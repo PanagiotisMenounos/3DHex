@@ -5,17 +5,17 @@
 
 ## Features of version 1.0.0
 
-- User friendly configuration
-- Jerk free S-Curve velocity profile
-- Either S-Curve or Trapezoid profile
-- Real arc G02/G03 motion 
-- Jump velocity 
-- Basic thermal protection
-- Working with RAMPS board
-- USB printing (15KHz step rate)
-- SD Card printing (25KHz step rate)
-- LCD 16x2 support
-- Only for Cartesian 3D printers
+-User friendly configuration
+-Jerk free S-Curve velocity profile
+-Either S-Curve or Trapezoid profile
+-Real arc G02/G03 motion 
+-Jump velocity 
+-Basic thermal protection
+-Working with RAMPS board
+-USB printing (15KHz step rate)
+-SD Card printing (25KHz step rate)
+-LCD 16x2 support
+-Only for Cartesian 3D printers
 
 ## Installation
 
