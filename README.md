@@ -1,5 +1,5 @@
 # 3DHex
-<img align="left" src="https://github.com/3DHexfw/3DHex/blob/master/3DHex%201.0.0/Host/3DHex.ico" />
+<img align="left" src="https://github.com/3DHexfw/3DHex/blob/master/Host/3DHex.ico" />
 
 3DHex is an open source 3D printer firmware. The Host uses the CPU power of any typical desktop computer and generates a binary file. This file then is transfered either via USB or SD Card to the MCU. The MCU sets its outputs according to the raw 0s and 1s that binary file contains. 
 
@@ -19,11 +19,11 @@
 
 ## Installation
 
-All compiled current and previous versions of the firmware are located at  [Releases](https://github.com/3DHexfw/3DHex/releases). The setup will also create a folder on the desktop which contains the MCU code in order to upload to the board.
+All compiled current and previous versions of the firmware are located at  [Releases](https://github.com/3DHexfw/3DHex/releases) . The setup will also create a folder on the desktop which contains the MCU code in order to upload to the board.
 
 ## How to print 
 
-Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/3DHex%201.0.0/Host/Host%20saved%20settings/3DHex/Guide_1.0.0.pdf)
+Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20settings/3DHex/Guide_1.0.0.pdf)
 
 ## Youtube 
 
