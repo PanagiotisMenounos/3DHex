@@ -3,7 +3,7 @@
 
 3DHex is an open source 3D printer firmware. The Host uses the CPU power of any typical desktop computer and generates a binary file. This file then is transfered either via USB or SD Card to the MCU. The MCU sets its outputs according to the raw 0s and 1s that binary file contains. 
 
-## Features of version 1.0.0
+## Features of version 1.0.1
 
 -User friendly configuration
 -Jerk free S-Curve velocity profile
@@ -16,6 +16,7 @@
 -SD Card printing (25KHz step rate)
 -LCD 16x2 support
 -Only for Cartesian 3D printers
+-Axis angle error fix
 
 ## Installation
 
