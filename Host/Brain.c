@@ -55,6 +55,8 @@ uint8_t Wait_nozz,Wait_bed,THERMISTOR_TYPE_NOZZLE,THERMISTOR_TYPE_BED,HEATED_NOZ
 int HOME_FEED_X,HOME_FEED_Y,HOME_FEED_Z;
 uint16_t HOME_X_DURATION,HOME_Y_DURATION,HOME_Z_DURATION;
 uint8_t HOME_X_ENABLE,HOME_Y_ENABLE,HOME_Z_ENABLE,HOME_X_STATE,HOME_Y_STATE,HOME_Z_STATE,HOME_X_DIR,HOME_Y_DIR,HOME_Z_DIR;
+
+double XY_PLANE,ZX_PLANE,ZY_PLANE;
         
      ////////////////////////*****************/////////////////////////////////////
 
@@ -65,12 +67,12 @@ bool first=false,flag_file_state=false,first_time_executed=true; //for composite
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 
 
-wchar_t savepath[12][100]={L"//3DHex//coordinates.txt\0",L"//3DHex//gc2info.txt\0",L"//3DHex//savepath.txt\0",\
+wchar_t savepath[13][100]={L"//3DHex//coordinates.txt\0",L"//3DHex//gc2info.txt\0",L"//3DHex//savepath.txt\0",\
                    L"//3DHex//general settings.txt\0",L"//3DHex//temp settings.txt\0",L"//3DHex//GCODE.txt\0",\
 				   L"//3DHex//buffer_1.bin\0",L"//3DHex//buffer_2.bin\0",L"//3DHex//flag.bin\0",L"//3DHex//flag_py.bin\0",\
-				   L"//3DHex//child.bin\0",L"//3DHex//homing settings.txt\0"};
+				   L"//3DHex//child.bin\0",L"//3DHex//homing settings.txt\0",L"//3DHex//angle settings.txt\0"};
 wchar_t coordinates_path[150],gc2info_path[150],savepath_path[150],general_sett_path[150],temp_sett_path[150],
-        gcode_path[150],buffer1_path[150],buffer2_path[150],flag_path[150],startpy_path[150],child_path[150],home_path[150];
+        gcode_path[150],buffer1_path[150],buffer2_path[150],flag_path[150],startpy_path[150],child_path[150],home_path[150],angle_path[150];
  /////////////////////////*******//////////////////////
 
 FILE *SD_binary_file;//MUST BE GLOBAL
@@ -100,6 +102,7 @@ unsigned long gc2info(double flag_num); //write all the information clear to a f
 void read_general_settings(); //returns all the general settings  
 void read_temp_settings(); //returns all the temperature settings 
 void read_home_settings();
+void read_angle_settings();
 void close_SD_binary_file(); //close the output file
 void hidecursor(); //hide the cursor on the console
 void write_hex2file(uint8_t hex_value);
@@ -121,6 +124,7 @@ int main()
     	read_general_settings();
     	read_temp_settings(); 
     	read_home_settings();
+    	read_angle_settings();
 		hidecursor(); 
 		PRINT_STATE = check_print_state(); 
 		if(PRINT_STATE==0){
@@ -143,8 +147,13 @@ int main()
             Fl=check_units(Fl);
             if(Gl!=flag_num){ /// enter only of it is a G command
             	//composite(Gl,Ef,El);
-            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   //only G01 OR G1 =line        		
-                	LINE(Xf,Yf,Zf,Ef,Xl,Yl,Zl,El,Fl);
+            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   //only G01 OR G1 =line 
+				    if(XY_PLANE!=0 && (ZX_PLANE!=0 || ZY_PLANE!=0)){
+				    	LINE(0,0,Zf,0,0,0,Zl,0,0);
+				    	LINE(Xf,Yf,0,Ef,Xl,Yl,0,El,Fl);
+					}else{
+						LINE(Xf,Yf,Zf,Ef,Xl,Yl,Zl,El,Fl);
+					}     		
                 }else if (Gl==2 || Gl==02 || Gl==3 || Gl==03){ //only arc command = G02 or G03
 				    if(Gl==2 || Gl==02){
 		    			input=true; //clockwise
@@ -297,11 +306,13 @@ void crt_file()
 
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl){
     if(storage_counter>=MAX_FILE_SIZE){ //create a new output file when the file size reached
-		LINE(Xf,Yf,Zf,0,PARK_X,PARK_Y,PARK_Z,0,PARK_FEED);///GO TO PARKING BEFORE STOP
+        LINE(0,0,Zf,0,0,0,PARK_Z,0,PARK_FEED);
+		LINE(Xf,Yf,0,0,PARK_X,PARK_Y,0,0,PARK_FEED);///GO TO PARKING BEFORE STOP
 		close_SD_binary_file();
 		file_num++;
         crt_file(file_num);
-        LINE(PARK_X,PARK_Y,PARK_Z,0,Xl,Yl,Zl,0,PARK_FEED);///RETURN TO PREVIOUS POSITION
+        LINE(0,0,PARK_Z,0,0,0,Zl,0,PARK_FEED);
+        LINE(PARK_X,PARK_Y,0,0,Xl,Yl,0,0,PARK_FEED);///RETURN TO PREVIOUS POSITION
         storage_counter=0;
 	}
 }
@@ -316,11 +327,11 @@ void path_files()
    	    coordinates_path[j]=appdata_path[i];gc2info_path[j]=appdata_path[i];savepath_path[j]=appdata_path[i];
 		general_sett_path[j]=appdata_path[i];temp_sett_path[j]=appdata_path[i];gcode_path[j]=appdata_path[i];
 		buffer1_path[j]=appdata_path[i];buffer2_path[j]=appdata_path[i];flag_path[j]=appdata_path[i];
-		startpy_path[j]=appdata_path[i],child_path[j]=appdata_path[i],home_path[j]=appdata_path[i];
+		startpy_path[j]=appdata_path[i];child_path[j]=appdata_path[i];home_path[j]=appdata_path[i];angle_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<12;f++){
+    for(f=0;f<13;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -403,6 +414,13 @@ void path_files()
 		if(f==11){
 		    while(savepath[f][i]!=L'\0'){
              	home_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==12){
+		    while(savepath[f][i]!=L'\0'){
+             	angle_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
@@ -707,7 +725,8 @@ void read_temp_settings()
 			}				
 			}			
 		}
-	}     
+	} 
+	fclose(temp_sett);
 }
 
 void read_home_settings(){
@@ -759,7 +778,24 @@ void read_home_settings(){
 	 }else{
 	 	HOME_Z_DURATION=0;
 	 }
-	 //printf("%i\n",HOME_X_DURATION);
+	 fclose(home_sett);
+}
+
+void read_angle_settings(){
+    FILE *angle_sett;
+    char a[3][30],temp_str[30];  
+    int i;
+    
+    angle_sett=_wfopen(angle_path,L"r");
+    
+    for (i=0;i<=2;i++){
+    	fgets (temp_str, 30, angle_sett);
+        strcpy(a[i],temp_str);
+    }
+    sscanf(a[0], "%lf", &XY_PLANE);
+	sscanf(a[1], "%lf", &ZX_PLANE);
+	sscanf(a[2], "%lf", &ZY_PLANE);
+    fclose(angle_sett);
 }
 
 void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide-console-cursor-in-c
@@ -876,7 +912,30 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 
     int dx=0,dy=0,dz=0,de=0,xs=0,ys=0,zs=0,es=0,p1=0,p2=0,p3=0,x1_last,y1_last,z1_last,e1_last,period;
     int stepx=0,stepy=0,stepz=0,stepe=0,x1=0,y1=0,z1=0,e1=0,x2=0,y2=0,z2=0,e2=0;
-    double xmin,ymin,zmin,emin,LINE_DIST,E_DIST,LINE_STEP=0,l=0;
+    double xmin,ymin,zmin,emin,LINE_DIST,E_DIST,LINE_STEP=0,l=0,XY_PLANE_RAD,ZX_PLANE_RAD,ZY_PLANE_RAD;
+    
+    if(XY_PLANE!=0){
+    	XY_PLANE_RAD=XY_PLANE*pi/180;
+    	yl=yl-(sin(XY_PLANE_RAD)*xl);
+    	yf=yf-(sin(XY_PLANE_RAD)*xf);
+    	xl=cos(XY_PLANE_RAD)*xl;
+        xf=cos(XY_PLANE_RAD)*xf;    	
+	}
+    if(ZX_PLANE!=0 && (zl-zf)!=0){
+    	ZX_PLANE_RAD=ZX_PLANE*pi/180;
+    	zl=zl+(zl*(1-cos(ZX_PLANE_RAD)));
+        zf=zf+(zf*(1-cos(ZX_PLANE_RAD)));
+    	xl=sin(ZX_PLANE_RAD)*zl;
+    	xf=sin(ZX_PLANE_RAD)*zf;    	
+	}
+    if(ZY_PLANE!=0 && (zl-zf)!=0){
+    	ZY_PLANE_RAD=ZY_PLANE*pi/180;
+    	zl=zl+(zl*(1-cos(ZY_PLANE_RAD)));
+        zf=zf+(zf*(1-cos(ZY_PLANE_RAD)));
+    	yl=sin(ZY_PLANE_RAD)*zl;
+    	yf=sin(ZY_PLANE_RAD)*zf;  	
+	}
+	
     dx=xl-xf;
     dy=yl-yf;
     dz=zl-zf;
@@ -897,6 +956,9 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 	tmin=period*pow(10,-6);
     LINE_DIST=sqrt((pow(dx*xmin,2))+(pow(dy*xmin,2))+(pow(dz*xmin,2)));
     E_DIST=fabs(el-ef);
+    if(LINE_DIST==0 && E_DIST==0){
+    	return;
+	}
 	if(JMFEED>=FEEDRATE){
 		cu=check_jfeed_limits(xl-xf,yl-yf,zl-zf,E_DIST);
 		state=10;

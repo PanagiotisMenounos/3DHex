@@ -332,7 +332,51 @@ def save_general_settings():
    saveFile2.write(str(var105.get())+'\n')
    saveFile2.close()
 
-
+def angle_settings():
+   window4 = tk.Toplevel(root)
+   window4.title("Angle_Error")#title of the window1
+   window4.geometry('{}x{}'.format(300, 130))#size of the window1 at start up
+   window4.resizable(width=False, height=False) #fixed window1 size
+   window4.wm_iconbitmap('3DHex.ico')
+   angle_frame = Frame(window4,bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
+   angle_frame.place(x=15,y=10) #the coordinates for placing the frame on root window1
+   l48=Label(angle_frame,text="XY_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l48.grid(row=0, column=0) #choose to place labels with grid(there are also place and pack methods)
+   l49=Label(angle_frame,text="ZX_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l49.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)
+   l50=Label(angle_frame,text="ZY_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l50.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
+   t77=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t77.grid(row=0, column=1) #choose to place text box with grid(there are also place and pack methods)
+   t78=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t78.grid(row=1, column=1) #choose to place text box with grid(there are also place and pack methods)
+   t79=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t79.grid(row=2, column=1) #choose to place text box with grid(there are also place and pack methods)
+   with open(os.getenv('LOCALAPPDATA')+'\\3DHex\\angle settings.txt') as file: #read general setting file and set them
+      array3 = file.readlines()
+      if array3[0]!=' \n': t77.insert(END, array3[0]) #if fixes a bug
+      if array3[1]!=' \n': t78.insert(END, array3[1])
+      if array3[2]!=' \n': t79.insert(END, array3[2])
+   def save_angle_settings():
+     open(os.getenv('LOCALAPPDATA')+'\\3DHex\\angle settings.txt', 'w').close()
+     saveFile5 = open(os.getenv('LOCALAPPDATA')+'\\3DHex\\angle settings.txt','w')
+     if (not str(t77.get(1.0,END)[:-1])) or (str(t77.get(1.0,END)[:-1])=='') or (str(t77.get(1.0,END)[:-1])=='\n'): #check if it is aan empty string
+      saveFile5.write("0\n")
+     else:
+      saveFile5.write(str(t77.get(1.0,END)[:-1]).split()[0]+'\n') #split delete '\n' char
+     if (not str(t78.get(1.0,END)[:-1])) or (str(t78.get(1.0,END)[:-1])=='') or (str(t78.get(1.0,END)[:-1])=='\n'):
+      saveFile5.write("0\n")
+     else:
+      saveFile5.write(str(t78.get(1.0,END)[:-1]).split()[0]+'\n')
+     if (not str(t79.get(1.0,END)[:-1])) or (str(t79.get(1.0,END)[:-1])=='') or (str(t79.get(1.0,END)[:-1])=='\n'):
+      saveFile5.write("0\n")
+     else:
+      saveFile5.write(str(t79.get(1.0,END)[:-1]).split()[0]+'\n')
+   b102=Button(window4, text="SAVE",font=("Calibri", 12,'bold'),width = 7, height = 1,command = save_angle_settings)
+   b102.place(relx=0.640,rely=0.18)
+   b103=Button(window4, text="CLOSE",font=("Calibri", 12,'bold'),width = 7, height = 1,command=window4.destroy)
+   b103.place(relx=0.640,rely=0.58)	 
+   
 def homing_settings():
    window3 = tk.Toplevel(root)
    window3.title("Homing")#title of the window1
@@ -1000,9 +1044,13 @@ c105=Checkbutton(settings_frame_1, variable=var105,onvalue=1, offvalue=0)
 c105.grid(row=1, column=5)
 
 render1 = ImageTk.PhotoImage(Image.open("HOME.png").resize((25,25), Image.ANTIALIAS))
+render2 = ImageTk.PhotoImage(Image.open("ANGLE.png").resize((25,25), Image.ANTIALIAS))
 b6=Button(root, bg= "grey",bd=1,command = homing_settings)
+b7=Button(root, bg= "grey",bd=1,command = angle_settings)
 b6.place(relx=0.625,rely=0.942)
+b7.place(relx=0.660,rely=0.942)
 b6.config(image=render1)
+b7.config(image=render2)
 b1=Button(root, text="SD CARD",font=("Calibri", 12,'bold'),width = 10, height = 3,command = SD_calculate)
 b1.place(relx=0.485,rely=0.815)
 b2=Button(root, text="HEATERS",font=("Calibri", 12,'bold'),width = 10, height = 3,command = temp_settings)

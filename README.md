@@ -23,7 +23,7 @@ All compiled current and previous versions of the firmware are located at  [Rele
 
 ## How to print 
 
-Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20settings/3DHex/Guide_1.0.0.pdf)
+Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20settings/3DHex/Guide_1.0.1.pdf)
 
 ## Youtube 
 
@@ -33,3 +33,4 @@ Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Hos
 
 <div>Logo made with <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a></div>
 <div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" 
+<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
