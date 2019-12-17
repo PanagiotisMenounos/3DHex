@@ -135,12 +135,12 @@ def about():
    lisence_data = lisence_file.read() #read the file
    lisence_file.close() #close the file
    lisence_text.insert(END, lisence_data)
-   l300=Label(window2,text="Installed Version: 1.0.0                                 \nCopyright (c) 2019 Panagiotis Menounos  \nContact: 3DHexfw@gmail.com                    ",\
+   l300=Label(window2,text="Installed Version: 1.0.1                                 \nCopyright (c) 2019 Panagiotis Menounos  \nContact: 3DHexfw@gmail.com                    ",\
               width=35,height=3,font=("Calibri", 10,'bold'),relief=FLAT) #create label2
    l300.place(x=15, y=98) #choose to place labels with grid(there are also place and pack methods)
  
 def guide():
-   subprocess.Popen([os.getenv('LOCALAPPDATA')+"\\3DHex\\Guide_1.0.0.pdf"],shell=True)
+   subprocess.Popen([os.getenv('LOCALAPPDATA')+"\\3DHex\\Guide_1.0.1.pdf"],shell=True)
  
 def exit():
  child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex\\child.bin','w')
