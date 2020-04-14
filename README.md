@@ -27,7 +27,7 @@ Download 3DHex.exe located at [Releases](https://github.com/3DHexfw/3DHex/releas
 
 ## How to print 
 
-Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20settings/3DHex/Guide_1.0.2.pdf)
+Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20files/3DHex/Guide_1.0.2.pdf)
 
 ## Youtube 
 
