@@ -105,17 +105,18 @@ def about():
    window2.geometry('{}x{}'.format(550, 600))#size of the window1 at start up
    window2.resizable(width=False, height=False) #fixed window1 size
    window2.wm_iconbitmap('3DHex.ico')
-   photos_frame = Frame(window2,bd=0, relief=GROOVE) #create a frame for labels and boxes for settings
+   window2.configure(background="#1c343c ")
+   photos_frame = Frame(window2,bg="#1c343c ",bd=0, relief=GROOVE) #create a frame for labels and boxes for settings
    photos_frame.place(x=160,y=0) #the coordinates for placing the frame on root window1
-   lisence_frame = Frame(window2,bd=1, relief=GROOVE) #create a frame for labels and boxes for settings
+   lisence_frame = Frame(window2,bg="#1c343c ",bd=1, relief=GROOVE) #create a frame for labels and boxes for settings
    lisence_frame.place(x=25,y=150) #the coordinates for placing the frame on root window1
-   xscrollbar = Scrollbar(lisence_frame, orient=HORIZONTAL)#create horizontal scrollbar
+   xscrollbar = Scrollbar(lisence_frame,bg="#1c343c", orient=HORIZONTAL)#create horizontal scrollbar
    xscrollbar.grid(row=1, column=0, sticky=E+W) #place it at the (bottom) 
-   yscrollbar = Scrollbar(lisence_frame) #create vertical scrollbar
+   yscrollbar = Scrollbar(lisence_frame,bg="#1c343c") #create vertical scrollbar
    yscrollbar.grid(row=0, column=1, sticky=N+S) #place it (right)
    lisence_text = Text(lisence_frame, wrap=NONE, bd=0, #create a text box and place the above scrollbars
             xscrollcommand=xscrollbar.set,
-            yscrollcommand=yscrollbar.set,width = 60, height = 21,font=("Calibri", 12))
+            yscrollcommand=yscrollbar.set,width = 60, height = 21,bg="black",fg="#1fe41f",insertbackground="#1fe41f",font=("Calibri", 12))
    lisence_text.grid(row=0, column=0, sticky=N+S+E+W) #choose to place text box with grid(there are also place and pack methods)
    xscrollbar.config(command=lisence_text.xview) #this is for scrollbars to move with cursor
    yscrollbar.config(command=lisence_text.yview)
@@ -127,7 +128,7 @@ def about():
    render2 = ImageTk.PhotoImage(load2)
    #img1=Label(photos_frame,image=render1,width=120,height=120)
    #img1.image=render1
-   img2=Label(photos_frame,image=render2,width=210,height=105)
+   img2=Label(photos_frame,image=render2,bg="#1c343c ",width=210,height=105)
    img2.image=render2
    #img1.grid(row=0, column=0)
    img2.pack()
@@ -135,8 +136,8 @@ def about():
    lisence_data = lisence_file.read() #read the file
    lisence_file.close() #close the file
    lisence_text.insert(END, lisence_data)
-   l300=Label(window2,text="Installed Version: 1.0.1                                 \nCopyright (c) 2019 Panagiotis Menounos  \nContact: 3DHexfw@gmail.com                    ",\
-              width=35,height=3,font=("Calibri", 10,'bold'),relief=FLAT) #create label2
+   l300=Label(window2,text="Installed Version: 1.0.2                                 \nCopyright (c) 2019 Panagiotis Menounos  \nContact: 3DHexfw@gmail.com                    ",\
+              width=35,height=3,font=("Calibri", 10,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l300.place(x=15, y=98) #choose to place labels with grid(there are also place and pack methods)
  
 def guide():
@@ -332,25 +333,70 @@ def save_general_settings():
    saveFile2.write(str(var105.get())+'\n')
    saveFile2.close()
 
+def curve_settings():
+   window5 = tk.Toplevel(root)
+   window5.title("Curve_Detection")#title of the window1
+   window5.geometry('{}x{}'.format(300, 130))#size of the window1 at start up
+   window5.resizable(width=False, height=False) #fixed window1 size
+   window5.wm_iconbitmap('3DHex.ico')
+   window5.configure(background="#1c343c ")
+   curve_frame = Frame(window5,bg="#1c343c",bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
+   curve_frame.place(x=5,y=8) #the coordinates for placing the frame on root window1
+   l51=Label(curve_frame,text="Curve_Detection",width=19,height=2,fg="white",bg="#1c343c",font=("Calibri", 10),relief=FLAT) #create label1
+   l51.grid(row=0, column=0) #choose to place labels with grid(there are also place and pack methods)
+   l52=Label(curve_frame,text="Angle_Tolerance [deg]",width=19,height=2,fg="white",bg="#1c343c",font=("Calibri", 10),relief=FLAT) #create label1
+   l52.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)
+   l53=Label(curve_frame,text="Speed_Tolerance [mm/s]",width=19,height=2,fg="white",bg="#1c343c",font=("Calibri", 10),relief=FLAT) #create label1
+   l53.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
+   t80=Text(curve_frame, wrap=NONE, bd=1.8,width = 7, height = 1,fg="#1fe41f",insertbackground="#1fe41f",bg="black",font=("Calibri", 12)) #create text box
+   t80.grid(row=1, column=1) #choose to place text box with grid(there are also place and pack methods)
+   t81=Text(curve_frame, wrap=NONE, bd=1.8,width = 7, height = 1,fg="#1fe41f",insertbackground="#1fe41f",bg="black",font=("Calibri", 12)) #create text box
+   t81.grid(row=2, column=1) #choose to place text box with grid(there are also place and pack methods)
+   var210 =IntVar()
+   with open(os.getenv('LOCALAPPDATA')+'\\3DHex\\curve settings.txt') as file: #read general setting file and set them
+      array4 = file.readlines()
+      var210.set(int(array4[2]))
+      if array4[0]!=' \n': t80.insert(END, array4[0]) #if fixes a bug
+      if array4[1]!=' \n': t81.insert(END, array4[1])
+   def save_curve_settings():
+     open(os.getenv('LOCALAPPDATA')+'\\3DHex\\curve settings.txt', 'w').close()
+     saveFile6 = open(os.getenv('LOCALAPPDATA')+'\\3DHex\\curve settings.txt','w')
+     if (not str(t80.get(1.0,END)[:-1])) or (str(t80.get(1.0,END)[:-1])=='') or (str(t80.get(1.0,END)[:-1])=='\n'): #check if it is aan empty string
+      saveFile6.write("0\n")
+     else:
+      saveFile6.write(str(t80.get(1.0,END)[:-1]).split()[0]+'\n') #split delete '\n' char
+     if (not str(t81.get(1.0,END)[:-1])) or (str(t81.get(1.0,END)[:-1])=='') or (str(t81.get(1.0,END)[:-1])=='\n'):
+      saveFile6.write("0\n")
+     else:
+      saveFile6.write(str(t81.get(1.0,END)[:-1]).split()[0]+'\n')
+     saveFile6.write(str(var210.get())+'\n')
+   b104=Button(window5, text="SAVE",font=("Calibri", 12,'bold'),fg="white",bg="#000f10",width = 7, height = 1,command = save_curve_settings)
+   b104.place(relx=0.750,rely=0.22)
+   b105=Button(window5, text="CLOSE",font=("Calibri", 12,'bold'),fg="white",bg="#000f10",width = 7, height = 1,command=window5.destroy)
+   b105.place(relx=0.750,rely=0.52)
+   c210=Checkbutton(curve_frame, variable=var210,onvalue=1, offvalue=0,fg="black",bg="#1c343c")
+   c210.grid(row=0, column=1) 
+   
 def angle_settings():
    window4 = tk.Toplevel(root)
    window4.title("Angle_Error")#title of the window1
    window4.geometry('{}x{}'.format(300, 130))#size of the window1 at start up
    window4.resizable(width=False, height=False) #fixed window1 size
    window4.wm_iconbitmap('3DHex.ico')
-   angle_frame = Frame(window4,bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
+   window4.configure(background="#1c343c ")
+   angle_frame = Frame(window4,bd=2,bg="#1c343c ", relief=GROOVE) #create a frame for labels and boxes for settings
    angle_frame.place(x=15,y=10) #the coordinates for placing the frame on root window1
-   l48=Label(angle_frame,text="XY_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l48=Label(angle_frame,text="XY_plane",width=10,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l48.grid(row=0, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l49=Label(angle_frame,text="ZX_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l49=Label(angle_frame,text="ZX_plane",width=10,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l49.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l50=Label(angle_frame,text="ZY_plane",width=10,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l50=Label(angle_frame,text="ZY_plane",width=10,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l50.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
-   t77=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t77=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t77.grid(row=0, column=1) #choose to place text box with grid(there are also place and pack methods)
-   t78=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t78=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t78.grid(row=1, column=1) #choose to place text box with grid(there are also place and pack methods)
-   t79=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t79=Text(angle_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t79.grid(row=2, column=1) #choose to place text box with grid(there are also place and pack methods)
    with open(os.getenv('LOCALAPPDATA')+'\\3DHex\\angle settings.txt') as file: #read general setting file and set them
       array3 = file.readlines()
@@ -372,9 +418,9 @@ def angle_settings():
       saveFile5.write("0\n")
      else:
       saveFile5.write(str(t79.get(1.0,END)[:-1]).split()[0]+'\n')
-   b102=Button(window4, text="SAVE",font=("Calibri", 12,'bold'),width = 7, height = 1,command = save_angle_settings)
+   b102=Button(window4, text="SAVE",font=("Calibri", 12,'bold'),width = 7, height = 1,fg="white",bg="#000f10",command = save_angle_settings)
    b102.place(relx=0.640,rely=0.18)
-   b103=Button(window4, text="CLOSE",font=("Calibri", 12,'bold'),width = 7, height = 1,command=window4.destroy)
+   b103=Button(window4, text="CLOSE",font=("Calibri", 12,'bold'),width = 7, height = 1,fg="white",bg="#000f10",command=window4.destroy)
    b103.place(relx=0.640,rely=0.58)	 
    
 def homing_settings():
@@ -383,28 +429,29 @@ def homing_settings():
    window3.geometry('{}x{}'.format(550, 200))#size of the window1 at start up
    window3.resizable(width=False, height=False) #fixed window1 size
    window3.wm_iconbitmap('3DHex.ico')
-   homing_frame = Frame(window3,bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
+   window3.configure(background="#1c343c ")
+   homing_frame = Frame(window3,bd=2,bg="#1c343c ", relief=GROOVE) #create a frame for labels and boxes for settings
    homing_frame.place(x=5,y=10) #the coordinates for placing the frame on root window1
-   l41=Label(homing_frame,text="Enable_Min_Endstop",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l41=Label(homing_frame,text="Enable_Min_Endstop",width=25,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l41.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l45=Label(homing_frame,text="Home_Pin_State",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l45=Label(homing_frame,text="Home_Pin_State",width=25,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l45.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l46=Label(homing_frame,text="Direction",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l46=Label(homing_frame,text="Direction",width=25,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l46.grid(row=3, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l47=Label(homing_frame,text="Feedrate [mm]/[sec]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label1
+   l47=Label(homing_frame,text="Feedrate [mm]/[sec]",width=25,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l47.grid(row=4, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l42=Label(homing_frame,text="X_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+   l42=Label(homing_frame,text="X_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l42.grid(row=0, column=1) #choose to place labels with grid(there are also place and pack methods)
-   l43=Label(homing_frame,text="Y_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+   l43=Label(homing_frame,text="Y_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l43.grid(row=0, column=2) #choose to place labels with grid(there are also place and pack methods)
-   l44=Label(homing_frame,text="Z_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+   l44=Label(homing_frame,text="Z_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label1
    l44.grid(row=0, column=3) #choose to place labels with grid(there are also place and pack methods)
    
-   t74=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t74=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t74.grid(row=4, column=1) #choose to place text box with grid(there are also place and pack methods)
-   t75=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t75=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t75.grid(row=4, column=2) #choose to place text box with grid(there are also place and pack methods)
-   t76=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t76=Text(homing_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t76.grid(row=4, column=3) #choose to place text box with grid(there are also place and pack methods)
    var201 = IntVar()  
    var202 = IntVar() 
@@ -429,23 +476,23 @@ def homing_settings():
       var207.set(int(array1[9]))
       var208.set(int(array1[10]))
       var209.set(int(array1[11]))
-   c201=Checkbutton(homing_frame, variable=var201,onvalue=1, offvalue=0)
+   c201=Checkbutton(homing_frame,bg="#1c343c ", variable=var201,onvalue=1, offvalue=0)
    c201.grid(row=1, column=1) 
-   c202=Checkbutton(homing_frame, variable=var202,onvalue=1, offvalue=0)
+   c202=Checkbutton(homing_frame,bg="#1c343c ", variable=var202,onvalue=1, offvalue=0)
    c202.grid(row=1, column=2)
-   c203=Checkbutton(homing_frame, variable=var203,onvalue=1, offvalue=0)
+   c203=Checkbutton(homing_frame,bg="#1c343c ", variable=var203,onvalue=1, offvalue=0)
    c203.grid(row=1, column=3)
-   c204=Checkbutton(homing_frame, variable=var204,onvalue=1, offvalue=0)
+   c204=Checkbutton(homing_frame,bg="#1c343c ", variable=var204,onvalue=1, offvalue=0)
    c204.grid(row=2, column=1)
-   c205=Checkbutton(homing_frame, variable=var205,onvalue=1, offvalue=0)
+   c205=Checkbutton(homing_frame,bg="#1c343c ", variable=var205,onvalue=1, offvalue=0)
    c205.grid(row=2, column=2) 
-   c206=Checkbutton(homing_frame, variable=var206,onvalue=1, offvalue=0)
+   c206=Checkbutton(homing_frame,bg="#1c343c ", variable=var206,onvalue=1, offvalue=0)
    c206.grid(row=2, column=3)  
-   c207=Checkbutton(homing_frame, variable=var207,onvalue=1, offvalue=0)
+   c207=Checkbutton(homing_frame,bg="#1c343c ", variable=var207,onvalue=1, offvalue=0)
    c207.grid(row=3, column=1)
-   c208=Checkbutton(homing_frame, variable=var208,onvalue=1, offvalue=0)
+   c208=Checkbutton(homing_frame,bg="#1c343c ", variable=var208,onvalue=1, offvalue=0)
    c208.grid(row=3, column=2) 
-   c209=Checkbutton(homing_frame, variable=var209,onvalue=1, offvalue=0)
+   c209=Checkbutton(homing_frame,bg="#1c343c ", variable=var209,onvalue=1, offvalue=0)
    c209.grid(row=3, column=3) 
    def save_Homing_settings():
      open(os.getenv('LOCALAPPDATA')+'\\3DHex\\homing settings.txt', 'w').close()
@@ -472,9 +519,9 @@ def homing_settings():
      saveFile4.write(str(var208.get())+'\n')
      saveFile4.write(str(var209.get())+'\n')
      saveFile4.close() 
-   b100=Button(window3, text="SAVE",font=("Calibri", 12,'bold'),width = 7, height = 1,command = save_Homing_settings)
+   b100=Button(window3, text="SAVE",font=("Calibri", 12,'bold'),fg="white",bg="#000f10",width = 7, height = 1,command = save_Homing_settings)
    b100.place(relx=0.840,rely=0.20)
-   b101=Button(window3, text="CLOSE",font=("Calibri", 12,'bold'),width = 7, height = 1,command=window3.destroy)
+   b101=Button(window3, text="CLOSE",font=("Calibri", 12,'bold'),fg="white",bg="#000f10",width = 7, height = 1,command=window3.destroy)
    b101.place(relx=0.840,rely=0.60)	 
    
 
@@ -687,82 +734,83 @@ def temp_settings():
    window1.geometry('{}x{}'.format(680, 450))#size of the window1 at start up
    window1.resizable(width=False, height=False) #fixed window1 size
    window1.wm_iconbitmap('3DHex.ico')
+   window1.configure(background="#1c343c ")
    
-   temp_settings_frame = Frame(window1,bd=1, relief=GROOVE) #create a frame for labels and boxes for settings
+   temp_settings_frame = Frame(window1,bd=1,bg="#1c343c ", relief=GROOVE) #create a frame for labels and boxes for settings
    temp_settings_frame.place(x=15,y=15) #the coordinates for placing the frame on root window1
    
-   l19=Label(temp_settings_frame,text="Nozzle_Temp [C]",width=20,height=2,font=("Calibri", 12,'bold'),relief=FLAT) #create label2
+   l19=Label(temp_settings_frame,text="Nozzle_Temp [C]",width=20,height=2,font=("Calibri", 12,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l19.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)   
-   l20=Label(temp_settings_frame,text="Wait",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l20=Label(temp_settings_frame,text="Wait",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l20.grid(row=1, column=2) #choose to place labels with grid(there are also place and pack methods)
-   l21=Label(temp_settings_frame,text="Heated_Nozzle",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l21=Label(temp_settings_frame,text="Heated_Nozzle",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l21.grid(row=0, column=0) #choose to place labels with grid(there are also place and pack methods)  
-   l22=Label(temp_settings_frame,text="Heated_Bed",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l22=Label(temp_settings_frame,text="Heated_Bed",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l22.grid(row=0, column=2) #choose to place labels with grid(there are also place and pack methods)  
-   l23=Label(temp_settings_frame,text="Enable_PID",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l23=Label(temp_settings_frame,text="Enable_PID",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l23.grid(row=3, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l24=Label(temp_settings_frame,text="P_Nozzle",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l24=Label(temp_settings_frame,text="P_Nozzle",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l24.grid(row=3, column=1) #choose to place labels with grid(there are also place and pack methods)
-   l25=Label(temp_settings_frame,text="I_Nozzle",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l25=Label(temp_settings_frame,text="I_Nozzle",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l25.grid(row=3, column=2) #choose to place labels with grid(there are also place and pack methods)
-   l26=Label(temp_settings_frame,text="D_Nozzle",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l26=Label(temp_settings_frame,text="D_Nozzle",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l26.grid(row=3, column=3) #choose to place labels with grid(there are also place and pack methods)
-   l27=Label(temp_settings_frame,text="Digit_Thermostat",width=15,height=4,font=("Calibri", 10),relief=FLAT) #create label2
+   l27=Label(temp_settings_frame,text="Digit_Thermostat",width=15,height=4,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l27.grid(row=5, column=0,rowspan=2) #choose to place labels with grid(there are also place and pack methods)  
-   l28=Label(temp_settings_frame,text="Therm_type",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l28=Label(temp_settings_frame,text="Therm_type",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l28.grid(row=5, column=1) #choose to place labels with grid(there are also place and pack methods)  
-   l29=Label(temp_settings_frame,text="Differential [C]",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l29=Label(temp_settings_frame,text="Differential [C]",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l29.grid(row=5, column=2) #choose to place labels with grid(there are also place and pack methods) 
-   l30=Label(temp_settings_frame,text="Cycle [msec]",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l30=Label(temp_settings_frame,text="Cycle [msec]",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l30.grid(row=5, column=3) #choose to place labels with grid(there are also place and pack methods)
-   l31=Label(temp_settings_frame,text="Bed_Temp [C]",width=15,height=3,font=("Calibri", 12,'bold'),relief=FLAT) #create label2
+   l31=Label(temp_settings_frame,text="Bed_Temp [C]",width=15,height=3,font=("Calibri", 12,'bold'),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l31.grid(row=7, column=0) #choose to place labels with grid(there are also place and pack methods)   
-   l32=Label(temp_settings_frame,text="Wait",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l32=Label(temp_settings_frame,text="Wait",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l32.grid(row=7, column=2) #choose to place labels with grid(there are also place and pack methods)  
-   l33=Label(temp_settings_frame,text="Enable_PID",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l33=Label(temp_settings_frame,text="Enable_PID",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l33.grid(row=8, column=0) #choose to place labels with grid(there are also place and pack methods)
-   l34=Label(temp_settings_frame,text="P_Bed",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l34=Label(temp_settings_frame,text="P_Bed",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l34.grid(row=8, column=1) #choose to place labels with grid(there are also place and pack methods)
-   l35=Label(temp_settings_frame,text="I_Bed",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l35=Label(temp_settings_frame,text="I_Bed",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l35.grid(row=8, column=2) #choose to place labels with grid(there are also place and pack methods)
-   l36=Label(temp_settings_frame,text="D_Bed",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l36=Label(temp_settings_frame,text="D_Bed",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l36.grid(row=8, column=3) #choose to place labels with grid(there are also place and pack methods)
-   l37=Label(temp_settings_frame,text="Digit_Thermostat",width=15,height=4,font=("Calibri", 10),relief=FLAT) #create label2
+   l37=Label(temp_settings_frame,text="Digit_Thermostat",width=15,height=4,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l37.grid(row=10, column=0,rowspan=2) #choose to place labels with grid(there are also place and pack methods)   
-   l38=Label(temp_settings_frame,text="Therm_type",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l38=Label(temp_settings_frame,text="Therm_type",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l38.grid(row=10, column=1) #choose to place labels with grid(there are also place and pack methods)  
-   l39=Label(temp_settings_frame,text="Differential [C]",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l39=Label(temp_settings_frame,text="Differential [C]",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l39.grid(row=10, column=2) #choose to place labels with grid(there are also place and pack methods) 
-   l40=Label(temp_settings_frame,text="Cycle [msec]",width=15,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+   l40=Label(temp_settings_frame,text="Cycle [msec]",width=15,height=2,font=("Calibri", 10),bg="#1c343c ",fg="white",relief=FLAT) #create label2
    l40.grid(row=10, column=3) #choose to place labels with grid(there are also place and pack methods)
    
-   t60=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t60=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t60.grid(row=1, column=1) #choose to place text box with grid(there are also place and pack methods)   
-   t61=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t61=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t61.grid(row=4, column=1) #choose to place text box with grid(there are also place and pack methods)   
-   t62=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t62=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t62.grid(row=4, column=2) #choose to place text box with grid(there are also place and pack methods) 
-   t63=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t63=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t63.grid(row=4, column=3) #choose to place text box with grid(there are also place and pack methods) 
-   t64=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t64=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t64.grid(row=6, column=1) #choose to place text box with grid(there are also place and pack methods)   
-   t65=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t65=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t65.grid(row=6, column=2) #choose to place text box with grid(there are also place and pack methods) 
-   t66=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t66=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t66.grid(row=6, column=3) #choose to place text box with grid(there are also place and pack methods)
-   t67=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t67=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t67.grid(row=7, column=1) #choose to place text box with grid(there are also place and pack methods)    
-   t68=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t68=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t68.grid(row=9, column=1) #choose to place text box with grid(there are also place and pack methods) 
-   t69=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t69=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t69.grid(row=9, column=2) #choose to place text box with grid(there are also place and pack methods)
-   t70=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t70=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t70.grid(row=9, column=3) #choose to place text box with grid(there are also place and pack methods)   
-   t71=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t71=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t71.grid(row=11, column=1) #choose to place text box with grid(there are also place and pack methods) 
-   t72=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t72=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t72.grid(row=11, column=2) #choose to place text box with grid(there are also place and pack methods)
-   t73=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+   t73=Text(temp_settings_frame, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12),bg="black",fg="#1fe41f",insertbackground="#1fe41f") #create text box
    t73.grid(row=11, column=3) #choose to place text box with grid(there are also place and pack methods) 
    
    var7 = IntVar()  
@@ -793,154 +841,155 @@ def temp_settings():
       var10.set(int(array1[17]))
       var11.set(int(array1[18]))
       var12.set(int(array1[19]))
-   c7=Checkbutton(temp_settings_frame, variable=var7,onvalue=1, offvalue=0)
+   c7=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var7,onvalue=1, offvalue=0)
    c7.grid(row=1, column=3) 
-   c8=Checkbutton(temp_settings_frame, variable=var8,onvalue=1, offvalue=0,command=click_Heated_Nozzle)
+   c8=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var8,onvalue=1, offvalue=0,command=click_Heated_Nozzle)
    c8.grid(row=0, column=1)
-   c9=Checkbutton(temp_settings_frame, variable=var9,onvalue=1, offvalue=0,command=click_Heated_Bed)
+   c9=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var9,onvalue=1, offvalue=0,command=click_Heated_Bed)
    c9.grid(row=0, column=3)
-   c10=Checkbutton(temp_settings_frame, variable=var10,height = 2,onvalue=1, offvalue=0,command=click_PID_Nozzle)
+   c10=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var10,height = 2,onvalue=1, offvalue=0,command=click_PID_Nozzle)
    c10.grid(row=4, column=0)
-   c11=Checkbutton(temp_settings_frame, variable=var11,onvalue=1, offvalue=0)
+   c11=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var11,onvalue=1, offvalue=0)
    c11.grid(row=7, column=3) 
-   c12=Checkbutton(temp_settings_frame, variable=var12, height = 2,onvalue=1, offvalue=0,command=click_PID_Bed)
+   c12=Checkbutton(temp_settings_frame,bg="#1c343c ", variable=var12, height = 2,onvalue=1, offvalue=0,command=click_PID_Bed)
    c12.grid(row=9, column=0)   
-   b3=Button(window1, text="SAVE",font=("Calibri", 10,'bold'),width = 12, height = 2,command=save_temperature_settings)#must be inside the function
+   b3=Button(window1, text="SAVE",font=("Calibri", 10,'bold'),fg="white",bg="#000f10",width = 12, height = 2,command=save_temperature_settings)#must be inside the function
    b3.place(x=550,y=120)
-   b4=Button(window1, text="EXIT",font=("Calibri", 10,'bold'),width = 12, height = 2,command=window1.destroy)#must be inside the function
+   b4=Button(window1, text="EXIT",font=("Calibri", 10,'bold'),fg="white",bg="#000f10",width = 12, height = 2,command=window1.destroy)#must be inside the function
    b4.place(x=550,y=230)
    
    click_Heated_Nozzle()
    click_Heated_Bed()
-
+   
 root = Tk() #creates app window
 root.title("3DHex")#title of the window
 root.geometry('{}x{}'.format(1000, 530))#size of the window at start up
 root.resizable(width=False, height=False)
+root.configure(background="#1c343c")
  
-textbox_frame = Frame(root, bd=4, relief=GROOVE) #create a frame for text box
-textbox_frame.place(relx=0.625,rely=0.025) #place the frame at those coordinates in window app
-xscrollbar = Scrollbar(textbox_frame, orient=HORIZONTAL)#create horizontal scrollbar
+textbox_frame = Frame(root, bd=4, relief=GROOVE,bg="#1c343c") #create a frame for text box
+textbox_frame.place(relx=0.625,rely=0.019) #place the frame at those coordinates in window app
+xscrollbar = Scrollbar(textbox_frame,orient=HORIZONTAL)#create horizontal scrollbar
 xscrollbar.grid(row=1, column=0, sticky=E+W) #place it at the (bottom) 
 yscrollbar = Scrollbar(textbox_frame) #create vertical scrollbar
 yscrollbar.grid(row=0, column=1, sticky=N+S) #place it (right)
 text = Text(textbox_frame, wrap=NONE, bd=0, #create a text box and place the above scrollbars
             xscrollcommand=xscrollbar.set,
-            yscrollcommand=yscrollbar.set,width = 33, height = 20,font=("Calibri", 14))
+            yscrollcommand=yscrollbar.set,width = 33, height = 20,font=("Calibri", 14),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f")
 text.grid(row=0, column=0, sticky=N+S+E+W) #choose to place text box with grid(there are also place and pack methods)
 xscrollbar.config(command=text.xview) #this is for scrollbars to move with cursor
 yscrollbar.config(command=text.yview)
 
 
-settings_frame_1 = Frame(root,bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
-settings_frame_1.place(relx=0.01,rely=0.025) #the coordinates for placing the frame on root window
-settings_frame_2 = Frame(root,bd=2, relief=GROOVE) #create a frame for labels and boxes for settings
+settings_frame_1 = Frame(root,bd=2,bg="#1c343c", relief=GROOVE) #create a frame for labels and boxes for settings
+settings_frame_1.place(relx=0.01,rely=0.019) #the coordinates for placing the frame on root window
+settings_frame_2 = Frame(root,bd=2,bg="#1c343c ", relief=GROOVE) #create a frame for labels and boxes for settings
 settings_frame_2.place(relx=0.03,rely=0.64) #the coordinates for placing the frame on root window
 
-l1=Label(settings_frame_1,text="GENERAL",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+l1=Label(settings_frame_1,text="GENERAL",width=7,height=1,font=("Calibri", 16,'bold'),fg="white",bg="#1c343c ",relief=FLAT) #create label1
 l1.grid(row=0, column=1) #choose to place labels with grid(there are also place and pack methods)
-l8=Label(settings_frame_1,text="X_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+l8=Label(settings_frame_1,text="X_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),fg="white",bg="#1c343c ",relief=FLAT) #create label1
 l8.grid(row=0, column=2) #choose to place labels with grid(there are also place and pack methods)
-l9=Label(settings_frame_1,text="Y_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+l9=Label(settings_frame_1,text="Y_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),fg="white",bg="#1c343c ",relief=FLAT) #create label1
 l9.grid(row=0, column=3) #choose to place labels with grid(there are also place and pack methods)
-l10=Label(settings_frame_1,text="Z_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+l10=Label(settings_frame_1,text="Z_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),fg="white",bg="#1c343c ",relief=FLAT) #create label1
 l10.grid(row=0, column=4) #choose to place labels with grid(there are also place and pack methods)
-l12=Label(settings_frame_1,text="E_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),relief=FLAT) #create label1
+l12=Label(settings_frame_1,text="E_AXIS",width=7,height=1,font=("Calibri", 16,'bold'),fg="white",bg="#1c343c ",relief=FLAT) #create label1
 l12.grid(row=0, column=5) #choose to place labels with grid(there are also place and pack methods)
-l2=Label(settings_frame_1,text="Steps_Per_Unit [steps/mm]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l2=Label(settings_frame_1,text="Steps_Per_Unit [steps/mm]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l2.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
-l3=Label(settings_frame_1,text="Max_Feedrate [mm/s]",width=25,height=2,font=("Calibri", 10),relief=FLAT)
+l3=Label(settings_frame_1,text="Max_Feedrate [mm/s]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT)
 l3.grid(row=3, column=0)
-l4=Label(settings_frame_1,text="Acceleration [mm/s^2]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l4=Label(settings_frame_1,text="Acceleration [mm/s^2]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l4.grid(row=4, column=0) #choose to place labels with grid(there are also place and pack methods)
-l6=Label(settings_frame_1,text="Jerk [mm/s^3]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l6=Label(settings_frame_1,text="Jerk [mm/s^3]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l6.grid(row=5, column=0) #choose to place labels with grid(there are also place and pack methods)
-l7=Label(settings_frame_1,text="Jump_Feedrate [mm/s]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l7=Label(settings_frame_1,text="Jump_Feedrate [mm/s]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l7.grid(row=6, column=0) #choose to place labels with grid(there are also place and pack methods)
-l11=Label(settings_frame_1,text="Invert_Direction",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l11=Label(settings_frame_1,text="Invert_Direction",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l11.grid(row=8, column=0) #choose to place labels with grid(there are also place and pack methods)
-l15=Label(settings_frame_1,text="Parking [mm/s]-[mm]",width=25,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l15=Label(settings_frame_1,text="Parking [mm/s]-[mm]",width=25,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l15.grid(row=7, column=0) #choose to place labels with grid(there are also place and pack methods)
-l16=Label(settings_frame_1,text="Enable_Steppers",width=25,height=1,font=("Calibri", 10),relief=FLAT) #create label2
+l16=Label(settings_frame_1,text="Enable_Steppers",width=25,height=1,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l16.grid(row=1, column=0) #choose to place labels with grid(there are also place and pack methods)
 
-l17=Label(settings_frame_2,text="Service_Routine [KHz]",width=20,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l17=Label(settings_frame_2,text="Service_Routine [KHz]",width=20,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l17.grid(row=0, column=0) #choose to place labels with grid(there are also place and pack methods)
-l18=Label(settings_frame_2,text="Max_File_Size [GB]",width=20,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l18=Label(settings_frame_2,text="Max_File_Size [GB]",width=20,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l18.grid(row=0, column=1) #choose to place labels with grid(there are also place and pack methods)
-l19=Label(settings_frame_2,text="COM_PORT",width=20,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+l19=Label(settings_frame_2,text="COM_PORT",width=20,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l19.grid(row=2, column=0) #choose to place labels with grid(there are also place and pack methods)
-l21=Label(settings_frame_2,text="Baud_Rate",width=20,height=3,font=("Calibri", 10),relief=FLAT) #create label2
+l21=Label(settings_frame_2,text="Baud_Rate",width=20,height=3,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
 l21.grid(row=4, column=0) #choose to place labels with grid(there are also place and pack methods)
 
-t1=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t1=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t1.grid(row=2, column=1) #choose to place text box with grid(there are also place and pack methods)
-t2=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t2=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t2.grid(row=2, column=2) #choose to place text box with grid(there are also place and pack methods)
-t3=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t3=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t3.grid(row=2, column=3) #choose to place text box with grid(there are also place and pack methods)
-t4=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t4=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t4.grid(row=2, column=4) #choose to place text box with grid(there are also place and pack methods)
-t5=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t5=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t5.grid(row=2, column=5) #choose to place text box with grid(there are also place and pack methods)
-t6=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled')
+t6=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f")
 t6.grid(row=3, column=1)
-t7=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t7=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t7.grid(row=3, column=2) #choose to place text box with grid(there are also place and pack methods)
-t8=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t8=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t8.grid(row=3, column=3) #choose to place text box with grid(there are also place and pack methods)
-t9=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t9=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t9.grid(row=3, column=4) #choose to place text box with grid(there are also place and pack methods)
-t10=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t10=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t10.grid(row=3, column=5) #choose to place text box with grid(there are also place and pack methods)
-t11=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t11=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t11.grid(row=4, column=1) #choose to place text box with grid(there are also place and pack methods)
-t12=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t12=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t12.grid(row=4, column=2) #choose to place text box with grid(there are also place and pack methods)
-t13=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t13=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t13.grid(row=4, column=3) #choose to place text box with grid(there are also place and pack methods)
-t14=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t14=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t14.grid(row=4, column=4) #choose to place text box with grid(there are also place and pack methods)
-t15=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t15=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t15.grid(row=4, column=5) #choose to place text box with grid(there are also place and pack methods)
-t16=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t16=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t16.grid(row=5, column=1) #choose to place text box with grid(there are also place and pack methods)
-t17=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t17=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t17.grid(row=5, column=2) #choose to place text box with grid(there are also place and pack methods)
-t18=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t18=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t18.grid(row=5, column=3) #choose to place text box with grid(there are also place and pack methods)
-t19=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t19=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t19.grid(row=5, column=4) #choose to place text box with grid(there are also place and pack methods)
-t20=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t20=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t20.grid(row=5, column=5) #choose to place text box with grid(there are also place and pack methods)
-t21=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t21=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t21.grid(row=6, column=1) #choose to place text box with grid(there are also place and pack methods)
-t22=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t22=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t22.grid(row=6, column=2) #choose to place text box with grid(there are also place and pack methods)
-t23=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t23=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t23.grid(row=6, column=3) #choose to place text box with grid(there are also place and pack methods)
-t24=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t24=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t24.grid(row=6, column=4) #choose to place text box with grid(there are also place and pack methods)
-t25=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t25=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t25.grid(row=6, column=5) #choose to place text box with grid(there are also place and pack methods)
-t26=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t26=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t26.grid(row=7, column=1) #choose to place text box with grid(there are also place and pack methods)
-t27=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t27=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t27.grid(row=7, column=2) #choose to place text box with grid(there are also place and pack methods)
-t28=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t28=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t28.grid(row=7, column=3) #choose to place text box with grid(there are also place and pack methods)
-t29=Text(settings_frame_1, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t29=Text(settings_frame_1, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t29.grid(row=7, column=4) #choose to place text box with grid(there are also place and pack methods)
-t30=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled') #create text box
+t30=Text(settings_frame_1, wrap=NONE, bd=0,width = 7, height = 1,font=("Calibri", 12),state='disabled',bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t30.grid(row=7, column=5) #choose to place text box with grid(there are also place and pack methods)
 
-t31=Text(settings_frame_2, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t31=Text(settings_frame_2, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t31.grid(row=1, column=0) #choose to place text box with grid(there are also place and pack methods)
-t32=Text(settings_frame_2, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t32=Text(settings_frame_2, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t32.grid(row=1, column=1) #choose to place text box with grid(there are also place and pack methods)
-t33=Text(settings_frame_2, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t33=Text(settings_frame_2, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t33.grid(row=3, column=0) #choose to place text box with grid(there are also place and pack methods)
-t34=Text(settings_frame_2, wrap=NONE, bd=1.8,width = 7, height = 1,font=("Calibri", 12)) #create text box
+t34=Text(settings_frame_2, wrap=NONE, bd=3,width = 7, height = 1,font=("Calibri", 12),bg="#000000",fg="#1fe41f",insertbackground="#1fe41f") #create text box
 t34.grid(row=4, column=1) #choose to place text box with grid(there are also place and pack methods)
 
 var1 = IntVar()
@@ -1013,54 +1062,62 @@ def clear_text():
 	
 def click_check_units():
     if var15.get()==0:
-       l20=Label(settings_frame_2,text="Units [mm/sec]",width=20,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+       l20=Label(settings_frame_2,text="Units [mm/sec]",width=20,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
        l20.grid(row=2, column=1) #choose to place labels with grid(there are also place and pack methods)	 
     else:
-       l20=Label(settings_frame_2,text="Units [mm/min]",width=20,height=2,font=("Calibri", 10),relief=FLAT) #create label2
+       l20=Label(settings_frame_2,text="Units [mm/min]",width=20,height=2,font=("Calibri", 10),fg="white",bg="#1c343c ",relief=FLAT) #create label2
        l20.grid(row=2, column=1) #choose to place labels with grid(there are also place and pack methods)
 	
 click_check_units()
-c1=Checkbutton(settings_frame_1, variable=var1,onvalue=1, offvalue=0,state='disabled')
+c1=Checkbutton(settings_frame_1, variable=var1,onvalue=1, offvalue=0,bg="#1c343c ",state='disabled')
 c1.grid(row=8, column=1)
-c2=Checkbutton(settings_frame_1, variable=var2,onvalue=1, offvalue=0)
+c2=Checkbutton(settings_frame_1, variable=var2,onvalue=1, offvalue=0,bg="#1c343c ")
 c2.grid(row=8, column=2)
-c3=Checkbutton(settings_frame_1, variable=var3,onvalue=1, offvalue=0)
+c3=Checkbutton(settings_frame_1, variable=var3,onvalue=1, offvalue=0,bg="#1c343c ")
 c3.grid(row=8, column=3)
-c4=Checkbutton(settings_frame_1, variable=var4,onvalue=1, offvalue=0)
+c4=Checkbutton(settings_frame_1, variable=var4,onvalue=1, offvalue=0,bg="#1c343c ")
 c4.grid(row=8, column=4)
-c5=Checkbutton(settings_frame_1, variable=var5,onvalue=1, offvalue=0)
+c5=Checkbutton(settings_frame_1, variable=var5,onvalue=1, offvalue=0,bg="#1c343c ")
 c5.grid(row=8, column=5)
-c15=Checkbutton(settings_frame_2, variable=var15,onvalue=1, offvalue=0,command=click_check_units)
+c15=Checkbutton(settings_frame_2, variable=var15,onvalue=1, offvalue=0,bg="#1c343c ",command=click_check_units)
 c15.grid(row=3, column=1)
-c101=Checkbutton(settings_frame_1, variable=var101,onvalue=1, offvalue=0,state='disabled')
+c101=Checkbutton(settings_frame_1, variable=var101,onvalue=1, offvalue=0,bg="#1c343c ",state='disabled')
 c101.grid(row=1, column=1)
-c102=Checkbutton(settings_frame_1, variable=var102,onvalue=1, offvalue=0)
+c102=Checkbutton(settings_frame_1, variable=var102,onvalue=1, offvalue=0,bg="#1c343c ")
 c102.grid(row=1, column=2)
-c103=Checkbutton(settings_frame_1, variable=var103,onvalue=1, offvalue=0)
+c103=Checkbutton(settings_frame_1, variable=var103,onvalue=1, offvalue=0,bg="#1c343c ")
 c103.grid(row=1, column=3)
-c104=Checkbutton(settings_frame_1, variable=var104,onvalue=1, offvalue=0)
+c104=Checkbutton(settings_frame_1, variable=var104,onvalue=1, offvalue=0,bg="#1c343c ")
 c104.grid(row=1, column=4)
-c105=Checkbutton(settings_frame_1, variable=var105,onvalue=1, offvalue=0)
+c105=Checkbutton(settings_frame_1, variable=var105,onvalue=1, offvalue=0,bg="#1c343c ")
 c105.grid(row=1, column=5)
 
 render1 = ImageTk.PhotoImage(Image.open("HOME.png").resize((25,25), Image.ANTIALIAS))
 render2 = ImageTk.PhotoImage(Image.open("ANGLE.png").resize((25,25), Image.ANTIALIAS))
+render3 = ImageTk.PhotoImage(Image.open("CURVE.png").resize((25,25), Image.ANTIALIAS))
+
 b6=Button(root, bg= "grey",bd=1,command = homing_settings)
 b7=Button(root, bg= "grey",bd=1,command = angle_settings)
+b8=Button(root, bg= "grey",bd=1,command = curve_settings)
+
 b6.place(relx=0.625,rely=0.942)
 b7.place(relx=0.660,rely=0.942)
+b8.place(relx=0.695,rely=0.942)
+
 b6.config(image=render1)
 b7.config(image=render2)
-b1=Button(root, text="SD CARD",font=("Calibri", 12,'bold'),width = 10, height = 3,command = SD_calculate)
-b1.place(relx=0.485,rely=0.815)
-b2=Button(root, text="HEATERS",font=("Calibri", 12,'bold'),width = 10, height = 3,command = temp_settings)
-b2.place(relx=0.375,rely=0.655)
+b8.config(image=render3)
+
+b1=Button(root, text="SD CARD",relief=RIDGE,font=("Calibri", 14,'bold'),width = 9, height = 1,bd=1,fg="white",bg="#000f10",command = SD_calculate)
+b1.place(relx=0.485,rely=0.845)
+b2=Button(root, text="HEATERS",relief=RIDGE,font=("Calibri", 14,'bold'),width = 9, height = 1,bd=1,fg="white",bg="#000f10",command = temp_settings)
+b2.place(relx=0.375,rely=0.710)
 b3=Button(root,width = 2, height = 1, bg= "red",bd=2,command = clear_text)
 b3.place(relx=0.955,rely=0.948)
-b4=Button(root, text="SAVE",font=("Calibri", 12,'bold'),width = 10, height = 3,command = save_general_settings)
-b4.place(relx=0.485,rely=0.655)
-b5=Button(root, text="USB",font=("Calibri", 12,'bold'),width = 10, height = 3,command = USB_calculate)
-b5.place(relx=0.375,rely=0.815)
+b4=Button(root, text="SAVE",relief=RIDGE,font=("Calibri", 14,'bold'),width = 9, height = 1,bd=1,fg="white",bg="#000f10",command = save_general_settings)
+b4.place(relx=0.485,rely=0.710)
+b5=Button(root, text="USB",relief=RIDGE,font=("Calibri", 14,'bold'),width = 9, height = 1,bd=1,fg="white",bg="#000f10",command = USB_calculate)
+b5.place(relx=0.375,rely=0.845)
 
 
 class AppUI(Frame): #create the menu bar

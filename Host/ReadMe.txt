@@ -1,6 +1,9 @@
--In order to play around with the source code
-first you have to install Python 2.7 +Pyserial, PIL...best way with pip
+In order to play around with the source code
 
--Also you have to install a compiler for C like DevC++..
+1)Install Python 2.7 +Pyserial +PIL...best way with pip
+
+2)Download any C compiler, i use Dev C++
    
--Lastly check the Host saved settings...
+3)Move Host_Settings folder to APPDATA/LOCAL, press windowskey+R and type "appdata"
+
+4)Download Arduino IDE and import the necessary libraries

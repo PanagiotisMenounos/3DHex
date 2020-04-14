@@ -39,7 +39,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
 
-       ///////////////**************GLOBAL VARIABLES FOR SETTINGS******************/////////////////////
+       ///////////////**************gen VARIABLES FOR SETTINGS******************/////////////////////
 double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE,ACCELERATION,JERK,MAX_JFX,\
        MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
 int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS;
@@ -57,42 +57,51 @@ uint16_t HOME_X_DURATION,HOME_Y_DURATION,HOME_Z_DURATION;
 uint8_t HOME_X_ENABLE,HOME_Y_ENABLE,HOME_Z_ENABLE,HOME_X_STATE,HOME_Y_STATE,HOME_Z_STATE,HOME_X_DIR,HOME_Y_DIR,HOME_Z_DIR;
 
 double XY_PLANE,ZX_PLANE,ZY_PLANE;
+
+int CURVE_DETECTION;
+double ANGLE_TOLERANCE,FEEDRATE_TOLERANCE;
         
      ////////////////////////*****************/////////////////////////////////////
 
-//////////////////////////////***********GLOBAL VARIABLES******//////////////////
+//////////////////////////////***********gen VARIABLES******//////////////////
 int total_digi_lines=0,state,file_buffer_size=0,max_bufferfile_size=3300,PRINT_STATE, file_num=0;//number name of binary file
-double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION;
-bool first=false,flag_file_state=false,first_time_executed=true; //for composite material;
+double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_last,flag_num=101101101.101010;
+bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true; //for composite material;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
+double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
 
 
-wchar_t savepath[13][100]={L"//3DHex//coordinates.txt\0",L"//3DHex//gc2info.txt\0",L"//3DHex//savepath.txt\0",\
+wchar_t savepath[16][100]={L"//3DHex//coordinates.txt\0",L"//3DHex//fcoordinates.txt\0",L"//3DHex//gc2info.txt\0",L"//3DHex//savepath.txt\0",\
                    L"//3DHex//general settings.txt\0",L"//3DHex//temp settings.txt\0",L"//3DHex//GCODE.txt\0",\
 				   L"//3DHex//buffer_1.bin\0",L"//3DHex//buffer_2.bin\0",L"//3DHex//flag.bin\0",L"//3DHex//flag_py.bin\0",\
-				   L"//3DHex//child.bin\0",L"//3DHex//homing settings.txt\0",L"//3DHex//angle settings.txt\0"};
-wchar_t coordinates_path[150],gc2info_path[150],savepath_path[150],general_sett_path[150],temp_sett_path[150],
-        gcode_path[150],buffer1_path[150],buffer2_path[150],flag_path[150],startpy_path[150],child_path[150],home_path[150],angle_path[150];
+				   L"//3DHex//child.bin\0",L"//3DHex//homing settings.txt\0",L"//3DHex//angle settings.txt\0",L"//3DHex//curve settings.txt\0",L"//3DHex//gen.txt\0"};
+wchar_t coordinates_path[150],fcoordinates_path[150],gc2info_path[150],savepath_path[150],general_sett_path[150],temp_sett_path[150],
+        gcode_path[150],buffer1_path[150],buffer2_path[150],flag_path[150],startpy_path[150],child_path[150],home_path[150],\
+		angle_path[150],gen_path[150],curve_path[150],gen_path[150];
  /////////////////////////*******//////////////////////
 
-FILE *SD_binary_file;//MUST BE GLOBAL
+FILE *SD_binary_file;//MUST BE gen
 FILE *buffer1_file;
 FILE *buffer2_file;
 FILE *flag_file;
 FILE *startpy_file;
+
 //FILE *savepath_file;
 
 void LINE(double xf, double yf, double zf, double ef, double xl, double yl, double zl, double el, double FEEDRATE); //G01,G00 calculations   
-void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE); //GO2,G03 calculations 
+void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE); //GO2,G03 calculations 
 int casequartile(double x,double y,double K,double L); //find the quartile (1-4) of a point in polar coordinate system
 double max_n(double num1, double num2); //returns the max value
 double min_n(double num1, double num2) ; //returns the min value
-double theta_func(double x,double y,double k,double l,int a,bool input); //returns the angle of a point-line in polar coordinate system
+double theta_func(double x,double y,double k,double l,int a); //returns the angle of a point-line in polar coordinate system
 void time_momments(double L,double umax);//returns the time momments of velocity profile
 double L_time_calc(double l); //returns the time momment of points-pulses in XYZ axis
 double line_accel_feed_limits(double dx,double dy,double dz,double E_DIST,double FEEDRATE); //check derivative limits of G00-G01 (line)
 double arc_accel_feed_limits(double R,double ARC_DIST,double E_DIST,double FEEDRATE); //check derivativelimits of G02-G03 (arc)
 double check_jfeed_limits(double dx,double dy,double dz,double E_DIST); //check jump feed rate limits (only for lines)
+void curve_detection(unsigned long total_lines); 
+double curve_lines_angles(double xf,double yf,double xl,double yl); //check angle for speed adjustment
+void curve_length(unsigned long total_lines);
 void composite(double Command,double Ef,double El); //finds when should be cut the fiber
 void path_files(); //locates where the %APPDATA% is 
 double check_units(double Fl); //convert to mm/sec everything
@@ -103,6 +112,7 @@ void read_general_settings(); //returns all the general settings
 void read_temp_settings(); //returns all the temperature settings 
 void read_home_settings();
 void read_angle_settings();
+void read_curve_settings();
 void close_SD_binary_file(); //close the output file
 void hidecursor(); //hide the cursor on the console
 void write_hex2file(uint8_t hex_value);
@@ -116,15 +126,18 @@ uint8_t bits2val(char *bits);///convert a serial of 0,1 to a number 16bit (0,1) 
 int main()
     {
     	FILE *g1;
-        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,flag_num=101101101.101010,perc=0;
+    	FILE *gen1;
+    	
+        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,perc=0;
         unsigned long total_lines,j;
-        bool input,first_line=true;
+        bool clockwise,first_line=true;
 
         path_files();
     	read_general_settings();
     	read_temp_settings(); 
     	read_home_settings();
     	read_angle_settings();
+    	read_curve_settings();
 		hidecursor(); 
 		PRINT_STATE = check_print_state(); 
 		if(PRINT_STATE==0){
@@ -135,32 +148,50 @@ int main()
 			crt_file();
 		}        
         total_lines=gc2info(flag_num);
+        if(CURVE_DETECTION==1){
+        	curve_detection(total_lines);
+            curve_length(total_lines);
+		}
         g1=_wfopen(coordinates_path,L"r");
+        gen1=_wfopen(gen_path,L"r");
         printf("%s %.2f%%\r","Progress:",perc);
         for(j=1;j<=total_lines;j++){
+        	//last_time=0; 
 		    if(first_line==true){
 		        first_line=false;
-	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf);
+	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&LOC_CASE,&new_CURVE);
 	            j++;
 	    	}
-            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl);
-            Fl=check_units(Fl);
+            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&LOC_CASE,&new_CURVE);
+			if(CURVE_DETECTION==1 && new_CURVE==1){
+			   last_time=0; //FIX time BUG at the begining of new command
+               fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED);
+			}else if (CURVE_DETECTION==1){
+				Fl=gen_FEED;
+			}else{
+				Fl=check_units(Fl);
+				last_time=0; //FIX time BUG at the begining of new command
+			}
+            if(Xl==Xf && Yl==Yf && Zl==Zf && El==Ef && gen_DISTANCE!=0 && new_CURVE==1){
+            	Gl=flag_num;
+			}
             if(Gl!=flag_num){ /// enter only of it is a G command
             	//composite(Gl,Ef,El);
-            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   //only G01 OR G1 =line 
+            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   //LINE COMMAND
 				    if(XY_PLANE!=0 && (ZX_PLANE!=0 || ZY_PLANE!=0)){
 				    	LINE(0,0,Zf,0,0,0,Zl,0,0);
 				    	LINE(Xf,Yf,0,Ef,Xl,Yl,0,El,Fl);
 					}else{
 						LINE(Xf,Yf,Zf,Ef,Xl,Yl,Zl,El,Fl);
 					}     		
-                }else if (Gl==2 || Gl==02 || Gl==3 || Gl==03){ //only arc command = G02 or G03
+                }
+			    if (Gl==2 || Gl==02 || Gl==3 || Gl==03){  //ARC COMMAND
 				    if(Gl==2 || Gl==02){
-		    			input=true; //clockwise
+		    			clockwise=true; //clockwise
 		    		}else{
-		    			input=false; //counterclockwise
+		    			clockwise=false; //counterclockwise
 		    		}
-		    		ARC(input,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
+		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
 				}
 			}
 			Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle 
@@ -174,6 +205,7 @@ int main()
         fclose(buffer1_file);
         fclose(buffer2_file);
         fclose(SD_binary_file);
+        fclose(gen1);
         system("pause");   //wait the user to press enter key at the end
     }
     
@@ -216,7 +248,6 @@ void mcu_settings_send()
     fwrite(&PID_bed, sizeof(uint8_t),1,buffer1_file);
     fwrite(&DIFFERENTIAL_NOZZ, sizeof(uint8_t),1,buffer1_file);
     fwrite(&DIFFERENTIAL_BED, sizeof(uint8_t),1,buffer1_file);
-    
     fwrite(&HOME_X_DURATION, sizeof(uint16_t),1,buffer1_file);
     fwrite(&HOME_Y_DURATION, sizeof(uint16_t),1,buffer1_file);
     fwrite(&HOME_Z_DURATION, sizeof(uint16_t),1,buffer1_file);
@@ -324,14 +355,15 @@ void path_files()
     appdata_path=_wgetenv(L"LOCALAPPDATA"); //https://msdn.microsoft.com/en-us/library/tehxacec(v=VS.100).aspx
     //SHGetFolderPath (0, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, appdata_path);
     while(appdata_path[i] != L'\0'){
-   	    coordinates_path[j]=appdata_path[i];gc2info_path[j]=appdata_path[i];savepath_path[j]=appdata_path[i];
+   	    coordinates_path[j]=appdata_path[i];fcoordinates_path[j]=appdata_path[i];gc2info_path[j]=appdata_path[i];savepath_path[j]=appdata_path[i];
 		general_sett_path[j]=appdata_path[i];temp_sett_path[j]=appdata_path[i];gcode_path[j]=appdata_path[i];
 		buffer1_path[j]=appdata_path[i];buffer2_path[j]=appdata_path[i];flag_path[j]=appdata_path[i];
-		startpy_path[j]=appdata_path[i];child_path[j]=appdata_path[i];home_path[j]=appdata_path[i];angle_path[j]=appdata_path[i];
+		startpy_path[j]=appdata_path[i];child_path[j]=appdata_path[i];home_path[j]=appdata_path[i];angle_path[j]=appdata_path[i];\
+		gen_path[j]=appdata_path[i],curve_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<13;f++){
+    for(f=0;f<16;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -343,88 +375,109 @@ void path_files()
 		}
     	if(f==1){
 		    while(savepath[f][i]!=L'\0'){
+             	fcoordinates_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }   		
+		}
+    	if(f==2){
+		    while(savepath[f][i]!=L'\0'){
              	gc2info_path[p]=savepath[f][i];
             	p++;
              	i++;
             }     		
 		}		
-    	if(f==2){
+    	if(f==3){
 		    while(savepath[f][i]!=L'\0'){
              	savepath_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==3){
+    	if(f==4){
 		    while(savepath[f][i]!=L'\0'){
              	general_sett_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==4){
+    	if(f==5){
 		    while(savepath[f][i]!=L'\0'){
              	temp_sett_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==5){
+    	if(f==6){
 		    while(savepath[f][i]!=L'\0'){
              	gcode_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==6){
+    	if(f==7){
 		    while(savepath[f][i]!=L'\0'){
              	buffer1_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==7){
+    	if(f==8){
 		    while(savepath[f][i]!=L'\0'){
              	buffer2_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==8){
+    	if(f==9){
 		    while(savepath[f][i]!=L'\0'){
              	flag_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-    	if(f==9){
+    	if(f==10){
 		    while(savepath[f][i]!=L'\0'){
              	startpy_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}	
-    	if(f==10){
+    	if(f==11){
 		    while(savepath[f][i]!=L'\0'){
              	child_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-		if(f==11){
+		if(f==12){
 		    while(savepath[f][i]!=L'\0'){
              	home_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
 		}
-		if(f==12){
+		if(f==13){
 		    while(savepath[f][i]!=L'\0'){
              	angle_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
-		}																										
+		}	
+		if(f==14){
+		    while(savepath[f][i]!=L'\0'){
+             	curve_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==15){
+		    while(savepath[f][i]!=L'\0'){
+             	gen_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}																									
 	}
 }
     
@@ -642,7 +695,246 @@ double check_jfeed_limits(double dx,double dy,double dz,double E_DIST)
     	FEEDRATE=JMFEED;
 	}   
 	return FEEDRATE;  		
-}   
+}
+
+
+void curve_detection(unsigned long total_lines)
+{
+	int j,last_printing_move=0,printing_move=0,breeak=0;
+	double theta1=180,theta2,smart_case,last_smart_case=1,trash,FS;
+	double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,Gt,Mt,Xt,Yt,Zt,It,Jt,Et,Ft,St,Pt,Rt,Tt;
+	bool first_smart_line=true;
+	FILE *coord;
+	FILE *final;
+	
+    coord=_wfopen(coordinates_path,L"r");
+    final=_wfopen(fcoordinates_path,L"w");
+    
+    for(j=1;j<=total_lines;j++){
+		if(first_smart_line==true){
+		    first_smart_line=false;
+	        fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&trash,&trash);
+	        Ff=check_units(Ff);
+	        j++;
+	        while((Gf!=1 && Gf!=0) && j<=total_lines){
+	            fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,smart_case);
+    	        fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&trash,&trash);
+	            theta2 = curve_lines_angles(0,0,Xf,Yf); 
+	            Ff=check_units(Ff);
+	            Ff=line_accel_feed_limits(Xf,Yf,Zf,Ef,Ff);
+	            j++;
+			}
+			FS=Ff;
+	    }
+	    if(j<=total_lines){
+	        fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash,&trash);
+            Fl=check_units(Fl);
+            Fl=line_accel_feed_limits(Xl-Xf,Yl-Yf,Zl-Zf,El-Ef,Fl);
+            if((Gl==1 || Gl==0) && (Xl-Xf!=0 || Yl-Yf!=0) && El-Ef!=0){
+            	printing_move=1;
+			}else{
+				if((Gl==1 || Gl==0) && Xl-Xf==0 && Yl-Yf==0 && Zl-Zf==0 && El-Ef==0){
+					printing_move=last_printing_move;
+				}else{
+					printing_move=0;
+				}
+			}
+			if(printing_move==0 && last_printing_move==1){
+				breeak=1;
+			}
+			if(printing_move==1 && last_printing_move==0){
+				breeak=1;
+			}
+			last_printing_move=printing_move;
+			while(((Gl!=1 && Gl!=0) || breeak==1) && j<=total_lines){
+				breeak=0;
+				theta1=180;
+            	theta2=180;
+		    	if(last_smart_case==2 || last_smart_case==3){
+		    		smart_case=4;
+	    		}else{
+	    			smart_case=1;
+	      		}
+    			last_smart_case=smart_case;
+    			fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,smart_case);    			
+    			Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
+	            fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash,&trash);
+            	Fl=check_units(Fl);
+				Fl=line_accel_feed_limits(Xl-Xf,Yl-Yf,Zl-Zf,El-Ef,Fl);
+            	j++;
+            }
+    		if(Xf-Xl!=0 || Yf-Yl!=0){
+				theta2 = curve_lines_angles(Xf,Yf,Xl,Yl);
+			}/////*******
+            if((Gl==1 || Gl==0) && (Xl-Xf!=0 || Yl-Yf!=0) && El-Ef!=0){
+            	printing_move=1;
+			}else{
+				if((Gl==1 || Gl==0) && Xl-Xf==0 && Yl-Yf==0 && Zl-Zf==0 && El-Ef==0){
+					printing_move=last_printing_move;
+				}else{
+					printing_move=0;
+				}
+			}
+			last_printing_move=printing_move;
+    		if((theta1>=ANGLE_TOLERANCE && theta2>=ANGLE_TOLERANCE) || fabs(FS-Fl)>FEEDRATE_TOLERANCE || ((Zl-Zf)!=0) || ((Xf-Xl==0) && (Yf-Yl==0) && (Zl-Zf==0) && (El-Ef!=0))){
+    			if(last_smart_case!=3 && last_smart_case!=2){
+    				smart_case=1;
+				}else{
+					smart_case=4;
+				}
+				theta2=180;
+				FS=Fl;
+    		}else if(theta1<=ANGLE_TOLERANCE && theta2<=ANGLE_TOLERANCE){
+    			if(fabs(FS-Fl)>FEEDRATE_TOLERANCE || ((Zl-Zf)!=0) || ((Xf-Xl==0) && (Yf-Yl==0) && (Zl-Zf==0) && (El-Ef!=0))){
+    				if(last_smart_case==4 || last_smart_case==1){
+    					smart_case=1;
+					}else{
+						smart_case=4;
+					}
+					theta2=180;
+					FS=Fl;
+	     		}else{
+        			if(last_smart_case==4 || last_smart_case==1){
+	    				smart_case=3;		
+	    			}else{
+	    				smart_case=2;
+		    		}
+   		    	}
+    		}else if(theta1>=ANGLE_TOLERANCE && theta2<=ANGLE_TOLERANCE){
+                if(fabs(FS-Fl)>FEEDRATE_TOLERANCE || ((Zl-Zf)!=0) || ((Xf-Xl==0) && (Yf-Yl==0) && (Zl-Zf==0) && (El-Ef!=0))){
+    				if(last_smart_case==4 || last_smart_case==1){
+    					smart_case=1;
+					}else{
+						smart_case=4;
+					}
+					theta2=180;
+					FS=Fl;
+                }else{
+					smart_case=3;
+				}
+    		}else if(theta1<=ANGLE_TOLERANCE && theta2>=ANGLE_TOLERANCE){
+             	if(last_smart_case==4 || last_smart_case==1){
+             		smart_case=1;
+				}else{
+					smart_case=4;
+				}
+    		}
+    		if(Gf!=1 && Gf!=0){//fix a bug
+    			smart_case=1;
+			}
+            if((Xl-Xf!=0 || Yl-Yf!=0) && El-Ef!=0){
+            	printing_move=1;
+			}else{
+				printing_move=0;
+			}
+			last_printing_move=printing_move;
+    		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,smart_case);
+    		theta1 = theta2;
+    		last_smart_case=smart_case;
+    		Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
+    	}
+	}    
+    if(last_smart_case==4 || last_smart_case==1){
+        smart_case=1;
+	}else{
+		smart_case=4;
+	}
+    fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,smart_case); 
+	fclose(coord);
+	fclose(final);
+}
+
+
+double curve_lines_angles(double xf,double yf,double xl,double yl)
+{
+	int aadj;
+	double theta_adj,line_dtheta,adj_dtheta;
+	
+	if(fabs(xl-xf==0) && fabs(yl-yf==0)){
+		return 180;
+	}
+	if(CURVE_DETECTION==1){
+     	aadj=casequartile(xl,yl,xf,yf);
+     	theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
+     	if(f_adj==false){
+         	line_dtheta=fabs(theta_adj-theta_adj_last);
+         	adj_dtheta=fabs(180-line_dtheta);
+        	aadj=casequartile(xf,yf,xl,yl);
+        	theta_adj_last=theta_func(xf,yf,xl,yl,aadj)*180/pi;
+         	return adj_dtheta;
+         	
+        }else{
+        	f_adj=false;
+        	aadj=casequartile(0,0,xl,yl);
+        	theta_adj_last=theta_func(0,0,xl,yl,aadj)*180/pi;
+            return 90;
+		}
+	}
+}
+
+void curve_length(unsigned long total_lines)
+{
+	int j;
+	double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl=0,Sl,Pl,Rl,Tl,local_case,gen_feed,dx,dy,dz,de,gen_distance=0,reset_dist=1;
+	bool first_time_tcoord=true,first_write=true;
+	FILE *fcoord;
+	FILE *gen;
+	FILE *coord;
+	
+    fcoord=_wfopen(fcoordinates_path,L"r");
+    coord=_wfopen(coordinates_path,L"w");
+    gen=_wfopen(gen_path,L"w");
+    
+    for(j=1;j<=total_lines;j++){
+    	if(first_time_tcoord){
+    		first_time_tcoord=false;
+    		fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&local_case);
+    		fprintf(coord,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,local_case,reset_dist);
+    		j++;
+		}
+    	fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
+    	while(local_case!=1 && local_case!=4 && j<=total_lines && (Gl==1 || Gl==0)/* ||  (Gl!=1 && Xf-Xl==0 && Yf-Yl==0)*/){
+            dx=Xl-Xf;
+            dy=Yl-Yf;
+            dz=Zl-Zf;
+            de=El-Ef;
+    	    gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2)));
+    	    if(gen_distance==0){
+				gen_distance=fabs(El-Ef);
+			}
+			if(j==2 && Gl==flag_num){reset_dist=0;}
+            fprintf(coord,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,local_case,reset_dist);
+            Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
+    	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
+    	    j++;
+    	    reset_dist=0;
+    	}
+    	if(first_write==true && gen_distance==0 && (Gl==1 || Gl==0) && local_case==1){
+    		reset_dist=1;
+    		first_write=false;
+		}
+    	fprintf(coord,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,local_case,reset_dist);
+    	dx=Xl-Xf;
+        dy=Yl-Yf;
+        dz=Zl-Zf;
+        de=El-Ef;
+    	gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2)));
+    	if(gen_distance==0){
+    		gen_distance=fabs(El-Ef);
+		}
+    	gen_feed=Fl;
+    	if(Gl!=1 && Gl!=0){
+    		gen_distance=0;
+		}
+    	fprintf(gen,"%lf " "%lf\n",gen_distance,gen_feed);
+		reset_dist=1;
+		gen_distance=0;
+		Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
+	}
+	fclose(fcoord);
+	fclose(coord);
+	fclose(gen);
+}
 
 
   
@@ -660,7 +952,7 @@ void read_general_settings()
         if(i==1 || i==2 || i==3 || i==4 || i==6 || i==7 || i==8 || i==9 || i==10 || i==11 || i==12 || i==13 || i==14 || i==15 ||\
 		   i==20 || i==21 || i==22 || i==23 || i==24 || i==25 || i==26 || i==27 || i==28 || i==30 || i==31 || i==32 || i==32){
              if(a[i][0]==' '){
-		    	printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+		    	printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 		    	system("pause");
 	    		exit(0);
         	}		  	
@@ -701,25 +993,25 @@ void read_temp_settings()
 	if(HEATED_NOZZLE==1){
 		if(PID_nozz==1){
 			if(a[0][0]==' ' || a[1][0]==' ' || a[2][0]==' ' || a[3][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}
 		}else{
 			if(a[4][0]==' ' || a[5][0]==' ' || a[6][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}
 		}
 		if(PID_bed==1){
 			if(a[7][0]==' ' || a[8][0]==' ' || a[9][0]==' ' || a[10][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}else{
 			if(a[11][0]==' ' || a[12][0]==' ' || a[13][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}				
@@ -741,19 +1033,19 @@ void read_home_settings(){
         strcpy(a[i],temp_str);
 		if(i==0){
 			if(a[3][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}
 		}else if(i==1){
 			if(a[4][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}	
 		}else if(i==2){
 			if(a[5][0]==' '){
-				printf("%s\n","NON VALID SETTINGS!!! ...PLEASE FILL ALL THE SETTINGS");
+				printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
 				system("pause");
 				exit(0);
 			}			
@@ -792,11 +1084,38 @@ void read_angle_settings(){
     	fgets (temp_str, 30, angle_sett);
         strcpy(a[i],temp_str);
     }
-    sscanf(a[0], "%lf", &XY_PLANE);
+    sscanf(a[0], "%lf", &XY_PLANE);	
 	sscanf(a[1], "%lf", &ZX_PLANE);
 	sscanf(a[2], "%lf", &ZY_PLANE);
     fclose(angle_sett);
 }
+
+
+void read_curve_settings(){
+    FILE *curve_sett;
+    char a[3][30],temp_str[30];  
+    int i;
+    
+    curve_sett=_wfopen(curve_path,L"r");
+    
+    for (i=0;i<=2;i++){
+    	fgets (temp_str, 30, curve_sett);
+        strcpy(a[i],temp_str);
+    }
+    CURVE_DETECTION=atoi(a[2]);
+    if(CURVE_DETECTION==1){
+    	if(a[1][0]==' ' || a[2][0]==' '){
+     		fclose(curve_sett);
+    		printf("%s\n","PLEASE SET ALL REQUIRED SETTINGS");
+    		system("pause");
+     		exit(0);
+    	}
+    }
+	sscanf(a[0], "%lf", &ANGLE_TOLERANCE);
+	sscanf(a[1], "%lf", &FEEDRATE_TOLERANCE);
+    fclose(curve_sett);
+}
+
 
 void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide-console-cursor-in-c
 {
@@ -811,8 +1130,8 @@ unsigned long gc2info(double flag_num)
 {
     #define arrays_size 13
     char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'}; 
-	unsigned long i=0,j,g,poslet=0,total_lines=0;
-    double line1[arrays_size],line2[arrays_size];
+	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0;
+    double line1[arrays_size],line2[arrays_size],trash=0;
     bool first_line1=true,first_line2=true,notfound=true;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r"); //here its the gcode
@@ -864,8 +1183,8 @@ unsigned long gc2info(double flag_num)
 	        fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&line1[i],&line1[i+1],&line1[i+2],&line1[i+3],&line1[i+4],&line1[i+5],\
 		           &line1[i+6],&line1[i+7],&line1[i+8],&line1[i+9],&line1[i+10],&line1[i+11],&line1[i+12]);
 				  	
-	        fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line1[i],line1[i+1],line1[i+2],line1[i+3],line1[i+4],line1[i+5],\
-	    	        line1[i+6],line1[i+7],line1[i+8],line1[i+9],line1[i+10],line1[i+11],line1[i+12]);	
+	        fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line1[i],line1[i+1],line1[i+2],line1[i+3],line1[i+4],line1[i+5],\
+	    	        line1[i+6],line1[i+7],line1[i+8],line1[i+9],line1[i+10],line1[i+11],line1[i+12],trash,trash);	
 		}
         fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&line2[i],&line2[i+1],&line2[i+2],&line2[i+3],&line2[i+4],&line2[i+5],\
 		       &line2[i+6],&line2[i+7],&line2[i+8],&line2[i+9],&line2[i+10],&line2[i+11],&line2[i+12]); 
@@ -873,9 +1192,9 @@ unsigned long gc2info(double flag_num)
 	 	   if (line2[g]==flag_num){
 	 		   line2[g]=line1[g];
 		    }
-	    } 
-	    fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line2[i],line2[i+1],line2[i+2],line2[i+3],line2[i+4],line2[i+5],\
-	           line2[i+6],line2[i+7],line2[i+8],line2[i+9],line2[i+10],line2[i+11],line2[i+12]);
+	    }
+	    fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line2[i],line2[i+1],line2[i+2],line2[i+3],line2[i+4],line2[i+5],\
+	           line2[i+6],line2[i+7],line2[i+8],line2[i+9],line2[i+10],line2[i+11],line2[i+12],trash,trash);
 		for(g=0;g<arrays_size;g++){
 	 		line1[g]=line2[g];
 		} 
@@ -912,7 +1231,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 
     int dx=0,dy=0,dz=0,de=0,xs=0,ys=0,zs=0,es=0,p1=0,p2=0,p3=0,x1_last,y1_last,z1_last,e1_last,period;
     int stepx=0,stepy=0,stepz=0,stepe=0,x1=0,y1=0,z1=0,e1=0,x2=0,y2=0,z2=0,e2=0;
-    double xmin,ymin,zmin,emin,LINE_DIST,E_DIST,LINE_STEP=0,l=0,XY_PLANE_RAD,ZX_PLANE_RAD,ZY_PLANE_RAD;
+    double xmin,ymin,zmin,emin,LINE_DIST,E_DIST,LINE_STEP=0,XY_PLANE_RAD,ZX_PLANE_RAD,ZY_PLANE_RAD;
     
     if(XY_PLANE!=0){
     	XY_PLANE_RAD=XY_PLANE*pi/180;
@@ -935,12 +1254,11 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     	yl=sin(ZY_PLANE_RAD)*zl;
     	yf=sin(ZY_PLANE_RAD)*zf;  	
 	}
-	
     dx=xl-xf;
     dy=yl-yf;
     dz=zl-zf;
     de=el-ef;
-    FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE);
+    FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE); //Only working when CURVE_DETECTION is disabled
 	xmin=1/STPU_X;
     ymin=1/STPU_Y;
 	zmin=1/STPU_Z;
@@ -956,23 +1274,33 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 	tmin=period*pow(10,-6);
     LINE_DIST=sqrt((pow(dx*xmin,2))+(pow(dy*xmin,2))+(pow(dz*xmin,2)));
     E_DIST=fabs(el-ef);
-    if(LINE_DIST==0 && E_DIST==0){
+    if(LINE_DIST==0 && E_DIST==0){ //for safety
     	return;
 	}
-	if(JMFEED>=FEEDRATE){
-		cu=check_jfeed_limits(xl-xf,yl-yf,zl-zf,E_DIST);
-		state=10;
-	    if(LINE_DIST==0 && E_DIST!=0){
-        	LINE_DIST=E_DIST;
-        	E_DIST=0;
-	    }
-	}else{
-		if(LINE_DIST==0 && E_DIST!=0){
-        	LINE_DIST=E_DIST;
-        	E_DIST=0;
-	    }
-		time_momments(LINE_DIST,FEEDRATE);
+	if(LINE_DIST==0 && E_DIST!=0){
+        LINE_DIST=E_DIST;
+        E_DIST=0;
 	}
+	if(CURVE_DETECTION==1){
+	    if(new_CURVE==1){
+	    	trajectory_POINT=0; //reset
+	    	if(JMFEED>=gen_FEED){
+            	cu=gen_FEED;//for safety reasons
+        		state=10; //NO ACCElERATION or DECELERATION	    		
+			}else{
+				time_momments(gen_DISTANCE,gen_FEED);
+			}
+		}
+	}else{
+    	if(JMFEED>=FEEDRATE){ //If this case is true then motion occurs with NO ACCElERATION or DECELERATION
+        	cu=check_jfeed_limits(xl-xf,yl-yf,zl-zf,E_DIST);
+    		state=10; //NO ACCElERATION or DECELERATION
+    	}else{
+			time_momments(LINE_DIST,FEEDRATE);		
+		}
+        trajectory_POINT=0; //reset		
+	}
+///////******  BRESENHAM LINE ALGORITHM    ****/////////
     if (x2 > x1){
         xs = 1;
     }else{ 
@@ -1015,12 +1343,11 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
             p1 += 2 * dy; 
             p2 += 2 * dz; 
             p3 += 2 * de;
-            l += LINE_STEP;
+            trajectory_POINT += LINE_STEP;
             stepx = x1 - x1_last; stepy = y1 - y1_last;
             stepz = z1 - z1_last; stepe = e1 - e1_last;
-            //printf("%i %i %i\n",stepx,x1,x1_last);
             if(dx==0){stepx=0;}if(dy==0){stepy=0;}if(dz==0){stepz=0;}if(de==0){stepe=0;} //FIXES A BUG
-            wr2bin(stepx,stepy,stepz,stepe,l);
+            wr2bin(stepx,stepy,stepz,stepe,trajectory_POINT); //resolve time calculation for current trajectory point 
             x1_last = x1; y1_last = y1; z1_last = z1; e1_last = e1;
         }
     }else if (dy >= dx && dy >= dz && dy >= de){ 
@@ -1045,11 +1372,11 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
             p1 += 2 * dx; 
             p2 += 2 * dz;
 			p3 += 2 * de; 
-            l += LINE_STEP;
+            trajectory_POINT += LINE_STEP;
             stepx = x1 - x1_last; stepy = y1 - y1_last;
             stepz = z1 - z1_last; stepe = e1 - e1_last;
             if(dx==0){stepx=0;}if(dy==0){stepy=0;}if(dz==0){stepz=0;}if(de==0){stepe=0;} //FIXES A BUG
-            wr2bin(stepx,stepy,stepz,stepe,l);
+            wr2bin(stepx,stepy,stepz,stepe,trajectory_POINT); //resolve time calculation for current trajectory point
             x1_last = x1; y1_last = y1; z1_last = z1; e1_last = e1;			
         } 
     }else if (dz >= dx && dz >= dy && dz >= de){
@@ -1074,11 +1401,11 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
             p1 += 2 * dy;
             p2 += 2 * dx;
 			p3 += 2 * de; 
-            l += LINE_STEP;
+            trajectory_POINT += LINE_STEP;
             stepx = x1 - x1_last; stepy = y1 - y1_last;
             stepz = z1 - z1_last; stepe = e1 - e1_last;
             if(dx==0){stepx=0;}if(dy==0){stepy=0;}if(dz==0){stepz=0;}if(de==0){stepe=0;} //FIXES A BUG
-            wr2bin(stepx,stepy,stepz,stepe,l);
+            wr2bin(stepx,stepy,stepz,stepe,trajectory_POINT); //resolve time calculation for current trajectory point
             x1_last = x1; y1_last = y1; z1_last = z1; e1_last = e1;
         }
     }else{
@@ -1103,17 +1430,17 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
             p1 += 2 * dx;
             p2 += 2 * dy;
 			p3 += 2 * dz; 
-            l += LINE_STEP;
+            trajectory_POINT += LINE_STEP;
             stepx = x1 - x1_last; stepy = y1 - y1_last;
             stepz = z1 - z1_last; stepe = e1 - e1_last;
             if(dx==0){stepx=0;}if(dy==0){stepy=0;}if(dz==0){stepz=0;}if(de==0){stepe=0;} //FIXES A BUG
-            wr2bin(stepx,stepy,stepz,stepe,l);
+            wr2bin(stepx,stepy,stepz,stepe,trajectory_POINT); //resolve time calculation for current trajectory point
             x1_last = x1; y1_last = y1; z1_last = z1; e1_last = e1;
         }   	
 	}		
  }
 
-void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE)
+void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE)
    {
         
     double R,a_f,a_l,theta_first,theta_last,dtheta,ARC_DIST,E_DIST,Xmin,Ymin,Emin,THETA_STEP,theta,DX,DY,x,y,Xlast,Ylast,emin;
@@ -1132,8 +1459,8 @@ void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x
      	R=sqrt(pow((x2_f-k),2) + pow((y2_f-l),2)); ////calculate radius of circle
       	a_f=casequartile(x1_f,y1_f,k,l);
      	a_l=casequartile(x2_f,y2_f,k,l);
-     	theta_first=theta_func(x1_f,y1_f,k,l,a_f,input);
-     	theta_last=theta_func(x2_f,y2_f,k,l,a_l,input);
+     	theta_first=theta_func(x1_f,y1_f,k,l,a_f);
+     	theta_last=theta_func(x2_f,y2_f,k,l,a_l);
      	dtheta=fabs(theta_last-theta_first);
  		if(dtheta>pi/2.0){
 			dtheta=2.0*pi-dtheta;
@@ -1158,7 +1485,7 @@ void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x
 	    }		
 		if(Xmin<=Ymin){
             emin=(ARC_DIST*Emin)/fabs(E_DIST);
-			if(input==true){
+			if(clockwise==true){
 				if(Xmin<=emin){
 			        THETA_STEP=-dtheta*Xmin/ARC_DIST;
 				}else{
@@ -1173,7 +1500,7 @@ void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x
     		}
 		}else{
             emin=(ARC_DIST*Emin)/fabs(E_DIST);
-			if(input==true){
+			if(clockwise==true){
 				if(Ymin<=emin){
 			        THETA_STEP=-dtheta*Ymin/ARC_DIST;
 				}else{
@@ -1192,21 +1519,21 @@ void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x
 		L_STEP=fabs(THETA_STEP)*R;
 		theta=theta_first+THETA_STEP;
 		theta_prev=theta;
-		if (theta_first>theta_last && input==false){
+		if (theta_first>theta_last && clockwise==false){
 		    if(theta_last==0){
 		    	theta_last=2*pi;
 			}else{
     			temp=theta_last;
     			theta_last=2*pi;
     		}
-		}else if(theta_first<theta_last && input==true && y2_f!=0){
+		}else if(theta_first<theta_last && clockwise==true && y2_f!=0){
     			temp=theta_last;
     			theta_last=0;	
 		}
 		Xlast=x1_f;
 		Ylast=y1_f;	
         theta_last=theta_last+(THETA_STEP/2.0001); ///BUG FIX FOR THE LAST POINT
-		while((theta<=theta_last && input==false) || (theta>=theta_last && input==true)){
+		while((theta<=theta_last && clockwise==false) || (theta>=theta_last && clockwise==true)){
 			//L = fabs(theta-theta_first)*R;
 			L+=L_STEP;
 			x=R*cos(theta);
@@ -1246,7 +1573,7 @@ void ARC(bool input,double k,double l,double x1_f,double y1_f,double Ef,double x
 			}
 			theta_prev=theta;
 			theta += THETA_STEP;
-			if(input==false){
+			if(clockwise==false){
     			if (theta>(pi/2.0) && theta_prev<(pi/2.0)){
     				theta=(pi/2.0);
     		    }else if(theta>pi && theta_prev<pi){
@@ -1288,7 +1615,7 @@ int casequartile(double x,double y,double K,double L)
     		return result;
     }
     
-double theta_func(double x,double y,double k,double l,int a,bool input)
+double theta_func(double x,double y,double k,double l,int a)
     {
     	double theta,dx,dy;
     	dy=fabs(y-l);
@@ -1330,11 +1657,10 @@ void time_momments(double L,double umax){
 		
 	int loop=0,dek; 
     double t0,error,D,akr,xx,xa,xu,u,t,dt,dt1,dt2,b,E,t01,t02;
-	
+    
 	if(JERK != 0){
      	dek=-9;
      	akr=0.5*pow(10,dek);
-        	
         t1=ACCEL_ERATION/JERK;
         ca=ACCEL_ERATION;
         cu=JMFEED+(JERK*pow(t1,2));
@@ -1352,7 +1678,6 @@ void time_momments(double L,double umax){
         		t4=t3+t1;
     	    	t5=t4+t1;
         	}else{
-         		//dt1=(umax-cu)/ACCEL_ERATION;
          		dt1=(umax-((JERK*pow(t1,2))+JMFEED))/ACCEL_ERATION;
          		xa=((JMFEED+umax)*dt1)+(((2.0*JMFEED)+(2.0*umax))*t1);
          		ca=ACCEL_ERATION;
@@ -1369,7 +1694,6 @@ void time_momments(double L,double umax){
          			t6=t5+t1;
          			cu=JMFEED+JERK*pow(t1,2)+(ACCEL_ERATION*dt);
          			xa=((JMFEED+cu)*dt)+(((2.0*JMFEED)+(2.0*cu))*t1);
-         			//printf("%s\n","TEEESTED!!...DONE");
         		}else{
          			dt2=(L-xa)/umax;
          			state=4;
@@ -1379,7 +1703,6 @@ void time_momments(double L,double umax){
          			t5=t4+t1;
          			t6=t5+dt1;
          			t7=t6+t1;
-    			//printf("%s\n","TEEESTED!!...DONE");
      	    	}
         	}
         }else{
@@ -1395,7 +1718,7 @@ void time_momments(double L,double umax){
                         error=fabs(t-t0);		
 	                    t0=t;
                 	    loop++;
-                	    if(loop>50){ //reduce accuracy if the root cannot be calculated
+                	    if(loop>50){ //increase calculation error if the root cannot be found
                 	    	loop=0;
                 	    	dek++;
                 	    	akr=0.5*pow(10,dek);
@@ -1408,8 +1731,7 @@ void time_momments(double L,double umax){
         			t3=3.0*t1;
         			t4=4.0*t1;
         			ca=JERK*t1;
-	    	 		cu=JMFEED+(JERK*pow(t1,2));   
-	    			//printf("%s\n","TEEESTED!!...DONE");	
+	    	 		cu=JMFEED+(JERK*pow(t1,2));   	
 	    		}else{
     			   	dt=(L-xx)/umax;
 	    		   	state=3;
@@ -1417,7 +1739,6 @@ void time_momments(double L,double umax){
         		 	t3=t2+dt;
         	 		t4=t3+t1;
 	         		t5=t4+t1;
-	         		//printf("%s\n","TEEESTED!!...DONE");
 			   }
     	   }else{
          	    t0=t1*umax/cu;
@@ -1427,7 +1748,7 @@ void time_momments(double L,double umax){
                     error=fabs(t-t0);		
 	                t0=t;
             	    loop++;
-            	    if(loop>50){ //reduce accuracy if the root cannot be calculated
+            	    if(loop>50){ //increase calculation error if the root cannot be found
             	    	loop=0;
             	    	dek++;
             	    	akr=0.5*pow(10,dek);
@@ -1441,7 +1762,6 @@ void time_momments(double L,double umax){
     			t4=4.0*t1;
     			ca=JERK*t1;
 		 		cu=JMFEED+(JERK*pow(t1,2)); 
-    				//printf("%s\n","TEEESTED!!...DONE");
     	   }
     	}
     		if(state==1){ ///DONE
@@ -1450,7 +1770,6 @@ void time_momments(double L,double umax){
     			x2_t2=(t1*cu)+(JMFEED*t1);
                 x3_t3=x2_t2+x2_t2-x1_t1;
     			x4_t4=2.0*x2_t2;
-    			//printf("%s\n","STATE1");
     		}else if(state==2){//DONE
     			u1_t1=(JERK*pow(t1,2)/2.0)+JMFEED;
     			u2_t2=u1_t1+(ca*(t2-t1));
@@ -1460,7 +1779,6 @@ void time_momments(double L,double umax){
     			x4_t4=x3_t3+(x3_t3-x2_t2);
     			x5_t5=x4_t4+(x2_t2-x1_t1);
                 x6_t6=2.0*x3_t3;
-                 //printf("%s\n","STATE2");
     		}else if(state==3){ ////DONE
     			u1_t1=(JERK*pow(t1,2)/2.0)+JMFEED;
     			x1_t1=(JERK*pow(t1,3)/6.0)+(JMFEED*t1);
@@ -1468,7 +1786,6 @@ void time_momments(double L,double umax){
     			x3_t3=(cu*(t3-t2))+x2_t2;
     			x4_t4=x3_t3+x2_t2-x1_t1;
     			x5_t5=x3_t3+x2_t2;
-    		//	printf("%s\n","STATE3");
     		}else if(state=4){ ///DONE
     			u1_t1=(JERK*pow(t1,2)/2.0)+JMFEED;
     			u2_t2=u1_t1+(ca*(t2-t1));
@@ -1479,9 +1796,6 @@ void time_momments(double L,double umax){
     			x5_t5=x4_t4+(x3_t3-x2_t2);
     			x6_t6=x5_t5+(x2_t2-x1_t1);
     			x7_t7=x4_t4+x3_t3;
-    			//printf("%s\n","STATE4");
-    			//printf("%s %d %f %f %f %f %f %f %f\n","state=",state,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7);
-    			//x7_t7=(JERK*pow(t7,3)/6)-(JERK*pow(t7,3)/2)-(JERK*t7*pow(t6,2))+(JERK*t6*pow(t7,2))+(JERK*pow(t6,3)/3)-(JERK*t7*pow(t6,2)/2)+(u1_t1*(t7-t6))+x6_t6;
     		}
 	    }else{
             t1=(umax-JMFEED)/ACCEL_ERATION;
@@ -1520,18 +1834,16 @@ void time_momments(double L,double umax){
     			x2_t2=2*x1_t1;
     		}	    	
 		}
-		//printf("%s %d %f %f %f %f %f %f %f\n","state=",state,t1,t2,t3,t4,t5,t6,t7);
 }
 	
 double L_time_calc(double l)
-	{	   	
-    	int i=0,loop=0,dek; 
-    	double t0=2,t01,t02,t,error,D,akr;
+{	   	
+    int i=0,loop=0,dek; 
+    double t0=2,t01,t02,t,error,D,akr;
  	
  	if(JERK != 0){
     	dek=-9;
       	akr=0.5*pow(10,dek);
-	
     	if(state==1){/// VIRTUALLY TESTED
     		if(l<=x1_t1){
         	    t0=t1/2.0;
@@ -1541,7 +1853,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated 
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1558,7 +1870,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1575,7 +1887,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1592,7 +1904,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1603,7 +1915,6 @@ double L_time_calc(double l)
     			t=t4;
     		}
     	}
-	
     	if(state==2){ //// VIRTUALLY TESTED
             if(l<=x1_t1){
         	    t0=t1/2;
@@ -1613,7 +1924,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated 
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1639,7 +1950,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1656,7 +1967,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1682,7 +1993,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1703,7 +2014,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated 
+        		    if(loop>30){ //increase calculation error if the root cannot be found 
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1720,7 +2031,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1739,7 +2050,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1756,7 +2067,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1777,7 +2088,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated 
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1803,7 +2114,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1822,7 +2133,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1848,7 +2159,7 @@ double L_time_calc(double l)
 	    	        i=i+1;		
 	    	        t0=t;
         		    loop++;
-        		    if(loop>30){ //reduce accuracy if the root cannot be calculated
+        		    if(loop>30){ //increase calculation error if the root cannot be found
         		    	loop=0;
         		    	dek++;
         		    	akr=0.5*pow(10,dek);
@@ -1948,11 +2259,11 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
         char bits[9];
         uint8_t byte_num,null_byte=0,timeboxes;
       	
-       	for(j=0;j<=7;j++){ ///complete some bits with 0 for safety
+       	for(j=0;j<=7;j++){ ///set all bits 0 for safety
        		bits[j]='0';
        	}
        	j=0;
-        ///////////****complete the suitable bits 0,1 for step and direction in each axis****/////////////	
+        ///////////****set the suitable bits 0,1 to arduino output pins, step and direction for each axis****/////////////	
        	if(stepx==0){
             bits[6]='0';
             bits[7]='0';
@@ -2025,12 +2336,12 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[1]='0';
 			}	
    	    }
-	    bits[8]='e';  
-  	    byte_num=bits2val(bits); ///return the integer number of the previous calculated 8 bits
-  	    time=L_time_calc(l);
-        timeboxes=(time-last_time)/tmin; //total bytes in that period of time between this and the next pulse
+	    bits[8]='e'; //end bit  
+  	    byte_num=bits2val(bits); //byte num = the 8bit integer calculated from previous bits that arduino will port forward to his outputs 
+  	    time=L_time_calc(l); //calculate time momment from the begining of motion for current point trajectory
+        timeboxes=(time-last_time)/tmin; //ARDUINO LOW PULSE DURATION BETWEEN STEPS = CURRENT STEP FREQUENCY = CURRENT SPEED
         if(timeboxes<=0){
-        	timeboxes=1;///FIX A TIME BUG
+        	timeboxes=2;///FIX A TIME BUG
 		}
    	    write_hex2file(timeboxes);
    	    write_hex2file(byte_num);
@@ -2047,7 +2358,7 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
     int   child_status;
     uint16_t trash_byte=100;
     
-    if(PRINT_STATE==0){
+    if(PRINT_STATE==0){ //USB PRINTING
     	file_buffer_size++; //increase bytecounter
     	if(flag_file_state==false){ //write bytes to free file
          	fwrite(&hex_value, sizeof(uint8_t),1,buffer1_file);
@@ -2066,14 +2377,14 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
         	}else{
         		fclose(buffer2_file);
         	}
-    		do{ //wait for a file to be free
+    		do{ 
     			status = wstat(flag_path, &buffer); //check flag state....stat replaced with wstat
                 child_status = wstat(child_path, &child_buffer);
                 if(child_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
                     printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
                 	exit(0);
     			}
-    		}while(buffer.st_size==0);
+    		}while(buffer.st_size==0); //wait for a file to be free
     		if(flag_file_state==true){ //open the free file for writing
         		buffer1_file=_wfopen(buffer1_path,L"wb");
         	}else{
@@ -2086,7 +2397,7 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
     		file_buffer_size=0; //reset bytecounter
     		flag_file_state = !flag_file_state; 
     	}
-    }else{
+    }else{ //SD CARD PRINTING
     	fwrite(&hex_value, sizeof(uint8_t),1,SD_binary_file);
     	storage_counter=storage_counter+storage_step;
 		file_buffer_size++;
