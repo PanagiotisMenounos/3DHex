@@ -3,6 +3,7 @@
 
 3DHex is an open source 3D printer firmware. The Host uses the CPU power of any typical desktop computer to solve really complex mathematical equations and generates a binary file. This file then is transfered either via USB or SD Card to the MCU. The MCU sets its outputs according to the raw 0s and 1s that binary file contains and controls the printing process. 
 
+
 ## Notes on version 1.0.2
 
 -User friendly configuration
@@ -20,6 +21,7 @@
 -Software axis alignment 
 
 ## How to install
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/master/Host/GUI.png" />
 
 Download 3DHex.exe located at [Releases](https://github.com/3DHexfw/3DHex/releases) . The installation will also extract a folder which contains the MCU code and the necessary Arduino libraries in order to upload to the board.
 

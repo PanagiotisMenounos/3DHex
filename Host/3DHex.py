@@ -141,7 +141,7 @@ def about():
    l300.place(x=15, y=98) #choose to place labels with grid(there are also place and pack methods)
  
 def guide():
-   subprocess.Popen([os.getenv('LOCALAPPDATA')+"\\3DHex\\Guide_1.0.1.pdf"],shell=True)
+   subprocess.Popen([os.getenv('LOCALAPPDATA')+"\\3DHex\\Guide_1.0.2.pdf"],shell=True)
  
 def exit():
  child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex\\child.bin','w')
