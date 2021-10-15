@@ -69,7 +69,8 @@ double XY_PLANE,ZX_PLANE,ZY_PLANE;
 int CURVE_DETECTION;
 double ANGLE_TOLERANCE,FEEDRATE_TOLERANCE;
 
-uint8_t GP,GC;
+uint8_t GP,GC,LAST_TIME_BOXES;
+bool embedded_line=false;
         
      ////////////////////////*****************/////////////////////////////////////
 
@@ -79,7 +80,7 @@ double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_l
 bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise,ABSOLUTE_POSITIONING=1,E_ABSOLUTE_POSITIONING=1;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
-
+int X_GLOB=0,Y_GLOB=0;
 wchar_t savepath[14][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
@@ -129,7 +130,7 @@ double line_accel_feed_limits(double dx,double dy,double dz,double E_DIST,double
 double arc_accel_feed_limits(double R,double ARC_DIST,double E_DIST,double FEEDRATE);                                           //check derivativelimits of G02-G03 (arc)
 double check_jfeed_limits(double dx,double dy,double dz,double E_DIST);                                                         //check jump feed rate limits (only for lines)
 void curve_detection(unsigned long total_lines);                                                                                //finds tangent moves, prevent decelaration
-double curve_lines_angles(double xf,double yf,double xl,double yl);                                                             //check angle for speed adjustment
+double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl);                                                             //check angle for speed adjustment
 void curve_length(unsigned long total_lines);                                                                                   //callculate total curve length
 void composite(double Command,double Ef,double El);                                                                             //finds when should be cut the fiber
 void path_files();                                                                                                              //locates where the %APPDATA% is 
@@ -145,7 +146,6 @@ void mcu_settings_send();
 int check_print_state();                                                                                                        //return 0 => USB return 1 => SD_CARD
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl);
 uint8_t bits2val(char *bits);                                                                                                   //convert a serial of 0,1 to a number 16bit (0,1) = 2 bytes(unsigned integer=uint16_t)
-void zero_M();
 
 ///////////////////////****************//////////////////////////
 
@@ -202,8 +202,7 @@ int main()
 		}else{               //sd print
 			crt_file();
 		}        
-        total_lines=gc2info(flag_num); //remember to add first line
-        //CURVE_DETECTION=1;
+        total_lines=gc2info(flag_num); 
         if(CURVE_DETECTION==1){
         	curve_detection(total_lines);
             curve_length(total_lines);
@@ -214,20 +213,17 @@ int main()
         
         gen1=_wfopen(gen_path,L"r");
         for(j=1;j<=total_lines;j++){
-        	//last_time=0; 
-        //	printf("%i\n",j);
 		    if(first_line==true){
 		        first_line=false;
 	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&new_CURVE);
 	            j++;
 	    	}
             fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
-			if(CURVE_DETECTION==1 && new_CURVE==1 && Gl==1){
+			if(CURVE_DETECTION==1 && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3)){
 			   last_time=0; //FIX time BUG at the begining of new command
                fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED);
                gen_FEED=check_units(gen_FEED);
                Fl=gen_FEED;
-               
 			}
 			if (CURVE_DETECTION==0){
 				Fl=check_units(Fl);
@@ -379,7 +375,6 @@ int main()
 				if(Ml==83){// M83 E Absolute
 					E_ABSOLUTE_POSITIONING=0;
 				}
-				//file_buffer_size=file_buffer_size+30;
 				write_hex2file(GP);
 				write_hex2file(GP);
                 
@@ -396,12 +391,6 @@ int main()
 	            	write_hex2file(MG_byte_buffer[temp_counter]);
 				}
 	            free(MG_byte_buffer);
-				//if(flag_file_state==false){ //write bytes to free file
-                //	fwrite(&MG_data, sizeof(MG_data),1,buffer1_file);
-                	
-            	//}else{
-              	    //fwrite(&MG_data, sizeof(MG_data),1,buffer2_file);
-             	//}
 			}
 			if(Xl!=axis_num && Ml!=205){Xf=Xl;} //do not consider axis_num as a coordinate 
 			if(Yl!=axis_num && Ml!=205){Yf=Yl;}
@@ -412,13 +401,15 @@ int main()
 			WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
 			check_SD_file_size(Xf,Yf,Zf,Xl,Yl,Zl);			
         } 
+        
 		printf("%s\n","COMPLETED!");
+		printf("%s %i\n","X_GLOB=",X_GLOB);
+		printf("%s %i\n","Y_GLOB=",Y_GLOB);
         close_SD_binary_file();
         fclose(buffer1_file);
         fclose(buffer2_file);
         fclose(SD_binary_file);
         fclose(gen1);
-        //system("pause");   //wait the user to press enter key at the end
     }
     
     
@@ -845,7 +836,6 @@ double arc_accel_feed_limits(double R,double ARC_DIST,double E_DIST,double FEEDR
 	if(Dae>0){ //check the linear acceleration limits in E axis, only linear acceleration change => ratio change
         ACCEL_ERATION=MAX_ACCE/div;
     }   
-	//printf("%f %f\n",ACCEL_ERATION,FEEDRATE);
 	return FEEDRATE;  
 	
 }  
@@ -909,31 +899,39 @@ double check_jfeed_limits(double dx,double dy,double dz,double E_DIST)
 void curve_detection(unsigned long total_lines)
 {
 	int j=0,last_last_printing_move=0,last_printing_move=0,printing_move=0,breeak=0;
-	double theta1,theta2,smart_case,last_smart_case=1,trash,FS,last_curve=0,new_curve=0,af,al;
-	double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,Gt,Mt,Xt,Yt,Zt,It,Jt,Et,Ft,St,Pt,Rt,Tt;
+	double theta_temp,theta1,theta2,smart_case,last_smart_case=1,trash,FS,last_curve=0,new_curve=0,af,al,theta;
+	double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl;
 	bool first_smart_line=true,next_line=false;
 	FILE *coord;
 	FILE *final;
     coord=_wfopen(coordinates_path,L"r");
     final=_wfopen(fcoordinates_path,L"w");
     fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&trash); 
+    j++;
     fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,trash);
-    Gt=Gf;Mt=Mf;Xt=Xf;Yt=Yf;Zt=Zf;Et=Ef;
-    fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&trash);   
-	if(Gf==1){
-        if((Xf!=Xt || Yf!=Yt) && Ef!=Et && Zf==Zt){
+    fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash);
+	j++;   
+	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){
+        if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
         	last_printing_move=1;
     	}else{
 			last_printing_move=0;
     	}
     	last_curve=1;
-    }else{
-    	last_printing_move=0;
-    	last_curve=0;
-	}  
-	theta1 = curve_lines_angles(Xt,Yt,Xf,Yf);
-    j++;
-    j++;
+    	theta1 = curve_lines_angles(Xf,Yf,Xl,Yl,Gl);
+    }else if(Gl == 02 || Gl == 03 || Gl == 02|| Gl == 03){
+       	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
+       		printing_move=1;
+   		}else{
+   			printing_move=0;
+   		}
+		theta1 = curve_lines_angles(Il,Jl,Xl,Yl,Gl);
+		last_curve=1;	    		
+	}else{
+		last_printing_move=0;
+    	last_curve=0;	
+	}
+	Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
     while(j<total_lines){
     	j++;
         fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash);    
@@ -951,16 +949,30 @@ void curve_detection(unsigned long total_lines)
 				El=Ef;
 			}
 		}		
-		if(Gl==1 && Gf==1){
-        	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
-        		printing_move=1;
-			}else{
-				printing_move=0;
+		if((Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03) && (Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03)){
+			if(Gl==1){
+            	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
+            		printing_move=1;
+	    		}else{
+	    			printing_move=0;
+	    		}
+		    	theta2 = curve_lines_angles(Xf,Yf,Xl,Yl,Gl);
+	    	}
+	    	if(Gl == 2 || Gl == 3 || Gl == 02|| Gl == 03){
+            	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
+            		printing_move=1;
+	    		}else{
+	    			printing_move=0;
+	    		}
+				theta2 = curve_lines_angles(Il,Jl,Xf,Yf,Gl);
+				theta_temp = curve_lines_angles(Il,Jl,Xl,Yl,Gl);	    		
 			}
-			theta2 = curve_lines_angles(Xf,Yf,Xl,Yl);
         	if(last_printing_move==printing_move && Fl==Ff){
-                //printf("%s %f %f %f\n","angle",theta1,theta2,fabs(theta2-theta1));
-            	if(fabs(theta2-theta1)<=15 && ((Xf!=Xl || Yf!=Yl))){
+                theta=fabs(theta2-theta1);
+                if(theta>180){
+                 	theta=360-theta;
+		     	}
+                if(theta<=15 && ((Xf!=Xl || Yf!=Yl))){
 		    	  new_curve=0;
 		        }else{
 	    	       new_curve=1;
@@ -968,37 +980,54 @@ void curve_detection(unsigned long total_lines)
 	    	}else{
 	    	     new_curve=1;  	
 			}
-		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
-		last_last_printing_move=last_printing_move;
-		last_printing_move=printing_move;
-		last_curve=new_curve;
-		theta1=theta2;
-		Gt=Gf;Mt=Mf;Xt=Xf;Yf=Yf;Zt=Zf;
-        Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
+		    fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
+		    last_last_printing_move=last_printing_move;
+		    last_printing_move=printing_move;
+		    last_curve=new_curve;
+		    theta1=theta2;
+		    if(Gl==2 || Gl==3 || Gl==02 || Gl==03){
+		    	theta1=theta_temp;
+			}
+            Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
     	}
-		if(Gf==1 && Gl!=1){
-    	printing_move=0;
-    	new_curve=0;
-		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
-		last_printing_move=printing_move;
-		last_curve=new_curve;
-		theta1=theta2;
-		Gt=Gf;Mt=Mf;Xt=Xf;Yf=Yf;Zt=Zf;
-        Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle    		
+		if((Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
+        	printing_move=0;
+        	new_curve=0;
+    		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
+    		last_printing_move=printing_move;
+    		last_curve=new_curve;
+    		theta1=theta2;
+    		if(Gl==2 || Gl==3 || Gl==02 || Gl==03){
+    		    theta1=theta_temp;
+    		}
+            Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle    		
 		}
-		if(Gf!=1 && Gl==1){
-        	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
-        		printing_move=1;
-			}else{
-				printing_move=0;
+		if(((Gf!=1 && Gf!=0 && Gf!=2 && Gf!=3) || (Gf!=01 && Gf!=00 && Gf!=02 && Gf!=03)) && (Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03)){
+			if(Gl==0 || Gl==00 || Gl==1 || Gl==01){
+            	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
+            		printing_move=1;
+	    		}else{
+	    			printing_move=0;
+	    		}
+		    	theta2 = curve_lines_angles(Xf,Yf,Xl,Yl,Gl);
+	    	}
+	    	if(Gl == 02 || Gl == 03 || Gl == 02|| Gl == 03){
+            	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
+            		printing_move=1;
+	    		}else{
+	    			printing_move=0;
+	    		}
+				theta2 = curve_lines_angles(Il,Jl,Xf,Yf,Gl);
+				theta_temp = curve_lines_angles(Il,Jl,Xl,Yl,Gl);	    		
 			}
 			new_curve=1;
-			theta2 = curve_lines_angles(Xf,Yf,Xl,Yl);
 		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
 		last_printing_move=printing_move;
 		last_curve=new_curve;
 		theta1=theta2;
-		Gt=Gf;Mt=Mf;Xt=Xf;Yf=Yf;Zt=Zf;
+		if(Gl==02 || Gl==03 || Gl==2 || Gl==3){
+		    theta1=theta_temp;
+		}
         Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle		
 		}
     	
@@ -1008,25 +1037,58 @@ void curve_detection(unsigned long total_lines)
 	fclose(final);
 }
 
-double curve_lines_angles(double xf,double yf,double xl,double yl)
+double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl)
 {
 	int aadj;
 	double theta_adj;
 	
-	if(fabs(xl-xf==0) && fabs(yl-yf==0)){
-		return 180;
+	if(Gl==0 || Gl==00 || Gl==01 || Gl==1){
+    	if(fabs(xl-xf==0) && fabs(yl-yf==0)){
+      		return 180;
+    	}
+        aadj=casequartile(xl,yl,xf,yf,1);
+        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
+        return theta_adj;
+    }else{
+        aadj=casequartile(xl,yl,xf,yf,1);
+        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
+        if(aadj==1){
+        	if(Gl==2){
+             	theta_adj=270+theta_adj;	
+			}else if(Gl==3){
+				theta_adj=90+theta_adj;
+			}
+		}else if(aadj==2){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj+90;
+			}			
+		}else if(aadj==3){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj+90;
+			}			
+		}else if(aadj==4){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj-270;
+			}			
+		}
+        return theta_adj;
 	}
-    aadj=casequartile(xl,yl,xf,yf,1);
-    theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
-    return theta_adj;
 }
+
 
 void curve_length(unsigned long total_lines)
 {
-	int j=0,loopa=0;
+	int j=0,loopa=0,a_f,a_l;
 	double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl=0,Sl,Pl,Rl,Tl,local_case=0,gen_feed,dx,dy,dz,de,gen_distance=0,reset_dist=1;
 	bool first_time_tcoord=true,first_write=true;
 	double xmin,ymin,zmin,emin,x1,x2,y1,y2,z1,z2,e1,e2;
+	double x1_f,x2_f,y1_f,y2_f,k,l,R,theta_first,theta_last,dtheta;
 	FILE *fcoord;
 	FILE *gen;
 	FILE *coord;
@@ -1034,49 +1096,68 @@ void curve_length(unsigned long total_lines)
     fcoord=_wfopen(fcoordinates_path,L"r");
     gen=_wfopen(gen_path,L"w");
     
-    while(j<=total_lines){
+    while(j<total_lines){
     	if(first_time_tcoord){
     		first_time_tcoord=false;
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&local_case);
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
     	    j++;
-    	    //j++;
 		}
-		if(Gl==1 && first_write==true){
+		if((Gl==0 || Gl==00 || Gl==01 || Gl==02 || Gl==03 || Gl==1 || Gl==2 || Gl==3) && first_write==true){
 			local_case=0;
 			first_write=false;
 		}
-    	while(local_case==0 && Gl==1 && j<=total_lines){
-        	xmin=1/STPU_X;
-            ymin=1/STPU_Y;
-        	zmin=1/STPU_Z;
-         	emin=1/STPU_E;
-            x1=round(Xf/xmin); y1=round(Yf/ymin); z1=round(Zf/zmin); e1=round(Ef/emin);
-            x2=round(Xl/xmin); y2=round(Yl/ymin); z2=round(Zl/zmin); e2=round(El/emin);
-            dx = abs(x2 - x1);
-            dy = abs(y2 - y1); 
-            dz = abs(z2 - z1); 
-            de = abs(e2 - e1);
-            dx = dx*xmin;
-            dy = dy*ymin;
-            dz = dz*zmin;
-            de = de*emin;
-            if(dx!=0||dy!=0||dz!=0){
-            	gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2)));
-			}else if(de!=0){
-				gen_distance=gen_distance+fabs(de);
+    	while(local_case==0 && (Gl==00  || Gl==01 || Gl==03 || Gl==02 || Gl==0  || Gl==1 || Gl==3 || Gl==2) && j<total_lines){
+    		if(Gl==1 || Gl==01 || Gl==0 || Gl==00){
+            	xmin=1/STPU_X;
+                ymin=1/STPU_Y;
+            	zmin=1/STPU_Z;
+             	emin=1/STPU_E;
+                x1=round(Xf/xmin); y1=round(Yf/ymin); z1=round(Zf/zmin); e1=round(Ef/emin);
+                x2=round(Xl/xmin); y2=round(Yl/ymin); z2=round(Zl/zmin); e2=round(El/emin);
+                dx = abs(x2 - x1);
+                dy = abs(y2 - y1); 
+                dz = abs(z2 - z1); 
+                de = abs(e2 - e1);
+                dx = dx*xmin;
+                dy = dy*ymin;
+                dz = dz*zmin;
+                de = de*emin;
+                if(dx!=0||dy!=0||dz!=0){
+                	gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2)));
+    			}else if(de!=0){
+    				gen_distance=gen_distance+fabs(de);
+    			}
+		    }
+		    if(Gl==02 || Gl==03 || Gl==2 || Gl==3){
+		    	k=Il;
+		    	l=Jl;
+                x1_f=Xf-k; x2_f=Xl-k;
+                y1_f=Yf-l; y2_f=Yl-l;  
+				k=0; l=0;      
+             	R=sqrt(pow((x2_f-k),2) + pow((y2_f-l),2)); ////calculate radius of circle
+            	a_f=casequartile(x1_f,y1_f,k,l,1);
+            	a_l=casequartile(x2_f,y2_f,k,l,2);
+             	theta_first=theta_func(x1_f,y1_f,k,l,a_f);
+            	theta_last=theta_func(x2_f,y2_f,k,l,a_l);
+            	dtheta=fabs(theta_last-theta_first);
+        		if(dtheta>pi/2.0){
+        			dtheta=2.0*pi-dtheta;
+        		}
+        		double THETA_STEP;
+        		double ARC_DIST=dtheta*R; ///calculate total distance of the ar
+        		ARC_DIST=roundf(ARC_DIST*100)/100;
+         		gen_distance=gen_distance + ARC_DIST; ///calculate total distance of the ar		    	
 			}
-    	    if(gen_distance==0){
-				//gen_distance=fabs(El-Ef);
-			}
+		   
             Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
     	    j++;
     	    reset_dist=0;
     	    loopa=1;
-    	    gen_feed=Fl;
+    	    gen_feed=Ff;
     	}
-    	if(Gl!=1){
+    	if ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=00 && Gl!=01 && Gl!=02 && Gl!=03)){
     		Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
     	    j++;
@@ -1086,26 +1167,52 @@ void curve_length(unsigned long total_lines)
 		   gen_distance=0;
 		   loopa=0;
 		   local_case=0;
-	    }else if(Gl==1){
-        	xmin=1/STPU_X;
-            ymin=1/STPU_Y;
-        	zmin=1/STPU_Z;
-         	emin=1/STPU_E;
-            x1=round(Xf/xmin); y1=round(Yf/ymin); z1=round(Zf/zmin); e1=round(Ef/emin);
-            x2=round(Xl/xmin); y2=round(Yl/ymin); z2=round(Zl/zmin); e2=round(El/emin);
-            dx = abs(x2 - x1);
-            dy = abs(y2 - y1); 
-            dz = abs(z2 - z1); 
-            de = abs(e2 - e1);
-            dx = dx*xmin;
-            dy = dy*ymin;
-            dz = dz*zmin;
-            de = de*emin;
-        	gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2))); /////kati den moy kolaei edv
-        	if(gen_distance==0){
-        		gen_distance=fabs(El-Ef);
-    		}
-        	if(Gl!=1 && Gl!=0){
+	    }else if(Gl==0 || Gl==00 || Gl==01 || Gl==02 || Gl==03 || Gl==1 || Gl==2 || Gl==3){
+    		if(Gl==0 || Gl==00 || Gl==01 || Gl==1){
+            	xmin=1/STPU_X;
+                ymin=1/STPU_Y;
+            	zmin=1/STPU_Z;
+             	emin=1/STPU_E;
+                x1=round(Xf/xmin); y1=round(Yf/ymin); z1=round(Zf/zmin); e1=round(Ef/emin);
+                x2=round(Xl/xmin); y2=round(Yl/ymin); z2=round(Zl/zmin); e2=round(El/emin);
+                dx = abs(x2 - x1);
+                dy = abs(y2 - y1); 
+                dz = abs(z2 - z1); 
+                de = abs(e2 - e1);
+                dx = dx*xmin;
+                dy = dy*ymin;
+                dz = dz*zmin;
+                de = de*emin;
+                if(dx!=0||dy!=0||dz!=0){
+                	gen_distance=gen_distance+sqrt((pow(dx,2))+(pow(dy,2))+(pow(dz,2)));
+    			}else if(de!=0){
+    				gen_distance=gen_distance+fabs(de);
+    			}
+		    }
+		    if(Gl==02 || Gl==03 || Gl==2 || Gl==3){
+		    	k=Il;
+		    	l=Jl;
+                x1_f=Xf-k; x2_f=Xl-k;
+                y1_f=Yf-l; y2_f=Yl-l;
+             	double Xmin=1/STPU_X;
+                double Ymin=1/STPU_Y;
+            	double Emin=1/STPU_E;    
+				k=0; l=0;      
+             	R=sqrt(pow((x2_f-k),2) + pow((y2_f-l),2)); ////calculate radius of circle
+            	a_f=casequartile(x1_f,y1_f,k,l,1);
+            	a_l=casequartile(x2_f,y2_f,k,l,2);
+             	theta_first=theta_func(x1_f,y1_f,k,l,a_f);
+            	theta_last=theta_func(x2_f,y2_f,k,l,a_l);
+            	dtheta=fabs(theta_last-theta_first);
+        		if(dtheta>pi/2.0){
+        			dtheta=2.0*pi-dtheta;
+        		}
+        		double THETA_STEP;
+        		double ARC_DIST=dtheta*R; ///calculate total distance of the ar
+        		ARC_DIST=roundf(ARC_DIST*100)/100;
+         		gen_distance=gen_distance + ARC_DIST; ///calculate total distance of the ar		    	
+			}
+        	if((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03)){
         		gen_distance=0;
 	    	}
 	    	gen_feed=Fl;
@@ -1115,7 +1222,6 @@ void curve_length(unsigned long total_lines)
     		fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
     	    j++;
     	}
-    	//j=j-1;
 	}
 	fclose(fcoord);
 	fclose(gen);
@@ -1262,6 +1368,8 @@ unsigned long gc2info(double flag_num)
 	FILE *g1;
 	FILE *g2;
     g1=_wfopen(gc2info_path,L"w");	//the results are written in this fille
+    fprintf(g1,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",trash,trash,trash,trash,trash,trash,trash,trash,trash,trash,trash,trash,trash);
+    total_lines++;
     while (fgets(string, 200, fp) != NULL){//TILL THE END OF FILE
 	   if (string[0]=='G' || string[0]=='M'){
 	        total_lines++;								  
@@ -1286,63 +1394,59 @@ unsigned long gc2info(double flag_num)
 			        i++;
 				}
 				if(notfound==true){
-		            if(first_line1==false){
-		            	if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
-		            		temp_pos=0;
-		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
-		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
-		            			 	write_axis_num=false;
-								 }
-								 temp_pos++;
-		            		}
-		            		if(write_axis_num==true){
-		            			fprintf(g1,"%lf",axis_num);
-		            			write_axis_num=true;
-							}else{
-								fprintf(g1,"%lf",flag_num);
-							}
-						}else if((string[0]=='M' && string[1]=='2' && string[2]=='0' && string[3]=='5')){ //M205
-					        if(letters[poslet]=='S' || letters[poslet]=='J'){
-					        	fprintf(g1,"%lf",axis_num);
-							}else{
-								fprintf(g1,"%lf",flag_num);
-							}
-						}else if(string[0]=='G' && string[1]=='9' && string[2]=='2' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
-		            		temp_pos=0;
-		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
-		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || letters[poslet]=='E'){
-		            			 	write_axis_num=false;
-								 }
-								 temp_pos++;
-		            		}
-		            		if(write_axis_num==true){
-		            			fprintf(g1,"%lf",axis_num);
-		            			write_axis_num=true;
-							}else{
-								fprintf(g1,"%lf",flag_num);
-							}							
-						}else if(string[0]=='M' && ((string[1]=='1' && string[2]=='7') || (string[1]=='1' && string[2]=='8') || (string[1]=='8' && string[2]=='4')) && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
-		            		temp_pos=0;
-		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
-		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || string[temp_pos]=='E'){
-		            			 	write_axis_num=false;
-								 }
-								 temp_pos++;
-		            		}
-		            		if(write_axis_num==true){
-		            			fprintf(g1,"%lf",axis_num);
-		            			write_axis_num=true;
-							}else{
-								fprintf(g1,"%lf",flag_num);
-							}						
-						
-						
+		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
+		            	temp_pos=0;
+		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            		 	write_axis_num=false;
+							 }
+							 temp_pos++;
+		            	}
+		            	if(write_axis_num==true){
+		            		fprintf(g1,"%lf",axis_num);
+		            		write_axis_num=true;
 						}else{
-								fprintf(g1,"%lf",flag_num);
-						}			        
-			        }else{
-			        	fprintf(g1,"%lf",0);//COMPLETE WITH ZEROS FIRST LINE
-			       }
+							fprintf(g1,"%lf",flag_num);
+						}
+					}else if((string[0]=='M' && string[1]=='2' && string[2]=='0' && string[3]=='5')){ //M205
+					       if(letters[poslet]=='S' || letters[poslet]=='J'){
+					       	fprintf(g1,"%lf",axis_num);
+						}else{
+							fprintf(g1,"%lf",flag_num);
+						}
+					}else if(string[0]=='G' && string[1]=='9' && string[2]=='2' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
+		            	temp_pos=0;
+		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || letters[poslet]=='E'){
+		            		 	write_axis_num=false;
+							 }
+							 temp_pos++;
+		            	}
+		            	if(write_axis_num==true){
+		            		fprintf(g1,"%lf",axis_num);
+		            		write_axis_num=true;
+						}else{
+							fprintf(g1,"%lf",flag_num);
+						}							
+					}else if(string[0]=='M' && ((string[1]=='1' && string[2]=='7') || (string[1]=='1' && string[2]=='8') || (string[1]=='8' && string[2]=='4')) && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
+		            	temp_pos=0;
+		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || string[temp_pos]=='E'){
+		            		 	write_axis_num=false;
+							 }
+							 temp_pos++;
+		            	}
+		            	if(write_axis_num==true){
+		            		fprintf(g1,"%lf",axis_num);
+		            		write_axis_num=true;
+						}else{
+							fprintf(g1,"%lf",flag_num);
+						}						
+					
+					
+					}else{
+							fprintf(g1,"%lf",flag_num);
+					}			        
 			    }	
 	            j=0;
 		        i=0;
@@ -1435,6 +1539,9 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     period=1000/CORE_FREQ;
 	tmin=period*pow(10,-6);
     LINE_DIST=sqrt((pow(dx*xmin,2))+(pow(dy*ymin,2))+(pow(dz*zmin,2)));
+    //printf("%s %f\n","LINE_traj",trajectory_POINT);
+    //printf("%s %f\n","LINE",LINE_DIST);
+    
     E_DIST=fabs(el-ef);
     if(LINE_DIST==0 && E_DIST==0){ //for safety
     	return;
@@ -1443,26 +1550,29 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
         LINE_DIST=E_DIST;
         E_DIST=0;
 	}
-	if(CURVE_DETECTION==1){
-	    if(new_CURVE==1){
-	    	trajectory_POINT=0; //reset
-	    	if(JMFEED>=FEEDRATE){
-            	cu=FEEDRATE;//for safety reasons
-        		state=10; //NO ACCElERATION or DECELERATION	    		
-			}else{
-				//printf("%f %f\n",gen_DISTANCE,FEEDRATE);
-				time_momments(gen_DISTANCE,FEEDRATE);
-			}
-		}
-	}else{
-    	if(JMFEED>=FEEDRATE){ //If this case is true then motion occurs with NO ACCElERATION or DECELERATION
-        	cu=check_jfeed_limits(xl-xf,yl-yf,zl-zf,E_DIST);
-    		state=10; //NO ACCElERATION or DECELERATION
+	
+	if (embedded_line==false){
+    	if(CURVE_DETECTION==1){
+    	    if(new_CURVE==1){
+    	    	trajectory_POINT=0; //reset
+    	    	if(JMFEED>=FEEDRATE){
+                	cu=FEEDRATE;//for safety reasons
+            		state=10; //NO ACCElERATION or DECELERATION	    		
+    			}else{
+    				//printf("%f %f\n",gen_DISTANCE,FEEDRATE);
+    				time_momments(gen_DISTANCE,FEEDRATE);
+    			}
+    		}
     	}else{
-			time_momments(LINE_DIST,FEEDRATE);		
-		}
-        trajectory_POINT=0; //reset		
-	}
+        	if(JMFEED>=FEEDRATE){ //If this case is true then motion occurs with NO ACCElERATION or DECELERATION
+            	cu=check_jfeed_limits(xl-xf,yl-yf,zl-zf,E_DIST);
+        		state=10; //NO ACCElERATION or DECELERATION
+        	}else{
+    			time_momments(LINE_DIST,FEEDRATE);		
+    		}
+            trajectory_POINT=0; //reset		
+    	}
+    }
 ///////******  BRESENHAM LINE ALGORITHM    ****/////////
     if (x2 > x1){
         xs = 1;
@@ -1485,7 +1595,10 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 		es=-1;
 	}
     if (dx >= dy && dx >= dz && dx>=de){  	
-	    LINE_STEP=LINE_DIST/dx; 
+	    LINE_STEP=LINE_DIST/dx;
+		if(embedded_line==true){
+			LINE_STEP=0;
+		}
         p1 = 2 * dy - dx; 
         p2 = 2 * dz - dx;
 		p3 = 2 * de - dx; 
@@ -1515,6 +1628,9 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
         }
     }else if (dy >= dx && dy >= dz && dy >= de){ 
 	    LINE_STEP=LINE_DIST/dy;
+		if(embedded_line==true){
+			LINE_STEP=0;
+		}
         p1 = 2 * dx - dy;
         p2 = 2 * dz - dy;
 		p3 = 2 * de - dy; 
@@ -1600,25 +1716,28 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
             wr2bin(stepx,stepy,stepz,stepe,trajectory_POINT); //resolve time calculation for current trajectory point
             x1_last = x1; y1_last = y1; z1_last = z1; e1_last = e1;
         } 	
-	}		
+	}	
  }
 
 void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE)
    {
         
     double R,a_f,a_l,theta_first,theta_last,dtheta,ARC_DIST,E_DIST,Xmin,Ymin,Emin,THETA_STEP,theta,DX,DY,x,y,Xlast,Ylast,emin;
-    double temp,theta_prev,L=0,L_last,DL,L_STEP,FEED_TEMP;
+    double temp,theta_prev,L=0,L_last,DL,L_STEP,FEED_TEMP,L_prev=0;
     int b,stepx=0,stepy=0,stepe=0,e_step=0,period;
     bool next_point_x=false,next_point_y=false,next_point_e=false;
-    
+        double yy,xx,check=0;
+        int cor_counter=0;
 		period=1000/CORE_FREQ;
     	tmin=period*pow(10,-6);
         x1_f=x1_f-k; x2_f=x2_f-k;
         y1_f=y1_f-l; y2_f=y2_f-l;
+        yy=y1_f*STPU_Y;
+        xx=x1_f*STPU_X;
         k=0; l=0;
      	Xmin=1/STPU_X;
         Ymin=1/STPU_Y;
-    	Emin=1/STPU_E;          
+    	Emin=1/STPU_E;         
      	R=sqrt(pow((x2_f-k),2) + pow((y2_f-l),2)); ////calculate radius of circle
       	a_f=casequartile(x1_f,y1_f,k,l,1);
      	a_l=casequartile(x2_f,y2_f,k,l,2);
@@ -1634,18 +1753,30 @@ void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,doub
 		}
 		E_DIST=El-Ef;
 		FEEDRATE=arc_accel_feed_limits(R,ARC_DIST,E_DIST,FEEDRATE);
-		//printf("%f %f\n",ACCEL_ERATION,FEEDRATE);
-	    if(JMFEED>=FEEDRATE){
-	    	if(E_DIST!=0){
-	    		FEED_TEMP=min_n(MAX_JFX,MAX_JFY);
-	    		cu=min_n(FEED_TEMP,MAX_JFE);
-			}else{
-				cu=min_n(MAX_JFX,MAX_JFY);
-			}
-		    state=10;
-	    }else{
-		    time_momments(ARC_DIST,FEEDRATE);
-	    }		
+		if(CURVE_DETECTION==1){
+    	    if(new_CURVE==1){
+    	    	trajectory_POINT=0; //reset
+    	    	if(JMFEED>=FEEDRATE){
+                	cu=FEEDRATE;//for safety reasons
+            		state=10; //NO ACCElERATION or DECELERATION	    		
+    			}else{
+    				time_momments(gen_DISTANCE,FEEDRATE);
+    			}
+    		}
+    	}else{
+    		trajectory_POINT=0; //reset	
+	        if(JMFEED>=FEEDRATE){
+    	    	if(E_DIST!=0){
+    	    		FEED_TEMP=min_n(MAX_JFX,MAX_JFY);
+    	    		cu=min_n(FEED_TEMP,MAX_JFE);
+    			}else{
+    				cu=min_n(MAX_JFX,MAX_JFY);
+    			}
+    		    state=10;
+    	    }else{
+    		    time_momments(ARC_DIST,FEEDRATE);
+     	    }
+    	}
 		if(Xmin<=Ymin){
             emin=(ARC_DIST*Emin)/fabs(E_DIST);
 			if(clockwise==true){
@@ -1678,8 +1809,7 @@ void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,doub
     		}
 		}
 		b=round(pi/(2.0*THETA_STEP));//BUG FIX...VALUE DRIFT BECAUSE OF PI
-		THETA_STEP=pi/(2*b);
-		L_STEP=fabs(THETA_STEP)*R;
+		THETA_STEP=pi/(2.0*b);
 		theta=theta_first+THETA_STEP;
 		theta_prev=theta;
 		if (theta_first>theta_last && clockwise==false){
@@ -1695,10 +1825,12 @@ void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,doub
 		}
 		Xlast=x1_f;
 		Ylast=y1_f;	
-        theta_last=theta_last+(THETA_STEP/2.0001); ///BUG FIX FOR THE LAST POINT
-		while((theta<=theta_last && clockwise==false) || (theta>=theta_last && clockwise==true)){
-			//L = fabs(theta-theta_first)*R;
-			L+=L_STEP;
+        theta_last=theta_last+(THETA_STEP/1.2); ///BUG FIX FOR THE LAST POINT
+        L_STEP=Xmin;
+		ARC_DIST = roundf(ARC_DIST*100)/100+(L_STEP/1.2); ///BUG FIX FOR THE LAST POINT
+        L+=L_STEP;
+		trajectory_POINT=trajectory_POINT+L_STEP;
+		while(L<=ARC_DIST){
 			x=R*cos(theta);
 			y=R*sin(theta);	
 			DX=x-Xlast;
@@ -1732,8 +1864,12 @@ void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,doub
                 if (DX!=0 && next_point_x==true){ if(DX>0){stepx=1;}else{stepx=-1;}next_point_x=false;Xlast=x1_f;}else{ stepx=0; }
                 if (DY!=0 && next_point_y==true){ if(DY>0){stepy=1;}else{stepy=-1;}next_point_y=false;Ylast=y1_f;}else{ stepy=0; }
                 if (DL!=0 && next_point_e==true){ stepe=e_step;next_point_e=false;L_last+=emin;}else{ stepe=0; }
-                wr2bin(stepx,stepy,0,stepe,L); 
+                wr2bin(stepx,stepy,0,stepe,trajectory_POINT);
+				yy=yy+stepy; 
+				xx=xx+stepx;
 			}
+			trajectory_POINT=trajectory_POINT+L_STEP;
+			L+=L_STEP;
 			theta_prev=theta;
 			theta += THETA_STEP;
 			if(clockwise==false){
@@ -1759,6 +1895,16 @@ void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,doub
     				theta_last=temp+(THETA_STEP/2.0001);
     			}	    		
 			}
+		}
+		trajectory_POINT -=L_STEP;
+		//trajectory_POINT=trajectory_POINT-L_STEP;
+		//printf("%s %f\n","TRAJECT",trajectory_POINT);
+		xx=xx/STPU_X;
+		yy=yy/STPU_Y;
+		if((xx-x2_f!=0) || (yy-y2_f!=0)){
+			embedded_line=true;
+			LINE(xx,yy,0,0,x2_f,y2_f,0,0,FEEDRATE);
+			embedded_line=false;
 		}
    }
  
@@ -1824,7 +1970,7 @@ void time_momments(double L,double umax){
 		
 	int loop=0,dek; 
     double t0,error,D,akr,xx,xa,xu,u,t,dt,dt1,dt2,b,E,t01,t02;
-    
+
 	if(JERK != 0){
      	dek=-12;
      	akr=0.5*pow(10,dek);
@@ -1992,13 +2138,15 @@ void time_momments(double L,double umax){
     		if(state==1){
      			x1_t1=(JMFEED*t1)+(ACCEL_ERATION*pow(t1,2)/2);
     			x2_t2=2*x1_t1;
+    			//printf("%f %f %f\n",x1_t1,x2_t2,x3_t3);
     		}else if(state==2){
-    			x1_t1=(JMFEED*t1)+(ACCEL_ERATION*pow(t1,2)/2);
+    			x1_t1=(JMFEED*t1)+(ACCEL_ERATION*pow(t1,2)/2.0);
     			x2_t2=umax*(t2-t1)+x1_t1;
     			x3_t3=x2_t2+x1_t1;
      		}else if(state==3){
     			x1_t1=(JMFEED*t1)+(ACCEL_ERATION*pow(t1,2)/2);
     			x2_t2=2*x1_t1;
+    			//printf("%f %f %f\n",x1_t1,x2_t2,x3_t3);
     		}	    	
 		}
 }
@@ -2007,7 +2155,6 @@ double L_time_calc(double l)
 {	   	
     int i=0,loop=0,dek; 
     double t0=2,t01,t02,t,error,D,akr;
- 	
  	if(JERK != 0){
     	dek=-9;
       	akr=0.5*pow(10,dek);
@@ -2415,16 +2562,16 @@ double L_time_calc(double l)
 	}
     if(state==10){
     	t=l/cu;
-	}	
+	}
     	return t;
     }
 
 
 void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
     {
-        int i=0,j,b;
+        int i=0,j;
         char bits[9];
-        uint8_t byte_num,null_byte=0,timeboxes,last_timeboxes=60;//50 fixe a buf at starting
+        uint8_t byte_num,null_byte=0,timeboxes;//50 fixe a buf at starting
       	
        	for(j=0;j<=7;j++){ ///set all bits 0 for safety
        		bits[j]='0';
@@ -2435,6 +2582,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
             bits[6]='0';
             bits[7]='0';
        	}else if(stepx > 0){
+       		X_GLOB++;
             bits[6]='1';
             if(Invrt_X==0){
               	bits[7]='0';
@@ -2442,6 +2590,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[7]='1';
 			}
        	}else if(stepx<0){
+       		X_GLOB--;
             bits[6]='1';  
 			if(Invrt_X==0){
 				bits[7]='1';
@@ -2453,6 +2602,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
             bits[4]='0';
             bits[5]='0';
        	}else if(stepy>0){
+       		Y_GLOB++;
             bits[4]='1';
             if(Invrt_Y==0){
                	bits[5]='0';
@@ -2460,6 +2610,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[5]='1';
 			}
        	}else if(stepy<0){
+       		Y_GLOB--;
             bits[4]='1';
             if(Invrt_Y==0){
               	bits[5]='1';
@@ -2506,24 +2657,27 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 	    bits[8]='e'; //end bit  
   	    byte_num=bits2val(bits); //byte num = the 8bit integer calculated from previous bits that arduino will port forward to his outputs 
   	    time=L_time_calc(l); //calculate time momment from the begining of motion for current point trajectory
-        timeboxes=(time-last_time)/tmin; //ARDUINO LOW PULSE DURATION BETWEEN STEPS = CURRENT STEP FREQUENCY = CURRENT SPEED
-        if(timeboxes<=1){
-        	printf("%s %i\n","peeeeeeessoosososoososos",timeboxes);
-        	timeboxes=last_timeboxes;///FIX A TIME BUG
+  	    if (embedded_line==true){
+  	    	timeboxes=LAST_TIME_BOXES;
+  	    	//printf("%s %i\n","BOXEEESS",timeboxes);
 		}else{
-			last_timeboxes=timeboxes;
+			timeboxes=(time-last_time)/tmin; //ARDUINO LOW PULSE DURATION BETWEEN STEPS = CURRENT STEP FREQUENCY = CURRENT SPEED
 		}
+        if(timeboxes<=1){
+        	printf("%s %f %f %f\n","NOOOOOOOOOOOOOOOOOOOOOOOOOOO",l,time,last_time);
+        	timeboxes=30;///FIX A TIME BUG
+		}else{
+			last_time=time;
+		}
+		
 	    if(timeboxes==255){
         	timeboxes=254;///FIX A TIME BUG
 		}
-		if(timeboxes==0 || byte_num==0){
-			printf("%s\n", "NOOOOOOOOOOOOOOOOO");
-		}
    	    write_hex2file(timeboxes);
    	    write_hex2file(byte_num);
+   	    LAST_TIME_BOXES=timeboxes;
+   	    //last_time=time;
 		//storage_counter=storage_counter+storage_step;
-   	    b=0;
-   	    last_time=time;
     }
 
 void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/35390912/proper-way-to-get-file-size-in-c?rq=1
@@ -2557,12 +2711,10 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
     			status = wstat(flag_path, &buffer); //check flag state....stat replaced with wstat
                 child_status = wstat(child_path, &child_buffer);
                 if(child_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
-                    printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
+                    //printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
                 	exit(0);
     			}
-    			//printf("%s\n","PYTHNON");
     		}while(buffer.st_size==0); //wait for a file to be free
-    		//printf("%s\n","pe2ooooooooo");
     		if(flag_file_state==true){ //open the free file for writing
         		buffer1_file=_wfopen(buffer1_path,L"wb");
         	}else{
