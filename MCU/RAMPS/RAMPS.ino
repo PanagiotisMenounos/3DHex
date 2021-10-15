@@ -820,7 +820,7 @@ int check_inputs(){
 void rapid_position(){
    digitalWrite(BED_HEATER,LOW);    //Disable Heaters while rapid positioning for safety
    digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while rapid positioning for safety
-   while(step_counter<buffer5.J && buffer5.C==0 && buffer5.D==1 && setoff==false){
+   while(step_counter<buffer5.J && buffer5.C==0 && buffer5.D==1 && setoff==false && Serial.available()==0){
       PORTF = (buffer5.E<<PF1);
       PORTF = (buffer5.E<<PF1)|(1<<PF0);
       delayMicroseconds(buffer5.I);
@@ -830,7 +830,7 @@ void rapid_position(){
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
-   while(step_counter<buffer5.J && buffer5.C==1 && buffer5.D==1 && setoff==false){
+   while(step_counter<buffer5.J && buffer5.C==1 && buffer5.D==1 && setoff==false && Serial.available()==0){
       PORTF = (buffer5.E<<PF7);
       PORTF = (buffer5.E<<PF7)|(1<<PF6);
       delayMicroseconds(buffer5.I);
@@ -840,7 +840,7 @@ void rapid_position(){
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
-   while(step_counter<buffer5.J && buffer5.C==2 && buffer5.D==1 && setoff==false){
+   while(step_counter<buffer5.J && buffer5.C==2 && buffer5.D==1 && setoff==false && Serial.available()==0){
       PORTL = (buffer5.E<<PL1);
       PORTL = (buffer5.E<<PL1)|(1<<PL3);
       delayMicroseconds(buffer5.I);
@@ -850,7 +850,7 @@ void rapid_position(){
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
-   while(step_counter<buffer5.J && buffer5.C==3 && buffer5.D==1 && setoff==false){
+   while(step_counter<buffer5.J && buffer5.C==3 && buffer5.D==1 && setoff==false && Serial.available()==0){
       PORTA = (buffer5.E<<PA6);
       PORTA = (buffer5.E<<PA6)|(1<<PA4);
       delayMicroseconds(buffer5.I);
@@ -859,6 +859,9 @@ void rapid_position(){
       delayMicroseconds(buffer5.I);
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   if(Serial.available()!=0){
+     Serial.read();
    }
    step_counter=0;
 }

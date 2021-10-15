@@ -117,6 +117,7 @@ FILE *buffer1_file;
 FILE *buffer2_file;
 FILE *flag_file;
 FILE *startpy_file;
+FILE *child_file;
 
 void LINE(double xf, double yf, double zf, double ef, double xl, double yl, double zl, double el, double FEEDRATE);             //G01,G00 calculations   
 void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE); //GO2,G03 calculations 
@@ -410,6 +411,8 @@ int main()
         fclose(buffer2_file);
         fclose(SD_binary_file);
         fclose(gen1);
+		child_file=_wfopen(child_path,L"w"); //reset child file -> to prevent python print >>> Abort after SD
+		fclose(child_file);
     }
     
     
@@ -495,7 +498,7 @@ void crt_file()
     	path[j]=savefile[i]; //append the file name to the path
     	j++;
    }
-   SD_binary_file=_wfopen(path,L"wb"); //open the output file  
+   SD_binary_file=_wfopen(path,L"wb"); //open the output file 
    fwrite(&CORE_FREQ, sizeof(uint16_t),1,SD_binary_file);
    fwrite(&X_ENABLE, sizeof(uint8_t),1,SD_binary_file);
    fwrite(&Y_ENABLE, sizeof(uint8_t),1,SD_binary_file);
@@ -2711,7 +2714,7 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
     			status = wstat(flag_path, &buffer); //check flag state....stat replaced with wstat
                 child_status = wstat(child_path, &child_buffer);
                 if(child_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
-                    //printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
+                    printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
                 	exit(0);
     			}
     		}while(buffer.st_size==0); //wait for a file to be free
@@ -2733,6 +2736,11 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
 		file_buffer_size++;
 		if(file_buffer_size==max_bufferfile_size){
 			file_buffer_size=0;
+            child_status = wstat(child_path, &child_buffer);
+            if(child_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
+                printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
+                exit(0);
+    		}
 		}
 	}
 }
