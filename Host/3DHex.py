@@ -23,7 +23,6 @@
 
 
 
-
 import sys
 import serial.tools.list_ports
 from PyQt5 import QtWidgets, uic, QtCore
@@ -86,7 +85,7 @@ class COMPortWorker(QThread):
                             window.comboBox.setCurrentIndex(0)
                         window.comboBox.removeItem(window.comboBox.findText(i.device))
                 window.ports = serial.tools.list_ports.comports()
-            time.sleep(0.1)
+            time.sleep(0.5)
 
 class TEMPWorker(QThread):
     def run(self):
@@ -97,6 +96,7 @@ class TEMPWorker(QThread):
                     time.sleep(1)
                 window.Nozz_LCD.display(window.nozz_temp)
                 window.Bed_LCD.display(window.bed_temp)
+                time.sleep(0.8)
 
 class USBWorker(QThread): #This thread starts when 3DHEX connected successfully to the Printer
     def run(self):
@@ -106,11 +106,11 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
             (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
             if window.A==0: #if in idle mode
                window.update_temp=1 #Send signal to TEMPWorker to update temp
-               time.sleep(0.2)
+               time.sleep(1)
                self.check_idle_commands() #Check if any idle command has triggered
             else:
                window.update_temp=1 #Send signal to TEMPWorker to update temp
-               time.sleep(0.2)
+               time.sleep(0.8)
                self.usb_printing() #Go into USB Print function
                time.sleep(8)
                window.A=0 #After USB printing has completed declare idle mode
@@ -953,6 +953,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w',encoding="utf-8") #encoding is important
         savepathfile.write(path)
         savepathfile.close()
+        self.save_settings()
         if(path != ''):
            self.start_bar()
            self.file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')

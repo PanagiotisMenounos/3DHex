@@ -179,7 +179,7 @@ volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,b
 volatile unsigned int i=0,j=0,cc,step_counter=0;
 volatile byte buf[USB_SETTING_BYTES],PRINT_STATE,MG_buf[MG_BYTES];
 volatile float time_duration;
-volatile unsigned long currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0;
+volatile unsigned long terminate_counter=0,currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0;
 volatile int XMIN_READ,YMIN_READ,ZMIN_READ,set_counter=0;
 volatile uint8_t pass=1,fail=0,command_value=255;
 volatile int8_t p;
@@ -204,6 +204,7 @@ void initialization_var(){
    i=0;j=0;signal_duration=0;off=0;on=0;bufferstate=true;readstate=false;
    setoff=false;
    nozz_block=false;bed_block=false;once=false;GM_command=false;GM_end=false;
+   terminate_counter=0;
 }
 
 void setup() {
@@ -294,7 +295,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    if(GM_command==false){
    cli();
    i++;
-   if(bufferstate==true && i==buffer1.byte_1[j]){
+   if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
       j++;
       PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],2)<<PF7);
       PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],1)<<PF0)|(bitRead(buffer1.byte_1[j],2)<<PF7)|(bitRead(buffer1.byte_1[j],3)<<PF6);
@@ -304,8 +305,9 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6)|(bitRead(buffer1.byte_1[j],7)<<PA4);
       j++;
       i=0;
+      terminate_counter=0;
       //check_command(0);
-   }else if(bufferstate==false && i==buffer2.byte_2[j]){
+   }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
       j++;
       PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],2)<<PF7);
       PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],1)<<PF0)|(bitRead(buffer2.byte_2[j],2)<<PF7)|(bitRead(buffer2.byte_2[j],3)<<PF6);
@@ -315,6 +317,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6)|(bitRead(buffer2.byte_2[j],7)<<PA4);
       j++;
       i=0;
+      terminate_counter=0;
       //check_command(1);
    }else{
       PORTF = (0<<PF0)|(0<<PF6);
@@ -464,10 +467,17 @@ void terminate_process(){
 
 void check_USB_terminate(){
    if(bufferstate==true && buffer1.byte_1[j]==0){
-      setoff=true;
+      terminate_counter++;
+      //setoff=true;
+      digitalWrite(LED_BUILTIN,HIGH);
    }
    if(bufferstate==false && buffer2.byte_2[j]==0){
-      setoff=true;
+      terminate_counter++;
+      //setoff=true;
+      digitalWrite(LED_BUILTIN,HIGH);
+   }
+   if(terminate_counter>2000){
+    setoff=true;
    }
 }
 
