@@ -6,7 +6,7 @@ COPYRIGHT NOTICE FOR 3DHex:
 
 3DHex - 3D Printer Firmware
 
-Copyright (c) 2019 Panagiotis Menounos
+Copyright (c) 2021 Panagiotis Menounos
 Contact: 3DHexfw@gmail.com
 
 

@@ -5,7 +5,7 @@ COPYRIGHT NOTICE FOR 3DHex:
 
 3DHex - 3D Printer Firmware
 
-Copyright (c) 2019 Panagiotis Menounos
+Copyright (c) 2021 Panagiotis Menounos
 Contact: 3DHexfw@gmail.com
 
 
@@ -56,8 +56,9 @@ union {
     byte fly_array[4];
   } t;
        ///////////////**************GLOBAL VARIABLES FOR SETTINGS******************/////////////////////
-double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE,ACCELERATION,JERK,MAX_JFX,\
-       MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
+double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE,ACCELERATION,T_ACCEL_ERATION\
+       ,JERK,T_JERK,MAX_JFX,\
+       MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,T_JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
 int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS;
 int32_t BAUD_RATE;
 uint16_t CORE_FREQ;
@@ -79,7 +80,8 @@ double ANGLE_TOLERANCE,FEEDRATE_TOLERANCE;
 
 uint8_t GP,GC,LAST_TIME_BOXES;
 bool embedded_line=false;
-        
+
+double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
      ////////////////////////*****************/////////////////////////////////////
 
 //////////////////////////////***********GLOBAL VARIABLES******//////////////////
@@ -209,6 +211,9 @@ int main()
         GP=255;
         path_files();
     	read_settings();
+    	T_ACCEL_ERATION=ACCELERATION;
+    	T_JMFEED=JMFEED;
+    	T_JERK=JERK;
 		hidecursor(); 
 		PRINT_STATE = check_print_state(); 
 		if(PRINT_STATE==0){ //usb print
@@ -238,26 +243,45 @@ int main()
                fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
     		}else if(fly_buffer.st_size!=0){ //add M226
     	    	printf("%s\n","ON THE FLY COMMAND: ");
-                j=j-1;
                 ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL);
-                ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);
-                printf("%s %i %f\n","PIPE RECEIVED" ,y.M,t.S);
-    			fly_command=true;
-    			Gt=Gl;
-    			Mt=Ml;
-    			St=Sl;
-    			Gl=flag_num;
-    			Ml=y.M;
-    			Sl=t.S;
-    			
+                if(y.M!=0){
+                	j=j-1;
+                	ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);
+                	Gt=Gl;
+    		    	Mt=Ml;
+    			    St=Sl;
+                	printf("%s %i %f\n","PIPE RECEIVED,M command" ,y.M,t.S);
+    			    fly_command=true;
+    			    Gl=flag_num;
+    			    Ml=y.M;
+    			    Sl=t.S;
+				}else{
+                    ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
+					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+    	            JMFEED=T_JMFEED*(t.S/100.0);
+                    ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
+					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+                    FD_PRC=(t.S/100.0);
+                    ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
+					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					ACCELERATION=T_ACCEL_ERATION*(t.S/100.0);
+                    ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
+					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					JERK=T_JERK*(t.S/100.0);
+					fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
+                    fly_file=_wfopen(fly_path,L"wb"); //reset fly file
+            		fclose(fly_file);										
+				}
 			}
 			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3)){
 			   last_time=0; //FIX time BUG at the begining of new command
                fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED);
+               gen_FEED=FD_PRC*gen_FEED;
                gen_FEED=check_units(gen_FEED);
                Fl=gen_FEED;
 			}
 			if (CURVE_DETECTION==0){
+				Fl=Fl*FD_PRC;
 				Fl=check_units(Fl);
 				last_time=0; //FIX time BUG at the begining of new command
 			}

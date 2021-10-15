@@ -4,7 +4,7 @@
 #
 #      3DHex - 3D Printer Firmware
 #
-#Copyright (c) 2019 Panagiotis Menounos
+#Copyright (c) 2021 Panagiotis Menounos
 #Contact: 3DHexfw@gmail.com
 #
 #
@@ -227,7 +227,6 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         buffer1_file.close()
         buffer2_file.close()
         window.usb_printing=0
-        self.message.emit(">>> Completed") #emit the signal
 
     def check_idle_commands(self): #idle mode commands func
             if window.set_temp==1: #1 Set temp
@@ -539,6 +538,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p89.clicked.connect(self.setBEDTEMP)
         self.p22.clicked.connect(self.clear_GCODE)
         self.p23.clicked.connect(self.CANCEL)
+        self.p24.clicked.connect(self.setJFAJ)
+        self.p25.clicked.connect(self.setFAN1)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
@@ -937,6 +938,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
               self.child_file.write(str(struct.pack("i",self.mirror)))
               self.child_file.close() 
+    
+    def setFAN1(self):
+              MM=106
+              SS=float(window.d104.value())
+              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              self.Message_panel.append(">>> M106: Set FAN1 ")
+              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
+              self.child_file.write(str(struct.pack("i",self.mirror)))
+              self.child_file.close()
+       
+    def setJFAJ(self):
+              MM=0
+              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
+              SS=float(window.d100.value())
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              SS=float(window.d101.value())
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              SS=float(window.d102.value())
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              SS=float(window.d103.value())
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              self.Message_panel.append(">>> Set JFAJ")
+              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
+              self.child_file.write(str(struct.pack("i",self.mirror)))
+              self.child_file.close()
 
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
