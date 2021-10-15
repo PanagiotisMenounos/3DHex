@@ -86,6 +86,7 @@ class COMPortWorker(QThread):
                             window.comboBox.setCurrentIndex(0)
                         window.comboBox.removeItem(window.comboBox.findText(i.device))
                 window.ports = serial.tools.list_ports.comports()
+            time.sleep(0.1)
 
 class TEMPWorker(QThread):
     def run(self):
@@ -184,7 +185,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                window.update_temp=1			 
+                window.update_temp=1	
+                while serial_command==-243:
+                     (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
+                     window.update_temp=1               
                 window.ser.write(buffer1_file.read(3300))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
@@ -196,6 +200,9 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                 window.update_temp=1
+                while serial_command==-243:
+                     (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
+                     window.update_temp=1 
                 window.ser.write(buffer2_file.read(3300))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
@@ -947,11 +954,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         savepathfile.write(path)
         savepathfile.close()
         if(path != ''):
+           self.start_bar()
            self.file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
            self.data = self.GCODE_Panel.toPlainText()
            self.file.write(self.data)
            self.file.close()
-           #self.start_bar()
            p2 = subprocess.Popen("Brain.exe")
 
     def start_bar(self):

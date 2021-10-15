@@ -41,7 +41,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_BUF 1024
 #define pipename "\\\\.\\pipe\\Foo"
 
-union {
+union{
     int progress;
     byte temp_array[4];
   } u;
@@ -68,13 +68,15 @@ double XY_PLANE,ZX_PLANE,ZY_PLANE;
 
 int CURVE_DETECTION;
 double ANGLE_TOLERANCE,FEEDRATE_TOLERANCE;
+
+uint8_t GP,GC;
         
      ////////////////////////*****************/////////////////////////////////////
 
 //////////////////////////////***********GLOBAL VARIABLES******//////////////////
 int total_digi_lines=0,state,file_buffer_size=0,max_bufferfile_size=3300,PRINT_STATE, file_num=0;//number name of binary file
-double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_last,flag_num=101101101.101010;
-bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise;
+double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_last,flag_num=101101101.101010,axis_num=10201.102012;
+bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise,ABSOLUTE_POSITIONING=1,E_ABSOLUTE_POSITIONING=1;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
 
@@ -143,8 +145,32 @@ void mcu_settings_send();
 int check_print_state();                                                                                                        //return 0 => USB return 1 => SD_CARD
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl);
 uint8_t bits2val(char *bits);                                                                                                   //convert a serial of 0,1 to a number 16bit (0,1) = 2 bytes(unsigned integer=uint16_t)
+void zero_M();
 
 ///////////////////////****************//////////////////////////
+
+struct data{
+  volatile uint8_t A;
+  volatile uint8_t B;
+  volatile uint8_t C;
+  volatile uint8_t D;
+  volatile uint8_t E;
+  volatile uint8_t F;
+  volatile uint8_t G;
+  volatile uint8_t H;
+  volatile uint16_t I;
+  volatile uint16_t J;
+  volatile uint16_t K;
+  volatile uint16_t L;
+  volatile uint8_t M;
+  volatile uint8_t N;
+  volatile uint16_t O;
+  volatile uint16_t P;
+  volatile uint16_t Q;
+  volatile uint16_t R;
+  volatile uint16_t S;
+  volatile uint16_t T;
+}MG_data;
 
 int main()
     {
@@ -157,14 +183,17 @@ int main()
     
 	DWORD numWritten;
     
-    
     	FILE *g1;
     	FILE *gen1;
     	
-        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,perc=0;
+        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,TEMP_PERC=0;
         unsigned long total_lines,j;
-        bool first_line=true;
-
+        bool first_line=true,GM_command=false;
+        //uint8_t GP=100,GC=101;
+        WriteFile(pipe, &TEMP_PERC, sizeof(float), &numWritten, NULL); //FIX A BUG
+        int e_space,ii;
+        GP=255;
+        
         path_files();
     	read_settings();
 		hidecursor(); 
@@ -186,8 +215,6 @@ int main()
 		}
         
         gen1=_wfopen(gen_path,L"r");
-        printf("%s %.2f%%\r","Progress:",perc);
-        //printf("%i\n",u.progress);
         for(j=1;j<=total_lines;j++){
         	//last_time=0; 
 		    if(first_line==true){
@@ -210,7 +237,15 @@ int main()
             	Gl=flag_num;
 			}
             if(Gl!=flag_num){ /// enter only of it is a G command
-            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   //LINE COMMAND
+            	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   // G1 LINE COMMAND
+            	    if(ABSOLUTE_POSITIONING==0){
+                    	Xl=Xf+Xl;
+                    	Yl=Yf+Yl;
+                    	Zl=Zf+Zl;
+		        	}
+	        		if(E_ABSOLUTE_POSITIONING==0){
+                    	El=Ef+El;
+		        	}
 				    if(XY_PLANE!=0 && (ZX_PLANE!=0 || ZY_PLANE!=0)){
 				    	LINE(0,0,Zf,0,0,0,Zl,0,0);
 				    	LINE(Xf,Yf,0,Ef,Xl,Yl,0,El,Fl);
@@ -218,7 +253,7 @@ int main()
 						LINE(Xf,Yf,Zf,Ef,Xl,Yl,Zl,El,Fl);
 					}     		
                 }
-			    if (Gl==2 || Gl==02 || Gl==3 || Gl==03){  //ARC COMMAND
+			    if (Gl==2 || Gl==02 || Gl==3 || Gl==03){  // G2/G3 ARC COMMAND
 				    if(Gl==2 || Gl==02){
 		    			clockwise=true; //clockwise
 		    		}else{
@@ -226,15 +261,160 @@ int main()
 		    		}
 		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
 				}
+				if(Gl==28){ // G28 homing
+				    GM_command=true;
+					MG_data.A=3;
+					MG_data.B=HOME_X_DIR;
+					MG_data.C=HOME_Y_DIR;
+					MG_data.D=HOME_Z_DIR;
+					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.E=1;}else{MG_data.E=0;}
+					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.F=1;}else{MG_data.F=0;}
+					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.G=1;}else{MG_data.G=0;}
+					MG_data.H=HOME_X_STATE;
+					MG_data.L=HOME_Y_STATE;
+					MG_data.M=HOME_Z_STATE;
+					MG_data.N=X_ENABLE;
+					MG_data.O=Y_ENABLE;
+					MG_data.P=Z_ENABLE;
+					MG_data.I=HOME_X_DURATION;
+					MG_data.J=HOME_Y_DURATION;
+					MG_data.K=HOME_Z_DURATION;
+				}
+				if(Gl==4){ // G4 pause
+					GM_command=true;
+					MG_data.A=5;
+					MG_data.J=0;
+					MG_data.K=0;
+					MG_data.J=Pl;
+					MG_data.K=Sl;					
+				}
+				if(Gl==29){//auto bed leveling
+					
+				}
+				if(Gl==90){// G90 Absolute
+				    ABSOLUTE_POSITIONING=1;
+				    E_ABSOLUTE_POSITIONING=1;
+				}
+				if(Gl==91){// G91 Relative
+					ABSOLUTE_POSITIONING=0;
+					E_ABSOLUTE_POSITIONING=0;
+				}
+				if(Gl==92){// G91 Relative
+					if(Xl==axis_num && Yl==axis_num && Zl==axis_num && El==axis_num){
+						Xl=0;Yl=0;Zl=0;El=0;
+					}
+				}
+				if(GM_command==true){ //WRITE 255 & 255 & DATA FOR THE ARDUINO TO EXECUTE
+					GM_command=false;
+		     		write_hex2file(GP);
+			    	write_hex2file(GP);
+                    e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
+                    if(e_space<=30 && e_space!=0){
+                        for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
+            	           write_hex2file(GP);
+    	               }
+    	            }
+	                unsigned char *MG_byte_buffer=(char*)malloc(sizeof(MG_data)); //https://www.includehelp.com/c/how-to-copy-complete-structure-in-a-byte-array-character-buffer-in-c%20language.aspx
+	                int temp_counter;
+	                memcpy(MG_byte_buffer,(const unsigned char*)&MG_data,sizeof(MG_data));
+	                for(temp_counter=0;temp_counter<sizeof(MG_data);temp_counter++){
+	                	write_hex2file(MG_byte_buffer[temp_counter]);
+			    	}
+	                free(MG_byte_buffer);
+	            }
 			}
-			Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle 
-			perc=100.0*j/total_lines; //calculate the completed percent
+			if(Ml!=flag_num){
+                if(Ml==104){ // M104 set hotend temp no wait
+			        MG_data.A=1;
+			        MG_data.B=0;
+			     	MG_data.J=Sl;				    	
+				}
+				if(Ml==109){// M190 set hotend temp & wait
+			        MG_data.A=1;
+			        MG_data.B=1;
+			     	MG_data.J=Sl;					
+				}
+				if(Ml==140){// M140 set bed temp no wait
+			        MG_data.A=0;
+			        MG_data.B=0;
+			     	MG_data.J=Sl;
+				}
+				if(Ml==190){// M190 sed bed temp & wait
+				    MG_data.A=0;
+			        MG_data.B=1;
+			     	MG_data.J=Sl;
+				}
+				if(Ml==106){// M106 turn on fan & set speed 0-255
+					MG_data.A=4;
+			     	MG_data.J=Sl;					
+				}
+				if(Ml==107){// M107 turn fan off
+                    MG_data.A=4;
+                    MG_data.J=0;
+				}
+				if(Ml==17){// M17 Enable stepper motors
+				    MG_data.A=2;
+			        if(Xl==axis_num){MG_data.B=1;}else{MG_data.B=0;}
+					if(Yl==axis_num){MG_data.C=1;}else{MG_data.C=0;}
+					if(Zl==axis_num){MG_data.D=1;}else{MG_data.D=0;}
+					if(El==axis_num){MG_data.E=1;}else{MG_data.E=0;}					
+				}
+				if(Ml==18 || Ml==84){// M18/M84 Disable stepper motor
+				    MG_data.A=2;
+			        if(Xl==axis_num){MG_data.B=0;}else{MG_data.B=1;}
+					if(Yl==axis_num){MG_data.C=0;}else{MG_data.C=1;}
+					if(Zl==axis_num){MG_data.D=0;}else{MG_data.D=1;}
+					if(El==axis_num){MG_data.E=0;}else{MG_data.E=1;}					
+				}
+				if(Ml==204){// M204 set acceleration
+					ACCELERATION=Pl;
+				}
+				if(Ml==205){// M205 set advanced settings
+					if(Jl!=axis_num){JMFEED=Jl;}
+					if(Sl!=axis_num){JERK=Sl;}
+				}				
+				if(Ml==851){// M851 XYZ Probe Offset
+					
+				}
+				if(Ml==82){// M82 E Absolute
+					E_ABSOLUTE_POSITIONING=1;
+				}
+				if(Ml==83){// M83 E Absolute
+					E_ABSOLUTE_POSITIONING=0;
+				}
+				//file_buffer_size=file_buffer_size+30;
+				write_hex2file(GP);
+				write_hex2file(GP);
+                
+                e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
+                if(e_space<=30 && e_space!=0){
+                   for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
+        	          write_hex2file(GP);
+    	           }
+    	        }
+	            unsigned char *MG_byte_buffer=(char*)malloc(sizeof(MG_data)); //https://www.includehelp.com/c/how-to-copy-complete-structure-in-a-byte-array-character-buffer-in-c%20language.aspx
+	            int temp_counter;
+	            memcpy(MG_byte_buffer,(const unsigned char*)&MG_data,sizeof(MG_data));
+	            for(temp_counter=0;temp_counter<sizeof(MG_data);temp_counter++){
+	            	write_hex2file(MG_byte_buffer[temp_counter]);
+				}
+	            free(MG_byte_buffer);
+				//if(flag_file_state==false){ //write bytes to free file
+                //	fwrite(&MG_data, sizeof(MG_data),1,buffer1_file);
+                	
+            	//}else{
+              	    //fwrite(&MG_data, sizeof(MG_data),1,buffer2_file);
+             	//}
+			}
+			if(Xl!=axis_num && Ml!=205){Xf=Xl;} //do not consider axis_num as a coordinate 
+			if(Yl!=axis_num && Ml!=205){Yf=Yl;}
+			if(Zl!=axis_num && Ml!=205){Zf=Zl;}
+			if(El!=axis_num && Ml!=205){Ef=El;}
+			Gf=Gl;Mf=Ml;If=Il;Jf=Jl;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle 
 			u.progress=100*j/total_lines;//calculate the completed percent
 			WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
-			printf("%s %.2f%%\r","Progress:",perc);
 			check_SD_file_size(Xf,Yf,Zf,Xl,Yl,Zl);			
         } 
-		printf("%s %.2f%%\n","Progress:",perc);  
 		printf("%s\n","COMPLETED!");
         close_SD_binary_file();
         fclose(buffer1_file);
@@ -243,6 +423,7 @@ int main()
         fclose(gen1);
         //system("pause");   //wait the user to press enter key at the end
     }
+    
     
 int check_print_state(){
 	struct stat savepath_buffer;
@@ -274,8 +455,6 @@ void mcu_settings_send()
     fwrite(&I_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
     fwrite(&D_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
     fwrite(&Wait_nozz, sizeof(uint8_t),1,buffer1_file);
-    printf("%s %i\n","naiaa",Wait_nozz);
-    printf("%i\n", P_BED_MIRROR);
     fwrite(&Wait_bed, sizeof(uint8_t),1,buffer1_file);
     fwrite(&THERMISTOR_TYPE_NOZZLE, sizeof(int8_t),1,buffer1_file);
     fwrite(&THERMISTOR_TYPE_BED, sizeof(int8_t),1,buffer1_file);
@@ -924,10 +1103,10 @@ void read_settings()
     PID_nozz=atoi(c[25]); 
 	PID_bed=atoi(c[26]);
     CURVE_DETECTION=atoi(c[27]);	
-	//FOR THE MOMMENT	
-	HOME_X_DIR=0;
-	HOME_Y_DIR=0;
-	HOME_Z_DIR=0;
+	//FOR THE MOMMENT
+	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
+	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
+	if(Invrt_Z==0){HOME_Z_DIR=1;}else{HOME_Z_DIR=0;}
     COM_PORT=0;
 	DIFFERENTIAL_NOZZ=0;
     DIFFERENTIAL_BED=0;
@@ -971,9 +1150,9 @@ unsigned long gc2info(double flag_num)
 {
     #define arrays_size 13
     char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'}; 
-	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0;
+	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0,temp_pos=0;
     double line1[arrays_size],line2[arrays_size],trash=0;
-    bool first_line1=true,first_line2=true,notfound=true;
+    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
 	FILE *g1;
@@ -987,25 +1166,84 @@ unsigned long gc2info(double flag_num)
 		            if ((string[i]) == (letters[poslet])){
 			            notfound=false;
 			            j=i+1;
+			            write_value=false;
 			            while(string[j] != ' ' && string[j] != '\0' && string[j] != ';' && string[j] != '\n'){
+			            	write_value=true;
 						    if (string[j] != '[' && string[j] !=']'){
 			                    fprintf(g1,"%c",string[j]);
 			                }
 						    j++;	
 					    }
+					    if(write_value==false){ //IF NOT NUMBER AFTER X OR Y ETC...
+                           printf("%s\n","AXIS FOUND");
+                           fprintf(g1,"%lf",axis_num);
+						}
 			        }
 			        i++;
 				}
-		        if(notfound==true){
+				if(notfound==true){
 		            if(first_line1==false){
-				        fprintf(g1,"%lf",flag_num);
+		            	if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
+		            		temp_pos=0;
+		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            			 	write_axis_num=false;
+								 }
+								 temp_pos++;
+		            		}
+		            		if(write_axis_num==true){
+		            			fprintf(g1,"%lf",axis_num);
+		            			write_axis_num=true;
+							}else{
+								fprintf(g1,"%lf",flag_num);
+							}
+						}else if((string[0]=='M' && string[1]=='2' && string[2]=='0' && string[3]=='5')){ //M205
+					        if(letters[poslet]=='S' || letters[poslet]=='J'){
+					        	fprintf(g1,"%lf",axis_num);
+							}else{
+								fprintf(g1,"%lf",flag_num);
+							}
+						}else if(string[0]=='G' && string[1]=='9' && string[2]=='2' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
+		            		temp_pos=0;
+		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || letters[poslet]=='E'){
+		            			 	write_axis_num=false;
+								 }
+								 temp_pos++;
+		            		}
+		            		if(write_axis_num==true){
+		            			fprintf(g1,"%lf",axis_num);
+		            			write_axis_num=true;
+							}else{
+								fprintf(g1,"%lf",flag_num);
+							}							
+						}else if(string[0]=='M' && ((string[1]=='1' && string[2]=='7') || (string[1]=='1' && string[2]=='8') || (string[1]=='8' && string[2]=='4')) && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z' || letters[poslet]=='E')){ //G92
+		            		temp_pos=0;
+		            		while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            			 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z' || string[temp_pos]=='E'){
+		            			 	write_axis_num=false;
+								 }
+								 temp_pos++;
+		            		}
+		            		if(write_axis_num==true){
+		            			fprintf(g1,"%lf",axis_num);
+		            			write_axis_num=true;
+							}else{
+								fprintf(g1,"%lf",flag_num);
+							}						
+						
+						
+						}else{
+								fprintf(g1,"%lf",flag_num);
+						}			        
 			        }else{
-			        	fprintf(g1,"%lf",0);
+			        	fprintf(g1,"%lf",0);//COMPLETE WITH ZEROS FIRST LINE
 			       }
 			    }	
 	            j=0;
 		        i=0;
 		        notfound=true;
+		        found_axis=false;
 		        fprintf(g1,"%c",' ');
  	        }
  	        first_line1=false;
@@ -1029,14 +1267,16 @@ unsigned long gc2info(double flag_num)
         fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&line2[i],&line2[i+1],&line2[i+2],&line2[i+3],&line2[i+4],&line2[i+5],\
 		       &line2[i+6],&line2[i+7],&line2[i+8],&line2[i+9],&line2[i+10],&line2[i+11],&line2[i+12]); 
 		for(g=2;g<arrays_size;g++){
-	 	   if (line2[g]==flag_num){
+	 	   if (line2[g]==flag_num && line2[g]!= axis_num){
 	 		   line2[g]=line1[g];
 		    }
 	    }
 	    fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line2[i],line2[i+1],line2[i+2],line2[i+3],line2[i+4],line2[i+5],\
 	           line2[i+6],line2[i+7],line2[i+8],line2[i+9],line2[i+10],line2[i+11],line2[i+12],trash);
 		for(g=0;g<arrays_size;g++){
-	 		line1[g]=line2[g];
+			if(line2[g]!= axis_num){
+				line1[g]=line2[g];
+			}
 		} 
     }
     fclose(g1);
@@ -2165,6 +2405,9 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
         if(timeboxes<=0){
         	timeboxes=2;///FIX A TIME BUG
 		}
+	    if(timeboxes==255){
+        	timeboxes=254;///FIX A TIME BUG
+		}
    	    write_hex2file(timeboxes);
    	    write_hex2file(byte_num);
 		//storage_counter=storage_counter+storage_step;
@@ -2206,7 +2449,9 @@ void write_hex2file(uint8_t hex_value) //https://stackoverflow.com/questions/353
                     printf("%s\n","THE PRINTING PROCESS HAS BEEN TERMINATED BY EXTERNAL SIGNAL");
                 	exit(0);
     			}
+    			//printf("%s\n","PYTHNON");
     		}while(buffer.st_size==0); //wait for a file to be free
+    		//printf("%s\n","pe2ooooooooo");
     		if(flag_file_state==true){ //open the free file for writing
         		buffer1_file=_wfopen(buffer1_path,L"wb");
         	}else{

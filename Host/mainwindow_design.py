@@ -277,6 +277,7 @@ class Ui_MainWindow(object):
         self.b24.setObjectName("b24")
         self.gridLayout.addWidget(self.b24, 11, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.b25 = QtWidgets.QPlainTextEdit(self.tab)
+        self.b25.setEnabled(True)
         self.b25.setMinimumSize(QtCore.QSize(75, 25))
         self.b25.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
@@ -740,6 +741,9 @@ class Ui_MainWindow(object):
         self.b28.setEnabled(False)
         self.b28.setMinimumSize(QtCore.QSize(75, 25))
         self.b28.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b28.setFont(font)
         self.b28.setStyleSheet("QPlainTextEdit{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
@@ -962,6 +966,9 @@ class Ui_MainWindow(object):
         self.b26.setEnabled(False)
         self.b26.setMinimumSize(QtCore.QSize(75, 25))
         self.b26.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b26.setFont(font)
         self.b26.setStyleSheet("QPlainTextEdit{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
@@ -1123,6 +1130,9 @@ class Ui_MainWindow(object):
         self.b29.setEnabled(False)
         self.b29.setMinimumSize(QtCore.QSize(75, 25))
         self.b29.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b29.setFont(font)
         self.b29.setStyleSheet("QPlainTextEdit{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
@@ -1392,6 +1402,9 @@ class Ui_MainWindow(object):
         self.b27.setEnabled(False)
         self.b27.setMinimumSize(QtCore.QSize(75, 25))
         self.b27.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b27.setFont(font)
         self.b27.setStyleSheet("QPlainTextEdit{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"

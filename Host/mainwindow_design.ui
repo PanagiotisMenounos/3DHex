@@ -623,6 +623,9 @@ border-color:rgb(120, 120, 120)
            </item>
            <item row="12" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
             <widget class="QPlainTextEdit" name="b25">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>75</width>
@@ -1505,6 +1508,11 @@ border-color:rgb(120, 120, 120)
                <height>25</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
              <property name="styleSheet">
               <string notr="true">QPlainTextEdit{
 background-color: rgb(47, 47, 47);
@@ -1948,6 +1956,11 @@ border-color:rgb(120, 120, 120)
                <height>25</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
              <property name="styleSheet">
               <string notr="true">QPlainTextEdit{
 background-color: rgb(47, 47, 47);
@@ -2282,6 +2295,11 @@ border-color:rgb(120, 120, 120)
                <width>75</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
              </property>
              <property name="styleSheet">
               <string notr="true">QPlainTextEdit{
@@ -2793,6 +2811,11 @@ border-color:rgb(120, 120, 120)
                <width>75</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
              </property>
              <property name="styleSheet">
               <string notr="true">QPlainTextEdit{
