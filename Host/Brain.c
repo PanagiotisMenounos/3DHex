@@ -275,6 +275,7 @@ void mcu_settings_send()
     fwrite(&D_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
     fwrite(&Wait_nozz, sizeof(uint8_t),1,buffer1_file);
     printf("%s %i\n","naiaa",Wait_nozz);
+    printf("%i\n", P_BED_MIRROR);
     fwrite(&Wait_bed, sizeof(uint8_t),1,buffer1_file);
     fwrite(&THERMISTOR_TYPE_NOZZLE, sizeof(int8_t),1,buffer1_file);
     fwrite(&THERMISTOR_TYPE_BED, sizeof(int8_t),1,buffer1_file);
@@ -368,7 +369,6 @@ void crt_file()
    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,SD_binary_file);
    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,SD_binary_file);//MUST BE WRITTEN TWICE
    storage_counter=0.00000000000052; 
- 
 }
 
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl){
@@ -933,12 +933,12 @@ void read_settings()
     DIFFERENTIAL_BED=0;
     ////
     MAX_FILE_SIZE=MAX_FILE_SIZE*pow(10,-5);
-	P_NOZZ_MIRROR=P_NOZZ*100;
-	I_NOZZ_MIRROR=I_NOZZ*100;
-	D_NOZZ_MIRROR=D_NOZZ*100;
-	P_BED_MIRROR=P_BED*100;
-	I_BED_MIRROR=I_BED*100;
-	D_BED_MIRROR=D_BED*100;
+	P_NOZZ_MIRROR=P_NOZZ*10;
+	I_NOZZ_MIRROR=I_NOZZ*10;
+	D_NOZZ_MIRROR=D_NOZZ*10;
+	P_BED_MIRROR=P_BED*10;
+	I_BED_MIRROR=I_BED*10;
+	D_BED_MIRROR=D_BED*10;
 	if(STPU_X!=0 && HOME_X_ENABLE==1 && HOME_FEED_X!=0){
 	 	HOME_X_DURATION=1000000/(STPU_X*HOME_FEED_X*2);
 	 }else{

@@ -27,11 +27,13 @@
 import sys
 import serial.tools.list_ports
 from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5.QtWidgets import QInputDialog, QLineEdit
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 import time
 import os
 import easygui
 from mainwindow_design import Ui_MainWindow
+from printer_name import Ui_New_Printer
 from multiprocessing import Process #for multiprocessing
 import threading
 import subprocess
@@ -109,15 +111,15 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                window.update_temp=1 #Send signal to TEMPWorker to update temp
                time.sleep(0.2)
                self.usb_printing() #Go into USB Print function
+               time.sleep(8)
                window.A=0 #After USB printing has completed declare idle mode
                window.B=0
                window.C=0
-               time.sleep(8)
                self.send_buffer() #Then send idle mode temp only report to printer
                window.enable_idle_buttons()
 
     def send_buffer(self):
-        window.ser.write(struct.pack("8B4H2B",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N))
+        window.ser.write(struct.pack("8B4H2B6H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         if pass_fail==1: #pass_fail should be 1, else communication has failed
            print("PASS")
@@ -213,14 +215,13 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         window.ser.flushInput()
 
     def check_idle_commands(self): #idle mode commands func
-
             if window.set_temp==1: #1 Set temp
                 window.set_temp=0
                 window.B=0
                 window.C=1
                 window.D=0
-                window.E=0
-                window.F=0
+                window.E=int(window.c26.isChecked())
+                window.F=int(window.c27.isChecked())
                 window.G=int(window.c22.isChecked())
                 window.H=int(window.c23.isChecked())
                 window.I=int(window.b35.toPlainText().strip())
@@ -229,6 +230,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 window.L=int(window.b40.toPlainText().strip())
                 window.M=int(window.b37.toPlainText().strip())
                 window.N=int(window.b38.toPlainText().strip())
+                window.O=int(float(window.b41.toPlainText().strip())*10.0)
+                window.P=int(float(window.b43.toPlainText().strip())*10.0)
+                window.Q=int(float(window.b45.toPlainText().strip())*10.0)
+                window.R=int(float(window.b42.toPlainText().strip())*10.0)
+                window.S=int(float(window.b44.toPlainText().strip())*10.0)
+                window.T=int(float(window.b46.toPlainText().strip())*10.0)
                 time.sleep(0.2)
                 self.send_buffer()
                 window.enable_idle_buttons()
@@ -247,6 +254,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 window.L=0
                 window.M=0
                 window.N=0
+                window.O=0
+                window.P=0
+                window.Q=0
+                window.R=0
+                window.S=0
+                window.T=0
                 time.sleep(0.2)
                 self.send_buffer()            			   
                 window.enable_idle_buttons()
@@ -333,14 +346,49 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 window.enable_idle_buttons()
                 window.rapid_pos=0				   
 
+class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(PrinterWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self) #import Qtdesigner
+        self.ok_printer.clicked.connect(self.OK_Printer)
+        self.cancel_printer.clicked.connect(self.CANCEL_Printer)
+     
+    def OK_Printer(self):
+        text = self.input_name.toPlainText().replace("\n","")
+        if text== '':
+            print("close")
+            self.close()
+        else:
+            print(text)
+            printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
+            printers = printer_file.readlines()
+            printer_file.close()
+            printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
+            window.printer = len(printers)
+            print(window.printer)
+            for temp in printers:
+                printer = temp.split(',')
+                printer[1]=printer[1].replace("\n","")
+                printer_file.write("0,"+printer[1]+"\n")
+            printer_file.write("1,"+text)
+            printer_file.close()
+            window.save_settings()
+            window.load_printers()
+            self.close()
+        
+    def CANCEL_Printer(self):
+        self.close()
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self) #import Qtdesigner
         self.declare_vars()
+        self.load_printers()
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
-        self.actionPrinter2_2.setVisible(False)
+        #self.actionPrinter2_2.setVisible(False) #test only
     def declare_vars(self):
+        self.printer=0
         self.set_motor=0
         self.USB_CONNECTED=0
         self.usb_connected = 1
@@ -362,6 +410,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.L=0
         self.M=0
         self.N=0
+        self.O=0
+        self.P=0
+        self.Q=0
+        self.R=0
+        self.S=0
+        self.T=0
         self.update_temp=0
         self.chosenPort = ""
         self.ports = serial.tools.list_ports.comports()
@@ -369,6 +423,75 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for p in self.ports:
             self.comboBox.addItem(p.device)
 
+    def new_printer(self):
+        self.window2 = PrinterWindow(self)
+        self.window2.show()
+
+    def select_printer(self,printer_selection):
+        window.save_settings()
+        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
+        printers = printer_file.readlines()
+        printer_file.close()
+        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
+        total_printers=len(printers)
+        p=0
+        for temp in printers:
+            printer = temp.split(',')
+            if p < total_printers:
+                if p == printer_selection:
+                    printer_file.write("1,"+printer[1])
+                else:
+                    printer_file.write("0,"+printer[1])
+            p=p+1
+        printer_file.close()
+        self.load_printers()
+
+    def remove_printer(self):
+        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
+        printers = printer_file.readlines()
+        printer_file.close()
+        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
+        total_printers=len(printers)
+        p=0
+        for temp in printers:
+            printer = temp.split(',')
+            if p==0:
+                printer_file.write("1,"+printer[1])
+            else:
+                if int(printer[0]) == 0:
+                    printer_file.write("0,"+printer[1])
+            p=p+1
+        printer_file.close()
+        self.load_printers()
+        
+    def load_printers(self):
+        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
+        printers = printer_file.readlines()
+        total_printers=len(printers)
+        p=0
+        for temp in printers:
+            printer = temp.split(',')
+            if p < total_printers:
+                if int(printer[0]) == 1:
+                    self.printer = p
+                    print("printer", self.printer)
+                    self.selected_printer=p
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setText(str(printer[1].replace("\n",""))+" ●")
+                else:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setText(str(printer[1].replace("\n","")))
+            p=p+1
+        for i in range(0,10):
+            if i<p:
+                action_printer = getattr(self, "actionPrinter{}".format(i))
+                action_printer.setVisible(True)
+            else:
+                action_printer = getattr(self, "actionPrinter{}".format(i))
+                action_printer.setVisible(False)
+        printer_file.close()
+        self.load_settings()
+       
     def assign_buttons(self):
         self.p1.clicked.connect(self.CONNECT)
         self.p3.clicked.connect(self.USB)
@@ -392,7 +515,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p22.clicked.connect(self.clear_GCODE)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
-        self.comboBox.currentTextChanged.connect(self.selectPort)                                                                 #https://zetcode.com/pyqt/qcheckbox/
+        self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
         self.c2.stateChanged.connect(self.setXmotor)                                                               
         self.c3.stateChanged.connect(self.setYmotor)                                                             
         self.c4.stateChanged.connect(self.setZmotor)                                                             
@@ -400,12 +523,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.c12.stateChanged.connect(self.setHOME_Xbuttons)
         self.c13.stateChanged.connect(self.setHOME_Ybuttons)
         self.c14.stateChanged.connect(self.setHOME_Zbuttons)
-        self.Default.triggered.connect(self.Printer_Default)
-    
-    def Printer_Default(self):
-        Default = self.sender()
-        print('Name: ', Default.text()+"●")
-        self.Default.setText(Default.text()+" ●")
+        self.actionPrinter0.triggered.connect(lambda:self.select_printer(0))
+        self.actionPrinter1.triggered.connect(lambda:self.select_printer(1))
+        self.actionPrinter2.triggered.connect(lambda:self.select_printer(2))
+        self.actionPrinter3.triggered.connect(lambda:self.select_printer(3))
+        self.actionPrinter4.triggered.connect(lambda:self.select_printer(4))
+        self.actionPrinter5.triggered.connect(lambda:self.select_printer(5))
+        self.actionPrinter6.triggered.connect(lambda:self.select_printer(6))
+        self.actionPrinter7.triggered.connect(lambda:self.select_printer(7))
+        self.actionPrinter8.triggered.connect(lambda:self.select_printer(8))
+        self.actionPrinter9.triggered.connect(lambda:self.select_printer(9))
+        self.actionNew.triggered.connect(self.new_printer)
+        self.actionRemove.triggered.connect(self.remove_printer)
 
     def CONNECT(self):
         try:
@@ -433,21 +562,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print("failed to open")			
 
     def USB(self): #call this func whenever USB_calculate button is pressed
-        self.A=1 #printing mode
-        self.usb_printing=1
-        self.start_bar()
-        self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
-        self.data = self.GCODE_Panel.toPlainText()
-        self.file1.write(self.data)
-        self.file1.close()
-        self.save_settings()
-        self.mirror=5
-        self.savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w')
-        self.savepathfile.close()
-        self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
-        self.child_file.write(str(struct.pack("i",self.mirror)))
-        self.child_file.close()
-        self.disable_idle_buttons()
+        if self.USB_CONNECTED==1 and self.A==0:
+            self.A=1 #printing mode
+            self.usb_printing=1
+            self.start_bar()
+            self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+            self.data = self.GCODE_Panel.toPlainText()
+            self.file1.write(self.data)
+            self.file1.close()
+            self.save_settings()
+            self.mirror=5
+            self.savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w')
+            self.savepathfile.close()
+            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
+            self.child_file.write(str(struct.pack("i",self.mirror)))
+            self.child_file.close()
+            self.disable_idle_buttons()
 
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
@@ -743,46 +873,58 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            self.file1.close()
 
     def save_settings(self):
-        bfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','w')
-        cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
-        dfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
+        bfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','w')
+        cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','w')
+        dfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','w')
+        b_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','w')
+        c_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
+        d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         i=0
         for i in range (0,53):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
           text = b.toPlainText().strip() #strip() removes'/n'
           if (text==''): #check if it is aan empty string
               bfile.write("\n")
+              b_file.write("\n")
           else:
               bfile.write(text+"\n")
+              b_file.write(text+"\n")
         i=1
         for i in range (1,29): #c0-cmax
             c = getattr(self, "c{}".format(i))#self.c[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
             check = c.isChecked()
             if check==0:
                 cfile.write("0\n")
+                c_file.write("0\n")
             else:
-               	cfile.write("1\n")		
+               	cfile.write("1\n")
+                c_file.write("1\n")                
         i=1
         for i in range (1,9): #c0-cmax
             d = getattr(self, "d{}".format(i))
             value = d.value()
             dfile.write(str(value)+"\n")
+            d_file.write(str(value)+"\n")
         bfile.close()
         cfile.close()
         dfile.close()
+        b_file.close()
+        c_file.close()
+        d_file.close()
 
     def load_settings(self):
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','r') #read general setting file and set them
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','r') #read general setting file and set them
         boxes = file.readlines()
         file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','r') #read general setting file and set them
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','r') #read general setting file and set them
         cboxes = file.readlines()
         file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','r') #read general setting file and set them
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','r') #read general setting file and set them
         dboxes = file.readlines()
         file.close()
         for i in range (0,53): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+           b.setPlainText('')
            b.insertPlainText(boxes[i].strip()) #strip() removes'/n'
         for i in range (2,6): #c0-cmax
            c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
@@ -838,12 +980,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.usb_thread.setDaemon(True) #Terminate at the end,only threading.Thread
         self.usb_thread.start()	
 
-
-app = QtWidgets.QApplication(sys.argv)
-window = MainWindow()
-window.assign_buttons()
-window.load_settings()
-window.start_COMPort_worker()
-window.show()
-sys.exit(app.exec_())
-#app.exec()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = MainWindow()
+    window.assign_buttons()
+    window.start_COMPort_worker()
+    window.show()
+    sys.exit(app.exec_())
+    #app.exec()

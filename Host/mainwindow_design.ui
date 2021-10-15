@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1142</width>
+    <width>1153</width>
     <height>636</height>
    </rect>
   </property>
@@ -6833,7 +6833,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1142</width>
+     <width>1153</width>
      <height>21</height>
     </rect>
    </property>
@@ -6857,12 +6857,19 @@ border-color:rgb(83, 83, 83);
     <property name="title">
      <string>Printer</string>
     </property>
-    <addaction name="Default"/>
+    <addaction name="actionPrinter0"/>
+    <addaction name="actionPrinter1"/>
     <addaction name="actionPrinter2"/>
-    <addaction name="actionPrinter2_2"/>
+    <addaction name="actionPrinter3"/>
+    <addaction name="actionPrinter4"/>
+    <addaction name="actionPrinter5"/>
+    <addaction name="actionPrinter6"/>
+    <addaction name="actionPrinter7"/>
+    <addaction name="actionPrinter8"/>
+    <addaction name="actionPrinter9"/>
     <addaction name="separator"/>
-    <addaction name="actionSave_current"/>
-    <addaction name="actionRemove_current"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionRemove"/>
    </widget>
    <addaction name="menu_Files"/>
    <addaction name="menuPrinter"/>
@@ -6875,29 +6882,74 @@ border-color:rgb(83, 83, 83);
     <string>Open</string>
    </property>
   </action>
-  <action name="Default">
+  <action name="actionPrinter0">
    <property name="text">
     <string>Default</string>
    </property>
   </action>
-  <action name="actionPrinter2">
+  <action name="actionPrinter1">
    <property name="text">
-    <string>Printer1 ●</string>
+    <string>Printer1</string>
    </property>
   </action>
-  <action name="actionPrinter2_2">
+  <action name="actionPrinter2">
    <property name="text">
     <string>Printer2</string>
    </property>
   </action>
-  <action name="actionSave_current">
+  <action name="actionNew">
    <property name="text">
     <string>New</string>
    </property>
   </action>
-  <action name="actionRemove_current">
+  <action name="actionRemove">
    <property name="text">
     <string>Remove</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </action>
+  <action name="actionPrinter3">
+   <property name="text">
+    <string>Printer3</string>
+   </property>
+  </action>
+  <action name="actionPrinter4">
+   <property name="text">
+    <string>Printer4</string>
+   </property>
+  </action>
+  <action name="actionPrinter5">
+   <property name="text">
+    <string>Printer5</string>
+   </property>
+  </action>
+  <action name="actionPrinter6">
+   <property name="text">
+    <string>Printer6</string>
+   </property>
+  </action>
+  <action name="actionPrinter7">
+   <property name="text">
+    <string>Printer7</string>
+   </property>
+  </action>
+  <action name="actionPrinter8">
+   <property name="text">
+    <string>Printer8</string>
+   </property>
+  </action>
+  <action name="actionPrinter9">
+   <property name="text">
+    <string>Printer9</string>
    </property>
   </action>
  </widget>
