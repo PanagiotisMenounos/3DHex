@@ -1,3 +1,4 @@
+
 /*
 ----------------------------------------------------------------------
 COPYRIGHT NOTICE FOR 3DHex:
@@ -61,9 +62,11 @@ File myFile;
 #define BED_THRMSTR A14
 #define NOZZ_HEATER 10
 #define BED_HEATER 8
+#define IDLE_USB_TEMP_UPDATE_INTERVAL 1000
 
 void service_routine();
 void temperature_control();
+void temperature_USB_update();
 void get_USB_settings();
 void get_SD_settings();
 void check_steppers();
@@ -75,6 +78,7 @@ void check_USB_terminate();
 void check_BUTTON_terminate();
 void terminate_process();
 void homing_routine();
+void initialzation_vars();
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -125,19 +129,65 @@ struct data3{
    volatile uint8_t HOME_Z_STATE;//MUST BE WRITTEN TWICE
 };
 
+struct data4{
+  volatile double command;
+  volatile double nozz_temp;
+  volatile double bed_temp;
+};
+
+struct data5{
+  volatile uint8_t A;
+  volatile uint8_t B;
+  volatile uint8_t C;
+  volatile uint8_t D;
+  volatile uint8_t E;
+  volatile uint8_t F;
+  volatile uint8_t G;
+  volatile uint8_t H;
+  volatile uint16_t I;
+  volatile uint16_t J;
+  volatile uint16_t K;
+  volatile uint16_t L;
+  volatile uint8_t M;
+  volatile uint8_t N;
+};
+
 struct data1 buffer1;
 struct data2 buffer2;
 struct data3 buffer3;
+struct data4 buffer4;
+struct data5 buffer5;
+
+
+thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
+thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
 
 volatile double temp1,temp2;
 volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,bed_block=true,once=false,PRINTING=false;
-volatile unsigned int i=0,j=2,cc;
+volatile unsigned int i=0,j=2,cc,step_counter=0;
 volatile byte buf[USB_SETTING_BYTES],PRINT_STATE;
 volatile float time_duration;
-volatile unsigned long currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0;
+volatile unsigned long currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0;
 volatile int XMIN_READ,YMIN_READ,ZMIN_READ;
-
+volatile uint8_t pass=1,fail=0;
+volatile int8_t p;
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
+
+
+void initialization_var(){
+   buffer3.X_ENABLE=1;
+   buffer3.Y_ENABLE=1;
+   buffer3.Z_ENABLE=1;
+   buffer3.E_ENABLE=1;
+   buffer4.command=-253;
+   buffer5.A=0;
+   buffer5.B=0;
+   buffer5.C=0;
+   PRINTING=0;
+   i=0;j=2;signal_duration=0;off=0;on=0;bufferstate=true;readstate=false;
+   setoff=false;
+   nozz_block=false;bed_block=false;once=false;
+}
 
 void setup() {
    pinMode(ENCODER_PIN,INPUT_PULLUP);
@@ -167,14 +217,15 @@ void setup() {
    digitalWrite(BED_HEATER,LOW);
    digitalWrite(NOZZ_HEATER,LOW);
    Serial.begin(SERIAL_BAUD_RATE);
-   i=0;j=2;signal_duration=0;off=0;on=0;bufferstate=true;readstate=false;
-   setoff=false;nozz_block=true;bed_block=true;once=false,PRINTING=false;
+   pinMode(LED_BUILTIN,OUTPUT);
+   initialization_var();
    if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
    delay(100); 
    do{// blocking if no input
       if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");lcd.blink();}    
    }while(check_inputs());
-   PRINTING=true; //printing process has started
+   nozz_block=true;bed_block=true;
+   PRINTING=true;
    if(PRINT_STATE==0){get_USB_settings();}else{get_SD_settings();}
    if(LCD_16x4==true){lcd.noBlink();}
    check_steppers();
@@ -184,13 +235,20 @@ void setup() {
    }else{
       if(LCD_16x4==true && setoff==false){lcd.setCursor(0, 2);lcd.print("HEAT UP.");delay(1200);}
    }
+   PRINTING=false;
    temperature_control(); //blocking if heat up first is enabled
+   PRINTING=true; //printing process has started
+   buffer4.nozz_temp = therm1.analog2temp(); // nozzle
+   buffer4.bed_temp = therm2.analog2temp();  // bed
+   buffer4.command = -10;
+   Serial.write((char*)&buffer4,sizeof(buffer4));
+   delay(1000);
    if(LCD_16x4==true && setoff==false){lcd.noBlink();lcd.setCursor(0, 3);lcd.print("PRINTING..");lcd.blink();delay(1200);}
    Timer3.initialize(time_duration); //[microseconds]
    Timer3.attachInterrupt(service_routine);
 }
 
-void loop() {
+void loop(){
   if(setoff==false){
      if(PRINT_STATE==0){read_serial();}else{read_sd();}
      temperature_control();
@@ -237,51 +295,14 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    check_USB_terminate();
 }
 
-void homing_routine(){ 
-   if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
-   delay(800);
-   XMIN_READ=digitalRead(HOME_XMIN_PIN);
-   while(buffer3.HOME_X_ENABLE==true && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      XMIN_READ=digitalRead(HOME_XMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-   YMIN_READ=digitalRead(HOME_YMIN_PIN);
-   while(buffer3.HOME_Y_ENABLE==true && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      YMIN_READ=digitalRead(HOME_YMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-   ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-   while(buffer3.HOME_Z_ENABLE==true && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
-      delayMicroseconds(buffer3.HOME_Z_DURATION);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-      delayMicroseconds(buffer3.HOME_Z_DURATION);
-      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-}
-
 void terminate_process(){
     if(PRINTING==true){
+       initialization_var();
        Timer3.stop();
        if(PRINT_STATE==0){
-          Serial.write('e');
+          buffer4.command = -260;
+          Serial.write((char*)&buffer4,sizeof(buffer4)); 
           Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
-          Serial.write('e');
        }else{
           myFile.close();
        }
@@ -297,7 +318,8 @@ void terminate_process(){
 
 void check_USB_terminate(){
    if(bufferstate==true && buffer1.byte_1[j]==0){
-      setoff=true;}
+      setoff=true;
+      }
    else if(bufferstate==false && buffer2.byte_2[j]==0){
       setoff=true;
    }
@@ -317,16 +339,17 @@ void check_BUTTON_terminate(){
 }
 
 void read_serial(){
-   if(readstate==true){ 
+   if(readstate==true){
+      buffer4.command = -253; 
+      buffer4.nozz_temp = therm1.analog2temp(); // nozzle
+      buffer4.bed_temp = therm2.analog2temp(); // bed
       if(bufferstate==false){ 
          memset(&buffer1, 0, sizeof(buffer1));
-         Serial.read();
-         Serial.write('c');  
+         Serial.write((char*)&buffer4,sizeof(buffer4));  
          Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
       }else{
          memset(&buffer2, 0, sizeof(buffer2));
-         Serial.read();
-         Serial.write('c');  
+         Serial.write((char*)&buffer4,sizeof(buffer4));  
          Serial.readBytes((uint8_t *)&buffer2, sizeof(buffer2));     
       }
       readstate=false;
@@ -347,11 +370,10 @@ void read_sd(){
 void get_USB_settings(){
    if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: USB        ");lcd.noBlink();delay(1200);}
    if(LCD_16x4==true){lcd.setCursor(0, 1);lcd.print("CONNECTED!");delay(1200);}
-   Serial.read(); //Clears Serial
-   Serial.write('c');//Signal to python
+   buffer4.command = -253; 
+   Serial.write((char*)&buffer4,sizeof(buffer4));  
    Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
-   Serial.read();
-   Serial.write('c');
+   Serial.write((char*)&buffer4,sizeof(buffer4));  
    Serial.readBytes((uint8_t *)&buffer2, sizeof(buffer2));
    for(cc=0;cc<USB_SETTING_BYTES;cc++){//total 52 bytes
       buf[cc]=buffer1.byte_1[cc];
@@ -407,24 +429,28 @@ void get_SD_settings(){
 }
 
 void check_steppers(){
-   if(buffer3.X_ENABLE==0){pinMode(X_EN,INPUT);}
-   if(buffer3.Y_ENABLE==0){pinMode(Y_EN,INPUT);}
-   if(buffer3.Z_ENABLE==0){pinMode(Z_EN,INPUT);}
-   if(buffer3.E_ENABLE==0){pinMode(E_EN,INPUT);}
+   if(buffer3.X_ENABLE==0){pinMode(X_EN,INPUT);}else{pinMode(X_EN,OUTPUT);}
+   if(buffer3.Y_ENABLE==0){pinMode(Y_EN,INPUT);}else{pinMode(Y_EN,OUTPUT);}
+   if(buffer3.Z_ENABLE==0){pinMode(Z_EN,INPUT);}else{pinMode(Z_EN,OUTPUT);}
+   if(buffer3.E_ENABLE==0){pinMode(E_EN,INPUT);}else{pinMode(E_EN,OUTPUT);}
 }
 
 void temperature_control(){
-   thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
-   thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
    do{
       currentMillis = millis();
+      if (currentMillis - previousMillis_USBupdate >= IDLE_USB_TEMP_UPDATE_INTERVAL) {
+        previousMillis_USBupdate=currentMillis;
+        if (PRINTING==0){                                          //update temperature from here only when not printing
+           temperature_USB_update();
+        }
+      }
       if (currentMillis - previousMillis_Bed >= buffer3.CYCLE_BED) {
          previousMillis_Bed = currentMillis;
          temp2 = therm2.analog2temp(); // bed
          if((temp2<MIN_TEMP_SAFETY || temp2>MAX_TEMP_BED) && buffer3.HEATED_BED==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
          if(temp2<=buffer3.BED_TEMP && buffer3.HEATED_BED==1){digitalWrite(BED_HEATER,HIGH);}else{digitalWrite(BED_HEATER,LOW); bed_block=false;}
       }
-      if (currentMillis - previousMillis_Nozz >= buffer3.CYCLE_NOZZ) {
+      if (currentMillis - previousMillis_Nozz >= buffer3.CYCLE_NOZZ){
          previousMillis_Nozz = currentMillis;
          temp1 = therm1.analog2temp(); // nozzle
          if((temp1<MIN_TEMP_SAFETY || temp1>MAX_TEMP_NOZZLE) && buffer3.HEATED_NOZZLE==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
@@ -435,7 +461,16 @@ void temperature_control(){
    }while(((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1)) && setoff==false);
 }
 
+void temperature_USB_update(){
+  buffer4.nozz_temp = therm1.analog2temp(); // nozzle
+  buffer4.bed_temp = therm2.analog2temp();  // bed
+  buffer4.command = -243;
+  Serial.write((char*)&buffer4,sizeof(buffer4));
+}
+
+
 int check_inputs(){
+  int ii=0;
    while(signal_duration < BUTTON_TIME_DURATION && !Serial.available()){
       if(digitalRead(ENCODER_PIN)==LOW){
          off=millis();
@@ -449,11 +484,181 @@ int check_inputs(){
       signal_duration=0;
       return SD_setup();
    }
+///////////////////////////**************************///////////////////
    if(Serial.available() && signal_duration < BUTTON_TIME_DURATION){
-      PRINT_STATE=0;
-      return 0;
+       Serial.readBytes((uint8_t *)&buffer5, sizeof(buffer5));
+       Serial.write((uint8_t*)&pass,sizeof(pass));
+       if(buffer5.A==0){                             ///A=0 => idle mode
+           if(buffer5.B == 0){                       ///B=0 => temp command
+              if(buffer5.C == 1){                    ///C=1 => set temp
+                buffer3.HEATED_NOZZLE=buffer5.G;
+                buffer3.HEATED_BED=buffer5.H;
+                buffer3.NOZZLE_TEMP=buffer5.I;
+                buffer3.BED_TEMP=buffer5.J;
+                buffer3.CYCLE_NOZZ=buffer5.K;
+                buffer3.CYCLE_BED=buffer5.L;
+                buffer3.THERMISTOR_TYPE_NOZZLE=buffer5.M;
+                buffer3.THERMISTOR_TYPE_BED=buffer5.N;
+                buffer3.Wait_nozz=0;
+                buffer3.Wait_bed=0;
+              }else if(buffer5.C == 0){                                ///C=0 => monitor only temp                       
+                   buffer3.HEATED_NOZZLE=0;
+                   buffer3.HEATED_BED=0;
+               }
+            }else if(buffer5.B == 1){              ///B=1 Enable/Disable motor command
+                if(buffer5.C==0){                  //C=0 => XAXIS
+                  if(buffer5.D==0){                //D=0 => Disable
+                    buffer3.X_ENABLE=0;
+                  }else{                           //D=1 => Enable
+                    buffer3.X_ENABLE=1;
+                  }
+                }
+                if(buffer5.C==1){                  //C=1 => YAXIS
+                  if(buffer5.D==0){                //D=0 => Disable
+                    buffer3.Y_ENABLE=0;
+                  }else{                           //D=1 => Enable
+                    buffer3.Y_ENABLE=1;
+                  }
+                }
+                if(buffer5.C==2){                  //C=2 => ZAXIS
+                  if(buffer5.D==0){                //D=0 => Disable
+                    buffer3.Z_ENABLE=0;
+                  }else{                           //D=1 => Enable
+                    buffer3.Z_ENABLE=1;
+                  }
+                }
+                if(buffer5.C==3){                  //C=3 => EAXIS
+                  if(buffer5.D==0){                //D=0 => Disable
+                    buffer3.E_ENABLE=0;
+                  }else{                           //D=1 => Enable
+                    buffer3.E_ENABLE=1;
+                  }
+                }
+              check_steppers();
+            }else if(buffer5.B == 2){              //B=2 => Home
+                if(buffer5.C==0){                  //C=0 => XAXIS
+                     buffer3.X_ENABLE=buffer5.D;
+                     buffer3.HOME_X_ENABLE=buffer5.E;
+                     buffer3.HOME_X_STATE=buffer5.F;
+                     buffer3.HOME_X_DIR=buffer5.G;
+                     buffer3.HOME_X_DURATION=buffer5.I;
+                }
+                if(buffer5.C==1){                  //C=1 => YAXIS
+                     buffer3.Y_ENABLE=buffer5.D;
+                     buffer3.HOME_Y_ENABLE=buffer5.E;
+                     buffer3.HOME_Y_STATE=buffer5.F;
+                     buffer3.HOME_Y_DIR=buffer5.G;
+                     buffer3.HOME_Y_DURATION=buffer5.I;
+                }
+                if(buffer5.C==2){                  //C=2 => ZAXIS
+                     buffer3.Z_ENABLE=buffer5.D;
+                     buffer3.HOME_Z_ENABLE=buffer5.E;
+                     buffer3.HOME_Z_STATE=buffer5.F;
+                     buffer3.HOME_Z_DIR=buffer5.G;
+                     buffer3.HOME_Z_DURATION=buffer5.I;
+                }
+                homing_routine();
+            }else if(buffer5.B == 3){              //B=3 => Rapid potision           
+                    rapid_position();
+            }
+            while(Serial.available()<3){
+                 temperature_control();  
+            }
+        }else if (buffer5.A==1){
+            PRINT_STATE=0;
+            return 0;
+       }
    }
     return 1;
+}
+
+void rapid_position(){
+   digitalWrite(BED_HEATER,LOW);    //Disable Heaters while rapid positioning for safety
+   digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while rapid positioning for safety
+   while(step_counter<buffer5.J && buffer5.C==0 && buffer5.D==1 && setoff==false){
+      PORTF = (buffer5.E<<PF1);
+      PORTF = (buffer5.E<<PF1)|(1<<PF0);
+      delayMicroseconds(buffer5.I);
+      PORTF = (buffer5.E<<PF1);
+      PORTF = (buffer5.E<<PF1)|(0<<PF0);
+      delayMicroseconds(buffer5.I);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   while(step_counter<buffer5.J && buffer5.C==1 && buffer5.D==1 && setoff==false){
+      PORTF = (buffer5.E<<PF7);
+      PORTF = (buffer5.E<<PF7)|(1<<PF6);
+      delayMicroseconds(buffer5.I);
+      PORTF = (buffer5.E<<PF7);
+      PORTF = (buffer5.E<<PF7)|(0<<PF6);
+      delayMicroseconds(buffer5.I);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   while(step_counter<buffer5.J && buffer5.C==2 && buffer5.D==1 && setoff==false){
+      PORTL = (buffer5.E<<PL1);
+      PORTL = (buffer5.E<<PL1)|(1<<PL3);
+      delayMicroseconds(buffer5.I);
+      PORTL = (buffer5.E<<PL1);
+      PORTL = (buffer5.E<<PL1)|(0<<PL3);
+      delayMicroseconds(buffer5.I);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   while(step_counter<buffer5.J && buffer5.C==3 && buffer5.D==1 && setoff==false){
+      PORTA = (buffer5.E<<PA6);
+      PORTA = (buffer5.E<<PA6)|(1<<PA4);
+      delayMicroseconds(buffer5.I);
+      PORTA = (buffer5.E<<PA6);
+      PORTA = (buffer5.E<<PA6)|(0<<PA4);
+      delayMicroseconds(buffer5.I);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   step_counter=0;
+}
+
+void homing_routine(){ 
+   digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
+   digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
+   if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
+   delay(800);
+   XMIN_READ=digitalRead(HOME_XMIN_PIN);
+   if(buffer5.A==1){buffer5.C=0;}
+   while(buffer3.X_ENABLE==1 && buffer3.HOME_X_ENABLE==true && buffer5.C==0 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
+      PORTF = (buffer3.HOME_X_DIR<<PF1);
+      PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
+      delayMicroseconds(buffer3.HOME_X_DURATION);
+      PORTF = (buffer3.HOME_X_DIR<<PF1);
+      PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
+      delayMicroseconds(buffer3.HOME_X_DURATION);
+      XMIN_READ=digitalRead(HOME_XMIN_PIN);
+      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   if(buffer5.A==1){buffer5.C=1;}
+   YMIN_READ=digitalRead(HOME_XMIN_PIN);
+   while(buffer3.Y_ENABLE==1 && buffer3.HOME_Y_ENABLE==true && buffer5.C==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
+      PORTF = (buffer3.HOME_Y_DIR<<PF7);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      YMIN_READ=digitalRead(HOME_XMIN_PIN);
+      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   if(buffer5.A==1){buffer5.C=2;}
+   ZMIN_READ=digitalRead(HOME_XMIN_PIN);
+   while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
+      PORTL = (buffer3.HOME_Z_DIR<<PL1);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+      delayMicroseconds(buffer3.HOME_Z_DURATION);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+      delayMicroseconds(buffer3.HOME_Z_DURATION);
+      ZMIN_READ=digitalRead(HOME_XMIN_PIN);
+      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
 }
 
 
