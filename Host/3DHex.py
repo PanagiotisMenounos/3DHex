@@ -83,6 +83,10 @@ class COMPortWorker(QThread):
                         window.comboBox.removeItem(window.comboBox.findText(i.device))
                 window.ports = serial.tools.list_ports.comports()
             time.sleep(0.5)
+            
+class ontheFLYWorker(QThread):
+  #do some stuff
+
 
 class USBWorker(QThread): #This thread starts when 3DHEX connected successfully to the Printer
     message = pyqtSignal(str) #define signal
