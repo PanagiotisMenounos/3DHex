@@ -352,6 +352,7 @@ void check_command(int state_c){
     i=0;
   }
 }
+
 void read_GM_data(){
     int temp_counter=0;
     while(buffer1.byte_1[j]==command_value){ //clear command_values
@@ -359,8 +360,6 @@ void read_GM_data(){
       temp_counter++;
     }
     while(buffer2.byte_2[j]==command_value){ //clear command_values
-      //state_r=1;
-      //digitalWrite(LED_BUILTIN,HIGH);
       temp_counter++;
       j++;
     }
@@ -425,21 +424,30 @@ void execute_command(){
     case 4: //fan control
        analogWrite(FAN,buffer5.J);
     break;
-    case 5: //pause
+    case 5: //pause for time
        if(buffer5.J!=0){
           timestamp = millis();
           while(millis()-timestamp<buffer5.J){
             temperature_control();
+            on=millis(); //prevent termination from check_Button_terminate()
           }
        }else if(buffer5.K!=0){
           buffer5.K=buffer5.K*1000;
           timestamp = millis();
           while(millis()-timestamp<buffer5.K){
             temperature_control();
+            on=millis(); //prevent termination from check_Button_terminate()
           }
        }
     break;
-    case 6: //autobed levelin
+    case 6: //pause until interaction
+       while(digitalRead(ENCODER_PIN)==HIGH && Serial.available()==0){
+           temperature_control();
+           on=millis(); //prevent termination from check_Button_terminate()
+       }
+       if(Serial.available()!=0){
+           Serial.read();
+       }
     break;
   }
 }
@@ -469,12 +477,10 @@ void check_USB_terminate(){
    if(bufferstate==true && buffer1.byte_1[j]==0){
       terminate_counter++;
       //setoff=true;
-      digitalWrite(LED_BUILTIN,HIGH);
    }
    if(bufferstate==false && buffer2.byte_2[j]==0){
       terminate_counter++;
       //setoff=true;
-      digitalWrite(LED_BUILTIN,HIGH);
    }
    if(terminate_counter>2000){
     setoff=true;
@@ -689,7 +695,7 @@ void temperature_control(){
              nozz_block=false;
            }
       }
-      if((digitalRead(ENCODER_PIN)==LOW) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
+      if((digitalRead(ENCODER_PIN)==LOW) && (GM_command==false) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
    }while(((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1)) && setoff==false);
 }
 

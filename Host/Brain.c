@@ -46,7 +46,15 @@ union{
     byte temp_array[4];
   } u;
   
+union {
+	int M;
+    byte fly_array[4];
+  } y;
 
+union {
+	float S;
+    byte fly_array[4];
+  } t;
        ///////////////**************GLOBAL VARIABLES FOR SETTINGS******************/////////////////////
 double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE,ACCELERATION,JERK,MAX_JFX,\
        MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
@@ -81,7 +89,7 @@ bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clock
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
 int X_GLOB=0,Y_GLOB=0;
-wchar_t savepath[14][100]={L"//3DHex2//support files//coordinates.txt\0"  \
+wchar_t savepath[15][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
 						  ,L"//3DHex2//support files//savepath.txt\0"     \
@@ -94,7 +102,8 @@ wchar_t savepath[14][100]={L"//3DHex2//support files//coordinates.txt\0"  \
 						  ,L"//3DHex2//binary files//buffer_2.bin\0"      \
 						  ,L"//3DHex2//binary files//flag.bin\0"          \
 						  ,L"//3DHex2//binary files//flag_py.bin\0"       \
-						  ,L"//3DHex2//binary files//child.bin\0"};                       		  
+						  ,L"//3DHex2//binary files//child.bin\0"         \
+						  ,L"//3DHex2//binary files//fly.bin\0"};                      		  
 						  
 wchar_t coordinates_path[150]  \
        ,fcoordinates_path[150] \
@@ -109,7 +118,8 @@ wchar_t coordinates_path[150]  \
 	   ,buffer2_path[150]      \
 	   ,flag_path[150]         \
 	   ,startpy_path[150]      \
-	   ,child_path[150] ;
+	   ,child_path[150]        \
+	   ,fly_path[150];
  /////////////////////////*******//////////////////////
 
 FILE *SD_binary_file;
@@ -118,6 +128,7 @@ FILE *buffer2_file;
 FILE *flag_file;
 FILE *startpy_file;
 FILE *child_file;
+FILE *fly_file;
 
 void LINE(double xf, double yf, double zf, double ef, double xl, double yl, double zl, double el, double FEEDRATE);             //G01,G00 calculations   
 void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE); //GO2,G03 calculations 
@@ -187,13 +198,15 @@ int main()
     	FILE *g1;
     	FILE *gen1;
     	
-        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,TEMP_PERC=0;
+    	struct stat fly_buffer;
+        int   on_the_fly=0;
+    	
+        double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,Gt,Mt,St,TEMP_PERC=0;
         unsigned long total_lines,j;
-        bool first_line=true,GM_command=false;
+        bool first_line=true,GM_command=false,fly_command=false;
         WriteFile(pipe, &TEMP_PERC, sizeof(float), &numWritten, NULL); //FIX A BUG
         int e_space,ii;
         GP=255;
-        
         path_files();
     	read_settings();
 		hidecursor(); 
@@ -211,7 +224,8 @@ int main()
 		}else{
 			g1=_wfopen(coordinates_path,L"r");
 		}
-        
+        fly_file=_wfopen(fly_path,L"wb"); //reset fly file
+		fclose(fly_file);
         gen1=_wfopen(gen_path,L"r");
         for(j=1;j<=total_lines;j++){
 		    if(first_line==true){
@@ -219,8 +233,25 @@ int main()
 	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&new_CURVE);
 	            j++;
 	    	}
-            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
-			if(CURVE_DETECTION==1 && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3)){
+    		on_the_fly = wstat(fly_path, &fly_buffer); //check flag state....stat replaced with wstat
+            if(fly_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
+               fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
+    		}else if(fly_buffer.st_size!=0){ //add M226
+    	    	printf("%s\n","ON THE FLY COMMAND: ");
+                j=j-1;
+                ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL);
+                ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);
+                printf("%s %i %f\n","PIPE RECEIVED" ,y.M,t.S);
+    			fly_command=true;
+    			Gt=Gl;
+    			Mt=Ml;
+    			St=Sl;
+    			Gl=flag_num;
+    			Ml=y.M;
+    			Sl=t.S;
+    			
+			}
+			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3)){
 			   last_time=0; //FIX time BUG at the begining of new command
                fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED);
                gen_FEED=check_units(gen_FEED);
@@ -376,6 +407,10 @@ int main()
 				if(Ml==83){// M83 E Absolute
 					E_ABSOLUTE_POSITIONING=0;
 				}
+				if(Ml==226){// M83 E Absolute
+					MG_data.A=6;
+                    printf("%s\n", "M226");
+				}
 				write_hex2file(GP);
 				write_hex2file(GP);
                 
@@ -393,16 +428,27 @@ int main()
 				}
 	            free(MG_byte_buffer);
 			}
-			if(Xl!=axis_num && Ml!=205){Xf=Xl;} //do not consider axis_num as a coordinate 
-			if(Yl!=axis_num && Ml!=205){Yf=Yl;}
-			if(Zl!=axis_num && Ml!=205){Zf=Zl;}
-			if(El!=axis_num && Ml!=205){Ef=El;}
-			Gf=Gl;Mf=Ml;If=Il;Jf=Jl;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle 
+			if(fly_command==false){
+				if(Xl!=axis_num && Ml!=205){Xf=Xl;} //do not consider axis_num as a coordinate 
+			    if(Yl!=axis_num && Ml!=205){Yf=Yl;}
+			    if(Zl!=axis_num && Ml!=205){Zf=Zl;}
+			    if(El!=axis_num && Ml!=205){Ef=El;}
+			    Gf=Gl;Mf=Ml;If=Il;Jf=Jl;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
+			}else{
+				Gl=Gt;
+				Ml=Mt;
+				Sl=St;
+		        fly_file=_wfopen(fly_path,L"w"); //reset fly file
+		        fclose(fly_file);
+		        printf("%s\n","RESET FLY");
+			}
+			fly_command=false; //reset on the fly command
 			u.progress=100*j/total_lines;//calculate the completed percent
 			WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
 			check_SD_file_size(Xf,Yf,Zf,Xl,Yl,Zl);			
         } 
-        
+        u.progress=100;
+        WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
 		printf("%s\n","COMPLETED!");
 		printf("%s %i\n","X_GLOB=",X_GLOB);
 		printf("%s %i\n","Y_GLOB=",Y_GLOB);
@@ -413,6 +459,7 @@ int main()
         fclose(gen1);
 		child_file=_wfopen(child_path,L"w"); //reset child file -> to prevent python print >>> Abort after SD
 		fclose(child_file);
+		CloseHandle(pipe);
     }
     
     
@@ -576,10 +623,11 @@ void path_files()
 		flag_path[j]=appdata_path[i];
 		startpy_path[j]=appdata_path[i];
 		child_path[j]=appdata_path[i];
+		fly_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<14;f++){
+    for(f=0;f<15;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -676,6 +724,13 @@ void path_files()
 		if(f==13){
 		    while(savepath[f][i]!=L'\0'){
              	child_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==14){
+		    while(savepath[f][i]!=L'\0'){
+             	fly_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		

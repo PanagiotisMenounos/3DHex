@@ -41,33 +41,28 @@ import struct
 import win32pipe, win32file, pywintypes
 
 class ProgressBarWorker(QThread):
+  message = pyqtSignal(str) #define signal
   progress_value = pyqtSignal(int) #define signal
   def run(self):
-        pipe = win32pipe.CreateNamedPipe(
-        r'\\.\pipe\Foo',
-        win32pipe.PIPE_ACCESS_DUPLEX,
-        win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
-        1, 65536, 65536,
-        0,
-        None)
         try:
             received_progress=0
-            win32pipe.ConnectNamedPipe(pipe, None)
-            resp = win32file.ReadFile(pipe,4)	
+            win32pipe.ConnectNamedPipe(window.pipe, None)
+            resp = win32file.ReadFile(window.pipe,4)	
             (received_progress,)=struct.unpack("i",resp[1])
             while received_progress <=100:
                 self.progress_value.emit(received_progress) #emit the signal
-                resp = win32file.ReadFile(pipe,4)	
+                resp = win32file.ReadFile(window.pipe,4)	
                 (received_progress,)=struct.unpack("i",resp[1])
                 if received_progress==100:
                    self.progress_value.emit(received_progress) #emit the signal
                    received_progress=101
         except:
              self.progress_value.emit(0)
-             win32file.CloseHandle(pipe)
+             win32file.CloseHandle(window.pipe)
         finally:
-              win32file.CloseHandle(pipe)
+              win32file.CloseHandle(window.pipe)
               print("closed pipe")
+              self.message.emit(">>> Completed") #emit the signal
 
 class COMPortWorker(QThread):
     def run(self):
@@ -97,28 +92,34 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         time.sleep(2)
         self.send_buffer() #Set printer to idle mode temp only report
         self.message.emit(">>> Mode: Idle") #emit the signal
-        while True:
-            (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
-            if window.A==0: #if in idle mode
-               self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-               self.new_bed_temp.emit(window.bed_temp) #emit the signal
-               time.sleep(0.5)
-               self.check_idle_commands() #Check if any idle command has triggered
-            else:
-               self.message.emit(">>> Mode: USB printing") #emit the signal
-               #window.Message_panel.append(">>> Start usb printing")
-               time.sleep(0.5)
-               self.usb_printing() #Go into USB Print function
-               time.sleep(8)
-               window.A=0 #After USB printing has completed declare idle mode
-               window.B=0
-               window.C=0
-               self.send_buffer() #Then send idle mode temp only report to printer
-               window.enable_idle_buttons()
+        try:
+            while window.USB_CONNECTED==1:
+                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                if window.A==0: #if in idle mode
+                   self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
+                   self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                   time.sleep(0.5)
+                   self.check_idle_commands() #Check if any idle command has triggered
+                else:
+                   self.message.emit(">>> Mode: USB printing") #emit the signal
+                   #window.Message_panel.append(">>> Start usb printing")
+                   time.sleep(0.5)
+                   self.usb_printing() #Go into USB Print function
+                   time.sleep(5)
+                   window.A=0 #After USB printing has completed declare idle mode
+                   window.B=0
+                   window.C=0
+                   window.ser.flushInput() #very important without delay to fix a bug
+                   window.ser.flushOutput()#very important without delay to fix a bug
+                   self.send_buffer() #Then send idle mode temp only report to printer
+                   window.enable_idle_buttons()
+        except:
+            window.USB_CONNECTED=0
 
     def send_buffer(self):
         window.ser.write(struct.pack("8B4H2B6H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
+        print("apo pou kai os poy")
         if pass_fail==1: #pass_fail should be 1, else communication has failed
            print("PASS")
         else:
@@ -126,7 +127,6 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
 
     def usb_printing(self): #USB Printing function 
         window.A=1 #printing mode
-        window.usb_printing=0
         serial_command=0 #reset serial command from arduino
         flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
         flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data in order for Brain.C to know Python is in printing function
@@ -194,7 +194,8 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 while serial_command==-243 and child_buffer_size!=0:
                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                     self.new_bed_temp.emit(window.bed_temp) #emit the signal              
+                     self.new_bed_temp.emit(window.bed_temp) #emit the signal  
+                     window.froze=0                     
                 window.ser.write(buffer1_file.read(3300))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
@@ -211,6 +212,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                      self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                     window.froze=0 
                 window.ser.write(buffer2_file.read(3300))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
@@ -225,8 +227,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         buffer1_file.close()
         buffer2_file.close()
         window.usb_printing=0
-        window.ser.flushOutput()
-        window.ser.flushInput()
+        self.message.emit(">>> Completed") #emit the signal
 
     def check_idle_commands(self): #idle mode commands func
             if window.set_temp==1: #1 Set temp
@@ -407,6 +408,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
     def declare_vars(self):
+        self.froze=0 #prevent pause to be pressed multiple times
+        self.pause_state=0 #not at pause state
         self.mirror=5 #used as flag in C-Python
         self.printer=0
         self.set_motor=0
@@ -530,9 +533,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p16.clicked.connect(lambda:self.rapid_idle_position(2,0))
         self.p19.clicked.connect(lambda:self.rapid_idle_position(3,1))
         self.p20.clicked.connect(lambda:self.rapid_idle_position(3,0))
+        self.p21.clicked.connect(self.PAUSE)
         self.p4.clicked.connect(self.SD_CARD)
-        self.p88.clicked.connect(self.setTEMP)
-        self.p89.clicked.connect(self.resetTEMP)
+        self.p88.clicked.connect(self.setNOZZTEMP)
+        self.p89.clicked.connect(self.setBEDTEMP)
         self.p22.clicked.connect(self.clear_GCODE)
         self.p23.clicked.connect(self.CANCEL)
         self.action_Open.triggered.connect(self.openfile)
@@ -560,7 +564,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def CONNECT(self):
         try:
-            if self.USB_CONNECTED==0:	
+            if self.USB_CONNECTED==0:            
                 self.save_settings()
                 COM_PORT = self.chosenPort
                 BAUD_RATE = int(self.b48.toPlainText().strip())
@@ -571,7 +575,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.B=0 #B=0 => Temperature command
                 self.C=0 #C=0 => Report only temperature		
                 self.usb_thread = USBWorker() 
-                self.usb_thread.message.connect(self.print2user) #connect thread to message window
+                self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
                 self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
                 self.usb_thread.new_bed_temp.connect(self.update_bed_temp) #connect thread to message window
                 self.usb_thread.start()       #Start usb communication handling thread
@@ -581,12 +585,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                      c.setChecked(1) 
                 self.USB_CONNECTED=1
                 self.Message_panel.append(">>> Successfully connected to: " + str(COM_PORT))
-                self.p1.setStyleSheet('QPushButton {background-color:rgb(47, 47, 47);color: rgb(0,255,0);border-style: solid;border-radius:5px;border-width:2px; border-color:rgb(0,255,0);}QPushButton:hover {border-width:3px; border-color:rgb(255, 115, 30);}QPushButton:pressed {background-color:rgb(255, 115, 30);border-color: rgb(255, 195, 110);border-width: 4px;     }QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')                
+                self.p1.setStyleSheet('QPushButton {background-color:rgb(47, 47, 47);color: rgb(0,255,0);border-style: solid;border-radius:5px;border-width:2px; border-color:rgb(0,255,0);}\
+                QPushButton:hover {border-width:3px; border-color:rgb(255, 115, 30);}\
+                QPushButton:pressed {background-color:rgb(255, 115, 30);border-color: rgb(255, 195, 110);border-width: 4px;}\
+                QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
+            else:
+                if self.usb_printing==0: #disconnect only allowed when on idle
+                    self.p1.setStyleSheet('QPushButton {background-color:rgb(47, 47, 47);color: rgb(255,255,255);border-style: solid;border-radius:5px;border-width:2px; border-color:rgb(255,85,0);}\
+                    QPushButton:hover {border-width:3px; border-color:rgb(255, 115, 30);}\
+                    QPushButton:pressed {background-color:rgb(255, 115, 30);border-color: rgb(255, 195, 110);border-width: 4px;}\
+                    QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
+                    self.USB_CONNECTED=0
+                    self.ser.close()
+                    self.Message_panel.append(">>> Printer disconnected")
+                    self.Nozz_LCD.display(0)
+                    self.Bed_LCD.display(0)
         except:
             self.Message_panel.append(">>> Failed to connect")		
 
     def USB(self): #call this func whenever USB_calculate button is pressed
         if self.USB_CONNECTED==1 and self.A==0:
+            self.pipe = win32pipe.CreateNamedPipe(
+            r'\\.\pipe\Foo',
+            win32pipe.PIPE_ACCESS_DUPLEX,
+            win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
+            1, 65536, 65536,
+            0,
+            None)
+            self.pause_state=0
             self.A=1 #printing mode
             self.usb_printing=1
             self.start_bar()
@@ -633,8 +659,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.c13.setEnabled(False) 
           self.c14.setEnabled(False)
           self.c5.setEnabled(False)
-          self.p88.setEnabled(False)
-          self.p89.setEnabled(False)
+          #self.p88.setEnabled(False)
+          #self.p89.setEnabled(False)
 
     def enable_rapid_buttons(self):
         if self.c12.isChecked():
@@ -884,15 +910,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    self.p20.setEnabled(False)
             self.rapid_pos=1
 
-    def setTEMP(self):
+    def setNOZZTEMP(self):
         if self.A==0:
            self.disable_idle_buttons()
            self.set_temp=1
+        if self.usb_printing==1 and self.USB_CONNECTED==1:
+              MM=104
+              SS=float(window.b35.toPlainText().strip())
+              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              self.Message_panel.append(">>> M104: Set NOZZLE temp ")
+              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
+              self.child_file.write(str(struct.pack("i",self.mirror)))
+              self.child_file.close()     
 
-    def resetTEMP(self):
+    def setBEDTEMP(self):
         if self.A==0:
            self.disable_idle_buttons()
            self.set_temp=2
+        if self.usb_printing==1 and self.USB_CONNECTED==1:
+              MM=140
+              SS=float(window.b36.toPlainText().strip())
+              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
+              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              self.Message_panel.append(">>> M140: Set NOZZLE temp ")
+              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
+              self.child_file.write(str(struct.pack("i",self.mirror)))
+              self.child_file.close() 
 
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
@@ -987,6 +1031,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         savepathfile.close()
         self.save_settings()
         if(path != ''):
+           self.pipe = win32pipe.CreateNamedPipe(
+           r'\\.\pipe\Foo',
+           win32pipe.PIPE_ACCESS_DUPLEX,
+           win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
+           1, 65536, 65536,
+           0,
+           None)
            self.Message_panel.append(">>> path: " + path)
            self.start_bar()
            self.file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
@@ -1000,6 +1051,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
            self.Message_panel.append(">>> Aborted ")
 
+    def PAUSE(self):
+        if self.usb_printing==1 and self.froze==0:
+           if self.pause_state==0: #pass M226 command to C
+              MM=226
+              SS=0
+              win32file.WriteFile(self.pipe,(struct.pack("if",MM,SS)))
+              #win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
+              self.Message_panel.append(">>> M226: Pause request")   
+              self.pause_state=1 #paused
+              self.froze=1
+              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
+              self.child_file.write(str(struct.pack("i",self.mirror)))
+              self.child_file.close()
+           else:
+             self.ser.write(struct.pack("B",self.A)) #trash, to resume printing
+             self.pause_state=0 #resume
+             self.froze=1
+             self.Message_panel.append(">>> Resume printing... ")
+
     def update_nozz_temp(self, new_nozz_temp):
         self.Nozz_LCD.display(new_nozz_temp)
  
@@ -1009,10 +1079,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def start_bar(self):
         self.bar_thread = ProgressBarWorker()
         #self.bar_thread.setDaemon(True) #Terminate at the end,only threading.Thread
+        self.bar_thread.message.connect(self.print2user_bar) #connect thread to message window
         self.bar_thread.progress_value.connect(self.setProgressVal) #connect thread to bar
         self.bar_thread.start()
        
-    def print2user(self,message):
+    def print2user_usb(self,message):
+        self.Message_panel.append(message)
+
+    def print2user_bar(self,message):
         self.Message_panel.append(message)
 
     def setProgressVal(self,progress_value):
