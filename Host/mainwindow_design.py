@@ -2050,14 +2050,14 @@ class Ui_MainWindow(object):
         self.l19_4.setAlignment(QtCore.Qt.AlignCenter)
         self.l19_4.setObjectName("l19_4")
         self.gridLayout_2.addWidget(self.l19_4, 2, 0, 1, 1)
-        self.p88_2 = QtWidgets.QPushButton(self.frame_14)
-        self.p88_2.setEnabled(True)
-        self.p88_2.setMinimumSize(QtCore.QSize(60, 25))
-        self.p88_2.setMaximumSize(QtCore.QSize(60, 25))
+        self.p90 = QtWidgets.QPushButton(self.frame_14)
+        self.p90.setEnabled(True)
+        self.p90.setMinimumSize(QtCore.QSize(60, 25))
+        self.p90.setMaximumSize(QtCore.QSize(60, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p88_2.setFont(font)
-        self.p88_2.setStyleSheet("QPushButton {\n"
+        self.p90.setFont(font)
+        self.p90.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2081,16 +2081,16 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p88_2.setObjectName("p88_2")
-        self.gridLayout_2.addWidget(self.p88_2, 10, 1, 1, 1, QtCore.Qt.AlignHCenter)
-        self.p88_3 = QtWidgets.QPushButton(self.frame_14)
-        self.p88_3.setEnabled(True)
-        self.p88_3.setMinimumSize(QtCore.QSize(60, 26))
-        self.p88_3.setMaximumSize(QtCore.QSize(60, 26))
+        self.p90.setObjectName("p90")
+        self.gridLayout_2.addWidget(self.p90, 10, 1, 1, 1, QtCore.Qt.AlignHCenter)
+        self.p91 = QtWidgets.QPushButton(self.frame_14)
+        self.p91.setEnabled(True)
+        self.p91.setMinimumSize(QtCore.QSize(60, 26))
+        self.p91.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p88_3.setFont(font)
-        self.p88_3.setStyleSheet("QPushButton {\n"
+        self.p91.setFont(font)
+        self.p91.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2114,8 +2114,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p88_3.setObjectName("p88_3")
-        self.gridLayout_2.addWidget(self.p88_3, 10, 2, 1, 1, QtCore.Qt.AlignHCenter)
+        self.p91.setObjectName("p91")
+        self.gridLayout_2.addWidget(self.p91, 10, 2, 1, 1, QtCore.Qt.AlignHCenter)
         self.horizontalLayout_8.addWidget(self.frame_14)
         self.frame_7 = QtWidgets.QFrame(self.tab_15)
         self.frame_7.setMinimumSize(QtCore.QSize(150, 280))
@@ -2134,20 +2134,20 @@ class Ui_MainWindow(object):
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_13)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.c22_2 = QtWidgets.QCheckBox(self.frame_13)
-        self.c22_2.setMinimumSize(QtCore.QSize(75, 25))
-        self.c22_2.setMaximumSize(QtCore.QSize(75, 25))
+        self.c22_2.setMinimumSize(QtCore.QSize(60, 25))
+        self.c22_2.setMaximumSize(QtCore.QSize(60, 25))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.c22_2.setFont(font)
         self.c22_2.setObjectName("c22_2")
         self.verticalLayout_5.addWidget(self.c22_2, 0, QtCore.Qt.AlignHCenter)
-        self.d2_6 = QtWidgets.QDoubleSpinBox(self.frame_13)
-        self.d2_6.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_6.setMaximumSize(QtCore.QSize(65, 25))
+        self.d104 = QtWidgets.QDoubleSpinBox(self.frame_13)
+        self.d104.setMinimumSize(QtCore.QSize(65, 25))
+        self.d104.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_6.setFont(font)
-        self.d2_6.setStyleSheet("QDoubleSpinBox{\n"
+        self.d104.setFont(font)
+        self.d104.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2166,18 +2166,18 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_6.setMaximum(999.0)
-        self.d2_6.setProperty("value", 100.0)
-        self.d2_6.setObjectName("d2_6")
-        self.verticalLayout_5.addWidget(self.d2_6, 0, QtCore.Qt.AlignHCenter)
-        self.p88_4 = QtWidgets.QPushButton(self.frame_13)
-        self.p88_4.setEnabled(True)
-        self.p88_4.setMinimumSize(QtCore.QSize(60, 26))
-        self.p88_4.setMaximumSize(QtCore.QSize(60, 26))
+        self.d104.setMaximum(999.0)
+        self.d104.setProperty("value", 100.0)
+        self.d104.setObjectName("d104")
+        self.verticalLayout_5.addWidget(self.d104, 0, QtCore.Qt.AlignHCenter)
+        self.p25 = QtWidgets.QPushButton(self.frame_13)
+        self.p25.setEnabled(True)
+        self.p25.setMinimumSize(QtCore.QSize(60, 26))
+        self.p25.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p88_4.setFont(font)
-        self.p88_4.setStyleSheet("QPushButton {\n"
+        self.p25.setFont(font)
+        self.p25.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2201,8 +2201,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p88_4.setObjectName("p88_4")
-        self.verticalLayout_5.addWidget(self.p88_4, 0, QtCore.Qt.AlignHCenter)
+        self.p25.setObjectName("p25")
+        self.verticalLayout_5.addWidget(self.p25, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout_6.addWidget(self.frame_13, 0, QtCore.Qt.AlignHCenter)
         self.frame_21 = QtWidgets.QFrame(self.frame_7)
         self.frame_21.setMinimumSize(QtCore.QSize(90, 150))
@@ -2213,20 +2213,20 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_21)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.c22_3 = QtWidgets.QCheckBox(self.frame_21)
-        self.c22_3.setMinimumSize(QtCore.QSize(75, 25))
-        self.c22_3.setMaximumSize(QtCore.QSize(75, 25))
+        self.c22_3.setMinimumSize(QtCore.QSize(60, 25))
+        self.c22_3.setMaximumSize(QtCore.QSize(60, 25))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.c22_3.setFont(font)
         self.c22_3.setObjectName("c22_3")
         self.verticalLayout_3.addWidget(self.c22_3, 0, QtCore.Qt.AlignHCenter)
-        self.d2_7 = QtWidgets.QDoubleSpinBox(self.frame_21)
-        self.d2_7.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_7.setMaximumSize(QtCore.QSize(65, 25))
+        self.d105 = QtWidgets.QDoubleSpinBox(self.frame_21)
+        self.d105.setMinimumSize(QtCore.QSize(65, 25))
+        self.d105.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_7.setFont(font)
-        self.d2_7.setStyleSheet("QDoubleSpinBox{\n"
+        self.d105.setFont(font)
+        self.d105.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2245,18 +2245,18 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_7.setMaximum(999.0)
-        self.d2_7.setProperty("value", 100.0)
-        self.d2_7.setObjectName("d2_7")
-        self.verticalLayout_3.addWidget(self.d2_7, 0, QtCore.Qt.AlignHCenter)
-        self.p88_5 = QtWidgets.QPushButton(self.frame_21)
-        self.p88_5.setEnabled(True)
-        self.p88_5.setMinimumSize(QtCore.QSize(60, 26))
-        self.p88_5.setMaximumSize(QtCore.QSize(60, 26))
+        self.d105.setMaximum(999.0)
+        self.d105.setProperty("value", 100.0)
+        self.d105.setObjectName("d105")
+        self.verticalLayout_3.addWidget(self.d105, 0, QtCore.Qt.AlignHCenter)
+        self.p26 = QtWidgets.QPushButton(self.frame_21)
+        self.p26.setEnabled(True)
+        self.p26.setMinimumSize(QtCore.QSize(60, 26))
+        self.p26.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p88_5.setFont(font)
-        self.p88_5.setStyleSheet("QPushButton {\n"
+        self.p26.setFont(font)
+        self.p26.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2280,8 +2280,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p88_5.setObjectName("p88_5")
-        self.verticalLayout_3.addWidget(self.p88_5, 0, QtCore.Qt.AlignHCenter)
+        self.p26.setObjectName("p26")
+        self.verticalLayout_3.addWidget(self.p26, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout_6.addWidget(self.frame_21, 0, QtCore.Qt.AlignHCenter)
         self.horizontalLayout_8.addWidget(self.frame_7)
         self.tabWidget.addTab(self.tab_15, "")
@@ -3732,13 +3732,13 @@ class Ui_MainWindow(object):
 "")
         self.p22.setObjectName("p22")
         self.gridLayout_3.addWidget(self.p22, 0, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d2_2 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d2_2.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_2.setMaximumSize(QtCore.QSize(65, 25))
+        self.d100 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d100.setMinimumSize(QtCore.QSize(65, 25))
+        self.d100.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_2.setFont(font)
-        self.d2_2.setStyleSheet("QDoubleSpinBox{\n"
+        self.d100.setFont(font)
+        self.d100.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3757,17 +3757,17 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_2.setMaximum(999.0)
-        self.d2_2.setProperty("value", 100.0)
-        self.d2_2.setObjectName("d2_2")
-        self.gridLayout_3.addWidget(self.d2_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d2_3 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d2_3.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_3.setMaximumSize(QtCore.QSize(65, 25))
+        self.d100.setMaximum(999.0)
+        self.d100.setProperty("value", 100.0)
+        self.d100.setObjectName("d100")
+        self.gridLayout_3.addWidget(self.d100, 1, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d101 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d101.setMinimumSize(QtCore.QSize(65, 25))
+        self.d101.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_3.setFont(font)
-        self.d2_3.setStyleSheet("QDoubleSpinBox{\n"
+        self.d101.setFont(font)
+        self.d101.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3786,17 +3786,17 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_3.setMaximum(999.0)
-        self.d2_3.setProperty("value", 100.0)
-        self.d2_3.setObjectName("d2_3")
-        self.gridLayout_3.addWidget(self.d2_3, 1, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d2_4 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d2_4.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_4.setMaximumSize(QtCore.QSize(65, 25))
+        self.d101.setMaximum(999.0)
+        self.d101.setProperty("value", 100.0)
+        self.d101.setObjectName("d101")
+        self.gridLayout_3.addWidget(self.d101, 1, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d102 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d102.setMinimumSize(QtCore.QSize(65, 25))
+        self.d102.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_4.setFont(font)
-        self.d2_4.setStyleSheet("QDoubleSpinBox{\n"
+        self.d102.setFont(font)
+        self.d102.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3815,17 +3815,17 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_4.setMaximum(999.0)
-        self.d2_4.setProperty("value", 100.0)
-        self.d2_4.setObjectName("d2_4")
-        self.gridLayout_3.addWidget(self.d2_4, 1, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d2_5 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d2_5.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2_5.setMaximumSize(QtCore.QSize(65, 25))
+        self.d102.setMaximum(999.0)
+        self.d102.setProperty("value", 100.0)
+        self.d102.setObjectName("d102")
+        self.gridLayout_3.addWidget(self.d102, 1, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d103 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d103.setMinimumSize(QtCore.QSize(65, 25))
+        self.d103.setMaximumSize(QtCore.QSize(65, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.d2_5.setFont(font)
-        self.d2_5.setStyleSheet("QDoubleSpinBox{\n"
+        self.d103.setFont(font)
+        self.d103.setStyleSheet("QDoubleSpinBox{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3844,18 +3844,18 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.d2_5.setMaximum(999.0)
-        self.d2_5.setProperty("value", 100.0)
-        self.d2_5.setObjectName("d2_5")
-        self.gridLayout_3.addWidget(self.d2_5, 1, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p88_6 = QtWidgets.QPushButton(self.frame_9)
-        self.p88_6.setEnabled(True)
-        self.p88_6.setMinimumSize(QtCore.QSize(60, 26))
-        self.p88_6.setMaximumSize(QtCore.QSize(60, 26))
+        self.d103.setMaximum(999.0)
+        self.d103.setProperty("value", 100.0)
+        self.d103.setObjectName("d103")
+        self.gridLayout_3.addWidget(self.d103, 1, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.p24 = QtWidgets.QPushButton(self.frame_9)
+        self.p24.setEnabled(True)
+        self.p24.setMinimumSize(QtCore.QSize(60, 26))
+        self.p24.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p88_6.setFont(font)
-        self.p88_6.setStyleSheet("QPushButton {\n"
+        self.p24.setFont(font)
+        self.p24.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3879,8 +3879,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p88_6.setObjectName("p88_6")
-        self.gridLayout_3.addWidget(self.p88_6, 1, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.p24.setObjectName("p24")
+        self.gridLayout_3.addWidget(self.p24, 1, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.p21 = QtWidgets.QPushButton(self.frame_9)
         self.p21.setEnabled(True)
         self.p21.setMinimumSize(QtCore.QSize(60, 26))
@@ -4066,7 +4066,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_Exit.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -4102,12 +4102,12 @@ class Ui_MainWindow(object):
         self.l25_2.setText(_translate("MainWindow", "I"))
         self.l22_2.setText(_translate("MainWindow", "Wait"))
         self.l19_4.setText(_translate("MainWindow", "Temp [°C]"))
-        self.p88_2.setText(_translate("MainWindow", "AutoPID"))
-        self.p88_3.setText(_translate("MainWindow", "AutoPID"))
+        self.p90.setText(_translate("MainWindow", "AutoPID"))
+        self.p91.setText(_translate("MainWindow", "AutoPID"))
         self.c22_2.setText(_translate("MainWindow", "FAN 1"))
-        self.p88_4.setText(_translate("MainWindow", "Set"))
+        self.p25.setText(_translate("MainWindow", "Set"))
         self.c22_3.setText(_translate("MainWindow", "FAN 2"))
-        self.p88_5.setText(_translate("MainWindow", "Set"))
+        self.p26.setText(_translate("MainWindow", "Set"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_15), _translate("MainWindow", "Heaters"))
         self.l35.setText(_translate("MainWindow", "Binary [GB]"))
         self.l33.setText(_translate("MainWindow", "Steprate [KHz]"))
@@ -4146,7 +4146,7 @@ class Ui_MainWindow(object):
         self.l9_3.setText(_translate("MainWindow", "J [mm/sec³]"))
         self.c21.setText(_translate("MainWindow", "[mm/sec]"))
         self.p22.setText(_translate("MainWindow", "Clear"))
-        self.p88_6.setText(_translate("MainWindow", "Set"))
+        self.p24.setText(_translate("MainWindow", "Set"))
         self.p21.setText(_translate("MainWindow", "Pause"))
         self.p23.setText(_translate("MainWindow", "Cancel"))
         self.menu_Files.setTitle(_translate("MainWindow", "&File"))
