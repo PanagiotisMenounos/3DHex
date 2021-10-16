@@ -44,19 +44,19 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 union{
     int progress;
     byte temp_array[4];
-  } u;
+} u;
   
 union {
 	int M;
     byte fly_array[4];
-  } y;
+} y;
 
 union {
 	float S;
     byte fly_array[4];
   } t;
        ///////////////**************GLOBAL VARIABLES FOR SETTINGS******************/////////////////////
-double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE,ACCELERATION,T_ACCEL_ERATION\
+double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE, ACCELERATION,T_ACCEL_ERATION\
        ,JERK,T_JERK,MAX_JFX,\
        MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,T_JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
 int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS;
@@ -238,24 +238,24 @@ int main()
 	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&new_CURVE);
 	            j++;
 	    	}
-    		on_the_fly = wstat(fly_path, &fly_buffer); //check flag state....stat replaced with wstat
-            if(fly_buffer.st_size==0){ //check if Python GUI is terminated through a file signal
+    		on_the_fly = wstat(fly_path, &fly_buffer); //check for on the fly command
+            if(fly_buffer.st_size==0){ // 0 = no command
                fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
-    		}else if(fly_buffer.st_size!=0){ //add M226
+    		}else if(fly_buffer.st_size!=0){ //execute on the fly command
     	    	printf("%s\n","ON THE FLY COMMAND: ");
-                ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL);
-                if(y.M!=0){
+                ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL); //M value
+                if(y.M!=0){ //M command
                 	j=j-1;
-                	ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);
-                	Gt=Gl;
+                	ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL); //S value
+                	Gt=Gl; //save current commands
     		    	Mt=Ml;
-    			    St=Sl;
+    			    St=Sl; 
                 	printf("%s %i %f\n","PIPE RECEIVED,M command" ,y.M,t.S);
     			    fly_command=true;
     			    Gl=flag_num;
     			    Ml=y.M;
     			    Sl=t.S;
-				}else{
+				}else{ //JFAJ command
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
 					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
     	            JMFEED=T_JMFEED*(t.S/100.0);
@@ -433,7 +433,6 @@ int main()
 				}
 				if(Ml==226){// M83 E Absolute
 					MG_data.A=6;
-                    printf("%s\n", "M226");
 				}
 				write_hex2file(GP);
 				write_hex2file(GP);

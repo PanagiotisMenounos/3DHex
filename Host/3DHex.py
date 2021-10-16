@@ -84,8 +84,26 @@ class COMPortWorker(QThread):
                 window.ports = serial.tools.list_ports.comports()
             time.sleep(0.5)
             
-class ontheFLYWorker(QThread):
-  #do some stuff
+class FLYWorker(QThread):
+    message = pyqtSignal(str) #define signal
+    def run(self):
+        if window.MM!=0: #M command
+           win32file.WriteFile(window.pipe,(struct.pack("if",window.MM,window.SS))) #send command to C via pipe
+        else: # % command
+           win32file.WriteFile(window.pipe,(struct.pack("i",window.MM)))
+           window.SS=float(window.d100.value())
+           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
+           window.SS=float(window.d101.value())
+           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
+           window.SS=float(window.d102.value())
+           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
+           window.SS=float(window.d103.value())
+           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))       
+        window.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','wb')
+        window.child_file.write(struct.pack("i",window.mirror))
+        window.child_file.close()   
+        time.sleep(3)
+        window.froze=0        
 
 
 class USBWorker(QThread): #This thread starts when 3DHEX connected successfully to the Printer
@@ -147,7 +165,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         filecase=1 #Read from buffer1 file
         buffer_file_size=3300 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         child_buffer_size=1 #Means Brain.C is still running
-        while flag_py_buffer==0:#wait for C to fill binary data to buffer1+buffer2 binary files
+        while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
@@ -183,22 +201,22 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
                 flag_file.close()
             child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        while serial_command!=-10 and child_buffer_size!=0: #Wait for printer to read commanded temp
+        while serial_command!=-10 and child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
             (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
         window.usb_printing=1 
-        while buffer_file_size==3300 and child_buffer_size!=0 and serial_command!=-260: #Start binary data streaming to Printer 
+        while buffer_file_size==3300 and child_buffer_size!=0 and serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal	
-                while serial_command==-243 and child_buffer_size!=0:
+                while serial_command==-243 and child_buffer_size!=0 and window.usb_printing==1:
                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                     self.new_bed_temp.emit(window.bed_temp) #emit the signal  
+                     self.new_bed_temp.emit(window.bed_temp) #emit the signal                     
                      window.froze=0                     
                 window.ser.write(buffer1_file.read(3300))
                 buffer1_file.close()
@@ -212,10 +230,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                while serial_command==-243 and child_buffer_size!=0:
+                while serial_command==-243 and child_buffer_size!=0 and window.usb_printing==1:
                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                     self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                     self.new_bed_temp.emit(window.bed_temp) #emit the signal 
                      window.froze=0 
                 window.ser.write(buffer2_file.read(3300))
                 buffer2_file.close()
@@ -411,6 +429,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
     def declare_vars(self):
+        self.MM = 0
+        self.SS = 0
+        self.froze_loop=0 #prevent fly command when paused
         self.froze=0 #prevent pause to be pressed multiple times
         self.pause_state=0 #not at pause state
         self.mirror=5 #used as flag in C-Python
@@ -639,9 +660,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Aborted")
             child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so Brain.C to terminate
             child_file.close()
+            self.usb_printing=0
+            self.A=0
         if self.USB_CONNECTED==1 and self.rapid_pos==1:
             self.Message_panel.append(">>> Aborted")
             self.ser.write(struct.pack("B",self.A))
+
  
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
@@ -919,55 +943,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.A==0:
            self.disable_idle_buttons()
            self.set_temp=1
-        if self.usb_printing==1 and self.USB_CONNECTED==1:
-              MM=104
-              SS=float(window.b35.toPlainText().strip())
-              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              self.Message_panel.append(">>> M104: Set NOZZLE temp ")
-              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
-              self.child_file.write(str(struct.pack("i",self.mirror)))
-              self.child_file.close()     
+        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
+            self.froze=1
+            self.MM=104
+            self.SS=float(window.b35.toPlainText().strip())
+            self.Message_panel.append(">>> M104 S"+str(self.SS)+": Set NOZZLE temp ")
+            self.fly_thread = FLYWorker()
+            self.fly_thread.start()            
 
     def setBEDTEMP(self):
         if self.A==0:
-           self.disable_idle_buttons()
-           self.set_temp=2
-        if self.usb_printing==1 and self.USB_CONNECTED==1:
-              MM=140
-              SS=float(window.b36.toPlainText().strip())
-              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              self.Message_panel.append(">>> M140: Set NOZZLE temp ")
-              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
-              self.child_file.write(str(struct.pack("i",self.mirror)))
-              self.child_file.close() 
+            self.disable_idle_buttons()
+            self.set_temp=2
+        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
+            self.froze=1
+            self.MM=140
+            self.SS=float(window.b36.toPlainText().strip())
+            self.Message_panel.append(">>> M140 S"+str(self.SS)+": Set BED temp ")
+            self.fly_thread = FLYWorker()
+            self.fly_thread.start()
     
     def setFAN1(self):
-              MM=106
-              SS=float(window.d104.value())
-              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              self.Message_panel.append(">>> M106: Set FAN1 ")
-              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
-              self.child_file.write(str(struct.pack("i",self.mirror)))
-              self.child_file.close()
+        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
+            self.froze=1
+            self.MM=106
+            self.SS=float(window.d104.value())
+            self.Message_panel.append(">>> M106: Set FAN1 ")
+            self.fly_thread = FLYWorker()
+            self.fly_thread.start()
        
     def setJFAJ(self):
-              MM=0
-              win32file.WriteFile(self.pipe,(struct.pack("i",MM)))
-              SS=float(window.d100.value())
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              SS=float(window.d101.value())
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              SS=float(window.d102.value())
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              SS=float(window.d103.value())
-              win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              self.Message_panel.append(">>> Set JFAJ")
-              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
-              self.child_file.write(str(struct.pack("i",self.mirror)))
-              self.child_file.close()
+        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
+            self.froze=1
+            self.MM=0
+            self.Message_panel.append(">>> Set JFAJ")
+            self.fly_thread = FLYWorker()
+            self.fly_thread.start()
 
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
@@ -1085,20 +1096,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def PAUSE(self):
         if self.usb_printing==1 and self.froze==0:
            if self.pause_state==0: #pass M226 command to C
-              MM=226
-              SS=0
-              win32file.WriteFile(self.pipe,(struct.pack("if",MM,SS)))
-              #win32file.WriteFile(self.pipe,(struct.pack("f",SS)))
-              self.Message_panel.append(">>> M226: Pause request")   
+              self.MM=226
+              self.SS=0
               self.pause_state=1 #paused
               self.froze=1
-              self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','w')
-              self.child_file.write(str(struct.pack("i",self.mirror)))
-              self.child_file.close()
+              self.froze_loop=1
+              self.Message_panel.append(">>> M226: Pause request")  
+              self.fly_thread = FLYWorker()
+              self.fly_thread.start()	
            else:
              self.ser.write(struct.pack("B",self.A)) #trash, to resume printing
              self.pause_state=0 #resume
              self.froze=1
+             self.froze_loop=0 
              self.Message_panel.append(">>> Resume printing... ")
 
     def update_nozz_temp(self, new_nozz_temp):
