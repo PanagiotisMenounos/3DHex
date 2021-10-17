@@ -225,6 +225,8 @@ int main()
         if(CURVE_DETECTION==1){
         	curve_detection(total_lines);
             curve_length(total_lines);
+            ABSOLUTE_POSITIONING=1;
+			E_ABSOLUTE_POSITIONING=1;
             g1=_wfopen(fcoordinates_path,L"r");
 		}else{
 			g1=_wfopen(coordinates_path,L"r");
@@ -303,6 +305,14 @@ int main()
 					}     		
                 }
 			    if (Gl==2 || Gl==02 || Gl==3 || Gl==03){  // G2/G3 ARC COMMAND
+            	    if(ABSOLUTE_POSITIONING==0){
+                    	Xl=Xf+Xl;
+                    	Yl=Yf+Yl;
+                    	Zl=Zf+Zl;
+		        	}
+	        		if(E_ABSOLUTE_POSITIONING==0){
+                    	El=Ef+El;
+		        	}
 				    if(Gl==2 || Gl==02){
 		    			clockwise=true; //clockwise
 		    		}else{
@@ -344,11 +354,11 @@ int main()
 				    ABSOLUTE_POSITIONING=1;
 				    E_ABSOLUTE_POSITIONING=1;
 				}
-				if(Gl==91){// G91 Relative
+				if(Gl==91 && CURVE_DETECTION==0){// G91 Relative
 					ABSOLUTE_POSITIONING=0;
 					E_ABSOLUTE_POSITIONING=0;
 				}
-				if(Gl==92){// G91 Relative
+				if(Gl==92){// G92 Reset origin
 					if(Xl==axis_num && Yl==axis_num && Zl==axis_num && El==axis_num){
 						Xl=0;Yl=0;Zl=0;El=0;
 					}
@@ -1012,23 +1022,57 @@ void curve_detection(unsigned long total_lines)
 		last_printing_move=0;
     	last_curve=0;	
 	}
+	if(Gl==91){// G91 Relative
+		ABSOLUTE_POSITIONING=0;
+		E_ABSOLUTE_POSITIONING=0;
+	}
+	if(Gl==90){// G91 Relative
+		ABSOLUTE_POSITIONING=1;
+		E_ABSOLUTE_POSITIONING=1;
+	}
+	if(Ml==82){// M82 E Absolute
+		E_ABSOLUTE_POSITIONING=1;
+	}
+	if(Ml==83){// M83 E Absolute
+		E_ABSOLUTE_POSITIONING=0;
+	}
 	Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
     while(j<total_lines){
     	j++;
         fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash);    
-		if(Gl==92){// G91 Relative
-			if(Xl==axis_num){
-				Xl=Xf;
-			}
-			if(Yl==axis_num){
-				Yl=Yf;
-			}
-			if(Zl==axis_num){
-				Zl=Zf;
-			}
-			if(El==axis_num){
-				El=Ef;
-			}
+    	if(Gl==91){// G91 Relative
+    	    Xl=0; Yl=0; Zl=0; El=0;
+    		ABSOLUTE_POSITIONING=0;
+    		E_ABSOLUTE_POSITIONING=0;
+    	}
+    	if(Gl==90){// G91 Relative
+    	    Xl=Xf; Yl=Yf; Zl=Zf; El=Ef;
+    		ABSOLUTE_POSITIONING=1;
+    		E_ABSOLUTE_POSITIONING=1;
+    	}
+		if(Ml==82){// M82 E Absolute
+		    El=0;
+			E_ABSOLUTE_POSITIONING=1;
+		}
+		if(Ml==83){// M83 E Relative
+		    El=Ef;
+			E_ABSOLUTE_POSITIONING=0;
+		}
+		if(Gl==92 && ABSOLUTE_POSITIONING==0){
+			Xl=Xl-Xf;
+            Yl=Yl-Yf;
+            Zl=Zl-Zf;
+		}
+		if(Gl==92 && E_ABSOLUTE_POSITIONING==0){
+			El=El-Ef;
+		}
+        if(ABSOLUTE_POSITIONING==0){
+            Xl=Xf+Xl;
+            Yl=Yf+Yl;
+            Zl=Zf+Zl;
+		}
+	    if(E_ABSOLUTE_POSITIONING==0){
+            El=Ef+El;
 		}		
 		if((Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03) && (Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03)){
 			if(Gl==1){
@@ -1183,6 +1227,11 @@ void curve_length(unsigned long total_lines)
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&local_case);
     	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
     	    j++;
+    	    while(local_case!=1){
+        	    Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
+        	    fscanf(fcoord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&local_case);
+        	    j++;
+			}
 		}
 		if((Gl==0 || Gl==00 || Gl==01 || Gl==02 || Gl==03 || Gl==1 || Gl==2 || Gl==3) && first_write==true){
 			local_case=0;
@@ -1554,10 +1603,17 @@ unsigned long gc2info(double flag_num)
 	    	        line1[i+6],line1[i+7],line1[i+8],line1[i+9],line1[i+10],line1[i+11],line1[i+12],trash);	
 		}
         fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&line2[i],&line2[i+1],&line2[i+2],&line2[i+3],&line2[i+4],&line2[i+5],\
-		       &line2[i+6],&line2[i+7],&line2[i+8],&line2[i+9],&line2[i+10],&line2[i+11],&line2[i+12]); 
-		for(g=2;g<arrays_size;g++){
-	 	   if (line2[g]==flag_num && line2[g]!= axis_num){
+		       &line2[i+6],&line2[i+7],&line2[i+8],&line2[i+9],&line2[i+10],&line2[i+11],&line2[i+12]);
+	    if(line2[0]==91){ //Relative positioning
+	    	ABSOLUTE_POSITIONING=0;
+			E_ABSOLUTE_POSITIONING=0;
+		}
+		for(g=2;g<arrays_size;g++){ ////NOT SURE for this
+	 	   if (line2[g]==flag_num && (ABSOLUTE_POSITIONING==1 || (ABSOLUTE_POSITIONING==0 && g>5))){ //Absololute or Realtive without XYZE
 	 		   line2[g]=line1[g];
+		    }
+		    if (line2[g]==flag_num && ABSOLUTE_POSITIONING==0 && g<=5){ //Relative for XYZE
+	 		   line2[g]=0;
 		    }
 	    }
 	    fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line2[i],line2[i+1],line2[i+2],line2[i+3],line2[i+4],line2[i+5],\
