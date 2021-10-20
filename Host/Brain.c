@@ -186,8 +186,7 @@ struct data{
   volatile uint16_t T;
 }MG_data;
 
-int main()
-    {
+int main(){
     	
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (pipe == INVALID_HANDLE_VALUE)
@@ -214,49 +213,47 @@ int main()
     	T_ACCEL_ERATION=ACCELERATION;
     	T_JMFEED=JMFEED;
     	T_JERK=JERK;
-		hidecursor(); 
+		hidecursor(); //temporary
 		PRINT_STATE = check_print_state(); 
 		if(PRINT_STATE==0){ //usb print
 		    mcu_settings_send();
 		}else{               //sd print
 			crt_file();
 		}        
-        total_lines=gc2info(flag_num); 
-        if(CURVE_DETECTION==1){
+        total_lines=gc2info(flag_num); //GCODE parsing
+        if(CURVE_DETECTION==1){ 
         	curve_detection(total_lines);
             curve_length(total_lines);
-            ABSOLUTE_POSITIONING=1;
-			E_ABSOLUTE_POSITIONING=1;
+            ABSOLUTE_POSITIONING=1; //curve detection algorithm writes to fcoordinates.txt absolute coordinates
+			E_ABSOLUTE_POSITIONING=1; //curve detection algorithm writes to fcoordinates.txt absolute coordinates
             g1=_wfopen(fcoordinates_path,L"r");
 		}else{
 			g1=_wfopen(coordinates_path,L"r");
 		}
         fly_file=_wfopen(fly_path,L"wb"); //reset fly file
 		fclose(fly_file);
-        gen1=_wfopen(gen_path,L"r");
-        for(j=1;j<=total_lines;j++){
+        gen1=_wfopen(gen_path,L"r"); //Used for curve detection algorithm
+        for(j=1;j<=total_lines;j++){ //Read orsed gcode file untli the end
 		    if(first_line==true){
 		        first_line=false;
 	            fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&new_CURVE);
 	            j++;
 	    	}
-    		on_the_fly = wstat(fly_path, &fly_buffer); //check for on the fly command
+    		on_the_fly = wstat(fly_path, &fly_buffer); //check for on the fly command (Python writes bytes to the fly file in order to inform C)
             if(fly_buffer.st_size==0){ // 0 = no command
                fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
     		}else if(fly_buffer.st_size!=0){ //execute on the fly command
-    	    	printf("%s\n","ON THE FLY COMMAND: ");
-                ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL); //M value
+                ReadFile(pipe, &y.fly_array, 4, &numWritten, NULL); //read command from PIPE 
                 if(y.M!=0){ //M command
-                	j=j-1;
+                	j=j-1; //no readline at this loop
                 	ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL); //S value
                 	Gt=Gl; //save current commands
-    		    	Mt=Ml;
-    			    St=Sl; 
-                	printf("%s %i %f\n","PIPE RECEIVED,M command" ,y.M,t.S);
+    		    	Mt=Ml; //
+    			    St=Sl; //
     			    fly_command=true;
-    			    Gl=flag_num;
-    			    Ml=y.M;
-    			    Sl=t.S;
+    			    Gl=flag_num; //M command =? G has to be flag_num
+    			    Ml=y.M; //Mcommand code
+    			    Sl=t.S; //S value
 				}else{ //JFAJ command
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
 					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
@@ -275,10 +272,10 @@ int main()
             		fclose(fly_file);										
 				}
 			}
-			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3)){
+			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3 || Gl==01 || Gl==02 || Gl==03)){
 			   last_time=0; //FIX time BUG at the begining of new command
-               fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED);
-               gen_FEED=FD_PRC*gen_FEED;
+               fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED); //read curvedistance and feedrate
+               gen_FEED=FD_PRC*gen_FEED; 
                gen_FEED=check_units(gen_FEED);
                Fl=gen_FEED;
 			}
@@ -287,6 +284,7 @@ int main()
 				Fl=check_units(Fl);
 				last_time=0; //FIX time BUG at the begining of new command
 			}
+			printf("%s %f\n","FL=", Fl);
             if(Gl!=flag_num){ /// enter only of it is a G command
             	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   // G1 LINE COMMAND
             	    if(ABSOLUTE_POSITIONING==0){
@@ -298,18 +296,13 @@ int main()
                     	El=Ef+El;
 		        	}
 				    if(XY_PLANE!=0 && (ZX_PLANE!=0 || ZY_PLANE!=0)){
-				    	LINE(0,0,Zf,0,0,0,Zl,0,0);
+				    	LINE(0,0,Zf,0,0,0,Zl,0,0); //if Z is lifted, remember to add when Z gets down
 				    	LINE(Xf,Yf,0,Ef,Xl,Yl,0,El,Fl);
 					}else{
 						LINE(Xf,Yf,Zf,Ef,Xl,Yl,Zl,El,Fl);
 					}     		
                 }
 			    if (Gl==2 || Gl==02 || Gl==3 || Gl==03){  // G2/G3 ARC COMMAND
-            	    if(ABSOLUTE_POSITIONING==0){
-                    	Xl=Xf+Xl;
-                    	Yl=Yf+Yl;
-                    	Zl=Zf+Zl;
-		        	}
 	        		if(E_ABSOLUTE_POSITIONING==0){
                     	El=Ef+El;
 		        	}
@@ -347,23 +340,23 @@ int main()
 					MG_data.J=Pl;
 					MG_data.K=Sl;					
 				}
-				if(Gl==29){//auto bed leveling
+				if(Gl==29){//auto bed leveling - bltouch on the way
 					
 				}
 				if(Gl==90){// G90 Absolute
 				    ABSOLUTE_POSITIONING=1;
 				    E_ABSOLUTE_POSITIONING=1;
 				}
-				if(Gl==91 && CURVE_DETECTION==0){// G91 Relative
+				if(Gl==91 && CURVE_DETECTION==0){// G91 Relative, enable only if curve detection algorithm is off
 					ABSOLUTE_POSITIONING=0;
 					E_ABSOLUTE_POSITIONING=0;
 				}
-				if(Gl==92){// G92 Reset origin
+				if(Gl==92){// G92 Reset origin if not any of XYZE is given
 					if(Xl==axis_num && Yl==axis_num && Zl==axis_num && El==axis_num){
 						Xl=0;Yl=0;Zl=0;El=0;
 					}
 				}
-				if(GM_command==true){ //WRITE 255 & 255 & DATA FOR THE ARDUINO TO EXECUTE
+				if(GM_command==true){ //GM command is when data needs to be passed to MCU side
 					GM_command=false;
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
@@ -444,9 +437,9 @@ int main()
 				if(Ml==226){// M83 E Absolute
 					MG_data.A=6;
 				}
+
 				write_hex2file(GP);
 				write_hex2file(GP);
-                
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
                 if(e_space<=30 && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
@@ -474,10 +467,10 @@ int main()
 		        fly_file=_wfopen(fly_path,L"w"); //reset fly file
 		        fclose(fly_file);
 		        printf("%s\n","RESET FLY");
+		        fly_command=false; //reset on the fly command
 			}
-			fly_command=false; //reset on the fly command
 			u.progress=100*j/total_lines;//calculate the completed percent
-			WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
+			WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL); //Update python with progress %
 			check_SD_file_size(Xf,Yf,Zf,Xl,Yl,Zl);			
         } 
         u.progress=100;
@@ -493,7 +486,7 @@ int main()
 		child_file=_wfopen(child_path,L"w"); //reset child file -> to prevent python print >>> Abort after SD
 		fclose(child_file);
 		CloseHandle(pipe);
-    }
+}
     
     
 int check_print_state(){
@@ -1045,7 +1038,7 @@ void curve_detection(unsigned long total_lines)
     		ABSOLUTE_POSITIONING=0;
     		E_ABSOLUTE_POSITIONING=0;
     	}
-    	if(Gl==90){// G91 Relative
+    	if(Gl==90){// G90 Absolute
     	    Xl=Xf; Yl=Yf; Zl=Zf; El=Ef;
     		ABSOLUTE_POSITIONING=1;
     		E_ABSOLUTE_POSITIONING=1;
@@ -1058,7 +1051,7 @@ void curve_detection(unsigned long total_lines)
 		    El=Ef;
 			E_ABSOLUTE_POSITIONING=0;
 		}
-		if(Gl==92 && ABSOLUTE_POSITIONING==0){
+		if(Gl==92 && ABSOLUTE_POSITIONING==0){ //G92 set position
 			Xl=Xl-Xf;
             Yl=Yl-Yf;
             Zl=Zl-Zf;
@@ -1160,50 +1153,6 @@ void curve_detection(unsigned long total_lines)
     fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
 	fclose(coord);
 	fclose(final);
-}
-
-double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl)
-{
-	int aadj;
-	double theta_adj;
-	
-	if(Gl==0 || Gl==00 || Gl==01 || Gl==1){
-    	if(fabs(xl-xf==0) && fabs(yl-yf==0)){
-      		return 180;
-    	}
-        aadj=casequartile(xl,yl,xf,yf,1);
-        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
-        return theta_adj;
-    }else{
-        aadj=casequartile(xl,yl,xf,yf,1);
-        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
-        if(aadj==1){
-        	if(Gl==2){
-             	theta_adj=270+theta_adj;	
-			}else if(Gl==3){
-				theta_adj=90+theta_adj;
-			}
-		}else if(aadj==2){
-        	if(Gl==2){
-        		theta_adj=theta_adj-90;
-			}else if(Gl==3){
-				theta_adj=theta_adj+90;
-			}			
-		}else if(aadj==3){
-        	if(Gl==2){
-        		theta_adj=theta_adj-90;
-			}else if(Gl==3){
-				theta_adj=theta_adj+90;
-			}			
-		}else if(aadj==4){
-        	if(Gl==2){
-        		theta_adj=theta_adj-90;
-			}else if(Gl==3){
-				theta_adj=theta_adj-270;
-			}			
-		}
-        return theta_adj;
-	}
 }
 
 
@@ -1358,6 +1307,49 @@ void curve_length(unsigned long total_lines)
 }
 
 
+double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl)
+{
+	int aadj;
+	double theta_adj;
+	
+	if(Gl==0 || Gl==00 || Gl==01 || Gl==1){
+    	if(fabs(xl-xf==0) && fabs(yl-yf==0)){
+      		return 180;
+    	}
+        aadj=casequartile(xl,yl,xf,yf,1);
+        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
+        return theta_adj;
+    }else{
+        aadj=casequartile(xl,yl,xf,yf,1);
+        theta_adj=theta_func(xl,yl,xf,yf,aadj)*180/pi;
+        if(aadj==1){
+        	if(Gl==2){
+             	theta_adj=270+theta_adj;	
+			}else if(Gl==3){
+				theta_adj=90+theta_adj;
+			}
+		}else if(aadj==2){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj+90;
+			}			
+		}else if(aadj==3){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj+90;
+			}			
+		}else if(aadj==4){
+        	if(Gl==2){
+        		theta_adj=theta_adj-90;
+			}else if(Gl==3){
+				theta_adj=theta_adj-270;
+			}			
+		}
+        return theta_adj;
+	}
+}
   
 void read_settings()
 {
@@ -1493,6 +1485,7 @@ unsigned long gc2info(double flag_num)
 	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0,temp_pos=0;
     double line1[arrays_size],line2[arrays_size],trash=0;
     bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true;
+    int threshold_pos=7;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
 	FILE *g1;
@@ -1503,27 +1496,27 @@ unsigned long gc2info(double flag_num)
     while (fgets(string, 200, fp) != NULL){//TILL THE END OF FILE
 	   if (string[0]=='G' || string[0]=='M'){
 	        total_lines++;								  
-		    for(poslet=0;poslet<arrays_size;poslet++){		  
-		        while (string[i] != '\0' && string[i] != ';' ){
-		            if ((string[i]) == (letters[poslet])){
-			            notfound=false;
+		    for(poslet=0;poslet<arrays_size;poslet++){// check for each letter		  
+		        while (string[i] != '\0' && string[i] != ';' ){ //till the end of line
+		            if ((string[i]) == (letters[poslet])){ //
+			            notfound=false; //=found letter
 			            j=i+1;
 			            write_value=false;
-			            while(string[j] != ' ' && string[j] != '\0' && string[j] != ';' && string[j] != '\n'){
-			            	write_value=true;
-						    if (string[j] != '[' && string[j] !=']'){
+			            while(string[j] != ' ' && string[j] != '\0' && string[j] != ';' && string[j] != '\n'){ //until next character
+			            	write_value=true; //number found
+						    if (string[j] != '[' && string[j] !=']'){ //extract the number
 			                    fprintf(g1,"%c",string[j]);
 			                }
 						    j++;	
 					    }
-					    if(write_value==false){ //IF NOT NUMBER AFTER X OR Y ETC...
+					    if(write_value==false){ //no number extracted LETTERS XYZE 
                            printf("%s\n","AXIS FOUND");
-                           fprintf(g1,"%lf",axis_num);
+                           fprintf(g1,"%lf",axis_num); 
 						}
 			        }
 			        i++;
 				}
-				if(notfound==true){
+				if(notfound==true){ //if letter not found
 		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
 		            	temp_pos=0;
 		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
@@ -1572,8 +1565,6 @@ unsigned long gc2info(double flag_num)
 						}else{
 							fprintf(g1,"%lf",flag_num);
 						}						
-					
-					
 					}else{
 							fprintf(g1,"%lf",flag_num);
 					}			        
@@ -1587,6 +1578,16 @@ unsigned long gc2info(double flag_num)
  	        first_line1=false;
             fprintf(g1, "%c\n",' ' );
         }
+        if(string[0]=='G' && string[1]=='9' && string[2]=='1' ){
+             ABSOLUTE_POSITIONING=0;
+		}
+        if(string[0]=='G' && string[1]=='9' && string[2]=='0' ){
+             ABSOLUTE_POSITIONING=1;
+		}
+        if(string[0]=='G' && ((string[1]=='2' || string[1]=='3') || ((string[1]=='0' && string[1]=='2') || (string[2]=='0' && string[2]=='3'))) && ABSOLUTE_POSITIONING==0){
+            printf("%s\n","G2/G3 does not support relative move mode");
+            exit(0);
+		}
     }
     fclose(g1);
     fclose(fp);
@@ -1607,14 +1608,32 @@ unsigned long gc2info(double flag_num)
 	    if(line2[0]==91){ //Relative positioning
 	    	ABSOLUTE_POSITIONING=0;
 			E_ABSOLUTE_POSITIONING=0;
+			threshold_pos=7;
+		}
+	    if(line2[0]==90){ //Absolute positioning
+	    	ABSOLUTE_POSITIONING=1;
+			E_ABSOLUTE_POSITIONING=1;
+			threshold_pos=7;
+		}
+	    if(line2[1]==82){ //Absolute E positioning
+			E_ABSOLUTE_POSITIONING=1;
+			threshold_pos=6;
+		}
+	    if(line2[1]==83){ //Relative E positioning
+			E_ABSOLUTE_POSITIONING=0;
+			threshold_pos=7;
 		}
 		for(g=2;g<arrays_size;g++){ ////NOT SURE for this
-	 	   if (line2[g]==flag_num && (ABSOLUTE_POSITIONING==1 || (ABSOLUTE_POSITIONING==0 && g>5))){ //Absololute or Realtive without XYZE
-	 		   line2[g]=line1[g];
-		    }
-		    if (line2[g]==flag_num && ABSOLUTE_POSITIONING==0 && g<=5){ //Relative for XYZE
+		    if (line2[g]==flag_num && ABSOLUTE_POSITIONING==1 && E_ABSOLUTE_POSITIONING==0 && g==threshold_pos){ //Only E in relative
 	 		   line2[g]=0;
 		    }
+	 	   if (line2[g]==flag_num && (ABSOLUTE_POSITIONING==1 || (ABSOLUTE_POSITIONING==0 && g>threshold_pos))){ //Absololute or Realtive without XYZE
+	 		   line2[g]=line1[g];
+		    }
+		    if (line2[g]==flag_num && ABSOLUTE_POSITIONING==0 && g<=threshold_pos){ //Relative positioning for XYZE
+	 		   line2[g]=0;
+		    }
+		    
 	    }
 	    fprintf(g2,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",line2[i],line2[i+1],line2[i+2],line2[i+3],line2[i+4],line2[i+5],\
 	           line2[i+6],line2[i+7],line2[i+8],line2[i+9],line2[i+10],line2[i+11],line2[i+12],trash);
@@ -1661,7 +1680,13 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     dy=yl-yf;
     dz=zl-zf;
     de=el-ef;
-    FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE); //Only working when CURVE_DETECTION is disabled
+    if(CURVE_DETECTION==0){
+    	FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE); //Only working when CURVE_DETECTION is disabled
+	}else{
+		ACCEL_ERATION=ACCELERATION;
+	}
+	
+    printf("%s %f\n","feed",FEEDRATE);
 	xmin=1/STPU_X;
     ymin=1/STPU_Y;
 	zmin=1/STPU_Z;
@@ -2801,7 +2826,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 			timeboxes=(time-last_time)/tmin; //ARDUINO LOW PULSE DURATION BETWEEN STEPS = CURRENT STEP FREQUENCY = CURRENT SPEED
 		}
         if(timeboxes<=1){
-        	printf("%s %f %f %f\n","NOOOOOOOOOOOOOOOOOOOOOOOOOOO",l,time,last_time);
+        	//printf("%s %f %f %f\n","NOOOOOOOOOOOOOOOOOOOOOOOOOOO",l,time,last_time);
         	timeboxes=30;///FIX A TIME BUG
 		}else{
 			last_time=time;
