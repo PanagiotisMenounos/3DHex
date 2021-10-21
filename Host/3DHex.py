@@ -163,7 +163,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         p1 = subprocess.Popen("Brain.exe") #Start Brain.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
-        buffer_file_size=3300 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
+        buffer_file_size=3200 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         child_buffer_size=1 #Means Brain.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
@@ -175,14 +175,14 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         self.send_buffer() #Command Printer to go into printig mode window.A=1
         self.message.emit(">>> Post processing successfully completed") #emit the signal
         self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3300 and child_buffer_size!=0 and serial_command!=-260: #Firt time send binary data to Printer
+        if buffer_file_size==3200 and child_buffer_size!=0 and serial_command!=-260: #Firt time send binary data to Printer
             if filecase==1: #Read from buffer1 binary file
                 filecase=2  #Note to read buffer2 next time
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal			 
-                window.ser.write(buffer1_file.read(3300)) #Send binary data to Printer
+                window.ser.write(buffer1_file.read(3200)) #Send binary data to Printer
                 buffer1_file.close() 
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
@@ -194,7 +194,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                window.ser.write(buffer2_file.read(3300))
+                window.ser.write(buffer2_file.read(3200))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
@@ -206,7 +206,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
         window.usb_printing=1 
-        while buffer_file_size==3300 and child_buffer_size!=0 and serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
+        while buffer_file_size==3200 and child_buffer_size!=0 and serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
@@ -218,7 +218,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                      self.new_bed_temp.emit(window.bed_temp) #emit the signal                     
                      window.froze=0                     
-                window.ser.write(buffer1_file.read(3300))
+                window.ser.write(buffer1_file.read(3200))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -235,7 +235,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                      self.new_bed_temp.emit(window.bed_temp) #emit the signal 
                      window.froze=0 
-                window.ser.write(buffer2_file.read(3300))
+                window.ser.write(buffer2_file.read(3200))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -251,55 +251,45 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         window.usb_printing=0
 
     def check_idle_commands(self): #idle mode commands func
-            if window.set_temp==1: #1 Set temp
+            if window.set_temp==1: #1 Set NOZZLE temp
                 window.set_temp=0
                 window.B=0
-                window.C=1
+                window.C=0
                 window.D=0
                 window.E=int(window.c26.isChecked())
-                window.F=int(window.c27.isChecked())
                 window.G=int(window.c22.isChecked())
-                window.H=int(window.c23.isChecked())
                 window.I=int(window.b35.toPlainText().strip())
-                window.J=int(window.b36.toPlainText().strip())
                 window.K=int(window.b39.toPlainText().strip())
-                window.L=int(window.b40.toPlainText().strip())
                 window.M=int(window.b37.toPlainText().strip())
-                window.N=int(window.b38.toPlainText().strip())
                 window.O=int(float(window.b41.toPlainText().strip())*10.0)
                 window.P=int(float(window.b43.toPlainText().strip())*10.0)
                 window.Q=int(float(window.b45.toPlainText().strip())*10.0)
-                window.R=int(float(window.b42.toPlainText().strip())*10.0)
-                window.S=int(float(window.b44.toPlainText().strip())*10.0)
-                window.T=int(float(window.b46.toPlainText().strip())*10.0)
                 time.sleep(0.2)
                 self.send_buffer()
                 window.enable_idle_buttons()
-            if window.set_temp==2: #2 Reset temp
+            if window.set_temp==2: #2 SET bed temp
                 window.set_temp=0
                 window.B=0
                 window.C=1
                 window.D=0
-                window.E=0
-                window.F=0
-                window.G=0
-                window.H=0
-                window.I=0
-                window.J=0
-                window.K=0
-                window.L=0
-                window.M=0
-                window.N=0
-                window.O=0
-                window.P=0
-                window.Q=0
-                window.R=0
-                window.S=0
-                window.T=0
+                window.E=int(window.c27.isChecked())
+                window.G=int(window.c23.isChecked())
+                window.I=int(window.b36.toPlainText().strip())
+                window.K=int(window.b40.toPlainText().strip())
+                window.M=int(window.b38.toPlainText().strip())
+                window.O=int(float(window.b42.toPlainText().strip())*10.0)
+                window.P=int(float(window.b44.toPlainText().strip())*10.0)
+                window.Q=int(float(window.b46.toPlainText().strip())*10.0)
                 time.sleep(0.2)
                 self.send_buffer()            			   
                 window.enable_idle_buttons()
-
+            if window.set_fan==1:
+               window.set_fan=0
+               window.B=4
+               
+               window.J=int(window.d104.value())
+               print(window.J)
+               self.send_buffer()
             if window.set_motor==1: #Enable/Disable motor
                 window.set_motor=0
                 window.B=1
@@ -440,6 +430,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.USB_CONNECTED=0
         self.usb_connected = 1
         self.set_temp = 0	
+        self.set_fan = 0
         self.home_axis=0
         self.usb_printing=0
         self.rapid_pos=0
@@ -964,6 +955,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.fly_thread.start()
     
     def setFAN1(self):
+        if self.A==0:
+            self.set_fan=1
         if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
             self.froze=1
             self.MM=106
