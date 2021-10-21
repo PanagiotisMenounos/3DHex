@@ -38,7 +38,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
-#define MAX_BUF 1024
+#define max_bufferfile_size 3200
 #define pipename "\\\\.\\pipe\\Foo"
 
 union{
@@ -85,7 +85,7 @@ double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
      ////////////////////////*****************/////////////////////////////////////
 
 //////////////////////////////***********GLOBAL VARIABLES******//////////////////
-int total_digi_lines=0,state,file_buffer_size=0,max_bufferfile_size=3300,PRINT_STATE, file_num=0;//number name of binary file
+int total_digi_lines=0,state,file_buffer_size=0,PRINT_STATE, file_num=0;//number name of binary file
 double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_last,flag_num=101101101.101010,axis_num=10201.102012;
 bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise,ABSOLUTE_POSITIONING=1,E_ABSOLUTE_POSITIONING=1;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;

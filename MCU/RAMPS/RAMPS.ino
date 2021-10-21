@@ -1,36 +1,28 @@
-
 /*
 ----------------------------------------------------------------------
 COPYRIGHT NOTICE FOR 3DHex:
 ----------------------------------------------------------------------
-
 3DHex - 3D Printer Firmware
-
 Copyright (c) 2021 Panagiotis Menounos
 Contact: 3DHexfw@gmail.com
-
-
 3DHex is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 3DHex is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include <SPI.h>
 #include "SdFat.h"
 #include <TimerThree.h>
 #include <thermistor.h>
-//#include <PID_v1.h>
-//#include <PID_AutoTune_v0.h>
+#include <PID_v1.h>
+#include <PID_AutoTune_v0.h>
 #include <LiquidCrystal.h>
 SdFat SD;
 File myFile;
@@ -48,7 +40,7 @@ File myFile;
 #define HOME_ZMIN_PIN 18
 #define USB_SETTING_BYTES 52
 #define MG_BYTES 30
-#define BUFFERSIZE 3300
+#define BUFFERSIZE 3200
 #define X_EN 38
 #define Y_EN A2
 #define Z_EN A8
@@ -188,8 +180,8 @@ int state_r;
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
-//PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
-//PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
+PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
+PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
 
 void initialization_var(){
    buffer3.X_ENABLE=1;
@@ -241,10 +233,10 @@ void setup() {
    print_history=true;
    Serial.begin(SERIAL_BAUD_RATE);
    pinMode(LED_BUILTIN,OUTPUT);
-   //pidbed.SetMode(AUTOMATIC);
-   //pidbed.SetSampleTime(0);
-   //pidnozz.SetMode(AUTOMATIC);
-   //pidnozz.SetSampleTime(0);
+   pidbed.SetMode(AUTOMATIC);
+   pidbed.SetSampleTime(0);
+   pidnozz.SetMode(AUTOMATIC);
+   pidnozz.SetSampleTime(0);
    initialization_var();
    if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
    delay(100); 
@@ -583,8 +575,8 @@ void get_SD_settings(){
    p_nozz=buffer3.P_NOZZ/10.0;
    i_nozz=buffer3.I_NOZZ/10.0;
    d_nozz=buffer3.D_NOZZ/10.0;
-   //pidbed.SetTunings(p_bed,i_bed,d_bed);
-   //pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
+   pidbed.SetTunings(p_bed,i_bed,d_bed);
+   pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
    if(buffer3.Wait_nozz){nozz_block=true;}else{ nozz_block=false;}
    if(buffer3.Wait_bed){bed_block=true;}else{bed_block=false;}
    
@@ -612,8 +604,8 @@ void get_USB_settings(){
    p_nozz=buffer3.P_NOZZ/10.0;
    i_nozz=buffer3.I_NOZZ/10.0;
    d_nozz=buffer3.D_NOZZ/10.0;
-   //pidbed.SetTunings(p_bed,i_bed,d_bed);
-   //pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
+   pidbed.SetTunings(p_bed,i_bed,d_bed);
+   pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
    if(buffer3.Wait_nozz){nozz_block=true;}else{ nozz_block=false;}
    if(buffer3.Wait_bed){bed_block=true;}else{bed_block=false;}
 }
@@ -650,7 +642,7 @@ void temperature_control(){
           if (currentMillis - previousMillis_Bed >=buffer3.CYCLE_BED && buffer3.HEATED_BED==1){
               previousMillis_Bed = currentMillis;
               temp2 = therm2.analog2temp();
-              //pidbed.Compute();
+              pidbed.Compute();
               digitalWrite(BED_HEATER,bedpwm);
               if(temp2>buffer3.BED_TEMP){
                 bed_block=false;
@@ -678,11 +670,11 @@ void temperature_control(){
         }
       }else if(buffer3.THERMOSTAT_nozz==0){
           if (currentMillis - previousMillis_Nozz >=buffer3.CYCLE_NOZZ && buffer3.HEATED_NOZZLE==1){
-              //digitalWrite(LED_BUILTIN,HIGH);
+              digitalWrite(LED_BUILTIN,HIGH);
               previousMillis_Nozz = currentMillis;
               if(bed_block==false){
                  temp1 = therm1.analog2temp(); // nozzle
-                // pidnozz.Compute();
+                 pidnozz.Compute();
                  digitalWrite(NOZZ_HEATER,nozzpwm);
               }else{
                  digitalWrite(NOZZ_HEATER,LOW);
@@ -728,33 +720,33 @@ int check_inputs(){
        Serial.write((uint8_t*)&pass,sizeof(pass));
        if(buffer5.A==0){                             ///A=0 => idle mode
            if(buffer5.B == 0){                       ///B=0 => temp command
-              if(buffer5.C == 1){                    ///C=1 => set temp
-                bed_block=true;
+              if(buffer5.C == 0){                    ///C=1 => set temp
+                bed_block=false;
                 buffer3.THERMOSTAT_nozz=buffer5.E;
-                buffer3.THERMOSTAT_bed=buffer5.F;
                 buffer3.HEATED_NOZZLE=buffer5.G;
-                buffer3.HEATED_BED=buffer5.H;
                 buffer3.NOZZLE_TEMP=buffer5.I;
                 nozztemp=buffer3.NOZZLE_TEMP;
-                buffer3.BED_TEMP=buffer5.J;
-                bedtemp = buffer3.BED_TEMP;
                 buffer3.CYCLE_NOZZ=buffer5.K;
-                buffer3.CYCLE_BED=buffer5.L;
                 buffer3.THERMISTOR_TYPE_NOZZLE=buffer5.M;
-                buffer3.THERMISTOR_TYPE_BED=buffer5.N;
                 buffer3.Wait_nozz=0;
                 buffer3.Wait_bed=0;
                 p_nozz=buffer5.O/10.0;
                 i_nozz=buffer5.P/10.0;
                 d_nozz=buffer5.Q/10.0;
-                p_bed=buffer5.R/10.0;
-                i_bed=buffer5.S/10.0;
-                d_bed=buffer5.T/10.0;
-                //pidbed.SetTunings(p_bed,i_bed,d_bed);
-                //pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
-              }else if(buffer5.C == 0){                                ///C=0 => monitor only temp                       
-                   buffer3.HEATED_NOZZLE=0;
-                   buffer3.HEATED_BED=0;
+                pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
+              }else if(buffer5.C == 1){                                ///C=0 => monitor only temp                       
+                buffer3.THERMOSTAT_bed=buffer5.E;
+                buffer3.HEATED_BED=buffer5.G;
+                buffer3.BED_TEMP=buffer5.I;
+                bedtemp = buffer3.BED_TEMP;
+                buffer3.CYCLE_BED=buffer5.K;
+                buffer3.THERMISTOR_TYPE_BED=buffer5.M;
+                buffer3.Wait_nozz=0;
+                buffer3.Wait_bed=0;
+                p_bed=buffer5.O/10.0;
+                i_bed=buffer5.P/10.0;
+                d_bed=buffer5.Q/10.0;
+                pidbed.SetTunings(p_bed,i_bed,d_bed);
                }
             }else if(buffer5.B == 1){              ///B=1 Enable/Disable motor command
                 if(buffer5.C==0){                  //C=0 => XAXIS
@@ -811,11 +803,14 @@ int check_inputs(){
                 homing_routine();
             }else if(buffer5.B == 3){              //B=3 => Rapid potision           
                     rapid_position();
+            }else if(buffer5.B == 4){
+                   analogWrite(FAN,buffer5.J);
             }
             while(Serial.available()<3){
                  temperature_control();  
             }
         }else if (buffer5.A==1){
+            bed_block=true;
             PRINT_STATE=0;
             return 0;
        }
