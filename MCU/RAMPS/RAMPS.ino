@@ -22,7 +22,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <TimerThree.h>
 #include <thermistor.h>
 #include <PID_v1.h>
-#include <PID_AutoTune_v0.h>
+//#include <PID_AutoTune_v0.h>
 #include <LiquidCrystal.h>
 SdFat SD;
 File myFile;
@@ -178,11 +178,46 @@ volatile int8_t p;
 double input, output, setpoint=0;
 int state_r;
 
+byte ATuneModeRemember=2;
+double aTuneStep=125, aTuneNoise=0.5, aTuneStartValue=125;
+unsigned int aTuneLookBack=20;
+
+//PID_ATune aTune(&input, &output);
+//aTune.SetControlType(1);
+
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
 PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
 PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
-
+/*
+void changeAutoTune()
+{
+ if(!tuning)
+  {
+    //Set the output to the desired starting frequency.
+    output=aTuneStartValue;
+    aTune.SetNoiseBand(aTuneNoise);
+    aTune.SetOutputStep(aTuneStep);
+    aTune.SetLookbackSec((int)aTuneLookBack);
+    AutoTuneHelper(true);
+    tuning = true;
+  }
+  else
+  { //cancel autotune
+    aTune.Cancel();
+    tuning = false;
+    AutoTuneHelper(false);
+  }
+}
+*//*
+void AutoTuneHelper(boolean start)
+{
+  if(start)
+    ATuneModeRemember = myPID.GetMode();
+  else
+    myPID.SetMode(ATuneModeRemember);
+}
+*/
 void initialization_var(){
    buffer3.X_ENABLE=1;
    buffer3.Y_ENABLE=1;
@@ -441,8 +476,30 @@ void execute_command(){
            Serial.read();
        }
     break;
+    case 7: //pause until interaction
+      // changeAutoTune();
+//       tuning();
+    break;
   }
 }
+/*
+void tuning(){
+  while(tuning){
+     byte val = (aTune.Runtime());
+    if (val!=0)
+    {
+      tuning = false;
+    }
+    if(!tuning)
+    { //we're done, set the tuning parameters
+      kp = aTune.GetKp();
+      ki = aTune.GetKi();
+      kd = aTune.GetKd();
+      myPID.SetTunings(kp,ki,kd);
+      AutoTuneHelper(false);
+    }   
+  }
+}*/
 
 void terminate_process(){
     if(PRINTING==true){
