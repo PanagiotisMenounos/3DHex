@@ -3,6 +3,13 @@
 3DHex is a windows host controller 3D printer firmware.  
 The Host runs on windows and uses the CPU power of any typical desktop computer to solve really complex mathematical equations for the kinematics. In it's core function the MCU sets it's outputs according to a "move" byte which contains the step(4bits) & direction(4bits) signal for XYZE axes and one more "delay" byte corresponding to the steprate at that time. When printing from USB the host is calculating real time and sends the raw binary data via USB. Unlike typical 3D Printer firmwares, the MCU cannot accept GCODE and in order to print from SD Card the Host saves the generated data to a .bin file which then can be transferred to the MCU with SD card.
 
+## Downloads
+								
+Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled are not final releases but just for quick review with major bugs and pending features.
+
+[3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
+[3DHex_setup.exe(64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
+
 ## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI.png" />
 
@@ -32,12 +39,6 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 * Realtime kinematics plots  
 * Update manuals  
 
-## Download compiled
-
-Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled are not final releases but just for quick review with major bugs and pending features.
-
-[3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
-[3DHex_setup.exe(64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
 
 ## Manual
 
