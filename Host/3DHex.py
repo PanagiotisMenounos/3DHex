@@ -61,7 +61,7 @@ class ProgressBarWorker(QThread):
              win32file.CloseHandle(window.pipe)
         finally:
               win32file.CloseHandle(window.pipe)
-              print("closed pipe")
+              #print("closed pipe")
               self.message.emit(">>> Completed") #emit the signal
 
 class COMPortWorker(QThread):
@@ -141,11 +141,11 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
     def send_buffer(self):
         window.ser.write(struct.pack("8B4H2B6H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
-        print("apo pou kai os poy")
-        if pass_fail==1: #pass_fail should be 1, else communication has failed
-           print("PASS")
-        else:
-           print("FAILED")
+        #print("apo pou kai os poy")
+        #if pass_fail==1: #pass_fail should be 1, else communication has failed
+           #print("PASS")
+        #else:
+           #print("FAILED")
 
     def usb_printing(self): #USB Printing function 
         window.A=1 #printing mode
@@ -288,7 +288,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                window.B=4
                
                window.J=int(window.d104.value())
-               print(window.J)
+               #print(window.J)
                self.send_buffer()
             if window.set_motor==1: #Enable/Disable motor
                 window.set_motor=0
@@ -387,14 +387,14 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
             window.Message_panel.append(">>> Aborted")
             self.close()
         else:
-            print(text)
+            #print(text)
             window.Message_panel.append(">>> Added: " + text)
             printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
             printers = printer_file.readlines()
             printer_file.close()
             printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
             window.printer = len(printers)
-            print(window.printer)
+            #print(window.printer)
             for temp in printers:
                 printer = temp.split(',')
                 printer[1]=printer[1].replace("\n","")

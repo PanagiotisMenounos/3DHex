@@ -30,7 +30,7 @@ MCU:
 * LCD Display 16x2 Module HD44780 only  
 * Cartesian 3D printers only  
 * PID/Bang-Bang temperature control  
-* USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID  
+* USB idle functions: Temperature control, Fan control, Move toolhead, Enable/Disable stepper, Homing, AutoPID  
 * USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control  
 * Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
 

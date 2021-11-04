@@ -256,16 +256,16 @@ int main(){
     			    Sl=t.S; //S value
 				}else{ //JFAJ command
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
-					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					//printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
     	            JMFEED=T_JMFEED*(t.S/100.0);
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
-					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					//printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
                     FD_PRC=(t.S/100.0);
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
-					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					//printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
 					ACCELERATION=T_ACCEL_ERATION*(t.S/100.0);
                     ReadFile(pipe, &t.fly_array, 4, &numWritten, NULL);	
-					printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
+					//printf("%s %f\n","PIPE RECEIVED,%" ,t.S);
 					JERK=T_JERK*(t.S/100.0);
 					fscanf(g1,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&new_CURVE);
                     fly_file=_wfopen(fly_path,L"wb"); //reset fly file
@@ -284,7 +284,7 @@ int main(){
 				Fl=check_units(Fl);
 				last_time=0; //FIX time BUG at the begining of new command
 			}
-			printf("%s %f\n","FL=", Fl);
+			//printf("%s %f\n","FL=", Fl);
             if(Gl!=flag_num){ /// enter only of it is a G command
             	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){   // G1 LINE COMMAND
             	    if(ABSOLUTE_POSITIONING==0){
@@ -466,7 +466,7 @@ int main(){
 				Sl=St;
 		        fly_file=_wfopen(fly_path,L"w"); //reset fly file
 		        fclose(fly_file);
-		        printf("%s\n","RESET FLY");
+		        //printf("%s\n","RESET FLY");
 		        fly_command=false; //reset on the fly command
 			}
 			u.progress=100*j/total_lines;//calculate the completed percent
@@ -475,9 +475,9 @@ int main(){
         } 
         u.progress=100;
         WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
-		printf("%s\n","COMPLETED!");
-		printf("%s %i\n","X_GLOB=",X_GLOB);
-		printf("%s %i\n","Y_GLOB=",Y_GLOB);
+		//printf("%s\n","COMPLETED!");
+		//printf("%s %i\n","X_GLOB=",X_GLOB);
+		//printf("%s %i\n","Y_GLOB=",Y_GLOB);
         close_SD_binary_file();
         fclose(buffer1_file);
         fclose(buffer2_file);
@@ -1510,7 +1510,7 @@ unsigned long gc2info(double flag_num)
 						    j++;	
 					    }
 					    if(write_value==false){ //no number extracted LETTERS XYZE 
-                           printf("%s\n","AXIS FOUND");
+                           //printf("%s\n","AXIS FOUND");
                            fprintf(g1,"%lf",axis_num); 
 						}
 			        }
@@ -1585,7 +1585,7 @@ unsigned long gc2info(double flag_num)
              ABSOLUTE_POSITIONING=1;
 		}
         if(string[0]=='G' && ((string[1]=='2' || string[1]=='3') || ((string[1]=='0' && string[1]=='2') || (string[2]=='0' && string[2]=='3'))) && ABSOLUTE_POSITIONING==0){
-            printf("%s\n","G2/G3 does not support relative move mode");
+            //printf("%s\n","G2/G3 does not support relative move mode");
             exit(0);
 		}
     }
@@ -1686,7 +1686,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 		ACCEL_ERATION=ACCELERATION;
 	}
 	
-    printf("%s %f\n","feed",FEEDRATE);
+    //printf("%s %f\n","feed",FEEDRATE);
 	xmin=1/STPU_X;
     ymin=1/STPU_Y;
 	zmin=1/STPU_Z;

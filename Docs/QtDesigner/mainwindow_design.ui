@@ -7139,7 +7139,7 @@ border-color:rgb(120, 120, 120)
              </font>
             </property>
             <property name="text">
-             <string>[mm/sec]</string>
+             <string>[mm/min]</string>
             </property>
            </widget>
           </item>
@@ -7676,7 +7676,7 @@ border-color:rgb(83, 83, 83);
    </widget>
    <widget class="QMenu" name="menuPrinter">
     <property name="title">
-     <string>Printer</string>
+     <string>Config</string>
     </property>
     <addaction name="actionPrinter0"/>
     <addaction name="actionPrinter1"/>
