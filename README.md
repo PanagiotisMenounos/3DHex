@@ -4,7 +4,7 @@
 The Host runs on windows and uses the CPU power of any typical desktop computer to solve really complex mathematical equations for the kinematics. In it's core function the MCU sets it's outputs according to a "move" byte which contains the step(4bits) & direction(4bits) signal for XYZE axes and one more "delay" byte corresponding to the steprate at that time. When printing from USB the host is calculating real time and sends the raw binary data via USB. Unlike typical 3D Printer firmwares, the MCU cannot accept GCODE and in order to print from SD Card the Host saves the generated data to a .bin file which then can be transferred to the MCU with SD card.
 
 ## User interface
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/master/Host/GUI.png" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI.png" />
 
 ## Specs
 
@@ -12,7 +12,7 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 * Up to 10 different printer configurations  
 * Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3  
 * Optimized arc motion algorithm for G2/G3: microstepping grid resolution  
-* Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
+* Smart curve detection algorithm: No deceleration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
 * Basic thermal protection  
 * Software axis alignment   
 * Support only for Arduino Mega 2560 - RAMPS board  
@@ -34,7 +34,7 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 
 ## Download compiled
 
-Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled arem not final releases but just for quick review with major bugs and pending features.
+Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled are not final releases but just for quick review with major bugs and pending features.
 
 [3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
 [3DHex_setup.exe(64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
