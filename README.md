@@ -7,14 +7,12 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 								
 Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled are not final releases but just for quick review with major bugs and pending features.
 
-Host
-
+Host:
 [3DHex_setup.exe (32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
 [3DHex_setup.exe (64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
 
-RAMPS 1.6
-
-[RAMPS.bin](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
+MCU
+[RAMPS 1.6.bin](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
 
 ## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI.png" />
