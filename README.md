@@ -8,35 +8,35 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 
 ## Specs
 
--Easy configuration from the UI
--Up to 10 different printer configurations
--Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3
--Optimized arc motion algorithm for G2/G3: microstepping grid resolution
--Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered
--Basic thermal protection
--Software axis alignment 
--Support only for Arduino Mega 2560 - RAMPS board
--LCD Display 16x2 Module HD44780 only
--Cartesian 3D printers only
--PID/Bang-Bang temperature control
--USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID
--USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control
+-Easy configuration from the UI  
+-Up to 10 different printer configurations  
+-Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3  
+-Optimized arc motion algorithm for G2/G3: microstepping grid resolution  
+-Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
+-Basic thermal protection  
+-Software axis alignment   
+-Support only for Arduino Mega 2560 - RAMPS board  
+-LCD Display 16x2 Module HD44780 only  
+-Cartesian 3D printers only  
+-PID/Bang-Bang temperature control  
+-USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID  
+-USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control  
 -Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
 
 ## Pending
 
--AutoPID tuning
--32bit boards
--G29 Autobed leveling
--CoreXY and delta printers
--Realtime kinematics plots
--Update manuals
+-AutoPID tuning  
+-32bit boards  
+-G29 Autobed leveling  
+-CoreXY and delta printers  
+-Realtime kinematics plots  
+-Update manuals  
 
 ## Download compiled
 
 Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled arem not final releases but just for quick review with major bugs and pending features.
 
-[3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
+[3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
 [3DHex_setup.exe(64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
 
 ## Manual
