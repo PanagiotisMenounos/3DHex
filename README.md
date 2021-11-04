@@ -15,7 +15,9 @@ MCU:
 [RAMPS 1.6.bin](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)  
 
 ## User interface
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI.png" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Adv.PNG" />
 
 ## Specs
 
