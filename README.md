@@ -1,6 +1,6 @@
 # 3DHex
 
-3DHex is a windows host controller 3D printer firmware. 
+3DHex is a windows host controller 3D printer firmware.  
 The Host runs on windows and uses the CPU power of any typical desktop computer to solve really complex mathematical equations for the kinematics. In it's core function the MCU sets it's outputs according to a "move" byte which contains the step(4bits) & direction(4bits) signal for XYZE axes and one more "delay" byte corresponding to the steprate at that time. When printing from USB the host is calculating real time and sends the raw binary data via USB. Unlike typical 3D Printer firmwares, the MCU cannot accept GCODE and in order to print from SD Card the Host saves the generated data to a .bin file which then can be transferred to the MCU with SD card.
 
 ## User interface
@@ -8,29 +8,29 @@ The Host runs on windows and uses the CPU power of any typical desktop computer 
 
 ## Specs
 
--Easy configuration from the UI  
--Up to 10 different printer configurations  
--Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3  
--Optimized arc motion algorithm for G2/G3: microstepping grid resolution  
--Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
--Basic thermal protection  
--Software axis alignment   
--Support only for Arduino Mega 2560 - RAMPS board  
--LCD Display 16x2 Module HD44780 only  
--Cartesian 3D printers only  
--PID/Bang-Bang temperature control  
--USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID  
--USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control  
--Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
+*Easy configuration from the UI  
+*Up to 10 different printer configurations  
+*Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3  
+*Optimized arc motion algorithm for G2/G3: microstepping grid resolution  
+*Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
+*Basic thermal protection  
+*Software axis alignment   
+*Support only for Arduino Mega 2560 - RAMPS board  
+*LCD Display 16x2 Module HD44780 only  
+*Cartesian 3D printers only  
+*PID/Bang-Bang temperature control  
+*USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID  
+*USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control  
+*Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
 
 ## Pending
 
--AutoPID tuning  
--32bit boards  
--G29 Autobed leveling  
--CoreXY and delta printers  
--Realtime kinematics plots  
--Update manuals  
+*AutoPID tuning  
+*32bit boards  
+*G29 Autobed leveling  
+*CoreXY and delta printers  
+*Realtime kinematics plots  
+*Update manuals  
 
 ## Download compiled
 
