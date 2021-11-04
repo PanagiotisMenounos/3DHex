@@ -4066,7 +4066,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_Exit.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -4096,7 +4096,7 @@ class Ui_MainWindow(object):
         self.p89.setText(_translate("MainWindow", "Set"))
         self.l20_2.setText(_translate("MainWindow", "ThermType"))
         self.l21_2.setText(_translate("MainWindow", "Cycle [msec]"))
-        self.l23_2.setText(_translate("MainWindow", "Thermostat"))
+        self.l23_2.setText(_translate("MainWindow", "Bang-Bang"))
         self.l26_2.setText(_translate("MainWindow", "D"))
         self.l24_2.setText(_translate("MainWindow", "P"))
         self.l25_2.setText(_translate("MainWindow", "I"))

@@ -1,0 +1,2 @@
+pyuic5 mainwindow_design.ui -o mainwindow_design.py
+pyuic5 printer_name.ui -o printer_name.py

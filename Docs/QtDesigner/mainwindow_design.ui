@@ -439,7 +439,7 @@ margin: 0; /* if there is only one tab, we don't want overlapping margins */
 }</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -3603,7 +3603,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>Thermostat</string>
+                 <string>Bang-Bang</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
