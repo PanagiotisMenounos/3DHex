@@ -1,41 +1,58 @@
 # 3DHex
-<img align="left" src="https://github.com/3DHexfw/3DHex/blob/master/Host/3DHex.ico" />
 
-3DHex is an open source 3D printer firmware. The Host uses the CPU power of any typical desktop computer to solve really complex mathematical equations and generates a binary file. This file then is transfered either via USB or SD Card to the MCU. The MCU sets its outputs according to the raw 0s and 1s that binary file contains and controls the printing process. 
+3DHex is a windows host controller 3D printer firmware. 
+The Host runs on windows and uses the CPU power of any typical desktop computer to solve really complex mathematical equations for the kinematics. In it's core function the MCU sets it's outputs according to a "move" byte which contains the step(4bits) & direction(4bits) signal for XYZE axes and one more "delay" byte corresponding to the steprate at that time. When printing from USB the host is calculating real time and sends the raw binary data via USB. Unlike typical 3D Printer firmwares, the MCU cannot accept GCODE and in order to print from SD Card the Host saves the generated data to a .bin file which then can be transferred to the MCU with SD card.
 
-
-## Notes on version 1.0.2
-
--User friendly configuration
--Jerk free S-Curve velocity profile
--Option for Trapezoid velocity profile
--Real arc G02/G03 motion with accel-decel phase
--Curve detection with accel-decel phase
--Jump velocity
--Basic thermal protection
--Tested with Arduino Mega 2560
--USB printing max 15KHz step rate
--SD Card printing max 25KHz step rate
--LCD 16x2 support
--Only Cartesian 3D printers
--Software axis alignment 
-
-## How to install
+## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/master/Host/GUI.png" />
 
-Download 3DHex.exe located at [Releases](https://github.com/3DHexfw/3DHex/releases) . The installation will also extract a folder which contains the MCU code and the necessary Arduino libraries in order to upload to the board.
+## Specs
 
-## How to print 
+-Easy configuration from the UI
+-Up to 10 different printer configurations
+-Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3
+-Optimized arc motion algorithm for G2/G3: microstepping grid resolution
+-Smart curve detection algorithm: No decelaration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered
+-Basic thermal protection
+-Software axis alignment 
+-Support only for Arduino Mega 2560 - RAMPS board
+-LCD Display 16x2 Module HD44780 only
+-Cartesian 3D printers only
+-PID/Bang-Bang temperature control
+-USB idle functions: Temperature control, Fan control, Move toolhead, Homing, AutoPID
+-USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control
+-Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
 
-Take a look at the [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20files/3DHex/Guide_1.0.2.pdf)
+## Pending
 
-## Youtube 
+-AutoPID tuning
+-32bit boards
+-G29 Autobed leveling
+-CoreXY and delta printers
+-Realtime kinematics plots
+-Update manuals
 
-[3DHexfw](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
+## Download compiled
 
-## Images
+Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled arem not final releases but just for quick review with major bugs and pending features.
 
-<div>Logo made with <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" 
-<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+[3DHex_setup.exe(32bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
+[3DHex_setup.exe(64bit)](https://www.youtube.com/channel/UCmxyTgfH-faXP00cXr8jxtA?view_as=subscriber)
+
+## Manual
+
+Take a look at the (old) [Guide](https://github.com/3DHexfw/3DHex/blob/master/Host/Host%20saved%20files/3DHex/Guide_1.0.2.pdf)
+
+## Presentation 
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/3D Printer.JPG" />
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Host.JPG" />
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/MCU.JPG" />
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/S-Curve.JPG" />
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Jerk.JPG" />
+
+<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Curve detection.JPG" />
