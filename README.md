@@ -45,14 +45,14 @@ Take a look at the (old) [Guide](https://github.com/3DHexfw/3DHex/blob/master/Ho
 
 ## Presentation 
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/3D Printer.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/3D%20Printer.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Host.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Host.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/MCU.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/MCU.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/S-Curve.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/S-Curve.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Jerk.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Jerk.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/Docs/Presentation/Curve detection.JPG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Curve%20detection.JPG" />
