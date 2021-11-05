@@ -4066,7 +4066,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_Exit.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -4096,7 +4096,7 @@ class Ui_MainWindow(object):
         self.p89.setText(_translate("MainWindow", "Set"))
         self.l20_2.setText(_translate("MainWindow", "ThermType"))
         self.l21_2.setText(_translate("MainWindow", "Cycle [msec]"))
-        self.l23_2.setText(_translate("MainWindow", "Thermostat"))
+        self.l23_2.setText(_translate("MainWindow", "Bang-Bang"))
         self.l26_2.setText(_translate("MainWindow", "D"))
         self.l24_2.setText(_translate("MainWindow", "P"))
         self.l25_2.setText(_translate("MainWindow", "I"))
@@ -4144,7 +4144,7 @@ class Ui_MainWindow(object):
         self.l7_3.setText(_translate("MainWindow", "F[mm/sec]"))
         self.l9_2.setText(_translate("MainWindow", "A[mm/sec²]"))
         self.l9_3.setText(_translate("MainWindow", "J [mm/sec³]"))
-        self.c21.setText(_translate("MainWindow", "[mm/sec]"))
+        self.c21.setText(_translate("MainWindow", "[mm/min]"))
         self.p22.setText(_translate("MainWindow", "Clear"))
         self.p24.setText(_translate("MainWindow", "Set"))
         self.p21.setText(_translate("MainWindow", "Pause"))
@@ -4152,7 +4152,7 @@ class Ui_MainWindow(object):
         self.menu_Files.setTitle(_translate("MainWindow", "&File"))
         self.menu_About.setTitle(_translate("MainWindow", "&About"))
         self.menu_Exit.setTitle(_translate("MainWindow", "&Exit"))
-        self.menuPrinter.setTitle(_translate("MainWindow", "Printer"))
+        self.menuPrinter.setTitle(_translate("MainWindow", "Config"))
         self.action_Open.setText(_translate("MainWindow", "Open"))
         self.actionPrinter0.setText(_translate("MainWindow", "Default"))
         self.actionPrinter1.setText(_translate("MainWindow", "Printer1"))
