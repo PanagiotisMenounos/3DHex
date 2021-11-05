@@ -187,6 +187,9 @@ struct data{
 }MG_data;
 
 int main(){
+	HWND hWnd = GetConsoleWindow();
+    ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
+    ShowWindow( hWnd, SW_HIDE );
     	
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (pipe == INVALID_HANDLE_VALUE)
