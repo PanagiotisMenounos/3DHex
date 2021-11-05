@@ -11,9 +11,7 @@ Host:
 [3DHex_setup.exe (64bit)](https://drive.google.com/uc?export=download&id=1IUAwvQlQW2fMJM42fx39prPbyUTiclch)
 
 MCU:  
-[RAMPS 1.6.bin](https://drive.google.com/uc?export=download&id=17jIRwRCjPPezmSyDSkK-8Dl3-rQlhC1g)  
-
-or upload RAMPS.ino via Arduino IDE
+[RAMPS 1.6.bin](https://drive.google.com/uc?export=download&id=17jIRwRCjPPezmSyDSkK-8Dl3-rQlhC1g)  or upload RAMPS.ino via Arduino IDE
 
 ## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
