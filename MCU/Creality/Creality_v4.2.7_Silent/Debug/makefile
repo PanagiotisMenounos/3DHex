@@ -61,8 +61,8 @@ all: main-build
 main-build: Creality\ v4.2.7_Silent\ board.elf secondary-outputs
 
 # Tool invocations
-Creality\ v4.2.7_Silent\ board.elf: $(OBJS) $(USER_OBJS) C:\Users\Panagiotis\Desktop\3DHex\MCU\Creality\STM32F103RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Creality v4.2.7_Silent board.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Panagiotis\Desktop\3DHex\MCU\Creality\STM32F103RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Creality v4.2.7_Silent board.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Creality\ v4.2.7_Silent\ board.elf: $(OBJS) $(USER_OBJS) C:\Users\Panagiotis\Desktop\3DHex\MCU\Creality\Creality_v4.2.7_Silent\STM32F103RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Creality v4.2.7_Silent board.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Panagiotis\Desktop\3DHex\MCU\Creality\Creality_v4.2.7_Silent\STM32F103RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Creality v4.2.7_Silent board.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
