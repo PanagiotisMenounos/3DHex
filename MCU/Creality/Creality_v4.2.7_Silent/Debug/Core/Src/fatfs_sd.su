@@ -1,0 +1,17 @@
+fatfs_sd.c:20:13:SELECT	8	static
+fatfs_sd.c:26:13:DESELECT	8	static
+fatfs_sd.c:32:13:SPI_TxByte	16	static
+fatfs_sd.c:39:16:SPI_RxByte	24	static
+fatfs_sd.c:52:13:SPI_RxBytePtr	16	static
+fatfs_sd.c:58:16:SD_ReadyWait	16	static
+fatfs_sd.c:76:13:SD_PowerOn	32	static
+fatfs_sd.c:119:13:SD_PowerOff	4	static
+fatfs_sd.c:125:16:SD_CheckPower	4	static
+fatfs_sd.c:132:13:SD_RxDataBlock	24	static
+fatfs_sd.c:164:13:SD_TxDataBlock	24	static
+fatfs_sd.c:215:13:SD_SendCmd	24	static
+fatfs_sd.c:261:9:SD_disk_initialize	32	static
+fatfs_sd.c:364:9:SD_disk_status	16	static
+fatfs_sd.c:373:9:SD_disk_read	24	static
+fatfs_sd.c:417:9:SD_disk_write	24	static
+fatfs_sd.c:472:9:SD_disk_ioctl	56	static
