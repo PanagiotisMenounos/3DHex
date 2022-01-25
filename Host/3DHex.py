@@ -129,7 +129,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                       self.message.emit(">>> P=" +str(window.Auto_P))
                       self.message.emit(">>> I=" +str(window.Auto_I))
                       self.message.emit(">>> D=" +str(window.Auto_D))
-                      self.autotune_p.emit(window.Auto_P)
+                      self.autotune_p.emit(window.Auto_I)
                       serial_command=-243
                    else: #just update temp
                       self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
@@ -388,7 +388,11 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             
             if window.nozz_auto_tune==1: 
                 window.nozz_auto_tune=0
-                self.message.emit(">>> AUTOTUNE") #emit the signal             
+                if window.C==1:
+                     self.message.emit(">>> NOZZLE AUTOTUNE") #emit the signal 
+                     print(window.B)                     
+                else:          
+                     self.message.emit(">>> BED AUTOTUNE")                
                 self.send_buffer()                
                                 
 
@@ -436,12 +440,20 @@ class AutoTuneWindow(QtWidgets.QMainWindow, Ui_AutoTune):
         self.cancel_autotune.clicked.connect(self.CANCEL_Printer)
      
     def OK_Printer(self):
-        window.b41.clear()
-        window.b41.insertPlainText(str(window.Auto_P)) 
-        window.b43.clear()
-        window.b43.insertPlainText(str(window.Auto_I)) 
-        window.b45.clear()
-        window.b45.insertPlainText(str(window.Auto_D)) 
+        if window.C==1:
+            window.b41.clear()
+            window.b41.insertPlainText(str(window.Auto_P)) 
+            window.b43.clear()
+            window.b43.insertPlainText(str(window.Auto_I)) 
+            window.b45.clear()
+            window.b45.insertPlainText(str(window.Auto_D)) 
+        else:
+            window.b42.clear()
+            window.b42.insertPlainText(str(window.Auto_P)) 
+            window.b44.clear()
+            window.b44.insertPlainText(str(window.Auto_I)) 
+            window.b46.clear()
+            window.b46.insertPlainText(str(window.Auto_D))
         window.Message_panel.append(">>> PID updated")
         self.close()
         
@@ -606,6 +618,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p24.clicked.connect(self.setJFAJ)
         self.p25.clicked.connect(self.setFAN1)
         self.p90.clicked.connect(self.nozz_AUTOTUNE)
+        self.p91.clicked.connect(self.bed_AUTOTUNE)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
@@ -1029,6 +1042,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.A=0
         self.B=5
         self.C=1
+
+    def bed_AUTOTUNE(self):
+        self.nozz_auto_tune=1
+        self.A=0
+        self.B=5
+        self.C=0
 
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
