@@ -819,7 +819,9 @@ int check_inputs(){
             }else if(buffer5.B == 4){
                    analogWrite(FAN,buffer5.J);
             }else if(buffer5.B == 5){
+                   digitalWrite(LED_BUILTIN,HIGH);
                    Atune_loop(buffer5.C);
+                   digitalWrite(LED_BUILTIN,LOW);
             }
             while(Serial.available()<3){
                  temperature_control();  
@@ -838,10 +840,10 @@ void Atune_loop(uint8_t tune_case){
   double target_tune_temp, tune_temp, p_tune, i_tune, d_tune;
   int heater;
   AUTOTUNE=true;
-  if(tune_case==1){
+  if(tune_case==1){ //Nozzle Autotune
       target_tune_temp = NOZZLE_TUNE_TEMP;
       heater = NOZZ_HEATER;
-  }else{
+  }else{  //Bed Autotune
       target_tune_temp = BED_TUNE_TEMP;
       heater = BED_HEATER;
   }
@@ -863,14 +865,14 @@ void Atune_loop(uint8_t tune_case){
     }
     if(last_power!=power){
       while(get_extreme==false){
-        delay(100); // need to be replaced
+        delay(300); //need better sollution in the future
         if(tune_case==1){tune_temp = therm1.analog2temp();}else{tune_temp = therm2.analog2temp();}
         if(last_power==true){
           if(last_tune_temp>tune_temp){
             period=millis()-prev_time;
             prev_time=millis();
             get_extreme=true;
-            if(iterations>2){ //avoid overshoot sampling
+            if(iterations>2){ //avoid overshoot at the begining
                 sum_period=sum_period+period;
                 max_tune_temp=max_tune_temp+last_tune_temp;
                 max_temp_counter++;
@@ -879,7 +881,7 @@ void Atune_loop(uint8_t tune_case){
         }else{
           if(tune_temp>last_tune_temp){
             get_extreme=true;
-            if(iterations>2){
+            if(iterations>2){ //avoid overshoot at the begining
                min_tune_temp=min_tune_temp+last_tune_temp;
                min_temp_counter++;
             }
@@ -896,7 +898,7 @@ void Atune_loop(uint8_t tune_case){
       max_tune_temp=max_tune_temp/max_temp_counter;
       period=(sum_period/max_temp_counter)/1000;
       min_tune_temp=min_tune_temp/min_temp_counter;
-      double b=max_tune_temp-min_tune_temp;
+      double b = max_tune_temp-min_tune_temp;
       double Pu = (4.0*255)/(pi*b);
       p_tune=0.6*Pu;
       double Ti=0.5*period;
@@ -905,7 +907,7 @@ void Atune_loop(uint8_t tune_case){
       d_tune=p_tune*Td;
       repeat=false;
       buffer4.command=-200;
-      buffer4.nozz_temp=p_tune;
+      buffer4.nozz_temp=p_tune; //in this case nozz_temp,bed_temp is just a place to send the data (PID)
       buffer4.bed_temp=i_tune;
       Serial.write((char*)&buffer4,sizeof(buffer4));
       buffer4.command=-200;
