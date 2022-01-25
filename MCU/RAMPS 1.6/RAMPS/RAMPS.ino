@@ -22,7 +22,6 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <TimerThree.h>
 #include <thermistor.h>
 #include <PID_v1.h>
-//#include <PID_AutoTune_v0.h>
 #include <LiquidCrystal.h>
 SdFat SD;
 File myFile;
@@ -59,6 +58,9 @@ File myFile;
 #define FAN 9
 #define BED_HEATER 8
 #define IDLE_USB_TEMP_UPDATE_INTERVAL 1000
+#define NOZZLE_TUNE_TEMP 80
+#define BED_TUNE_TEMP 50
+#define pi 3.14159265358979323846
 
 void service_routine();
 void temperature_control();
@@ -78,6 +80,7 @@ void initialzation_vars();
 void check_buffer();
 void check_command(int state_c);
 void read_GM_data();
+void Atune_loop(uint8_t tune_case);
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -178,46 +181,15 @@ volatile int8_t p;
 double input, output, setpoint=0;
 int state_r;
 
-byte ATuneModeRemember=2;
-double aTuneStep=125, aTuneNoise=0.5, aTuneStartValue=125;
-unsigned int aTuneLookBack=20;
-
-//PID_ATune aTune(&input, &output);
-//aTune.SetControlType(1);
+boolean repeat=true,last_power=false,power=true,get_extreme=false,firsttime=true,AUTOTUNE=false;
+double iterations=0,last_tune_temp,max_tune_temp,min_tune_temp;
+unsigned long  period,prev_time;
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
 PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
 PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
-/*
-void changeAutoTune()
-{
- if(!tuning)
-  {
-    //Set the output to the desired starting frequency.
-    output=aTuneStartValue;
-    aTune.SetNoiseBand(aTuneNoise);
-    aTune.SetOutputStep(aTuneStep);
-    aTune.SetLookbackSec((int)aTuneLookBack);
-    AutoTuneHelper(true);
-    tuning = true;
-  }
-  else
-  { //cancel autotune
-    aTune.Cancel();
-    tuning = false;
-    AutoTuneHelper(false);
-  }
-}
-*//*
-void AutoTuneHelper(boolean start)
-{
-  if(start)
-    ATuneModeRemember = myPID.GetMode();
-  else
-    myPID.SetMode(ATuneModeRemember);
-}
-*/
+
 void initialization_var(){
    buffer3.X_ENABLE=1;
    buffer3.Y_ENABLE=1;
@@ -482,24 +454,6 @@ void execute_command(){
     break;
   }
 }
-/*
-void tuning(){
-  while(tuning){
-     byte val = (aTune.Runtime());
-    if (val!=0)
-    {
-      tuning = false;
-    }
-    if(!tuning)
-    { //we're done, set the tuning parameters
-      kp = aTune.GetKp();
-      ki = aTune.GetKi();
-      kd = aTune.GetKd();
-      myPID.SetTunings(kp,ki,kd);
-      AutoTuneHelper(false);
-    }   
-  }
-}*/
 
 void terminate_process(){
     if(PRINTING==true){
@@ -683,66 +637,68 @@ void temperature_control(){
            temperature_USB_update();
         }
       }
-      if (buffer3.THERMOSTAT_bed==1){
-          if(currentMillis - previousMillis_Bed >= buffer3.CYCLE_BED){
-              previousMillis_Bed = currentMillis;
-              temp2 = therm2.analog2temp(); // bed
-              if((temp2<MIN_TEMP_SAFETY || temp2>MAX_TEMP_BED) && buffer3.HEATED_BED==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
-              if(temp2<=buffer3.BED_TEMP && buffer3.HEATED_BED==1){
-                  digitalWrite(BED_HEATER,HIGH);
-              }else{
+      if (AUTOTUNE==false){
+         if (buffer3.THERMOSTAT_bed==1){
+             if(currentMillis - previousMillis_Bed >= buffer3.CYCLE_BED){
+                 previousMillis_Bed = currentMillis;
+                 temp2 = therm2.analog2temp(); // bed
+                 if((temp2<MIN_TEMP_SAFETY || temp2>MAX_TEMP_BED) && buffer3.HEATED_BED==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
+                 if(temp2<=buffer3.BED_TEMP && buffer3.HEATED_BED==1){
+                     digitalWrite(BED_HEATER,HIGH);
+                 }else{
+                     digitalWrite(BED_HEATER,LOW);
+                     bed_block=false;
+                 }
+             }
+         }else if(buffer3.THERMOSTAT_bed==0){
+             if (currentMillis - previousMillis_Bed >=buffer3.CYCLE_BED && buffer3.HEATED_BED==1){
+                 previousMillis_Bed = currentMillis;
+                 temp2 = therm2.analog2temp();
+                 pidbed.Compute();
+                 digitalWrite(BED_HEATER,bedpwm);
+                 if(temp2>buffer3.BED_TEMP){
+                   bed_block=false;
+                 }
+             }else if(buffer3.HEATED_BED==0){
+                  //digitalWrite(LED_BUILTIN,LOW);
                   digitalWrite(BED_HEATER,LOW);
                   bed_block=false;
               }
-          }
-      }else if(buffer3.THERMOSTAT_bed==0){
-          if (currentMillis - previousMillis_Bed >=buffer3.CYCLE_BED && buffer3.HEATED_BED==1){
-              previousMillis_Bed = currentMillis;
-              temp2 = therm2.analog2temp();
-              pidbed.Compute();
-              digitalWrite(BED_HEATER,bedpwm);
-              if(temp2>buffer3.BED_TEMP){
-                bed_block=false;
-              }
-          }else if(buffer3.HEATED_BED==0){
-               //digitalWrite(LED_BUILTIN,LOW);
-               digitalWrite(BED_HEATER,LOW);
-               bed_block=false;
-           }
-      }
-      if (buffer3.THERMOSTAT_nozz==1){
-        if (currentMillis - previousMillis_Nozz >= buffer3.CYCLE_NOZZ){
-           previousMillis_Nozz = currentMillis;
-           temp1 = therm1.analog2temp(); // nozzle
-           if((temp1<MIN_TEMP_SAFETY || temp1>MAX_TEMP_NOZZLE) && buffer3.HEATED_NOZZLE==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
-           if(temp1<=buffer3.NOZZLE_TEMP && buffer3.HEATED_NOZZLE==1){
-            if(bed_block==false){
-              digitalWrite(NOZZ_HEATER,HIGH);
-              }else{
-                digitalWrite(NOZZ_HEATER,LOW);
-                }
-           }else{
-             digitalWrite(NOZZ_HEATER,LOW); 
-             nozz_block=false;}
-        }
-      }else if(buffer3.THERMOSTAT_nozz==0){
-          if (currentMillis - previousMillis_Nozz >=buffer3.CYCLE_NOZZ && buffer3.HEATED_NOZZLE==1){
-              digitalWrite(LED_BUILTIN,HIGH);
+         }
+         if (buffer3.THERMOSTAT_nozz==1){
+           if (currentMillis - previousMillis_Nozz >= buffer3.CYCLE_NOZZ){
               previousMillis_Nozz = currentMillis;
-              if(bed_block==false){
-                 temp1 = therm1.analog2temp(); // nozzle
-                 pidnozz.Compute();
-                 digitalWrite(NOZZ_HEATER,nozzpwm);
+              temp1 = therm1.analog2temp(); // nozzle
+              if((temp1<MIN_TEMP_SAFETY || temp1>MAX_TEMP_NOZZLE) && buffer3.HEATED_NOZZLE==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
+              if(temp1<=buffer3.NOZZLE_TEMP && buffer3.HEATED_NOZZLE==1){
+               if(bed_block==false){
+                 digitalWrite(NOZZ_HEATER,HIGH);
+                 }else{
+                   digitalWrite(NOZZ_HEATER,LOW);
+                   }
               }else{
-                 digitalWrite(NOZZ_HEATER,LOW);
-              }
-              if(temp1>buffer3.NOZZLE_TEMP){
-                nozz_block=false;
-              }
-          }else if(buffer3.HEATED_NOZZLE==0 && (bed_block==false && buffer3.HEATED_BED==1 || buffer3.HEATED_BED==0)){
-             digitalWrite(NOZZ_HEATER,LOW); 
-             nozz_block=false;
+                digitalWrite(NOZZ_HEATER,LOW); 
+                nozz_block=false;}
            }
+         }else if(buffer3.THERMOSTAT_nozz==0){
+             if (currentMillis - previousMillis_Nozz >=buffer3.CYCLE_NOZZ && buffer3.HEATED_NOZZLE==1){
+                 digitalWrite(LED_BUILTIN,HIGH);
+                 previousMillis_Nozz = currentMillis;
+                 if(bed_block==false){
+                    temp1 = therm1.analog2temp(); // nozzle
+                    pidnozz.Compute();
+                    digitalWrite(NOZZ_HEATER,nozzpwm);
+                 }else{
+                    digitalWrite(NOZZ_HEATER,LOW);
+                 }
+                 if(temp1>buffer3.NOZZLE_TEMP){
+                   nozz_block=false;
+                 }
+             }else if(buffer3.HEATED_NOZZLE==0 && (bed_block==false && buffer3.HEATED_BED==1 || buffer3.HEATED_BED==0)){
+                digitalWrite(NOZZ_HEATER,LOW); 
+                nozz_block=false;
+             }
+         }
       }
       if((digitalRead(ENCODER_PIN)==LOW) && (GM_command==false) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
    }while(((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1)) && setoff==false);
@@ -777,7 +733,7 @@ int check_inputs(){
        Serial.write((uint8_t*)&pass,sizeof(pass));
        if(buffer5.A==0){                             ///A=0 => idle mode
            if(buffer5.B == 0){                       ///B=0 => temp command
-              if(buffer5.C == 0){                    ///C=1 => set temp
+              if(buffer5.C == 0){                    ///C=0 => set noz temp
                 bed_block=false;
                 buffer3.THERMOSTAT_nozz=buffer5.E;
                 buffer3.HEATED_NOZZLE=buffer5.G;
@@ -791,7 +747,7 @@ int check_inputs(){
                 i_nozz=buffer5.P/10.0;
                 d_nozz=buffer5.Q/10.0;
                 pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
-              }else if(buffer5.C == 1){                                ///C=0 => monitor only temp                       
+              }else if(buffer5.C == 1){                                ///C=1 => set bed temp                       
                 buffer3.THERMOSTAT_bed=buffer5.E;
                 buffer3.HEATED_BED=buffer5.G;
                 buffer3.BED_TEMP=buffer5.I;
@@ -858,10 +814,12 @@ int check_inputs(){
                      buffer3.HOME_Z_DURATION=buffer5.I;
                 }
                 homing_routine();
-            }else if(buffer5.B == 3){              //B=3 => Rapid potision           
+            }else if(buffer5.B == 3){              //B=3 => Rapid potision 
                     rapid_position();
             }else if(buffer5.B == 4){
                    analogWrite(FAN,buffer5.J);
+            }else if(buffer5.B == 5){
+                   Atune_loop(buffer5.C);
             }
             while(Serial.available()<3){
                  temperature_control();  
@@ -873,6 +831,92 @@ int check_inputs(){
        }
    }
     return 1;
+}
+
+void Atune_loop(uint8_t tune_case){
+  unsigned long max_temp_counter=0,min_temp_counter=0,sum_period=0;
+  double target_tune_temp, tune_temp, p_tune, i_tune, d_tune;
+  int heater;
+  AUTOTUNE=true;
+  if(tune_case==1){
+      target_tune_temp = NOZZLE_TUNE_TEMP;
+      heater = NOZZ_HEATER;
+  }else{
+      target_tune_temp = BED_TUNE_TEMP;
+      heater = BED_HEATER;
+  }
+  while(repeat==true){
+    if(tune_case==1){tune_temp = therm1.analog2temp();}else{tune_temp = therm2.analog2temp();}
+    if(tune_temp<target_tune_temp && last_power==false){
+      iterations=iterations+0.5;
+      power=true;
+      digitalWrite(heater,HIGH);
+    }
+    if(tune_temp>target_tune_temp && last_power==true){
+      iterations=iterations+0.5;
+      power=false;
+      digitalWrite(heater,LOW);
+    }
+    if(firsttime==true){
+      last_power=true;
+      firsttime=false;
+    }
+    if(last_power!=power){
+      while(get_extreme==false){
+        delay(100); // need to be replaced
+        if(tune_case==1){tune_temp = therm1.analog2temp();}else{tune_temp = therm2.analog2temp();}
+        if(last_power==true){
+          if(last_tune_temp>tune_temp){
+            period=millis()-prev_time;
+            prev_time=millis();
+            get_extreme=true;
+            if(iterations>2){ //avoid overshoot sampling
+                sum_period=sum_period+period;
+                max_tune_temp=max_tune_temp+last_tune_temp;
+                max_temp_counter++;
+            }
+          }
+        }else{
+          if(tune_temp>last_tune_temp){
+            get_extreme=true;
+            if(iterations>2){
+               min_tune_temp=min_tune_temp+last_tune_temp;
+               min_temp_counter++;
+            }
+          }          
+        }
+        last_tune_temp=tune_temp;
+        temperature_control();
+      }
+      get_extreme=false;
+    }
+    last_power=power;
+    last_tune_temp=tune_temp;
+    if(iterations>5){
+      max_tune_temp=max_tune_temp/max_temp_counter;
+      period=(sum_period/max_temp_counter)/1000;
+      min_tune_temp=min_tune_temp/min_temp_counter;
+      double b=max_tune_temp-min_tune_temp;
+      double Pu = (4.0*255)/(pi*b);
+      p_tune=0.6*Pu;
+      double Ti=0.5*period;
+      double Td=0.125*period;
+      i_tune=p_tune/Ti;
+      d_tune=p_tune*Td;
+      repeat=false;
+      buffer4.command=-200;
+      buffer4.nozz_temp=p_tune;
+      buffer4.bed_temp=i_tune;
+      Serial.write((char*)&buffer4,sizeof(buffer4));
+      buffer4.command=-200;
+      buffer4.nozz_temp=d_tune;
+      buffer4.bed_temp=i_tune;
+      Serial.write((char*)&buffer4,sizeof(buffer4));
+      buffer4.command=-253;
+    }
+    temperature_control();
+  }
+  AUTOTUNE=false;
 }
 
 void rapid_position(){

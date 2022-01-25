@@ -33,6 +33,7 @@ import os
 import easygui
 from mainwindow_design import Ui_MainWindow
 from printer_name import Ui_New_Printer
+from autotune import Ui_AutoTune
 from multiprocessing import Process #for multiprocessing
 import threading
 import subprocess
@@ -106,10 +107,11 @@ class FLYWorker(QThread):
         window.froze=0        
 
 
-class USBWorker(QThread): #This thread starts when 3DHEX connected successfully to the Printer
+class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
     message = pyqtSignal(str) #define signal
     new_nozz_temp = pyqtSignal(float)
     new_bed_temp = pyqtSignal(float)
+    autotune_p = pyqtSignal(float)
     def run(self):
         time.sleep(2)
         self.send_buffer() #Set printer to idle mode temp only report
@@ -118,8 +120,20 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
             while window.USB_CONNECTED==1:
                 (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
                 if window.A==0: #if in idle mode
-                   self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                   self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                   if serial_command==-200:
+                      window.Auto_P = round(window.nozz_temp,2)
+                      window.Auto_I = round(window.bed_temp,2)
+                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                      window.Auto_D = round(window.nozz_temp,2)
+                      self.message.emit(">>> AUTOTUNE RESULTS") #emit the signal
+                      self.message.emit(">>> P=" +str(window.Auto_P))
+                      self.message.emit(">>> I=" +str(window.Auto_I))
+                      self.message.emit(">>> D=" +str(window.Auto_D))
+                      self.autotune_p.emit(window.Auto_P)
+                      serial_command=-243
+                   else: #just update temp
+                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
+                      self.new_bed_temp.emit(window.bed_temp) #emit the signal
                    time.sleep(0.5)
                    self.check_idle_commands() #Check if any idle command has triggered
                 else:
@@ -141,7 +155,6 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
     def send_buffer(self):
         window.ser.write(struct.pack("8B4H2B6H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
-        #print("apo pou kai os poy")
         #if pass_fail==1: #pass_fail should be 1, else communication has failed
            #print("PASS")
         #else:
@@ -151,7 +164,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         window.A=1 #printing mode
         serial_command=0 #reset serial command from arduino
         flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-        flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data in order for Brain.C to know Python is in printing function
+        flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data in order for 3DHex.C to know Python is in printing function
         flag_file.close()
         flag_py_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag_py.bin',"wb") #Clear flag file
         flag_py_file.close()
@@ -160,11 +173,11 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
         buffer1_file.close()
         buffer2_file.close()
         self.message.emit(">>> GCODE Post processing..this may take a while..") #emit the signal
-        p1 = subprocess.Popen("Brain.exe") #Start Brain.C Proccess 
+        p1 = subprocess.Popen("3DHex.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
         buffer_file_size=3200 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
-        child_buffer_size=1 #Means Brain.C is still running
+        child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
@@ -242,7 +255,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
                 flag_file.close()
             child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so Brain.C to terminate
+        child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
         child_file.close()
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w') #reset path
         savepathfile.close()
@@ -264,6 +277,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                 window.O=int(float(window.b41.toPlainText().strip())*10.0)
                 window.P=int(float(window.b43.toPlainText().strip())*10.0)
                 window.Q=int(float(window.b45.toPlainText().strip())*10.0)
+                print(window.O)
                 time.sleep(0.2)
                 self.send_buffer()
                 window.enable_idle_buttons()
@@ -286,7 +300,6 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
             if window.set_fan==1:
                window.set_fan=0
                window.B=4
-               
                window.J=int(window.d104.value())
                #print(window.J)
                self.send_buffer()
@@ -371,7 +384,13 @@ class USBWorker(QThread): #This thread starts when 3DHEX connected successfully 
                    else:
                       window.p20.setEnabled(True)
                 window.enable_idle_buttons()
-                window.rapid_pos=0				   
+                window.rapid_pos=0
+            
+            if window.nozz_auto_tune==1: 
+                window.nozz_auto_tune=0
+                self.message.emit(">>> AUTOTUNE") #emit the signal             
+                self.send_buffer()                
+                                
 
 class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
     def __init__(self, *args, obj=None, **kwargs):
@@ -409,6 +428,27 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
         self.close()
         window.Message_panel.append(">>> Aborted")
 
+class AutoTuneWindow(QtWidgets.QMainWindow, Ui_AutoTune):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(AutoTuneWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self) #import Qtdesigner
+        self.ok_autotune.clicked.connect(self.OK_Printer)
+        self.cancel_autotune.clicked.connect(self.CANCEL_Printer)
+     
+    def OK_Printer(self):
+        window.b41.clear()
+        window.b41.insertPlainText(str(window.Auto_P)) 
+        window.b43.clear()
+        window.b43.insertPlainText(str(window.Auto_I)) 
+        window.b45.clear()
+        window.b45.insertPlainText(str(window.Auto_D)) 
+        window.Message_panel.append(">>> PID updated")
+        self.close()
+        
+    def CANCEL_Printer(self):
+        self.close()
+        window.Message_panel.append(">>> Aborted")
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
@@ -434,6 +474,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.home_axis=0
         self.usb_printing=0
         self.rapid_pos=0
+        self.nozz_auto_tune=0
         self.A=0
         self.B=0
         self.C=0
@@ -454,6 +495,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.R=0
         self.S=0
         self.T=0
+        self.Auto_P=0
+        self.Auto_I=0
+        self.Auto_D=0
         self.update_temp=0
         self.chosenPort = ""
         self.ports = serial.tools.list_ports.comports()
@@ -464,6 +508,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def new_printer(self):
         self.window2 = PrinterWindow(self)
         self.window2.show()
+
+    def test(self):
+        self.window3 = AutoTuneWindow(self)
+        self.window3.show()
+        print(self.Auto_P)
 
     def select_printer(self,printer_selection):
         window.save_settings()
@@ -556,6 +605,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p23.clicked.connect(self.CANCEL)
         self.p24.clicked.connect(self.setJFAJ)
         self.p25.clicked.connect(self.setFAN1)
+        self.p90.clicked.connect(self.nozz_AUTOTUNE)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
@@ -595,6 +645,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
                 self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
                 self.usb_thread.new_bed_temp.connect(self.update_bed_temp) #connect thread to message window
+                self.usb_thread.autotune_p.connect(self.test) #connect thread to autotune window
                 self.usb_thread.start()       #Start usb communication handling thread
                 self.enable_rapid_buttons()    #Enable home buttons
                 for i in range (2,6): #c0-cmax
@@ -649,7 +700,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         if child_buffer_size!=0:
             self.Message_panel.append(">>> Aborted")
-            child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so Brain.C to terminate
+            child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
             child_file.close()
             self.usb_printing=0
             self.A=0
@@ -972,6 +1023,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Set JFAJ")
             self.fly_thread = FLYWorker()
             self.fly_thread.start()
+ 
+    def nozz_AUTOTUNE(self):
+        self.nozz_auto_tune=1
+        self.A=0
+        self.B=5
+        self.C=1
 
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
@@ -1082,7 +1139,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
            self.child_file.write(str(struct.pack("i",self.mirror)))
            self.child_file.close()
-           p2 = subprocess.Popen("Brain.exe")
+           p2 = subprocess.Popen("3DHex.exe")
         else:
            self.Message_panel.append(">>> Aborted ")
 
