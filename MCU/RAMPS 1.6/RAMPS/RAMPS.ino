@@ -23,8 +23,12 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <thermistor.h>
 #include <PID_v1.h>
 #include <LiquidCrystal.h>
+#include <Servo.h>
+
 SdFat SD;
 File myFile;
+
+Servo bltouch;
 
 #define SERIAL_BAUD_RATE 400000
 #define BUTTON_TIME_DURATION 1000
@@ -37,6 +41,7 @@ File myFile;
 #define HOME_XMIN_PIN 3
 #define HOME_YMIN_PIN 14
 #define HOME_ZMIN_PIN 18
+#define BLTOUCH_PIN 4
 #define USB_SETTING_BYTES 52
 #define MG_BYTES 30
 #define BUFFERSIZE 3200
@@ -180,10 +185,8 @@ volatile uint8_t pass=1,fail=0,command_value=255;
 volatile int8_t p;
 double input, output, setpoint=0;
 int state_r;
+volatile boolean AUTOTUNE=false;
 
-boolean repeat=true,last_power=false,power=true,get_extreme=false,firsttime=true,AUTOTUNE=false;
-double iterations=0,last_tune_temp,max_tune_temp,min_tune_temp;
-unsigned long  period,prev_time;
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
@@ -207,6 +210,8 @@ void initialization_var(){
 }
 
 void setup() {
+   bltouch.attach(BLTOUCH_PIN);
+   bltouch.write(10);
    pinMode(ENCODER_PIN,INPUT_PULLUP);
    pinMode(SD_ENABLE,OUTPUT);
    if(print_history==false){
@@ -836,6 +841,9 @@ int check_inputs(){
 }
 
 void Atune_loop(uint8_t tune_case){
+  boolean repeat=true,last_power=false,power=true,get_extreme=false,firsttime=true;
+  double iterations=0,last_tune_temp=0,max_tune_temp=0,min_tune_temp=0;
+  unsigned long  period=0,prev_time=0;
   unsigned long max_temp_counter=0,min_temp_counter=0,sum_period=0;
   double target_tune_temp, tune_temp, p_tune, i_tune, d_tune;
   int heater;
@@ -971,6 +979,8 @@ void rapid_position(){
 }
 
 void homing_routine(){ 
+   boolean signalstate=true;
+   unsigned long prev=0;
    digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
    digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
    if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
@@ -1001,15 +1011,20 @@ void homing_routine(){
       if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
    if(buffer5.A==1 || buffer5.A==3){buffer5.C=2;}
-   ZMIN_READ=digitalRead(HOME_XMIN_PIN);
+   ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
    while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
-      delayMicroseconds(buffer3.HOME_Z_DURATION);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-      delayMicroseconds(buffer3.HOME_Z_DURATION);
-      ZMIN_READ=digitalRead(HOME_XMIN_PIN);
+      if (micros()-prev >= buffer3.HOME_Z_DURATION){
+        prev = micros();
+        if (signalstate){
+              PORTL = (buffer3.HOME_Z_DIR<<PL1);
+              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+        }else{
+              PORTL = (buffer3.HOME_Z_DIR<<PL1);
+              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+        }
+        signalstate=!signalstate;
+      }
+      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
       if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
 }
