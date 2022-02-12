@@ -439,7 +439,7 @@ margin: 0; /* if there is only one tab, we don't want overlapping margins */
 }</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -2235,7 +2235,7 @@ border-color:rgb(120, 120, 120)
               </font>
              </property>
              <property name="text">
-              <string>Parking</string>
+              <string>Offset [mm]</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -3068,301 +3068,68 @@ border-color:rgb(120, 120, 120)
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
-              <item row="0" column="1" alignment="Qt::AlignHCenter">
-               <widget class="QCheckBox" name="c22">
+              <item row="11" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QCheckBox" name="c26">
                 <property name="minimumSize">
                  <size>
-                  <width>75</width>
+                  <width>15</width>
                   <height>25</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>75</width>
+                  <width>15</width>
                   <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QLabel" name="l23_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
-                 <string>NOZZLE</string>
+                 <string>Bang-Bang</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
-              <item row="0" column="2" alignment="Qt::AlignHCenter">
-               <widget class="QCheckBox" name="c23">
+              <item row="11" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QCheckBox" name="c27">
                 <property name="minimumSize">
                  <size>
-                  <width>75</width>
+                  <width>15</width>
                   <height>25</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>75</width>
+                  <width>15</width>
                   <height>25</height>
                  </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>11</pointsize>
-                 </font>
                 </property>
                 <property name="text">
-                 <string>BED</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" alignment="Qt::AlignHCenter">
-               <widget class="QPushButton" name="p88">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>60</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
-background-color:rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:5px;
-border-width:2px; 
-border-color:rgb(255, 85, 0);
-}
-QPushButton:hover {
-border-width:3px; 
-border-color:rgb(255, 115, 30);
-}
-QPushButton:pressed {
-background-color:rgb(255, 115, 30);
-border-color: rgb(255, 195, 110);
-border-width: 4px;     
-}
-QPushButton:disabled{
-background-color: rgb(255, 149, 62);
-color: rgb(83, 83, 83);
-border-color:rgb(83, 83, 83);
-}
-
-</string>
-                </property>
-                <property name="text">
-                 <string>Set</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2" alignment="Qt::AlignHCenter">
-               <widget class="QPushButton" name="p89">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>60</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
-background-color:rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:5px;
-border-width:2px; 
-border-color:rgb(255, 85, 0);
-}
-QPushButton:hover {
-border-width:3px; 
-border-color:rgb(255, 115, 30);
-}
-QPushButton:pressed {
-background-color:rgb(255, 115, 30);
-border-color: rgb(255, 195, 110);
-border-width: 4px;     
-}
-QPushButton:disabled{
-background-color: rgb(255, 149, 62);
-color: rgb(83, 83, 83);
-border-color:rgb(83, 83, 83);
-}
-
-</string>
-                </property>
-                <property name="text">
-                 <string>Set</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QPlainTextEdit" name="b35">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPlainTextEdit{
-background-color: rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:3px;
-border-width:1px; 
-border-color:white;
-}
-QPlainTextEdit:hover{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:focus{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:disabled {
-background-color: rgb(63, 63, 63);
-color: rgb(0, 0, 0);
-border-color:rgb(120, 120, 120)
-}</string>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="2">
-               <widget class="QPlainTextEdit" name="b36">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPlainTextEdit{
-background-color: rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:3px;
-border-width:1px; 
-border-color:white;
-}
-QPlainTextEdit:hover{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:focus{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:disabled {
-background-color: rgb(63, 63, 63);
-color: rgb(0, 0, 0);
-border-color:rgb(120, 120, 120)
-}</string>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QPlainTextEdit" name="b39">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPlainTextEdit{
-background-color: rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:3px;
-border-width:1px; 
-border-color:white;
-}
-QPlainTextEdit:hover{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:focus{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:disabled {
-background-color: rgb(63, 63, 63);
-color: rgb(0, 0, 0);
-border-color:rgb(120, 120, 120)
-}</string>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -3386,7 +3153,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>ThermType</string>
+                 <string>Sensor</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -3395,54 +3162,6 @@ border-color:rgb(120, 120, 120)
               </item>
               <item row="3" column="1">
                <widget class="QPlainTextEdit" name="b37">
-                <property name="minimumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>75</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>9</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPlainTextEdit{
-background-color: rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:3px;
-border-width:1px; 
-border-color:white;
-}
-QPlainTextEdit:hover{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:focus{
-border-color: rgb(85, 170, 255);
-}
-QPlainTextEdit:disabled {
-background-color: rgb(63, 63, 63);
-color: rgb(0, 0, 0);
-border-color:rgb(120, 120, 120)
-}</string>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QPlainTextEdit" name="b38">
                 <property name="minimumSize">
                  <size>
                   <width>75</width>
@@ -3516,22 +3235,78 @@ border-color:rgb(120, 120, 120)
                 </property>
                </widget>
               </item>
-              <item row="6" column="1" alignment="Qt::AlignHCenter">
-               <widget class="QCheckBox" name="c26">
+              <item row="3" column="2">
+               <widget class="QPlainTextEdit" name="b38">
                 <property name="minimumSize">
                  <size>
-                  <width>15</width>
+                  <width>75</width>
                   <height>25</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>15</width>
+                  <width>75</width>
                   <height>25</height>
                  </size>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="l26_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
                 <property name="text">
-                 <string/>
+                 <string>D</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -3583,60 +3358,6 @@ border-color:rgb(120, 120, 120)
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
-               <widget class="QLabel" name="l23_2">
-                <property name="minimumSize">
-                 <size>
-                  <width>90</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>90</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>10</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Bang-Bang</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="0">
-               <widget class="QLabel" name="l26_2">
-                <property name="minimumSize">
-                 <size>
-                  <width>90</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>90</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>10</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>D</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
               <item row="4" column="2">
                <widget class="QPlainTextEdit" name="b40">
                 <property name="minimumSize">
@@ -3685,44 +3406,6 @@ border-color:rgb(120, 120, 120)
                 </property>
                </widget>
               </item>
-              <item row="6" column="2" alignment="Qt::AlignHCenter">
-               <widget class="QCheckBox" name="c27">
-                <property name="minimumSize">
-                 <size>
-                  <width>15</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>15</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="2" alignment="Qt::AlignHCenter">
-               <widget class="QCheckBox" name="c25">
-                <property name="minimumSize">
-                 <size>
-                  <width>15</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>15</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
               <item row="7" column="0">
                <widget class="QLabel" name="l24_2">
                 <property name="minimumSize">
@@ -3747,6 +3430,25 @@ border-color:rgb(120, 120, 120)
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QCheckBox" name="c25">
+                <property name="minimumSize">
+                 <size>
+                  <width>15</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>15</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -4087,6 +3789,304 @@ border-color:rgb(120, 120, 120)
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPlainTextEdit" name="b36">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QPlainTextEdit" name="b39">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QCheckBox" name="c22">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>NOZZLE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QCheckBox" name="c23">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>BED</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p88">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Set</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p89">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Set</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPlainTextEdit" name="b35">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
                 </property>
                </widget>
               </item>
@@ -5131,6 +5131,1404 @@ border-color:rgb(120, 120, 120)
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Bed</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QFrame" name="frame_8">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>530</width>
+               <height>280</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>700</width>
+               <height>400</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QLabel" name="l29_5">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Width [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPlainTextEdit" name="b53">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="l29_6">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Length [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPlainTextEdit" name="b54">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="l29_15">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Sensor</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QComboBox" name="comboBox_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>BLTouch</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Inductive</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Capacitive</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Smart Efector</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Infared</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Piezo</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Hall Effect</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="l29_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string> Rows</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPlainTextEdit" name="b55">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="l29_4">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Columns</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QPlainTextEdit" name="b56">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QLabel" name="l29_7">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Iterations</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QPlainTextEdit" name="b57">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="l29_11">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>X Offset [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPlainTextEdit" name="b58">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="l29_12">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Y Offset [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QPlainTextEdit" name="b59">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4">
+               <widget class="QLabel" name="l29_13">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Margin [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="QPlainTextEdit" name="b60">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="l29_8">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>XY [mm/sec]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QPlainTextEdit" name="b61">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="l29_14">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Z [mm/sec]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QPlainTextEdit" name="b62">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="QLabel" name="l29_10">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Fade [mm]</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="5">
+               <widget class="QPlainTextEdit" name="b63">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="c29_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Include ABL</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QPlainTextEdit" name="b64">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p88_4">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>View</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p88_2">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Remove</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="4">
+               <widget class="QLabel" name="l29_16">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Saved</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="5" alignment="Qt::AlignHCenter">
+               <widget class="QComboBox" name="comboBox_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>26</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QCheckBox" name="c29">
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>ABL Mesh</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QCheckBox" name="c29_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>ABL Mesh</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p88_3">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Execute</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3" alignment="Qt::AlignHCenter">
+               <widget class="QPushButton" name="p88_5">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Test</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="4">
+               <widget class="QLabel" name="l29_17">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Repeatability</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="5">
+               <widget class="QPlainTextEdit" name="b65">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
                 </property>
                </widget>
               </item>
@@ -7692,8 +9090,14 @@ border-color:rgb(83, 83, 83);
     <addaction name="actionNew"/>
     <addaction name="actionRemove"/>
    </widget>
+   <widget class="QMenu" name="menuSimulation">
+    <property name="title">
+     <string>Simulation</string>
+    </property>
+   </widget>
    <addaction name="menu_Files"/>
    <addaction name="menuPrinter"/>
+   <addaction name="menuSimulation"/>
    <addaction name="menu_About"/>
    <addaction name="menu_Exit"/>
   </widget>
