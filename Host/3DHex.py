@@ -721,6 +721,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Aborted")
             self.ser.write(struct.pack("B",self.A))
 
+    def ABL(self):
+        self.width=self.b53.toPlainText().strip()
+        self.length=self.b54.toPlainText().strip()
+        self.rows=self.b55.toPlainText().strip()
+        self.columns=self.b56.toPlainText().strip()
+        self.iterations=self.b57.toPlainText().strip()
+        self.x_offset=self.b58.toPlainText().strip()
+        self.y_offset=self.b59.toPlainText().strip()
+        
+
  
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
@@ -1072,7 +1082,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         c_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         i=0
-        for i in range (0,53):
+        for i in range (0,66):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
           text = b.toPlainText().strip() #strip() removes'/n'
           if (text==''): #check if it is aan empty string
@@ -1114,7 +1124,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','r') #read general setting file and set them
         dboxes = file.readlines()
         file.close()
-        for i in range (0,53): #b0-bmax
+        for i in range (0,66): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            b.setPlainText('')
            b.insertPlainText(boxes[i].strip()) #strip() removes'/n'
