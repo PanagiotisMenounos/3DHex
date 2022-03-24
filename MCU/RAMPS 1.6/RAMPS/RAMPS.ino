@@ -44,7 +44,7 @@ Servo bltouch;
 #define BLTOUCH_PIN 4
 #define USB_SETTING_BYTES 52
 #define MG_BYTES 30
-#define BUFFERSIZE 3200
+#define BUFFERSIZE 3100
 #define X_EN 38
 #define Y_EN A2
 #define Z_EN A8
@@ -184,8 +184,8 @@ volatile int XMIN_READ,YMIN_READ,ZMIN_READ,set_counter=0;
 volatile uint8_t pass=1,fail=0,command_value=255;
 volatile int8_t p;
 double input, output, setpoint=0;
-int state_r;
-volatile boolean AUTOTUNE=false;
+int state_r,ABL_ITERATIONS;
+volatile boolean AUTOTUNE=false,ABL=false;
 
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
@@ -198,7 +198,7 @@ void initialization_var(){
    buffer3.Y_ENABLE=1;
    buffer3.Z_ENABLE=1;
    buffer3.E_ENABLE=1;
-   buffer4.command=-253;
+   buffer4.command=-253; //-253 Idle
    buffer5.A=0;
    buffer5.B=0;
    buffer5.C=0;
@@ -252,6 +252,7 @@ void setup() {
    initialization_var();
    if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
    delay(100); 
+   bltouch.write(90);
    do{// blocking if no input
       if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");lcd.blink();}    
    }while(check_inputs());
@@ -362,17 +363,31 @@ void read_GM_data(){
     while(buffer1.byte_1[j]==command_value){ //clear command_values
       j++;
       temp_counter++;
+      if (j>=BUFFERSIZE){ //just reset to zero so the buffer locate again at the start point (first object e.g a[0])
+         check_buffer();
+         temp_counter++;
+      }
     }
     while(buffer2.byte_2[j]==command_value){ //clear command_values
       temp_counter++;
       j++;
+      if (j>=BUFFERSIZE){ //just reset to zero so the buffer locate again at the start point (first object e.g a[0])
+         check_buffer();
+         temp_counter++;
+      }
     }
     if(temp_counter>2){if(state_r==0){state_r=1;}else{state_r=0;}}//that state means that the data is at the other buffer
     for(cc=0;cc<sizeof(buffer5);cc++){//total 30 bytes of data
       if(state_r==0){
+        while(buffer1.byte_1[j]==command_value){ //clear command_values
+            j++;
+        }
         MG_buf[cc]=buffer1.byte_1[j];
         j++;
       }else{
+        while(buffer2.byte_2[j]==command_value){ //clear command_values
+          j++;
+        }
         MG_buf[cc]=buffer2.byte_2[j];
         j++;
       }
@@ -453,9 +468,16 @@ void execute_command(){
            Serial.read();
        }
     break;
-    case 7: //pause until interaction
-      // changeAutoTune();
-//       tuning();
+    case 7: //ABL start/stop
+        ABL_ITERATIONS=buffer5.B;
+        if(ABL){
+          ABL=false;
+          buffer4.command =-302; //ABL stop
+        }else{
+          ABL=true;
+          buffer4.command =-300; //ABL start
+        }
+        Serial.write((char*)&buffer4,sizeof(buffer4));
     break;
   }
 }
@@ -465,7 +487,7 @@ void terminate_process(){
        initialization_var();
        Timer3.stop();
        if(PRINT_STATE==0){
-          buffer4.command = -260;
+          buffer4.command = -260; //-260 terminate
           Serial.write((char*)&buffer4,sizeof(buffer4)); 
           Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
        }else{
@@ -595,7 +617,6 @@ void get_SD_settings(){
    pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
    if(buffer3.Wait_nozz){nozz_block=true;}else{ nozz_block=false;}
    if(buffer3.Wait_bed){bed_block=true;}else{bed_block=false;}
-   
 }
 
 void get_USB_settings(){
@@ -914,7 +935,7 @@ void Atune_loop(uint8_t tune_case){
       i_tune=p_tune/Ti;
       d_tune=p_tune*Td;
       repeat=false;
-      buffer4.command=-200;
+      buffer4.command=-200; //Autotune command
       buffer4.nozz_temp=p_tune; //in this case nozz_temp,bed_temp is just a place to send the data (PID)
       buffer4.bed_temp=i_tune;
       Serial.write((char*)&buffer4,sizeof(buffer4));
@@ -981,9 +1002,13 @@ void rapid_position(){
 void homing_routine(){ 
    boolean signalstate=true;
    unsigned long prev=0;
+   long  ABL_Height=500, rev=0;
+   float ABL_Z=0;
+   int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
+   
    digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
    digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
-   if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
+  /* if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
    delay(800);
    XMIN_READ=digitalRead(HOME_XMIN_PIN);
    if(buffer5.A==1 || buffer5.A==3){buffer5.C=0;}
@@ -996,6 +1021,7 @@ void homing_routine(){
       delayMicroseconds(buffer3.HOME_X_DURATION);
       XMIN_READ=digitalRead(HOME_XMIN_PIN);
       if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+
    }
    delay(1000);
    if(buffer5.A==1 || buffer5.A==3){buffer5.C=1;}
@@ -1010,21 +1036,88 @@ void homing_routine(){
       YMIN_READ=digitalRead(HOME_XMIN_PIN);
       if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
-   if(buffer5.A==1 || buffer5.A==3){buffer5.C=2;}
-   ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-   while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-      if (micros()-prev >= buffer3.HOME_Z_DURATION){
-        prev = micros();
-        if (signalstate){
+*/
+   
+   if(buffer5.A==1 || buffer5.A==3){buffer5.C=2; bltouch.write(10);delay(100);}
+   if(ABL){
+   bltouch.write(10);
+   delay(300);
+   while(iter<ABL_ITERATIONS){
+      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+      while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
+         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+         if (micros()-prev >= buffer3.HOME_Z_DURATION){
+           //temperature_control();
+           prev = micros();
+           if (signalstate){
               PORTL = (buffer3.HOME_Z_DIR<<PL1);
               PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
-        }else{
+           }else{
               PORTL = (buffer3.HOME_Z_DIR<<PL1);
               PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-        }
-        signalstate=!signalstate;
+              ABL_Z=ABL_Z+1;
+           }
+           signalstate=!signalstate;
+         }
+         if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+         if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+               bltouch.write(90);
+               delay(200);
+               buffer4.command =-301; //ABL_ZTrack_Packet
+               buffer4.nozz_temp = ABL_Z;
+               Serial.write((char*)&buffer4,sizeof(buffer4));
+               
+               if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
+       
+                  while(rev<ABL_Z){
+                     //temperature_control();
+                     if (micros()-prev >= buffer3.HOME_Z_DURATION){
+                        prev = micros();
+                        if (signalstate){
+                           PORTL = (Z_revdir<<PL1);
+                           PORTL = (Z_revdir<<PL1)|(1<<PL3);
+                        }else{
+                           PORTL = (Z_revdir<<PL1);
+                           PORTL = (Z_revdir<<PL1)|(0<<PL3);
+                           rev++;
+                        }
+                        signalstate=!signalstate;
+                    }            
+              }
+              bltouch.write(10);
+              delay(200);
+              ABL_Z=0;
+              rev=0;
+         }            
       }
-      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+      iter++;
    }
+     bltouch.write(90);
+     buffer4.command =-303; //ABL_ZTrack_Packet
+     Serial.write((char*)&buffer4,sizeof(buffer4));
+     GM_command=false;
+     iter=0;
+   }/*else{
+      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+      while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
+         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+         if (micros()-prev >= buffer3.HOME_Z_DURATION){
+           //temperature_control();
+           prev = micros();
+           if (signalstate){
+              PORTL = (buffer3.HOME_Z_DIR<<PL1);
+              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+           }else{
+              PORTL = (buffer3.HOME_Z_DIR<<PL1);
+              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+              ABL_Z=ABL_Z+1;
+           }
+           signalstate=!signalstate;
+         }
+         if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+         if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+               bltouch.write(90);
+         }
+      }
+   }*/
 }
