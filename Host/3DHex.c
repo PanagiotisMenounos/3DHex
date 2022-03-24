@@ -38,7 +38,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
-#define max_bufferfile_size 3200
+#define max_bufferfile_size 3100
 #define pipename "\\\\.\\pipe\\Foo"
 
 union{
@@ -59,7 +59,7 @@ union {
 double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE, ACCELERATION,T_ACCEL_ERATION\
        ,JERK,T_JERK,MAX_JFX,\
        MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,T_JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
-int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS;
+int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS,ABL_ITERATIONS;
 int32_t BAUD_RATE;
 uint16_t CORE_FREQ;
 uint8_t X_ENABLE,Y_ENABLE,Z_ENABLE,E_ENABLE;
@@ -82,6 +82,15 @@ uint8_t GP,GC,LAST_TIME_BOXES;
 bool embedded_line=false;
 
 double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
+
+double ABL_X=0,ABL_Y=0,BED_WIDTH=200,BED_LENGTH=200;
+double BED_XSIZE, BED_YSIZE,ABL_Z_last=0;
+bool ABL=false;
+int ABL_COORD_SIZE=0,ABL_resolution=1;
+
+
+//float *ABL_YCOORD=(float*)malloc(sizeof(float));
+//float *ABL_ZCOORD=(float*)malloc(sizeof(float));
      ////////////////////////*****************/////////////////////////////////////
 
 //////////////////////////////***********GLOBAL VARIABLES******//////////////////
@@ -90,8 +99,8 @@ double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_l
 bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise,ABSOLUTE_POSITIONING=1,E_ABSOLUTE_POSITIONING=1;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
-int X_GLOB=0,Y_GLOB=0;
-wchar_t savepath[15][100]={L"//3DHex2//support files//coordinates.txt\0"  \
+double X_GLOB=0,Y_GLOB=0,X_GLOB_STEP,Y_GLOB_STEP;
+wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
 						  ,L"//3DHex2//support files//savepath.txt\0"     \
@@ -105,7 +114,10 @@ wchar_t savepath[15][100]={L"//3DHex2//support files//coordinates.txt\0"  \
 						  ,L"//3DHex2//binary files//flag.bin\0"          \
 						  ,L"//3DHex2//binary files//flag_py.bin\0"       \
 						  ,L"//3DHex2//binary files//child.bin\0"         \
-						  ,L"//3DHex2//binary files//fly.bin\0"};                      		  
+						  ,L"//3DHex2//binary files//fly.bin\0"           \
+						  ,L"//3DHex2//settings//abl_x.txt\0"             \
+						  ,L"//3DHex2//settings//abl_y.txt\0"             \
+						  ,L"//3DHex2//settings//XYZ.txt\0"};                      		  
 						  
 wchar_t coordinates_path[150]  \
        ,fcoordinates_path[150] \
@@ -121,7 +133,10 @@ wchar_t coordinates_path[150]  \
 	   ,flag_path[150]         \
 	   ,startpy_path[150]      \
 	   ,child_path[150]        \
-	   ,fly_path[150];
+	   ,fly_path[150]          \
+	   ,abl_x_path[150]        \
+	   ,abl_y_path[150]        \
+	   ,abl_xyz_path[150];
  /////////////////////////*******//////////////////////
 
 FILE *SD_binary_file;
@@ -131,6 +146,9 @@ FILE *flag_file;
 FILE *startpy_file;
 FILE *child_file;
 FILE *fly_file;
+FILE *abl_x_file;
+FILE *abl_y_file;
+
 
 void LINE(double xf, double yf, double zf, double ef, double xl, double yl, double zl, double el, double FEEDRATE);             //G01,G00 calculations   
 void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE); //GO2,G03 calculations 
@@ -159,9 +177,13 @@ void write_hex2file(uint8_t hex_value);
 void mcu_settings_send();
 int check_print_state();                                                                                                        //return 0 => USB return 1 => SD_CARD
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl);
+void ABL_readXYZ();
 uint8_t bits2val(char *bits);                                                                                                   //convert a serial of 0,1 to a number 16bit (0,1) = 2 bytes(unsigned integer=uint16_t)
 
 ///////////////////////****************//////////////////////////
+float *ABL_XCOORD;
+float *ABL_YCOORD;
+float *ABL_ZCOORD;
 
 struct data{
   volatile uint8_t A;
@@ -187,10 +209,14 @@ struct data{
 }MG_data;
 
 int main(){
-	HWND hWnd = GetConsoleWindow();
-    ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
-    ShowWindow( hWnd, SW_HIDE );
-    	
+	ABL_XCOORD = (float*)malloc(sizeof(float));
+	ABL_YCOORD = (float*)malloc(sizeof(float));
+	ABL_ZCOORD = (float*)malloc(sizeof(float));
+	//HWND hWnd = GetConsoleWindow();
+    //ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
+    //ShowWindow( hWnd, SW_HIDE );
+    //int *ABL_XCOORD;
+    
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (pipe == INVALID_HANDLE_VALUE)
     {
@@ -213,6 +239,7 @@ int main(){
         GP=255;
         path_files();
     	read_settings();
+    	ABL_readXYZ();
     	T_ACCEL_ERATION=ACCELERATION;
     	T_JMFEED=JMFEED;
     	T_JERK=JERK;
@@ -317,6 +344,10 @@ int main(){
 		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
 				}
 				if(Gl==28){ // G28 homing
+				    if(ABL){
+				      fprintf(abl_x_file,"%lf\n",ABL_X);
+				      fprintf(abl_y_file,"%lf\n",ABL_Y);
+					}
 				    GM_command=true;
 					MG_data.A=3;
 					MG_data.B=HOME_X_DIR;
@@ -343,8 +374,19 @@ int main(){
 					MG_data.J=Pl;
 					MG_data.K=Sl;					
 				}
-				if(Gl==29){//auto bed leveling - bltouch on the way
+				if(Gl==2929){//auto bed leveling - bltouch on the way
+				    GM_command=true;
+				    MG_data.A=7; //BUG 21/2.22
+				    MG_data.B=ABL_ITERATIONS;
+				    if(ABL){
+				    	fclose(abl_x_file);
+				    	fclose(abl_y_file);
+					}else{
+						abl_x_file=_wfopen(abl_x_path,L"w");
+						abl_y_file=_wfopen(abl_y_path,L"w");
+					}
 					
+					ABL=!ABL;
 				}
 				if(Gl==90){// G90 Absolute
 				    ABSOLUTE_POSITIONING=1;
@@ -363,8 +405,9 @@ int main(){
 					GM_command=false;
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
-                    e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
+                    e_space=max_bufferfile_size-(file_buffer_size); 
                     if(e_space<=30 && e_space!=0){
+                    	e_space=30;//fix a bug arduino side
                         for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
             	           write_hex2file(GP);
     	               }
@@ -437,7 +480,7 @@ int main(){
 				if(Ml==83){// M83 E Absolute
 					E_ABSOLUTE_POSITIONING=0;
 				}
-				if(Ml==226){// M83 E Absolute
+				if(Ml==226){// M226 pause until iteraction
 					MG_data.A=6;
 				}
 
@@ -479,8 +522,8 @@ int main(){
         u.progress=100;
         WriteFile(pipe, &u.temp_array, sizeof(float), &numWritten, NULL);
 		//printf("%s\n","COMPLETED!");
-		//printf("%s %i\n","X_GLOB=",X_GLOB);
-		//printf("%s %i\n","Y_GLOB=",Y_GLOB);
+		//printf("%s %f\n","X_GLOB=",X_GLOB);
+		//printf("%s %f\n","Y_GLOB=",Y_GLOB);
         close_SD_binary_file();
         fclose(buffer1_file);
         fclose(buffer2_file);
@@ -488,7 +531,31 @@ int main(){
         fclose(gen1);
 		child_file=_wfopen(child_path,L"w"); //reset child file -> to prevent python print >>> Abort after SD
 		fclose(child_file);
+		free(ABL_XCOORD);
+		free(ABL_YCOORD);
+		free(ABL_ZCOORD);
 		CloseHandle(pipe);
+}
+
+void ABL_readXYZ(){
+	char string[100];
+	int place=0;
+	
+	FILE *abl_xyz_file;
+	abl_xyz_file=_wfopen(abl_xyz_path,L"r");
+    while (fgets(string, 100, abl_xyz_file) != NULL){//TILL THE END OF FILE
+    	ABL_COORD_SIZE++;
+	}
+	fclose(abl_xyz_file);
+	ABL_XCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+	ABL_YCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+	ABL_ZCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+	abl_xyz_file=_wfopen(abl_xyz_path,L"r");
+	while(place<ABL_COORD_SIZE){
+		fscanf(abl_xyz_file,"%f" "%f" "%f" ,&ABL_XCOORD[place],&ABL_YCOORD[place],&ABL_ZCOORD[place]);
+		place++;
+	}
+    fclose(abl_xyz_file);
 }
     
     
@@ -653,10 +720,13 @@ void path_files()
 		startpy_path[j]=appdata_path[i];
 		child_path[j]=appdata_path[i];
 		fly_path[j]=appdata_path[i];
+		abl_x_path[j]=appdata_path[i];
+		abl_y_path[j]=appdata_path[i];
+		abl_xyz_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<15;f++){
+    for(f=0;f<18;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -760,6 +830,27 @@ void path_files()
 		if(f==14){
 		    while(savepath[f][i]!=L'\0'){
              	fly_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==15){
+		    while(savepath[f][i]!=L'\0'){
+             	abl_x_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==16){
+		    while(savepath[f][i]!=L'\0'){
+             	abl_y_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==17){
+		    while(savepath[f][i]!=L'\0'){
+             	abl_xyz_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
@@ -1358,12 +1449,12 @@ void read_settings()
 {
     FILE *box_sett;
     FILE *cbox_sett;
-    char b[53][30],c[28][30],temp_str[30];  
+    char b[65][30],c[28][30],temp_str[30];  
     int i;
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
     
-    for (i=0;i<=52;i++){
+    for (i=0;i<=64;i++){
         fgets (temp_str, 30, box_sett);
         strcpy(b[i],temp_str);
     }
@@ -1411,6 +1502,9 @@ void read_settings()
     sscanf(b[50], "%lf", &XY_PLANE);	
 	sscanf(b[51], "%lf", &ZX_PLANE);
 	sscanf(b[52], "%lf", &ZY_PLANE);
+	sscanf(b[53], "%lf", &BED_XSIZE);
+	sscanf(b[54], "%lf", &BED_YSIZE);
+	ABL_ITERATIONS=atoi(b[57]);
     i=0;
     for (i=0;i<=27;i++){
         fgets (temp_str, 30, cbox_sett);
@@ -1468,6 +1562,8 @@ void read_settings()
 	 }else{
 	 	HOME_Z_DURATION=0;
 	 }
+	X_GLOB_STEP=1.0/STPU_X;
+	Y_GLOB_STEP=1.0/STPU_Y;
 	fclose(box_sett);
     fclose(cbox_sett);
 }
@@ -1657,6 +1753,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     int dx=0,dy=0,dz=0,de=0,xs=0,ys=0,zs=0,es=0,p1=0,p2=0,p3=0,x1_last,y1_last,z1_last,e1_last,period;
     int stepx=0,stepy=0,stepz=0,stepe=0,x1=0,y1=0,z1=0,e1=0,x2=0,y2=0,z2=0,e2=0;
     double xmin,ymin,zmin,emin,LINE_DIST,E_DIST,LINE_STEP=0,XY_PLANE_RAD,ZX_PLANE_RAD,ZY_PLANE_RAD;
+
     
     if(XY_PLANE!=0){
     	XY_PLANE_RAD=XY_PLANE*pi/180;
@@ -1696,6 +1793,8 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
 	emin=1/STPU_E;
     x1=round(xf/xmin); y1=round(yf/ymin); z1=round(zf/zmin); e1=round(ef/emin);
     x2=round(xl/xmin); y2=round(yl/ymin); z2=round(zl/zmin); e2=round(el/emin);
+    ABL_X = x2/STPU_X;
+    ABL_Y = y2/STPU_Y;
     x1_last=x1; y1_last=y1; z1_last=z1; e1_last=e1; ////BUG FIX
     dx = abs(x2 - x1);
     dy = abs(y2 - y1); 
@@ -1716,7 +1815,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
         E_DIST=0;
 	}
 	
-	if (embedded_line==false){
+	if(embedded_line==false){
     	if(CURVE_DETECTION==1){
     	    if(new_CURVE==1){
     	    	trajectory_POINT=0; //reset
@@ -2734,11 +2833,45 @@ double L_time_calc(double l)
 
 void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
     {
-        int i=0,j;
+        int i=0,j,ABL_Coord_Position=0,ABL_Z_steps=0;
         char bits[9];
         uint8_t byte_num,null_byte=0,timeboxes;//50 fixe a buf at starting
       	
        	for(j=0;j<=7;j++){ ///set all bits 0 for safety
+       		bits[j]='0';
+       	}
+       	j=0;
+       	
+       	ABL_Coord_Position=(abs(Y_GLOB)*(BED_XSIZE+1))+X_GLOB;
+   	    ABL_Z_steps = (ABL_ZCOORD[ABL_Coord_Position]-ABL_Z_last)*STPU_Z;
+   	    ABL_Z_last = ABL_ZCOORD[ABL_Coord_Position]; 
+   	    //printf("%s %f %f %f %i %i\n","X Y Z correction",X_GLOB,Y_GLOB,ABL_ZCOORD[ABL_Coord_Position],ABL_Coord_Position,abs(ABL_Z_steps));
+   	    if(ABL_Z_steps==0){
+            bits[2]='0';
+            bits[3]='0';
+       	}else if(ABL_Z_steps>0){
+            bits[2]='1';
+            if(Invrt_Z==0){
+               	bits[3]='0';
+			}else{
+    			bits[3]='1';
+			}
+       	}else if(ABL_Z_steps<0){
+            bits[2]='1';
+            if(Invrt_Z==0){
+               	bits[3]='1';
+			}else{
+				bits[3]='0';
+    		}	
+        }
+	    bits[8]='e'; //end bit 
+	    byte_num=bits2val(bits);
+	    for(j=0;j<abs(ABL_Z_steps);j++){
+	    	write_hex2file(1);
+   	    	write_hex2file(byte_num);
+    	}
+    	j=0;
+	    for(j=0;j<=7;j++){ ///set all bits 0 for safety
        		bits[j]='0';
        	}
        	j=0;
@@ -2747,7 +2880,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
             bits[6]='0';
             bits[7]='0';
        	}else if(stepx > 0){
-       		X_GLOB++;
+       		X_GLOB=X_GLOB+X_GLOB_STEP;
             bits[6]='1';
             if(Invrt_X==0){
               	bits[7]='0';
@@ -2755,7 +2888,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[7]='1';
 			}
        	}else if(stepx<0){
-       		X_GLOB--;
+       		X_GLOB=X_GLOB-X_GLOB_STEP;
             bits[6]='1';  
 			if(Invrt_X==0){
 				bits[7]='1';
@@ -2767,7 +2900,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
             bits[4]='0';
             bits[5]='0';
        	}else if(stepy>0){
-       		Y_GLOB++;
+       		Y_GLOB=Y_GLOB+Y_GLOB_STEP;
             bits[4]='1';
             if(Invrt_Y==0){
                	bits[5]='0';
@@ -2775,7 +2908,7 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[5]='1';
 			}
        	}else if(stepy<0){
-       		Y_GLOB--;
+       		Y_GLOB=Y_GLOB-Y_GLOB_STEP;
             bits[4]='1';
             if(Invrt_Y==0){
               	bits[5]='1';
@@ -2818,23 +2951,20 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 			}else{
 				bits[1]='0';
 			}	
-   	    }
+   	    }        
 	    bits[8]='e'; //end bit  
   	    byte_num=bits2val(bits); //byte num = the 8bit integer calculated from previous bits that arduino will port forward to his outputs 
   	    time=L_time_calc(l); //calculate time momment from the begining of motion for current point trajectory
   	    if (embedded_line==true){
   	    	timeboxes=LAST_TIME_BOXES;
-  	    	//printf("%s %i\n","BOXEEESS",timeboxes);
 		}else{
 			timeboxes=(time-last_time)/tmin; //ARDUINO LOW PULSE DURATION BETWEEN STEPS = CURRENT STEP FREQUENCY = CURRENT SPEED
 		}
         if(timeboxes<=1){
-        	//printf("%s %f %f %f\n","NOOOOOOOOOOOOOOOOOOOOOOOOOOO",l,time,last_time);
         	timeboxes=30;///FIX A TIME BUG
 		}else{
 			last_time=time;
 		}
-		
 	    if(timeboxes==255){
         	timeboxes=254;///FIX A TIME BUG
 		}

@@ -40,6 +40,14 @@ import subprocess
 import multiprocessing
 import struct
 import win32pipe, win32file, pywintypes
+import numpy as np
+from scipy import interpolate
+from matplotlib import pyplot
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import Rbf
+import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
+from numpy import loadtxt
 
 class ProgressBarWorker(QThread):
   message = pyqtSignal(str) #define signal
@@ -106,6 +114,27 @@ class FLYWorker(QThread):
         time.sleep(3)
         window.froze=0        
 
+class ABL_Interpolation(QThread):
+    def run(self):
+        x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt')
+        y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt')
+        z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt')
+        
+        xx = np.arange(0, 220,1)
+        yy = np.arange(0, 220,1)
+        xx, yy = np.meshgrid(xx, yy)
+        
+        rbfi = Rbf(x, y, z,function="cubic")  # radial basis function interpolator instance
+        znew = rbfi(xx, yy)   # interpolated values
+        
+        
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
+        size=xx.ravel().size
+        i=0
+        while i < size:
+            file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
+            i=i+1
+        file.close()
 
 class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
     message = pyqtSignal(str) #define signal
@@ -118,24 +147,27 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.message.emit(">>> Mode: Idle") #emit the signal
         try:
             while window.USB_CONNECTED==1:
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
                 if window.A==0: #if in idle mode
-                   if serial_command==-200:
+                    if self.serial_command==-200: #-200 autotune read settings
                       window.Auto_P = round(window.nozz_temp,2)
                       window.Auto_I = round(window.bed_temp,2)
-                      (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                      (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
                       window.Auto_D = round(window.nozz_temp,2)
                       self.message.emit(">>> AUTOTUNE RESULTS") #emit the signal
                       self.message.emit(">>> P=" +str(window.Auto_P))
                       self.message.emit(">>> I=" +str(window.Auto_I))
                       self.message.emit(">>> D=" +str(window.Auto_D))
                       self.autotune_p.emit(window.Auto_I)
-                      serial_command=-243
-                   else: #just update temp
+                      self.serial_command=-243
+                    elif self.serial_command==-301: #temporary
+                        self.message.emit(">>> ZTRACK=" +str(int(window.nozz_temp)))
+                        self.serial_command=-243
+                    else: #just update temp
                       self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                       self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                   time.sleep(0.5)
-                   self.check_idle_commands() #Check if any idle command has triggered
+                    time.sleep(0.5)
+                    self.check_idle_commands() #Check if any idle command has triggered
                 else:
                    self.message.emit(">>> Mode: USB printing") #emit the signal
                    #window.Message_panel.append(">>> Start usb printing")
@@ -160,9 +192,40 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         #else:
            #print("FAILED")
 
+    def packet_decode(self):
+        (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
+        while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
+            if int(self.serial_command)==-300: #300-> start of ABL
+                self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt',"w")
+            if int(self.serial_command)==-301: #-301-> TRACK_Z
+                self.trackZ=self.trackZ+window.nozz_temp
+            if int(self.serial_command)==-303: #-303-> end of iterations
+                    self.AVG_traxkZ=self.trackZ/window.iterations
+                    self.trackZ=0
+                    if window.ABL_Sample==0:
+                        window.ABL_Z_CENTER=self.AVG_traxkZ
+                        window.ABL_Sample=1
+                    self.AVG_traxkZ=(window.ABL_Z_CENTER - self.AVG_traxkZ)/window.STPZ
+                    self.message.emit(">>> AVG:"+str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"mm") #emit the signal  
+                    self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"\n")
+            if int(self.serial_command)==-302: #202-> end of ABL
+                self.ABL_Sample=1
+                self.AVG_traxkZ=0
+                self.trackZ=0
+                self.abl_z_file.close()
+                self.ABL_interpolation_thread=ABL_Interpolation()
+                self.ABL_interpolation_thread.start()
+            if int(self.serial_command)==-243: #temp report
+                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
+                self.new_bed_temp.emit(window.bed_temp) #emit the signal	
+            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
+            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
+
     def usb_printing(self): #USB Printing function 
+        window.usb_printing=1
+        self.trackZ=0
         window.A=1 #printing mode
-        serial_command=0 #reset serial command from arduino
+        self.serial_command=0 #reset serial command from arduino
         flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
         flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data in order for 3DHex.C to know Python is in printing function
         flag_file.close()
@@ -176,10 +239,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         p1 = subprocess.Popen("3DHex.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
-        buffer_file_size=3200 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
-        child_buffer_size=1 #Means 3DHex.C is still running
+        buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
+        self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
-            (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
+            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
             flag_py_buffer=os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag_py.bin') #Get size of flag_py_file, if 1 then C has fill binary files
@@ -188,14 +251,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.send_buffer() #Command Printer to go into printig mode window.A=1
         self.message.emit(">>> Post processing successfully completed") #emit the signal
         self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3200 and child_buffer_size!=0 and serial_command!=-260: #Firt time send binary data to Printer
+        if buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
             if filecase==1: #Read from buffer1 binary file
                 filecase=2  #Note to read buffer2 next time
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal			 
-                window.ser.write(buffer1_file.read(3200)) #Send binary data to Printer
+                self.packet_decode()
+                window.ser.write(buffer1_file.read(3100)) #Send binary data to Printer
                 buffer1_file.close() 
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
@@ -204,34 +265,24 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             if filecase==2:
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                window.ser.write(buffer2_file.read(3200))
+                self.packet_decode()
+                window.ser.write(buffer2_file.read(3100))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
                 buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
                 flag_file.close()
-            child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        while serial_command!=-10 and child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
-            (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
+            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
+        while self.serial_command!=-10 and self.child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
+            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
-        window.usb_printing=1 
-        while buffer_file_size==3200 and child_buffer_size!=0 and serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
+        while buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal	
-                while serial_command==-243 and child_buffer_size!=0 and window.usb_printing==1:
-                     (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                     self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                     self.new_bed_temp.emit(window.bed_temp) #emit the signal                     
-                     window.froze=0                     
-                window.ser.write(buffer1_file.read(3200))
+                self.packet_decode()                      
+                window.ser.write(buffer1_file.read(3100))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -240,21 +291,16 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             elif filecase==2:
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                while serial_command==-243 and child_buffer_size!=0 and window.usb_printing==1:
-                     (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12))
-                     self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                     self.new_bed_temp.emit(window.bed_temp) #emit the signal 
-                     window.froze=0 
-                window.ser.write(buffer2_file.read(3200))
+                self.packet_decode()
+                window.ser.write(buffer2_file.read(3100))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
                 buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
                 flag_file.close()
-            child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
+            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
+        self.child_buffer_size=1 #catch last packet after C terminates, if MCU does ot send -260 this will stuck in loop
+        self.packet_decode()
         child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
         child_file.close()
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w') #reset path
@@ -360,7 +406,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
 
             if window.rapid_pos==1: #Rapid positioning command
                 self.send_buffer()
-                (serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #wait for arduino to end process
+                (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #wait for arduino to end process
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
                 if window.C==0:
@@ -511,6 +557,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Auto_I=0
         self.Auto_D=0
         self.update_temp=0
+        self.ABL=0
+        self.iterations=1.0
+        self.STPZ=100
+        self.ABL_Z_CENTER=0
+        self.ABL_Sample=0
+        self.plot_num=0
         self.chosenPort = ""
         self.ports = serial.tools.list_ports.comports()
         self.comboBox.addItem("")
@@ -619,6 +671,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p25.clicked.connect(self.setFAN1)
         self.p90.clicked.connect(self.nozz_AUTOTUNE)
         self.p91.clicked.connect(self.bed_AUTOTUNE)
+        self.p92.clicked.connect(self.View)
+        self.p94.clicked.connect(self.execute_ABL)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
@@ -697,10 +751,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.A=1 #printing mode
             self.usb_printing=1
             self.start_bar()
-            self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
-            self.data = self.GCODE_Panel.toPlainText()
-            self.file1.write(self.data)
-            self.file1.close()
+            if self.ABL==0:
+                self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+                self.data = self.GCODE_Panel.toPlainText()
+                self.file1.write(self.data)
+                self.file1.close()
             self.save_settings()
             self.savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w')
             self.savepathfile.close()
@@ -710,8 +765,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.disable_idle_buttons()
 
     def CANCEL(self):
-        child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        if child_buffer_size!=0:
+        self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
+        if self.child_buffer_size!=0:
             self.Message_panel.append(">>> Aborted")
             child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
             child_file.close()
@@ -721,17 +776,100 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Aborted")
             self.ser.write(struct.pack("B",self.A))
 
-    def ABL(self):
-        self.width=self.b53.toPlainText().strip()
-        self.length=self.b54.toPlainText().strip()
-        self.rows=self.b55.toPlainText().strip()
-        self.columns=self.b56.toPlainText().strip()
-        self.iterations=self.b57.toPlainText().strip()
-        self.x_offset=self.b58.toPlainText().strip()
-        self.y_offset=self.b59.toPlainText().strip()
+    def execute_ABL(self):
+        self.width=float(self.b53.toPlainText().strip())
+        self.length=float(self.b54.toPlainText().strip())
+        self.rows=float(self.b55.toPlainText().strip())
+        self.columns=float(self.b56.toPlainText().strip())
+        self.iterations=float(self.b57.toPlainText().strip())
+        self.xtool_offset=float(self.b58.toPlainText().strip())
+        self.ytool_offset=float(self.b59.toPlainText().strip())
+        self.margins=float(self.b60.toPlainText().strip())
+        self.XY_Feed=float(self.b61.toPlainText().strip())
+        self.Z_Feed=float(self.b62.toPlainText().strip())
+        self.STPZ=float(self.b3.toPlainText().strip())
+        offset_Y = 10
+        safez = 5
         
-
- 
+        centerX = (self.width/2.0)-self.xtool_offset
+        centerY = (self.length/2.0)-self.ytool_offset
+        stepx = (self.width-(2.0*self.margins))/(self.columns-1)
+        stepy = (self.length-(2.0*self.margins))/(self.rows-1)
+        
+        #with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
+        #    ABL_f.write('G2929'+'\n')
+        #    ABL_f.write('G1 Z'+str(int(safez))+' F'+str(int(self.Z_Feed))+'\n')
+        #    ABL_f.write('G1 X'+str(int(self.margins-self.xtool_offset))+' Y'+str(int(self.margins-self.ytool_offset))+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G92 X0 Y0'+'\n')
+        #    ABL_f.write('G1 X'+str(int(centerX))+' Y'+str(int(centerY))+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G28 Z'+'\n')
+        #    x_iter=0
+        #    y_iter=0
+        #    while y_iter < self.rows:
+        #        gpsx = 0
+        #        while x_iter < self.columns:
+        #            ABL_f.write('G1 X'+str(int(gpsx))+' Y'+str(int(gpsy))+' F'+str(int(self.XY_Feed))+'\n')
+        #            ABL_f.write('G28 Z'+'\n')
+        #            gpsx = gpsx + stepx
+        #            x_iter=x_iter+1
+        #        x_iter=0
+        #        gpsy = gpsy + stepy
+        #        y_iter=y_iter+1
+        #    ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G92 X'+str(int(self.margins-self.xtool_offset))+' Y'+str(int(self.margins-self.ytool_offset))+'\n')
+        #    ABL_f.write('G1 X0 Y0 '+'F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+        #    ABL_f.write('G2929'+'\n')
+        
+        gpsx = self.margins
+        gpsy = self.margins
+        with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
+            ABL_f.write('G2929'+'\n')
+            ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
+            ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
+            ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
+            ABL_f.write('G28 Z'+'\n')
+            x_iter=0
+            y_iter=0
+            while y_iter < self.rows:
+                gpsx = self.margins
+                while x_iter < self.columns:
+                    ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
+                    ABL_f.write('G28 Z'+'\n')
+                    gpsx = gpsx + stepx
+                    x_iter=x_iter+1
+                x_iter=0
+                gpsy = gpsy + stepy
+                y_iter=y_iter+1
+            ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+            ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
+            ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
+            ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+            ABL_f.write('G2929'+'\n')
+            
+        ABL_f.close()
+        self.ABL=1
+        self.USB()
+        
+    def View(self):
+        if pyplot.fignum_exists(self.plot_num)==False:
+            plt.style.use('dark_background')
+            fig = pyplot.figure()
+            self.plot_num=fig.number
+            ax = fig.add_subplot(projection='3d')
+            ax.set_zlim3d(-5, 5)
+            ax.set_xlabel('X axis')
+            ax.set_ylabel('Y axis')
+            ax.set_zlabel('Z axis')
+            my_cmap = plt.get_cmap('viridis')
+            XYZ=loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt',delimiter=' ')
+            surf=ax.plot_trisurf(XYZ[:,0], XYZ[:,1], XYZ[:,2],cmap = my_cmap,linewidth = 0.2,antialiased = True,edgecolor = 'grey')
+            fig.colorbar(surf, location='right', shrink=0.4, aspect=20, pad=0.1)
+            fig.tight_layout()
+            pyplot.ion()
+            pyplot.show()
+        
+            
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
         window.c3.setEnabled(True) 
