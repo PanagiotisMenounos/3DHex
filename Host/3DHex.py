@@ -115,26 +115,52 @@ class FLYWorker(QThread):
         window.froze=0        
 
 class ABL_Interpolation(QThread):
+    message = pyqtSignal(str)
     def run(self):
+        method = str(window.comboBox1.currentText())
+        view_percentage = int(window.comboBox2.currentText().replace("%", ""))
+        width=float(window.b53.toPlainText().strip())
+        length=float(window.b54.toPlainText().strip())
+        grid=float(window.b66.toPlainText().strip())
+  
         x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt')
         y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt')
         z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt')
         
-        xx = np.arange(0, 220,1)
-        yy = np.arange(0, 220,1)
+        xx = np.arange(0, width, grid)
+        yy = np.arange(0, length, grid)
         xx, yy = np.meshgrid(xx, yy)
         
-        rbfi = Rbf(x, y, z,function="cubic")  # radial basis function interpolator instance
+        rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
         znew = rbfi(xx, yy)   # interpolated values
         
         
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
-        size=xx.ravel().size
+        size = xx.ravel().size
+        view_step = int((100/view_percentage)*grid)
         i=0
         while i < size:
             file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
             i=i+1
         file.close()
+        
+        xx = np.arange(0, width, view_step)
+        yy = np.arange(0, length, view_step)
+        xx, yy = np.meshgrid(xx, yy)
+        
+        rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
+        znew = rbfi(xx, yy)
+
+        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')      
+        size = xx.ravel().size
+        i=0
+        while i < size:
+            view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
+            if(i%view_step==0):
+                view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
+            i=i+1
+        view_file.close()
+        self.message.emit("nothing")
 
 class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
     message = pyqtSignal(str) #define signal
@@ -213,8 +239,8 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.AVG_traxkZ=0
                 self.trackZ=0
                 self.abl_z_file.close()
-                self.ABL_interpolation_thread=ABL_Interpolation()
-                self.ABL_interpolation_thread.start()
+                #self.ABL_interpolation_thread=ABL_Interpolation()
+                #self.ABL_interpolation_thread.start()
             if int(self.serial_command)==-243: #temp report
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal	
@@ -516,6 +542,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_printers()
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
+        self.UNITS()
+        self.ABL_include()
     def declare_vars(self):
         self.MM = 0
         self.SS = 0
@@ -671,8 +699,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p25.clicked.connect(self.setFAN1)
         self.p90.clicked.connect(self.nozz_AUTOTUNE)
         self.p91.clicked.connect(self.bed_AUTOTUNE)
-        self.p92.clicked.connect(self.View)
-        self.p94.clicked.connect(self.execute_ABL)
+        self.p29.clicked.connect(self.View)
+        self.p27.clicked.connect(self.execute_ABL)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
@@ -683,6 +711,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.c12.stateChanged.connect(self.setHOME_Xbuttons)
         self.c13.stateChanged.connect(self.setHOME_Ybuttons)
         self.c14.stateChanged.connect(self.setHOME_Zbuttons)
+        self.c21.stateChanged.connect(self.UNITS)
+        self.c31.stateChanged.connect(self.ABL_include)
         self.actionPrinter0.triggered.connect(lambda:self.select_printer(0))
         self.actionPrinter1.triggered.connect(lambda:self.select_printer(1))
         self.actionPrinter2.triggered.connect(lambda:self.select_printer(2))
@@ -696,6 +726,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
 
+
+    def UNITS(self):
+        if self.c21.isChecked() == True:
+            self.c21.setText("[mm/min]")
+        else:
+            self.c21.setText("[mm/sec]")
+
+    def ABL_include(self):
+        if self.c31.isChecked() == True:
+            self.p27.setEnabled(False)
+        else:
+            self.p27.setEnabled(True)
+  
+  
     def CONNECT(self):
         try:
             if self.USB_CONNECTED==0:            
@@ -853,22 +897,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     def View(self):
         if pyplot.fignum_exists(self.plot_num)==False:
-            plt.style.use('dark_background')
-            fig = pyplot.figure()
-            self.plot_num=fig.number
-            ax = fig.add_subplot(projection='3d')
-            ax.set_zlim3d(-5, 5)
-            ax.set_xlabel('X axis')
-            ax.set_ylabel('Y axis')
-            ax.set_zlabel('Z axis')
-            my_cmap = plt.get_cmap('viridis')
-            XYZ=loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt',delimiter=' ')
-            surf=ax.plot_trisurf(XYZ[:,0], XYZ[:,1], XYZ[:,2],cmap = my_cmap,linewidth = 0.2,antialiased = True,edgecolor = 'grey')
-            fig.colorbar(surf, location='right', shrink=0.4, aspect=20, pad=0.1)
-            fig.tight_layout()
-            pyplot.ion()
-            pyplot.show()
-        
+            self.ABL_interpolation_thread=ABL_Interpolation()
+            self.ABL_interpolation_thread.message.connect(self.Plot)
+            self.ABL_interpolation_thread.start()
+
+    def Plot(self,message):    
+        plt.style.use('dark_background')
+        fig = pyplot.figure()
+        self.plot_num=fig.number
+        ax = fig.add_subplot(projection='3d')
+        ax.set_zlim3d(-5, 5)
+        ax.set_xlabel('X axis')
+        ax.set_ylabel('Y axis')
+        ax.set_zlabel('Z axis')
+        my_cmap = plt.get_cmap('viridis')
+        XYZ=loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt',delimiter=' ')
+        surf=ax.plot_trisurf(XYZ[:,0], XYZ[:,1], XYZ[:,2],cmap = my_cmap,linewidth = 0.2,antialiased = True,edgecolor = 'grey')
+        fig.colorbar(surf, location='right', shrink=0.4, aspect=20, pad=0.1)
+        fig.tight_layout()
+        pyplot.ion()
+        pyplot.show()
             
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
@@ -1216,9 +1264,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         bfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','w')
         cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','w')
         dfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','w')
+        cbfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','w')
         b_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','w')
         c_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
+        cb_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cbboxes settings.txt','w')
         i=0
         for i in range (0,66):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
@@ -1245,12 +1295,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             value = d.value()
             dfile.write(str(value)+"\n")
             d_file.write(str(value)+"\n")
+        i=1
+        for i in range (1,4): #c0-cmax
+            cb = getattr(self, "comboBox{}".format(i))
+            value = cb.currentIndex()
+            cbfile.write(str(value)+"\n")
+            cb_file.write(str(value)+"\n")
         bfile.close()
         cfile.close()
         dfile.close()
+        cbfile.close()
         b_file.close()
         c_file.close()
         d_file.close()
+        cb_file.close()
+                    
 
     def load_settings(self):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','r') #read general setting file and set them
@@ -1261,6 +1320,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file.close()
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','r') #read general setting file and set them
         dboxes = file.readlines()
+        file.close()
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
+        cbboxes = file.readlines()
         file.close()
         for i in range (0,66): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
@@ -1275,6 +1337,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (1,9): #c0-cmax
            d = getattr(self, "d{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            d.setValue(float(dboxes[i-1].strip())) #strip() removes'/n'
+        for i in range (1,4): #c0-cmax
+           cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+           cb.setCurrentIndex(int(cbboxes[i-1].strip()))
 
     def clear_GCODE(self):
         self.data=''
