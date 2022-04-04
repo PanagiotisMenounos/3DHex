@@ -211,7 +211,6 @@ void initialization_var(){
 
 void setup() {
    bltouch.attach(BLTOUCH_PIN);
-   bltouch.write(10);
    pinMode(ENCODER_PIN,INPUT_PULLUP);
    pinMode(SD_ENABLE,OUTPUT);
    if(print_history==false){
@@ -1038,16 +1037,16 @@ void homing_routine(){
    }
 */
    
-   if(buffer5.A==1 || buffer5.A==3){buffer5.C=2; bltouch.write(10);delay(100);}
+   if(buffer5.A==1 || buffer5.A==3){buffer5.C=2;}
    if(ABL){
    bltouch.write(10);
    delay(300);
    while(iter<ABL_ITERATIONS){
       ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
       while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-         if (micros()-prev >= buffer3.HOME_Z_DURATION){
-           //temperature_control();
+         //if (micros()-prev >= buffer3.HOME_Z_DURATION){
+          if (micros()-prev >= 3000){
+           ABL_Z=ABL_Z+1;
            prev = micros();
            if (signalstate){
               PORTL = (buffer3.HOME_Z_DIR<<PL1);
@@ -1055,23 +1054,22 @@ void homing_routine(){
            }else{
               PORTL = (buffer3.HOME_Z_DIR<<PL1);
               PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-              ABL_Z=ABL_Z+1;
            }
            signalstate=!signalstate;
          }
          if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
          if(ZMIN_READ!=buffer3.HOME_Z_STATE){
                bltouch.write(90);
                delay(200);
                buffer4.command =-301; //ABL_ZTrack_Packet
                buffer4.nozz_temp = ABL_Z;
                Serial.write((char*)&buffer4,sizeof(buffer4));
-               
                if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
-       
-                  while(rev<ABL_Z){
-                     //temperature_control();
-                     if (micros()-prev >= buffer3.HOME_Z_DURATION){
+                  while(ABL_Z>0){
+                     //if (micros()-prev >= buffer3.HOME_Z_DURATION){
+                      if (micros()-prev >= 3000){
+                        ABL_Z=ABL_Z-1;
                         prev = micros();
                         if (signalstate){
                            PORTL = (Z_revdir<<PL1);
@@ -1079,13 +1077,14 @@ void homing_routine(){
                         }else{
                            PORTL = (Z_revdir<<PL1);
                            PORTL = (Z_revdir<<PL1)|(0<<PL3);
-                           rev++;
                         }
                         signalstate=!signalstate;
                     }            
               }
-              bltouch.write(10);
-              delay(200);
+              if(iter<ABL_ITERATIONS-1){
+                bltouch.write(10);
+                delay(300);
+              }
               ABL_Z=0;
               rev=0;
          }            
@@ -1093,6 +1092,7 @@ void homing_routine(){
       iter++;
    }
      bltouch.write(90);
+     delay(300);
      buffer4.command =-303; //ABL_ZTrack_Packet
      Serial.write((char*)&buffer4,sizeof(buffer4));
      GM_command=false;

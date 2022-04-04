@@ -127,8 +127,8 @@ class ABL_Interpolation(QThread):
         y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt')
         z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt')
         
-        xx = np.arange(0, width, grid)
-        yy = np.arange(0, length, grid)
+        xx = np.arange(0, width+1, grid)
+        yy = np.arange(0, length+1, grid)
         xx, yy = np.meshgrid(xx, yy)
         
         rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
@@ -140,7 +140,7 @@ class ABL_Interpolation(QThread):
         view_step = int((100/view_percentage)*grid)
         i=0
         while i < size:
-            file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
+            file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(znew.ravel()[i]*int(window.b3.toPlainText().strip())))+'\n')
             i=i+1
         file.close()
         
@@ -167,6 +167,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
     new_nozz_temp = pyqtSignal(float)
     new_bed_temp = pyqtSignal(float)
     autotune_p = pyqtSignal(float)
+    
     def run(self):
         time.sleep(2)
         self.send_buffer() #Set printer to idle mode temp only report
@@ -225,20 +226,27 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt',"w")
             if int(self.serial_command)==-301: #-301-> TRACK_Z
                 self.trackZ=self.trackZ+window.nozz_temp
+                if window.ABL_Sample==0:
+                    if window.min==0:
+                        window.min = window.nozz_temp
+                    if window.nozz_temp < window.min:
+                        window.min = window.nozz_temp
             if int(self.serial_command)==-303: #-303-> end of iterations
-                    self.AVG_traxkZ=self.trackZ/window.iterations
+                    self.AVG_traxkZ=self.trackZ/2
                     self.trackZ=0
                     if window.ABL_Sample==0:
-                        window.ABL_Z_CENTER=self.AVG_traxkZ
+                        window.ABL_Z_CENTER=window.min
+                        self.AVG_traxkZ=window.min
                         window.ABL_Sample=1
-                    self.AVG_traxkZ=(window.ABL_Z_CENTER - self.AVG_traxkZ)/window.STPZ
+                    self.AVG_traxkZ=(window.ABL_Z_CENTER-self.AVG_traxkZ)/window.STPZ
                     self.message.emit(">>> AVG:"+str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"mm") #emit the signal  
                     self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"\n")
-            if int(self.serial_command)==-302: #202-> end of ABL
-                self.ABL_Sample=1
+            if int(self.serial_command)==-302: #302-> end of ABL
+                window.ABL_Sample=0
                 self.AVG_traxkZ=0
                 self.trackZ=0
                 self.abl_z_file.close()
+                window.ABL=0
                 #self.ABL_interpolation_thread=ABL_Interpolation()
                 #self.ABL_interpolation_thread.start()
             if int(self.serial_command)==-243: #temp report
@@ -591,6 +599,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ABL_Z_CENTER=0
         self.ABL_Sample=0
         self.plot_num=0
+        self.min=0
         self.chosenPort = ""
         self.ports = serial.tools.list_ports.comports()
         self.comboBox.addItem("")
@@ -712,7 +721,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.c13.stateChanged.connect(self.setHOME_Ybuttons)
         self.c14.stateChanged.connect(self.setHOME_Zbuttons)
         self.c21.stateChanged.connect(self.UNITS)
-        self.c31.stateChanged.connect(self.ABL_include)
+        self.c29.stateChanged.connect(self.ABL_include)
         self.actionPrinter0.triggered.connect(lambda:self.select_printer(0))
         self.actionPrinter1.triggered.connect(lambda:self.select_printer(1))
         self.actionPrinter2.triggered.connect(lambda:self.select_printer(2))
@@ -734,7 +743,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.c21.setText("[mm/sec]")
 
     def ABL_include(self):
-        if self.c31.isChecked() == True:
+        if self.c29.isChecked() == True:
             self.p27.setEnabled(False)
         else:
             self.p27.setEnabled(True)
@@ -821,6 +830,51 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.ser.write(struct.pack("B",self.A))
 
     def execute_ABL(self):
+        #self.width=float(self.b53.toPlainText().strip())
+        #self.length=float(self.b54.toPlainText().strip())
+        #self.rows=float(self.b55.toPlainText().strip())
+        #self.columns=float(self.b56.toPlainText().strip())
+        #self.iterations=float(self.b57.toPlainText().strip())
+        #self.xtool_offset=float(self.b58.toPlainText().strip())
+        #self.ytool_offset=float(self.b59.toPlainText().strip())
+        #self.margins=float(self.b60.toPlainText().strip())
+        #self.XY_Feed=float(self.b61.toPlainText().strip())
+        #self.Z_Feed=float(self.b62.toPlainText().strip())
+        #self.STPZ=float(self.b3.toPlainText().strip())
+        #offset_Y = 10
+        #safez = 5
+        #
+        #centerX = (self.width/2.0)-self.xtool_offset
+        #centerY = (self.length/2.0)-self.ytool_offset
+        #stepx = (self.width-(2.0*self.margins))/(self.columns-1)
+        #stepy = (self.length-(2.0*self.margins))/(self.rows-1)
+        #
+        #gpsx = self.margins
+        #gpsy = self.margins
+        #with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
+        #    ABL_f.write('G2929'+'\n')
+        #    ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
+        #    ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
+        #    ABL_f.write('G28 Z'+'\n')
+        #    x_iter=0
+        #    y_iter=0
+        #    while y_iter < self.rows:
+        #        gpsx = self.margins
+        #        while x_iter < self.columns:
+        #            ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
+        #            ABL_f.write('G28 Z'+'\n')
+        #            gpsx = gpsx + stepx
+        #            x_iter=x_iter+1
+        #        x_iter=0
+        #        gpsy = gpsy + stepy
+        #        y_iter=y_iter+1
+        #    ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
+        #    ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
+        #    ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+        #    ABL_f.write('G2929'+'\n')
+            
         self.width=float(self.b53.toPlainText().strip())
         self.length=float(self.b54.toPlainText().strip())
         self.rows=float(self.b55.toPlainText().strip())
@@ -828,45 +882,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.iterations=float(self.b57.toPlainText().strip())
         self.xtool_offset=float(self.b58.toPlainText().strip())
         self.ytool_offset=float(self.b59.toPlainText().strip())
-        self.margins=float(self.b60.toPlainText().strip())
-        self.XY_Feed=float(self.b61.toPlainText().strip())
-        self.Z_Feed=float(self.b62.toPlainText().strip())
-        self.STPZ=float(self.b3.toPlainText().strip())
-        offset_Y = 10
-        safez = 5
+        self.XY_Feed=float(self.b60.toPlainText().strip())
+        safez=float(self.b62.toPlainText().strip())
+        self.Z_Feed=float(self.b63.toPlainText().strip())
+        self.Xstart=float(self.b64.toPlainText().strip())
+        self.Xend=float(self.b65.toPlainText().strip())
+        self.Ystart=float(self.b67.toPlainText().strip())
+        self.Yend=float(self.b68.toPlainText().strip())
+        self.repeat=int(self.b69.toPlainText().strip())
         
         centerX = (self.width/2.0)-self.xtool_offset
         centerY = (self.length/2.0)-self.ytool_offset
-        stepx = (self.width-(2.0*self.margins))/(self.columns-1)
-        stepy = (self.length-(2.0*self.margins))/(self.rows-1)
+        stepx = (self.Xend-self.Xstart)/(self.columns-1)
+        stepy = (self.Yend-self.Ystart)/(self.rows-1)
         
-        #with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
-        #    ABL_f.write('G2929'+'\n')
-        #    ABL_f.write('G1 Z'+str(int(safez))+' F'+str(int(self.Z_Feed))+'\n')
-        #    ABL_f.write('G1 X'+str(int(self.margins-self.xtool_offset))+' Y'+str(int(self.margins-self.ytool_offset))+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G92 X0 Y0'+'\n')
-        #    ABL_f.write('G1 X'+str(int(centerX))+' Y'+str(int(centerY))+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G28 Z'+'\n')
-        #    x_iter=0
-        #    y_iter=0
-        #    while y_iter < self.rows:
-        #        gpsx = 0
-        #        while x_iter < self.columns:
-        #            ABL_f.write('G1 X'+str(int(gpsx))+' Y'+str(int(gpsy))+' F'+str(int(self.XY_Feed))+'\n')
-        #            ABL_f.write('G28 Z'+'\n')
-        #            gpsx = gpsx + stepx
-        #            x_iter=x_iter+1
-        #        x_iter=0
-        #        gpsy = gpsy + stepy
-        #        y_iter=y_iter+1
-        #    ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G92 X'+str(int(self.margins-self.xtool_offset))+' Y'+str(int(self.margins-self.ytool_offset))+'\n')
-        #    ABL_f.write('G1 X0 Y0 '+'F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
-        #    ABL_f.write('G2929'+'\n')
-        
-        gpsx = self.margins
-        gpsy = self.margins
+        gpsx = self.Xstart
+        gpsy = self.Ystart
         with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
             ABL_f.write('G2929'+'\n')
             ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
@@ -876,7 +907,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             x_iter=0
             y_iter=0
             while y_iter < self.rows:
-                gpsx = self.margins
+                gpsx = self.Xstart
                 while x_iter < self.columns:
                     ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
                     ABL_f.write('G28 Z'+'\n')
@@ -1270,7 +1301,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         cb_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cbboxes settings.txt','w')
         i=0
-        for i in range (0,66):
+        for i in range (0,70):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
           text = b.toPlainText().strip() #strip() removes'/n'
           if (text==''): #check if it is aan empty string
@@ -1280,7 +1311,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               bfile.write(text+"\n")
               b_file.write(text+"\n")
         i=1
-        for i in range (1,29): #c0-cmax
+        for i in range (1,30): #c0-cmax
             c = getattr(self, "c{}".format(i))#self.c[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
             check = c.isChecked()
             if check==0:
@@ -1324,14 +1355,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
         cbboxes = file.readlines()
         file.close()
-        for i in range (0,66): #b0-bmax
+        for i in range (0,70): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            b.setPlainText('')
            b.insertPlainText(boxes[i].strip()) #strip() removes'/n'
         for i in range (2,6): #c0-cmax
            c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            c.setChecked(1)                       #set Enable/Disable cboxes always on at start
-        for i in range (7,29): #c0-cmax
+        for i in range (7,30): #c0-cmax
            c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            c.setChecked(int(cboxes[i-1].strip())) #strip() removes'/n'
         for i in range (1,9): #c0-cmax
@@ -1433,6 +1464,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.usb_thread.start()	
 
 if __name__ == "__main__":
+    QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling) #https://vicrucann.github.io/tutorials/osg-qt-high-dpi/?fbclid=IwAR3lhrM1zYX615yAGoyoJdAYGdKY5W-l5NsQiWu7gEVoQfzsqWML2iPOWBg
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.assign_buttons()

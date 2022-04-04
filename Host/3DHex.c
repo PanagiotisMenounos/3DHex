@@ -83,10 +83,10 @@ bool embedded_line=false;
 
 double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
 
-double ABL_X=0,ABL_Y=0,BED_WIDTH=200,BED_LENGTH=200;
+double ABL_X=0,ABL_Y=0,BED_WIDTH=200,BED_LENGTH=200,ABL_Z_Fade;
 double BED_XSIZE, BED_YSIZE,ABL_Z_last=0;
-bool ABL=false;
-int ABL_COORD_SIZE=0,ABL_resolution=1;
+bool ABL_Process=false,ABL_Data=false;
+int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
 
 //float *ABL_YCOORD=(float*)malloc(sizeof(float));
@@ -99,7 +99,7 @@ double storage_step=0.00000000000001,storage_counter=0,ACCEL_ERATION,theta_adj_l
 bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clockwise,ABSOLUTE_POSITIONING=1,E_ABSOLUTE_POSITIONING=1;
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
-double X_GLOB=0,Y_GLOB=0,X_GLOB_STEP,Y_GLOB_STEP;
+double X_GLOB=0,Y_GLOB=0,X_GLOB_STEP,Y_GLOB_STEP,Z_GLOB=0;
 wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
@@ -118,7 +118,7 @@ wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
 						  ,L"//3DHex2//settings//abl_x.txt\0"             \
 						  ,L"//3DHex2//settings//abl_y.txt\0"             \
 						  ,L"//3DHex2//settings//XYZ.txt\0"};                      		  
-						  
+
 wchar_t coordinates_path[150]  \
        ,fcoordinates_path[150] \
 	   ,gc2info_path[150]      \
@@ -344,7 +344,7 @@ int main(){
 		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
 				}
 				if(Gl==28){ // G28 homing
-				    if(ABL){
+				    if(ABL_Process){
 				      fprintf(abl_x_file,"%lf\n",ABL_X);
 				      fprintf(abl_y_file,"%lf\n",ABL_Y);
 					}
@@ -376,9 +376,9 @@ int main(){
 				}
 				if(Gl==2929){//auto bed leveling - bltouch on the way
 				    GM_command=true;
-				    MG_data.A=7; //BUG 21/2.22
+				    MG_data.A=7; //
 				    MG_data.B=ABL_ITERATIONS;
-				    if(ABL){
+				    if(ABL_Process){
 				    	fclose(abl_x_file);
 				    	fclose(abl_y_file);
 					}else{
@@ -386,7 +386,7 @@ int main(){
 						abl_y_file=_wfopen(abl_y_path,L"w");
 					}
 					
-					ABL=!ABL;
+					ABL_Process=!ABL_Process;
 				}
 				if(Gl==90){// G90 Absolute
 				    ABSOLUTE_POSITIONING=1;
@@ -400,6 +400,8 @@ int main(){
 					if(Xl==axis_num && Yl==axis_num && Zl==axis_num && El==axis_num){
 						Xl=0;Yl=0;Zl=0;El=0;
 					}
+                    ABL_X = round(Xl*STPU_X)/STPU_X;
+                    ABL_Y = round(Yl*STPU_Y)/STPU_Y;
 				}
 				if(GM_command==true){ //GM command is when data needs to be passed to MCU side
 					GM_command=false;
@@ -534,28 +536,38 @@ int main(){
 		free(ABL_XCOORD);
 		free(ABL_YCOORD);
 		free(ABL_ZCOORD);
+		printf("%s %f\n","z",Z_GLOB);
 		CloseHandle(pipe);
 }
 
 void ABL_readXYZ(){
+	struct stat buffer;
 	char string[100];
-	int place=0;
+	int place=0,status;
 	
-	FILE *abl_xyz_file;
-	abl_xyz_file=_wfopen(abl_xyz_path,L"r");
-    while (fgets(string, 100, abl_xyz_file) != NULL){//TILL THE END OF FILE
-    	ABL_COORD_SIZE++;
+	status = wstat(abl_xyz_path, &buffer);
+	
+	if(buffer.st_size!=0){
+		ABL_Data=true;
+		FILE *abl_xyz_file;
+		abl_xyz_file=_wfopen(abl_xyz_path,L"r");
+		while (fgets(string, 100, abl_xyz_file) != NULL){//TILL THE END OF FILE
+			ABL_COORD_SIZE++;
+		}
+		
+		fclose(abl_xyz_file);
+		ABL_XCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+		ABL_YCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+		ABL_ZCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
+		abl_xyz_file=_wfopen(abl_xyz_path,L"r");
+		while(place<ABL_COORD_SIZE){
+			fscanf(abl_xyz_file,"%f" "%f" "%f" ,&ABL_XCOORD[place],&ABL_YCOORD[place],&ABL_ZCOORD[place]);
+			place++;
+		}
+		fclose(abl_xyz_file);
+    }else{
+    	ABL_Data=false;
 	}
-	fclose(abl_xyz_file);
-	ABL_XCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
-	ABL_YCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
-	ABL_ZCOORD = (float*)malloc(ABL_COORD_SIZE*sizeof(float));
-	abl_xyz_file=_wfopen(abl_xyz_path,L"r");
-	while(place<ABL_COORD_SIZE){
-		fscanf(abl_xyz_file,"%f" "%f" "%f" ,&ABL_XCOORD[place],&ABL_YCOORD[place],&ABL_ZCOORD[place]);
-		place++;
-	}
-    fclose(abl_xyz_file);
 }
     
     
@@ -1449,12 +1461,12 @@ void read_settings()
 {
     FILE *box_sett;
     FILE *cbox_sett;
-    char b[65][30],c[28][30],temp_str[30];  
+    char b[65][30],c[29][30],temp_str[30];  
     int i;
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
     
-    for (i=0;i<=64;i++){
+    for (i=0;i<65;i++){
         fgets (temp_str, 30, box_sett);
         strcpy(b[i],temp_str);
     }
@@ -1505,8 +1517,9 @@ void read_settings()
 	sscanf(b[53], "%lf", &BED_XSIZE);
 	sscanf(b[54], "%lf", &BED_YSIZE);
 	ABL_ITERATIONS=atoi(b[57]);
+	sscanf(b[61], "%lf", &ABL_Z_Fade);
     i=0;
-    for (i=0;i<=27;i++){
+    for (i=0;i<29;i++){
         fgets (temp_str, 30, cbox_sett);
         strcpy(c[i],temp_str);
     }
@@ -1531,7 +1544,9 @@ void read_settings()
     Wait_bed=atoi(c[24]);
     PID_nozz=atoi(c[25]); 
 	PID_bed=atoi(c[26]);
-    CURVE_DETECTION=atoi(c[27]);	
+    CURVE_DETECTION=atoi(c[27]);
+	ABL_Include	= atoi(c[28]);
+	printf("%s %i\n","ABL",ABL_Include);
 	//FOR THE MOMMENT
 	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
 	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
@@ -2836,41 +2851,9 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
         int i=0,j,ABL_Coord_Position=0,ABL_Z_steps=0;
         char bits[9];
         uint8_t byte_num,null_byte=0,timeboxes;//50 fixe a buf at starting
-      	
-       	for(j=0;j<=7;j++){ ///set all bits 0 for safety
-       		bits[j]='0';
-       	}
-       	j=0;
-       	
-       	ABL_Coord_Position=(abs(Y_GLOB)*(BED_XSIZE+1))+X_GLOB;
-   	    ABL_Z_steps = (ABL_ZCOORD[ABL_Coord_Position]-ABL_Z_last)*STPU_Z;
-   	    ABL_Z_last = ABL_ZCOORD[ABL_Coord_Position]; 
-   	    //printf("%s %f %f %f %i %i\n","X Y Z correction",X_GLOB,Y_GLOB,ABL_ZCOORD[ABL_Coord_Position],ABL_Coord_Position,abs(ABL_Z_steps));
-   	    if(ABL_Z_steps==0){
-            bits[2]='0';
-            bits[3]='0';
-       	}else if(ABL_Z_steps>0){
-            bits[2]='1';
-            if(Invrt_Z==0){
-               	bits[3]='0';
-			}else{
-    			bits[3]='1';
-			}
-       	}else if(ABL_Z_steps<0){
-            bits[2]='1';
-            if(Invrt_Z==0){
-               	bits[3]='1';
-			}else{
-				bits[3]='0';
-    		}	
-        }
-	    bits[8]='e'; //end bit 
-	    byte_num=bits2val(bits);
-	    for(j=0;j<abs(ABL_Z_steps);j++){
-	    	write_hex2file(1);
-   	    	write_hex2file(byte_num);
-    	}
-    	j=0;
+    
+
+
 	    for(j=0;j<=7;j++){ ///set all bits 0 for safety
        		bits[j]='0';
        	}
@@ -2971,6 +2954,44 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
    	    write_hex2file(timeboxes);
    	    write_hex2file(byte_num);
    	    LAST_TIME_BOXES=timeboxes;
+
+    	if(ABL_Include==1 && ABL_Data==true){
+			for(j=0;j<=7;j++){ ///set all bits 0 for safety
+				bits[j]='0';
+			}
+			j=0;
+			ABL_Coord_Position=(abs(Y_GLOB+0.00000001)*(BED_XSIZE+1))+abs(X_GLOB+0.5); //0.00000001 FIX A FLOAT BUG
+			ABL_Z_steps = (ABL_ZCOORD[ABL_Coord_Position]-ABL_Z_last);
+			//printf("%s %f %f %f %i %i\n","X Y Z correction",X_GLOB,Y_GLOB,ABL_ZCOORD[ABL_Coord_Position],ABL_Coord_Position,abs(ABL_Z_steps));
+			if(ABL_Z_steps==0){
+				bits[2]='0';
+				bits[3]='0';
+			}else if(ABL_Z_steps>0){
+				ABL_Z_last = ABL_ZCOORD[ABL_Coord_Position]; 
+				bits[2]='1';
+				if(Invrt_Z==0){
+					bits[3]='0';
+				}else{
+					bits[3]='1';
+				}
+			}else if(ABL_Z_steps<0){
+				ABL_Z_last = ABL_ZCOORD[ABL_Coord_Position]; 
+				bits[2]='1';
+				if(Invrt_Z==0){
+					bits[3]='1';
+				}else{
+					bits[3]='0';
+				}	
+			}
+			bits[8]='e'; //end bit 
+			byte_num=bits2val(bits);
+			for(j=0;j<abs(ABL_Z_steps);j++){
+				write_hex2file(2);
+				write_hex2file(byte_num);
+			}
+			j=0;
+   		}
+
    	    //last_time=time;
 		//storage_counter=storage_counter+storage_step;
     }
