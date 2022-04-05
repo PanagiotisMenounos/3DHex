@@ -86,6 +86,7 @@ void check_buffer();
 void check_command(int state_c);
 void read_GM_data();
 void Atune_loop(uint8_t tune_case);
+void position_report();
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -140,6 +141,7 @@ struct data4{
   volatile double command;
   volatile double nozz_temp;
   volatile double bed_temp;
+  volatile long x_pos;
 };
 
 struct data5{
@@ -186,6 +188,8 @@ volatile int8_t p;
 double input, output, setpoint=0;
 int state_r,ABL_ITERATIONS;
 volatile boolean AUTOTUNE=false,ABL=false;
+volatile int XPOS=0;
+volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
 
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
@@ -281,11 +285,13 @@ void setup() {
 void loop(){
   if(setoff==false){
      if(PRINT_STATE==0){read_serial();}else{read_sd();}
-     if(GM_command==true){read_GM_data();temperature_control();GM_command=false;}
+     if(GM_command==true){read_GM_data();temperature_control();position_report();GM_command=false;}
      temperature_control();
+     position_report();
      check_BUTTON_terminate();
      check_USB_terminate();
-  }else{ 
+  }else{
+     position_report(); 
      terminate_process();
   }
 }
@@ -309,6 +315,13 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6)|(bitRead(buffer1.byte_1[j],7)<<PA4);
       j++;
       i=0;
+      if (bitRead(buffer1.byte_1[j-1],1)){
+        if(bitRead(buffer1.byte_1[j-1],0)){
+          XPOS=XPOS+1;
+        }else{
+          XPOS=XPOS-1;
+        }
+      }
       terminate_counter=0;
       //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
@@ -321,6 +334,13 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6)|(bitRead(buffer2.byte_2[j],7)<<PA4);
       j++;
       i=0;
+      if (bitRead(buffer2.byte_2[j-1],1)){
+        if(bitRead(buffer2.byte_2[j-1],0)){
+          XPOS=XPOS+1;
+        }else{
+          XPOS=XPOS-1;
+        }
+      }
       terminate_counter=0;
       //check_command(1);
    }else{
@@ -331,6 +351,17 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    check_buffer();
    sei();
    }
+}
+
+void position_report(){
+  currentMillis_pos = millis();
+  if (currentMillis_pos - previousMillis_USBupdate_pos >= 100) {
+       previousMillis_USBupdate_pos=currentMillis_pos;
+           buffer4.command = -243;
+           buffer4.x_pos=XPOS;
+           Serial.write((char*)&buffer4,sizeof(buffer4));
+  }
+
 }
 
 void check_buffer(){
@@ -733,6 +764,7 @@ void temperature_USB_update(){
   buffer4.nozz_temp = therm1.analog2temp(); // nozzle
   buffer4.bed_temp = therm2.analog2temp();  // bed
   buffer4.command = -243;
+  buffer4.x_pos=XPOS;
   Serial.write((char*)&buffer4,sizeof(buffer4));
 }
 
@@ -959,6 +991,11 @@ void rapid_position(){
       PORTF = (buffer5.E<<PF1);
       PORTF = (buffer5.E<<PF1)|(0<<PF0);
       delayMicroseconds(buffer5.I);
+      if(buffer5.E){
+        XPOS=XPOS+1;
+      }else{
+        XPOS=XPOS-1;
+      }
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }

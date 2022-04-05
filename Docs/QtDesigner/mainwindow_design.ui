@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1133</width>
-    <height>619</height>
+    <width>1124</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -200,14 +200,7 @@
 background-color: rgb(63, 63, 63);</string>
    </property>
    <layout class="QGridLayout" name="gridLayout_4">
-    <item row="0" column="1">
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
@@ -228,6 +221,254 @@ background-color: rgb(63, 63, 63);</string>
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QFrame" name="frame_24">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>550</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>800</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="l19_7">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>X [mm]</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="Nozz_LCD_2">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="digitCount">
+             <number>7</number>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="value" stdset="0">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="intValue" stdset="0">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="l19_8">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Y [mm]</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="Nozz_LCD_3">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="digitCount">
+             <number>7</number>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="value" stdset="0">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="intValue" stdset="0">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="l19_9">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Z [mm]</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="Nozz_LCD_4">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="digitCount">
+             <number>7</number>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="value" stdset="0">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="intValue" stdset="0">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item alignment="Qt::AlignHCenter">
         <widget class="QFrame" name="frame_15">
          <property name="minimumSize">
@@ -254,13 +495,13 @@ background-color: rgb(63, 63, 63);</string>
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>30</height>
+              <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>120</width>
-              <height>30</height>
+              <height>20</height>
              </size>
             </property>
             <property name="font">
@@ -307,6 +548,9 @@ background-color: rgb(63, 63, 63);</string>
             <property name="smallDecimalPoint">
              <bool>false</bool>
             </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
             <property name="value" stdset="0">
              <double>0.000000000000000</double>
             </property>
@@ -317,13 +561,13 @@ background-color: rgb(63, 63, 63);</string>
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>30</height>
+              <height>20</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>120</width>
-              <height>30</height>
+              <height>20</height>
              </size>
             </property>
             <property name="font">
@@ -352,6 +596,9 @@ background-color: rgb(63, 63, 63);</string>
               <width>70</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
             </property>
            </widget>
           </item>
@@ -4840,13 +5087,13 @@ border-color:rgb(120, 120, 120)
              <property name="minimumSize">
               <size>
                <width>200</width>
-               <height>50</height>
+               <height>100</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>220</width>
-               <height>50</height>
+               <height>100</height>
               </size>
              </property>
              <property name="frameShape">
@@ -4856,7 +5103,7 @@ border-color:rgb(120, 120, 120)
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QGridLayout" name="gridLayout_13">
-              <item row="0" column="0">
+              <item row="0" column="0" alignment="Qt::AlignHCenter">
                <widget class="QLabel" name="l30_2">
                 <property name="minimumSize">
                  <size>
@@ -4883,7 +5130,7 @@ border-color:rgb(120, 120, 120)
                 </property>
                </widget>
               </item>
-              <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+              <item row="0" column="1" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="c28">
                 <property name="minimumSize">
                  <size>
@@ -4899,6 +5146,81 @@ border-color:rgb(120, 120, 120)
                 </property>
                 <property name="text">
                  <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="l35_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>90</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Angle°</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QPlainTextEdit" name="b49_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>75</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit{
+background-color: rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:3px;
+border-width:1px; 
+border-color:white;
+}
+QPlainTextEdit:hover{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:focus{
+border-color: rgb(85, 170, 255);
+}
+QPlainTextEdit:disabled {
+background-color: rgb(63, 63, 63);
+color: rgb(0, 0, 0);
+border-color:rgb(120, 120, 120)
+}</string>
+                </property>
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
                 </property>
                </widget>
               </item>
@@ -4962,7 +5284,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>ZY Plane [deg]</string>
+                 <string>ZY Plane°</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -5133,7 +5455,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>XY Plane [deg]</string>
+                 <string>XY Plane°</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -5160,7 +5482,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>ZX Plane [deg]</string>
+                 <string>ZX Plane°</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -7542,7 +7864,7 @@ border-color:rgb(83, 83, 83);
       </layout>
      </widget>
     </item>
-    <item row="0" column="2">
+    <item row="1" column="1">
      <widget class="QFrame" name="frame_3">
       <property name="maximumSize">
        <size>
@@ -8570,8 +8892,8 @@ border-color:rgb(120, 120, 120)
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QDoubleSpinBox" name="d7">
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="d6">
             <property name="minimumSize">
              <size>
               <width>65</width>
@@ -8615,8 +8937,8 @@ border-color:rgb(120, 120, 120)
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
-           <widget class="QDoubleSpinBox" name="d6">
+          <item row="2" column="3">
+           <widget class="QDoubleSpinBox" name="d7">
             <property name="minimumSize">
              <size>
               <width>65</width>
@@ -8777,35 +9099,8 @@ border-color:rgb(120, 120, 120)
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="l17">
-            <property name="minimumSize">
-             <size>
-              <width>55</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>55</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>[mm]</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QDoubleSpinBox" name="d4">
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="d5">
             <property name="minimumSize">
              <size>
               <width>65</width>
@@ -8849,8 +9144,35 @@ border-color:rgb(120, 120, 120)
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="d5">
+          <item row="1" column="0">
+           <widget class="QLabel" name="l17">
+            <property name="minimumSize">
+             <size>
+              <width>55</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>55</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>[mm]</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QDoubleSpinBox" name="d4">
             <property name="minimumSize">
              <size>
               <width>65</width>
@@ -8945,7 +9267,7 @@ border-color:rgb(120, 120, 120)
        <item>
         <widget class="QPlainTextEdit" name="GCODE_Panel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -8953,7 +9275,7 @@ border-color:rgb(120, 120, 120)
          <property name="minimumSize">
           <size>
            <width>359</width>
-           <height>150</height>
+           <height>200</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -9004,7 +9326,7 @@ border-color:rgb(120, 120, 120)
        <item alignment="Qt::AlignHCenter">
         <widget class="QFrame" name="frame_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -9012,7 +9334,7 @@ border-color:rgb(120, 120, 120)
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>75</height>
+           <height>70</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -9539,7 +9861,7 @@ border-color:rgb(83, 83, 83);
          <property name="minimumSize">
           <size>
            <width>359</width>
-           <height>100</height>
+           <height>40</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -9683,7 +10005,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1133</width>
+     <width>1124</width>
      <height>21</height>
     </rect>
    </property>
@@ -9712,6 +10034,21 @@ border-color:rgb(83, 83, 83);
     <addaction name="actionPrinter7"/>
     <addaction name="actionPrinter8"/>
     <addaction name="actionPrinter9"/>
+    <addaction name="actionPrinter10"/>
+    <addaction name="actionPrinter11"/>
+    <addaction name="actionPrinter12"/>
+    <addaction name="actionPrinter13"/>
+    <addaction name="actionPrinter14"/>
+    <addaction name="actionPrinter15"/>
+    <addaction name="actionPrinter16"/>
+    <addaction name="actionPrinter17"/>
+    <addaction name="actionPrinter18"/>
+    <addaction name="actionPrinter19"/>
+    <addaction name="actionPrinter20"/>
+    <addaction name="actionPrinter21"/>
+    <addaction name="actionPrinter22"/>
+    <addaction name="actionPrinter23"/>
+    <addaction name="actionPrinter24"/>
     <addaction name="separator"/>
     <addaction name="actionNew"/>
     <addaction name="actionRemove"/>
@@ -9800,6 +10137,81 @@ border-color:rgb(83, 83, 83);
   <action name="actionPrinter9">
    <property name="text">
     <string>Printer9</string>
+   </property>
+  </action>
+  <action name="actionPrinter10">
+   <property name="text">
+    <string>Printer10</string>
+   </property>
+  </action>
+  <action name="actionPrinter11">
+   <property name="text">
+    <string>Printer11</string>
+   </property>
+  </action>
+  <action name="actionPrinter12">
+   <property name="text">
+    <string>Printer12</string>
+   </property>
+  </action>
+  <action name="actionPrinter13">
+   <property name="text">
+    <string>Printer13</string>
+   </property>
+  </action>
+  <action name="actionPrinter14">
+   <property name="text">
+    <string>Printer14</string>
+   </property>
+  </action>
+  <action name="actionPrinter15">
+   <property name="text">
+    <string>Printer15</string>
+   </property>
+  </action>
+  <action name="actionPrinter16">
+   <property name="text">
+    <string>Printer16</string>
+   </property>
+  </action>
+  <action name="actionPrinter17">
+   <property name="text">
+    <string>Printer17</string>
+   </property>
+  </action>
+  <action name="actionPrinter18">
+   <property name="text">
+    <string>Printer18</string>
+   </property>
+  </action>
+  <action name="actionPrinter19">
+   <property name="text">
+    <string>Printer19</string>
+   </property>
+  </action>
+  <action name="actionPrinter20">
+   <property name="text">
+    <string>Printer20</string>
+   </property>
+  </action>
+  <action name="actionPrinter21">
+   <property name="text">
+    <string>Printer21</string>
+   </property>
+  </action>
+  <action name="actionPrinter22">
+   <property name="text">
+    <string>Printer22</string>
+   </property>
+  </action>
+  <action name="actionPrinter23">
+   <property name="text">
+    <string>Printer23</string>
+   </property>
+  </action>
+  <action name="actionPrinter24">
+   <property name="text">
+    <string>Printer24</string>
    </property>
   </action>
  </widget>

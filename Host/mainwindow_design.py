@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1133, 619)
+        MainWindow.resize(1124, 649)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -79,11 +79,6 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.line_2 = QtWidgets.QFrame(self.centralwidget)
-        self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
-        self.gridLayout_4.addWidget(self.line_2, 0, 1, 1, 1)
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setMinimumSize(QtCore.QSize(0, 0))
         self.frame.setMaximumSize(QtCore.QSize(1100, 1000000))
@@ -92,6 +87,97 @@ class Ui_MainWindow(object):
         self.frame.setObjectName("frame")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.frame_24 = QtWidgets.QFrame(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_24.sizePolicy().hasHeightForWidth())
+        self.frame_24.setSizePolicy(sizePolicy)
+        self.frame_24.setMinimumSize(QtCore.QSize(550, 40))
+        self.frame_24.setMaximumSize(QtCore.QSize(800, 40))
+        self.frame_24.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_24.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_24.setObjectName("frame_24")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame_24)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.l19_7 = QtWidgets.QLabel(self.frame_24)
+        self.l19_7.setMinimumSize(QtCore.QSize(60, 20))
+        self.l19_7.setMaximumSize(QtCore.QSize(60, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        self.l19_7.setFont(font)
+        self.l19_7.setAlignment(QtCore.Qt.AlignCenter)
+        self.l19_7.setObjectName("l19_7")
+        self.horizontalLayout_5.addWidget(self.l19_7)
+        self.Nozz_LCD_2 = QtWidgets.QLCDNumber(self.frame_24)
+        self.Nozz_LCD_2.setMinimumSize(QtCore.QSize(90, 25))
+        self.Nozz_LCD_2.setMaximumSize(QtCore.QSize(90, 25))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.Nozz_LCD_2.setFont(font)
+        self.Nozz_LCD_2.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.Nozz_LCD_2.setFrameShape(QtWidgets.QFrame.Box)
+        self.Nozz_LCD_2.setLineWidth(1)
+        self.Nozz_LCD_2.setSmallDecimalPoint(False)
+        self.Nozz_LCD_2.setDigitCount(7)
+        self.Nozz_LCD_2.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.Nozz_LCD_2.setProperty("value", 0.0)
+        self.Nozz_LCD_2.setProperty("intValue", 0)
+        self.Nozz_LCD_2.setObjectName("Nozz_LCD_2")
+        self.horizontalLayout_5.addWidget(self.Nozz_LCD_2)
+        self.l19_8 = QtWidgets.QLabel(self.frame_24)
+        self.l19_8.setMinimumSize(QtCore.QSize(60, 20))
+        self.l19_8.setMaximumSize(QtCore.QSize(60, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.l19_8.setFont(font)
+        self.l19_8.setAlignment(QtCore.Qt.AlignCenter)
+        self.l19_8.setObjectName("l19_8")
+        self.horizontalLayout_5.addWidget(self.l19_8)
+        self.Nozz_LCD_3 = QtWidgets.QLCDNumber(self.frame_24)
+        self.Nozz_LCD_3.setMinimumSize(QtCore.QSize(90, 25))
+        self.Nozz_LCD_3.setMaximumSize(QtCore.QSize(90, 25))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.Nozz_LCD_3.setFont(font)
+        self.Nozz_LCD_3.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.Nozz_LCD_3.setFrameShape(QtWidgets.QFrame.Box)
+        self.Nozz_LCD_3.setLineWidth(1)
+        self.Nozz_LCD_3.setSmallDecimalPoint(False)
+        self.Nozz_LCD_3.setDigitCount(7)
+        self.Nozz_LCD_3.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.Nozz_LCD_3.setProperty("value", 0.0)
+        self.Nozz_LCD_3.setProperty("intValue", 0)
+        self.Nozz_LCD_3.setObjectName("Nozz_LCD_3")
+        self.horizontalLayout_5.addWidget(self.Nozz_LCD_3)
+        self.l19_9 = QtWidgets.QLabel(self.frame_24)
+        self.l19_9.setMinimumSize(QtCore.QSize(60, 20))
+        self.l19_9.setMaximumSize(QtCore.QSize(60, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.l19_9.setFont(font)
+        self.l19_9.setAlignment(QtCore.Qt.AlignCenter)
+        self.l19_9.setObjectName("l19_9")
+        self.horizontalLayout_5.addWidget(self.l19_9)
+        self.Nozz_LCD_4 = QtWidgets.QLCDNumber(self.frame_24)
+        self.Nozz_LCD_4.setMinimumSize(QtCore.QSize(90, 25))
+        self.Nozz_LCD_4.setMaximumSize(QtCore.QSize(90, 25))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.Nozz_LCD_4.setFont(font)
+        self.Nozz_LCD_4.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.Nozz_LCD_4.setFrameShape(QtWidgets.QFrame.Box)
+        self.Nozz_LCD_4.setLineWidth(1)
+        self.Nozz_LCD_4.setSmallDecimalPoint(False)
+        self.Nozz_LCD_4.setDigitCount(7)
+        self.Nozz_LCD_4.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.Nozz_LCD_4.setProperty("value", 0.0)
+        self.Nozz_LCD_4.setProperty("intValue", 0)
+        self.Nozz_LCD_4.setObjectName("Nozz_LCD_4")
+        self.horizontalLayout_5.addWidget(self.Nozz_LCD_4)
+        self.verticalLayout.addWidget(self.frame_24, 0, QtCore.Qt.AlignHCenter)
         self.frame_15 = QtWidgets.QFrame(self.frame)
         self.frame_15.setMinimumSize(QtCore.QSize(550, 40))
         self.frame_15.setMaximumSize(QtCore.QSize(800, 40))
@@ -101,8 +187,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_15)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.l19_5 = QtWidgets.QLabel(self.frame_15)
-        self.l19_5.setMinimumSize(QtCore.QSize(120, 30))
-        self.l19_5.setMaximumSize(QtCore.QSize(120, 30))
+        self.l19_5.setMinimumSize(QtCore.QSize(120, 20))
+        self.l19_5.setMaximumSize(QtCore.QSize(120, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.l19_5.setFont(font)
@@ -119,12 +205,13 @@ class Ui_MainWindow(object):
         self.Nozz_LCD.setFrameShape(QtWidgets.QFrame.Box)
         self.Nozz_LCD.setLineWidth(1)
         self.Nozz_LCD.setSmallDecimalPoint(False)
+        self.Nozz_LCD.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.Nozz_LCD.setProperty("value", 0.0)
         self.Nozz_LCD.setObjectName("Nozz_LCD")
         self.horizontalLayout_7.addWidget(self.Nozz_LCD)
         self.l19_6 = QtWidgets.QLabel(self.frame_15)
-        self.l19_6.setMinimumSize(QtCore.QSize(120, 30))
-        self.l19_6.setMaximumSize(QtCore.QSize(120, 30))
+        self.l19_6.setMinimumSize(QtCore.QSize(120, 20))
+        self.l19_6.setMaximumSize(QtCore.QSize(120, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.l19_6.setFont(font)
@@ -134,6 +221,7 @@ class Ui_MainWindow(object):
         self.Bed_LCD = QtWidgets.QLCDNumber(self.frame_15)
         self.Bed_LCD.setMinimumSize(QtCore.QSize(70, 25))
         self.Bed_LCD.setMaximumSize(QtCore.QSize(70, 25))
+        self.Bed_LCD.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.Bed_LCD.setObjectName("Bed_LCD")
         self.horizontalLayout_7.addWidget(self.Bed_LCD)
         self.verticalLayout.addWidget(self.frame_15, 0, QtCore.Qt.AlignHCenter)
@@ -2444,8 +2532,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_16.sizePolicy().hasHeightForWidth())
         self.frame_16.setSizePolicy(sizePolicy)
-        self.frame_16.setMinimumSize(QtCore.QSize(200, 50))
-        self.frame_16.setMaximumSize(QtCore.QSize(220, 50))
+        self.frame_16.setMinimumSize(QtCore.QSize(200, 100))
+        self.frame_16.setMaximumSize(QtCore.QSize(220, 100))
         self.frame_16.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_16.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_16.setObjectName("frame_16")
@@ -2459,13 +2547,51 @@ class Ui_MainWindow(object):
         self.l30_2.setFont(font)
         self.l30_2.setAlignment(QtCore.Qt.AlignCenter)
         self.l30_2.setObjectName("l30_2")
-        self.gridLayout_13.addWidget(self.l30_2, 0, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.l30_2, 0, 0, 1, 1, QtCore.Qt.AlignHCenter)
         self.c28 = QtWidgets.QCheckBox(self.frame_16)
         self.c28.setMinimumSize(QtCore.QSize(15, 25))
         self.c28.setMaximumSize(QtCore.QSize(15, 25))
         self.c28.setText("")
         self.c28.setObjectName("c28")
-        self.gridLayout_13.addWidget(self.c28, 0, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.gridLayout_13.addWidget(self.c28, 0, 1, 1, 1, QtCore.Qt.AlignHCenter)
+        self.l35_2 = QtWidgets.QLabel(self.frame_16)
+        self.l35_2.setMinimumSize(QtCore.QSize(90, 20))
+        self.l35_2.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l35_2.setFont(font)
+        self.l35_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.l35_2.setObjectName("l35_2")
+        self.gridLayout_13.addWidget(self.l35_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter)
+        self.b49_2 = QtWidgets.QPlainTextEdit(self.frame_16)
+        self.b49_2.setMinimumSize(QtCore.QSize(75, 25))
+        self.b49_2.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b49_2.setFont(font)
+        self.b49_2.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b49_2.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b49_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b49_2.setObjectName("b49_2")
+        self.gridLayout_13.addWidget(self.b49_2, 1, 1, 1, 1, QtCore.Qt.AlignHCenter)
         self.verticalLayout_4.addWidget(self.frame_16, 0, QtCore.Qt.AlignLeft)
         self.line_4 = QtWidgets.QFrame(self.tab_5)
         self.line_4.setStyleSheet("")
@@ -3771,7 +3897,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.p4)
         self.horizontalLayout.addWidget(self.frame_4, 0, QtCore.Qt.AlignVCenter)
         self.verticalLayout.addWidget(self.frame_2)
-        self.gridLayout_4.addWidget(self.frame, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.frame, 1, 0, 1, 1)
         self.frame_3 = QtWidgets.QFrame(self.centralwidget)
         self.frame_3.setMaximumSize(QtCore.QSize(1100, 16777215))
         self.frame_3.setStyleSheet("")
@@ -4380,34 +4506,6 @@ class Ui_MainWindow(object):
         self.d3.setMaximum(999.0)
         self.d3.setObjectName("d3")
         self.gridLayout_6.addWidget(self.d3, 1, 3, 1, 1)
-        self.d7 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d7.setMinimumSize(QtCore.QSize(65, 25))
-        self.d7.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d7.setFont(font)
-        self.d7.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d7.setMaximum(999.0)
-        self.d7.setObjectName("d7")
-        self.gridLayout_6.addWidget(self.d7, 2, 3, 1, 1)
         self.d6 = QtWidgets.QDoubleSpinBox(self.frame_10)
         self.d6.setMinimumSize(QtCore.QSize(65, 25))
         self.d6.setMaximumSize(QtCore.QSize(65, 25))
@@ -4436,6 +4534,34 @@ class Ui_MainWindow(object):
         self.d6.setMaximum(999.0)
         self.d6.setObjectName("d6")
         self.gridLayout_6.addWidget(self.d6, 2, 2, 1, 1)
+        self.d7 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d7.setMinimumSize(QtCore.QSize(65, 25))
+        self.d7.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d7.setFont(font)
+        self.d7.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d7.setMaximum(999.0)
+        self.d7.setObjectName("d7")
+        self.gridLayout_6.addWidget(self.d7, 2, 3, 1, 1)
         self.l18 = QtWidgets.QLabel(self.frame_10)
         self.l18.setMinimumSize(QtCore.QSize(55, 25))
         self.l18.setMaximumSize(QtCore.QSize(55, 25))
@@ -4501,6 +4627,34 @@ class Ui_MainWindow(object):
         self.d2.setMaximum(999.0)
         self.d2.setObjectName("d2")
         self.gridLayout_6.addWidget(self.d2, 1, 2, 1, 1)
+        self.d5 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d5.setMinimumSize(QtCore.QSize(65, 25))
+        self.d5.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d5.setFont(font)
+        self.d5.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d5.setMaximum(999.0)
+        self.d5.setObjectName("d5")
+        self.gridLayout_6.addWidget(self.d5, 2, 1, 1, 1)
         self.l17 = QtWidgets.QLabel(self.frame_10)
         self.l17.setMinimumSize(QtCore.QSize(55, 25))
         self.l17.setMaximumSize(QtCore.QSize(55, 25))
@@ -4538,34 +4692,6 @@ class Ui_MainWindow(object):
         self.d4.setMaximum(999.0)
         self.d4.setObjectName("d4")
         self.gridLayout_6.addWidget(self.d4, 1, 4, 1, 1)
-        self.d5 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d5.setMinimumSize(QtCore.QSize(65, 25))
-        self.d5.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d5.setFont(font)
-        self.d5.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d5.setMaximum(999.0)
-        self.d5.setObjectName("d5")
-        self.gridLayout_6.addWidget(self.d5, 2, 1, 1, 1)
         self.d8 = QtWidgets.QDoubleSpinBox(self.frame_10)
         self.d8.setMinimumSize(QtCore.QSize(65, 25))
         self.d8.setMaximumSize(QtCore.QSize(65, 25))
@@ -4596,12 +4722,12 @@ class Ui_MainWindow(object):
         self.gridLayout_6.addWidget(self.d8, 2, 4, 1, 1)
         self.verticalLayout_2.addWidget(self.frame_10, 0, QtCore.Qt.AlignHCenter)
         self.GCODE_Panel = QtWidgets.QPlainTextEdit(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.GCODE_Panel.sizePolicy().hasHeightForWidth())
         self.GCODE_Panel.setSizePolicy(sizePolicy)
-        self.GCODE_Panel.setMinimumSize(QtCore.QSize(359, 150))
+        self.GCODE_Panel.setMinimumSize(QtCore.QSize(359, 200))
         self.GCODE_Panel.setMaximumSize(QtCore.QSize(1100, 16777215))
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -4631,12 +4757,12 @@ class Ui_MainWindow(object):
         self.GCODE_Panel.setObjectName("GCODE_Panel")
         self.verticalLayout_2.addWidget(self.GCODE_Panel)
         self.frame_9 = QtWidgets.QFrame(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_9.sizePolicy().hasHeightForWidth())
         self.frame_9.setSizePolicy(sizePolicy)
-        self.frame_9.setMinimumSize(QtCore.QSize(0, 75))
+        self.frame_9.setMinimumSize(QtCore.QSize(0, 70))
         self.frame_9.setMaximumSize(QtCore.QSize(600, 75))
         self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -4915,7 +5041,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.Message_panel.sizePolicy().hasHeightForWidth())
         self.Message_panel.setSizePolicy(sizePolicy)
-        self.Message_panel.setMinimumSize(QtCore.QSize(359, 100))
+        self.Message_panel.setMinimumSize(QtCore.QSize(359, 40))
         self.Message_panel.setMaximumSize(QtCore.QSize(1100, 200))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -4990,10 +5116,10 @@ class Ui_MainWindow(object):
         self.p23.setObjectName("p23")
         self.horizontalLayout_6.addWidget(self.p23, 0, QtCore.Qt.AlignVCenter)
         self.verticalLayout_2.addWidget(self.frame_6)
-        self.gridLayout_4.addWidget(self.frame_3, 0, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.frame_3, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1133, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1124, 21))
         self.menubar.setObjectName("menubar")
         self.menu_Files = QtWidgets.QMenu(self.menubar)
         self.menu_Files.setObjectName("menu_Files")
@@ -5037,6 +5163,36 @@ class Ui_MainWindow(object):
         self.actionPrinter8.setObjectName("actionPrinter8")
         self.actionPrinter9 = QtWidgets.QAction(MainWindow)
         self.actionPrinter9.setObjectName("actionPrinter9")
+        self.actionPrinter10 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter10.setObjectName("actionPrinter10")
+        self.actionPrinter11 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter11.setObjectName("actionPrinter11")
+        self.actionPrinter12 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter12.setObjectName("actionPrinter12")
+        self.actionPrinter13 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter13.setObjectName("actionPrinter13")
+        self.actionPrinter14 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter14.setObjectName("actionPrinter14")
+        self.actionPrinter15 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter15.setObjectName("actionPrinter15")
+        self.actionPrinter16 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter16.setObjectName("actionPrinter16")
+        self.actionPrinter17 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter17.setObjectName("actionPrinter17")
+        self.actionPrinter18 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter18.setObjectName("actionPrinter18")
+        self.actionPrinter19 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter19.setObjectName("actionPrinter19")
+        self.actionPrinter20 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter20.setObjectName("actionPrinter20")
+        self.actionPrinter21 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter21.setObjectName("actionPrinter21")
+        self.actionPrinter22 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter22.setObjectName("actionPrinter22")
+        self.actionPrinter23 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter23.setObjectName("actionPrinter23")
+        self.actionPrinter24 = QtWidgets.QAction(MainWindow)
+        self.actionPrinter24.setObjectName("actionPrinter24")
         self.menu_Files.addAction(self.action_Open)
         self.menuPrinter.addAction(self.actionPrinter0)
         self.menuPrinter.addAction(self.actionPrinter1)
@@ -5048,6 +5204,21 @@ class Ui_MainWindow(object):
         self.menuPrinter.addAction(self.actionPrinter7)
         self.menuPrinter.addAction(self.actionPrinter8)
         self.menuPrinter.addAction(self.actionPrinter9)
+        self.menuPrinter.addAction(self.actionPrinter10)
+        self.menuPrinter.addAction(self.actionPrinter11)
+        self.menuPrinter.addAction(self.actionPrinter12)
+        self.menuPrinter.addAction(self.actionPrinter13)
+        self.menuPrinter.addAction(self.actionPrinter14)
+        self.menuPrinter.addAction(self.actionPrinter15)
+        self.menuPrinter.addAction(self.actionPrinter16)
+        self.menuPrinter.addAction(self.actionPrinter17)
+        self.menuPrinter.addAction(self.actionPrinter18)
+        self.menuPrinter.addAction(self.actionPrinter19)
+        self.menuPrinter.addAction(self.actionPrinter20)
+        self.menuPrinter.addAction(self.actionPrinter21)
+        self.menuPrinter.addAction(self.actionPrinter22)
+        self.menuPrinter.addAction(self.actionPrinter23)
+        self.menuPrinter.addAction(self.actionPrinter24)
         self.menuPrinter.addSeparator()
         self.menuPrinter.addAction(self.actionNew)
         self.menuPrinter.addAction(self.actionRemove)
@@ -5063,6 +5234,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.l19_7.setText(_translate("MainWindow", "X [mm]"))
+        self.l19_8.setText(_translate("MainWindow", "Y [mm]"))
+        self.l19_9.setText(_translate("MainWindow", "Z [mm]"))
         self.l19_5.setText(_translate("MainWindow", "Nozzle Temp [C]"))
         self.l19_6.setText(_translate("MainWindow", "Bed Temp [C]"))
         self.l14.setText(_translate("MainWindow", "Z AXIS"))
@@ -5104,9 +5278,10 @@ class Ui_MainWindow(object):
         self.l33.setText(_translate("MainWindow", "Steprate [KHz]"))
         self.l34.setText(_translate("MainWindow", "Baudrate"))
         self.l30_2.setText(_translate("MainWindow", "Curve detection"))
-        self.l29_2.setText(_translate("MainWindow", "ZY Plane [deg]"))
-        self.l27_2.setText(_translate("MainWindow", "XY Plane [deg]"))
-        self.l28_2.setText(_translate("MainWindow", "ZX Plane [deg]"))
+        self.l35_2.setText(_translate("MainWindow", "Angle°"))
+        self.l29_2.setText(_translate("MainWindow", "ZY Plane°"))
+        self.l27_2.setText(_translate("MainWindow", "XY Plane°"))
+        self.l28_2.setText(_translate("MainWindow", "ZX Plane°"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Advanced"))
         self.l29_5.setText(_translate("MainWindow", "Width [mm]"))
         self.l29_4.setText(_translate("MainWindow", "Columns"))
@@ -5210,3 +5385,18 @@ class Ui_MainWindow(object):
         self.actionPrinter7.setText(_translate("MainWindow", "Printer7"))
         self.actionPrinter8.setText(_translate("MainWindow", "Printer8"))
         self.actionPrinter9.setText(_translate("MainWindow", "Printer9"))
+        self.actionPrinter10.setText(_translate("MainWindow", "Printer10"))
+        self.actionPrinter11.setText(_translate("MainWindow", "Printer11"))
+        self.actionPrinter12.setText(_translate("MainWindow", "Printer12"))
+        self.actionPrinter13.setText(_translate("MainWindow", "Printer13"))
+        self.actionPrinter14.setText(_translate("MainWindow", "Printer14"))
+        self.actionPrinter15.setText(_translate("MainWindow", "Printer15"))
+        self.actionPrinter16.setText(_translate("MainWindow", "Printer16"))
+        self.actionPrinter17.setText(_translate("MainWindow", "Printer17"))
+        self.actionPrinter18.setText(_translate("MainWindow", "Printer18"))
+        self.actionPrinter19.setText(_translate("MainWindow", "Printer19"))
+        self.actionPrinter20.setText(_translate("MainWindow", "Printer20"))
+        self.actionPrinter21.setText(_translate("MainWindow", "Printer21"))
+        self.actionPrinter22.setText(_translate("MainWindow", "Printer22"))
+        self.actionPrinter23.setText(_translate("MainWindow", "Printer23"))
+        self.actionPrinter24.setText(_translate("MainWindow", "Printer24"))

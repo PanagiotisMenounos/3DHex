@@ -167,6 +167,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
     new_nozz_temp = pyqtSignal(float)
     new_bed_temp = pyqtSignal(float)
     autotune_p = pyqtSignal(float)
+    x_pos_report = pyqtSignal(float)
     
     def run(self):
         time.sleep(2)
@@ -174,12 +175,13 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.message.emit(">>> Mode: Idle") #emit the signal
         try:
             while window.USB_CONNECTED==1:
-                (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #Read temperature
+                print("XPOS="+str(window.X_POS))
                 if window.A==0: #if in idle mode
                     if self.serial_command==-200: #-200 autotune read settings
                       window.Auto_P = round(window.nozz_temp,2)
                       window.Auto_I = round(window.bed_temp,2)
-                      (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read temperature
+                      (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #Read temperature
                       window.Auto_D = round(window.nozz_temp,2)
                       self.message.emit(">>> AUTOTUNE RESULTS") #emit the signal
                       self.message.emit(">>> P=" +str(window.Auto_P))
@@ -193,6 +195,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                     else: #just update temp
                       self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                       self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                      self.x_pos_report.emit(window.X_POS/100.0)
                     time.sleep(0.5)
                     self.check_idle_commands() #Check if any idle command has triggered
                 else:
@@ -220,7 +223,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
            #print("FAILED")
 
     def packet_decode(self):
-        (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
+        (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #This first time read buffer1 contains all the necessary settings for Printer
         while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
             if int(self.serial_command)==-300: #300-> start of ABL
                 self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt',"w")
@@ -251,8 +254,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 #self.ABL_interpolation_thread.start()
             if int(self.serial_command)==-243: #temp report
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal	
-            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #This first time read buffer1 contains all the necessary settings for Printer
+                self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                self.x_pos_report.emit(window.X_POS/100.0)
+                print("XPOS="+str(window.X_POS))               
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #This first time read buffer1 contains all the necessary settings for Printer
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
 
     def usb_printing(self): #USB Printing function 
@@ -276,9 +281,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
-            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
+            self.x_pos_report.emit(window.X_POS/100.0)
             flag_py_buffer=os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag_py.bin') #Get size of flag_py_file, if 1 then C has fill binary files
         window.ser.flushInput() #very important without delay to fix a bug
         window.ser.flushOutput()#very important without delay to fix a bug
@@ -308,9 +314,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 flag_file.close()
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         while self.serial_command!=-10 and self.child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
-            (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #Read arduino temp report
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
+            self.x_pos_report.emit(window.X_POS/100.0)
         while buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
@@ -440,9 +447,10 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
 
             if window.rapid_pos==1: #Rapid positioning command
                 self.send_buffer()
-                (self.serial_command,window.nozz_temp,window.bed_temp,)=struct.unpack("3f",window.ser.read(12)) #wait for arduino to end process
+                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,)=struct.unpack("3fl",window.ser.read(16)) #wait for arduino to end process
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
+                self.x_pos_report.emit(window.X_POS/100.0)
                 if window.C==0:
                    if window.F==1:
                       window.p7.setEnabled(True)
@@ -491,18 +499,42 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
             self.close()
         else:
             #print(text)
+            window.freeroom=0
+            window.added=0
             window.Message_panel.append(">>> Added: " + text)
             printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
             printers = printer_file.readlines()
             printer_file.close()
             printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
-            window.printer = len(printers)
+            window.printers = len(printers)
             #print(window.printer)
             for temp in printers:
                 printer = temp.split(',')
-                printer[1]=printer[1].replace("\n","")
-                printer_file.write("0,"+printer[1]+"\n")
-            printer_file.write("1,"+text)
+                printer[2]=printer[2].replace("\n","")
+                if int(printer[2])==0:
+                    window.freeroom=1
+            if window.freeroom==1:
+                for temp in printers:
+                    printer = temp.split(',')
+                    printer[2]=printer[2].replace("\n","")
+                    if int(printer[2])==0 and window.added==0:
+                        printer_file.write("1,"+text+",1\n")
+                        window.Message_panel.append(">>> Added: " + text)
+                        window.added=1
+                    else:
+                        printer_file.write("0,"+printer[1]+","+printer[2]+"\n")
+            else:
+                window.Message_panel.append(">>> Cannot add more than " + str(window.printers) + " configurations")
+                for temp in printers:
+                    printer = temp.split(',')
+                    printer[2]=printer[2].replace("\n","")
+                    if window.added==0:
+                        printer_file.write("1,Default,1\n")
+                        window.added=1
+                    else:
+                        printer_file.write("0,"+printer[1]+","+printer[2]+"\n")
+            window.freeroom=0
+            window.added=0
             printer_file.close()
             window.save_settings()
             window.load_printers()
@@ -548,7 +580,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Message_panel.append(">>> 3DHex")
         self.declare_vars()
         self.load_printers()
-        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
+        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
         self.ABL_include()
@@ -627,9 +659,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             printer = temp.split(',')
             if p < total_printers:
                 if p == printer_selection:
-                    printer_file.write("1,"+printer[1])
+                    printer_file.write("1,"+printer[1]+","+printer[2])
                 else:
-                    printer_file.write("0,"+printer[1])
+                    printer_file.write("0,"+printer[1]+","+printer[2])
             p=p+1
         printer_file.close()
         self.load_printers()
@@ -644,12 +676,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for temp in printers:
             printer = temp.split(',')
             if p==0:
-                printer_file.write("1,"+printer[1])
+                printer_file.write("1,"+printer[1].replace("\n","")+",1\n")
             else:
-                if int(printer[0]) == 0:
-                    printer_file.write("0,"+printer[1])
+                if p == self.printer:
+                    printer_file.write("0,"+printer[1].replace("\n","")+",0\n")
+                    self.Message_panel.append(">>> Removed: " + str(printer[1].replace("\n","")))
+                else:
+                    printer_file.write("0,"+printer[1].replace("\n","")+","+printer[2])
             p=p+1
-        self.Message_panel.append(">>> Removed: " + str(printer[1].replace("\n","")))
+        
         printer_file.close()
         self.load_printers()
         
@@ -666,18 +701,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.selected_printer=p
                     action_printer = getattr(self, "actionPrinter{}".format(p))
                     self.Message_panel.append(">>> Loaded: " + str(printer[1].replace("\n","")))
-                    action_printer.setText(str(printer[1].replace("\n",""))+" ●")
+                    action_printer.setText(str("● "+printer[1].replace("\n","")))
                 else:
                     action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setText(str(printer[1].replace("\n","")))
+                    action_printer.setText(str("   "+printer[1].replace("\n","")))
+                if int(printer[2])==1:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setVisible(True)
+                else:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setVisible(False)
             p=p+1
-        for i in range(0,10):
-            if i<p:
-                action_printer = getattr(self, "actionPrinter{}".format(i))
-                action_printer.setVisible(True)
-            else:
-                action_printer = getattr(self, "actionPrinter{}".format(i))
-                action_printer.setVisible(False)
         printer_file.close()
         self.load_settings()
        
@@ -732,6 +766,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionPrinter7.triggered.connect(lambda:self.select_printer(7))
         self.actionPrinter8.triggered.connect(lambda:self.select_printer(8))
         self.actionPrinter9.triggered.connect(lambda:self.select_printer(9))
+        self.actionPrinter10.triggered.connect(lambda:self.select_printer(10))
+        self.actionPrinter11.triggered.connect(lambda:self.select_printer(11))
+        self.actionPrinter12.triggered.connect(lambda:self.select_printer(12))
+        self.actionPrinter13.triggered.connect(lambda:self.select_printer(13))
+        self.actionPrinter14.triggered.connect(lambda:self.select_printer(14))
+        self.actionPrinter15.triggered.connect(lambda:self.select_printer(15))
+        self.actionPrinter16.triggered.connect(lambda:self.select_printer(16))
+        self.actionPrinter17.triggered.connect(lambda:self.select_printer(17))
+        self.actionPrinter18.triggered.connect(lambda:self.select_printer(18))
+        self.actionPrinter19.triggered.connect(lambda:self.select_printer(19))
+        self.actionPrinter20.triggered.connect(lambda:self.select_printer(20))
+        self.actionPrinter21.triggered.connect(lambda:self.select_printer(21))
+        self.actionPrinter22.triggered.connect(lambda:self.select_printer(22))
+        self.actionPrinter23.triggered.connect(lambda:self.select_printer(23))
+        self.actionPrinter24.triggered.connect(lambda:self.select_printer(24))
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
 
@@ -765,6 +814,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
                 self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
                 self.usb_thread.new_bed_temp.connect(self.update_bed_temp) #connect thread to message window
+                self.usb_thread.x_pos_report.connect(self.update_xpos) #connect thread to message window
                 self.usb_thread.autotune_p.connect(self.test) #connect thread to autotune window
                 self.usb_thread.start()       #Start usb communication handling thread
                 self.enable_rapid_buttons()    #Enable home buttons
@@ -785,6 +835,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
                     self.USB_CONNECTED=0
                     self.ser.close()
+                    self.disable_rapid_buttons()
                     self.Message_panel.append(">>> Printer disconnected")
                     self.Nozz_LCD.display(0)
                     self.Bed_LCD.display(0)
@@ -829,52 +880,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Aborted")
             self.ser.write(struct.pack("B",self.A))
 
-    def execute_ABL(self):
-        #self.width=float(self.b53.toPlainText().strip())
-        #self.length=float(self.b54.toPlainText().strip())
-        #self.rows=float(self.b55.toPlainText().strip())
-        #self.columns=float(self.b56.toPlainText().strip())
-        #self.iterations=float(self.b57.toPlainText().strip())
-        #self.xtool_offset=float(self.b58.toPlainText().strip())
-        #self.ytool_offset=float(self.b59.toPlainText().strip())
-        #self.margins=float(self.b60.toPlainText().strip())
-        #self.XY_Feed=float(self.b61.toPlainText().strip())
-        #self.Z_Feed=float(self.b62.toPlainText().strip())
-        #self.STPZ=float(self.b3.toPlainText().strip())
-        #offset_Y = 10
-        #safez = 5
-        #
-        #centerX = (self.width/2.0)-self.xtool_offset
-        #centerY = (self.length/2.0)-self.ytool_offset
-        #stepx = (self.width-(2.0*self.margins))/(self.columns-1)
-        #stepy = (self.length-(2.0*self.margins))/(self.rows-1)
-        #
-        #gpsx = self.margins
-        #gpsy = self.margins
-        #with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
-        #    ABL_f.write('G2929'+'\n')
-        #    ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
-        #    ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
-        #    ABL_f.write('G28 Z'+'\n')
-        #    x_iter=0
-        #    y_iter=0
-        #    while y_iter < self.rows:
-        #        gpsx = self.margins
-        #        while x_iter < self.columns:
-        #            ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
-        #            ABL_f.write('G28 Z'+'\n')
-        #            gpsx = gpsx + stepx
-        #            x_iter=x_iter+1
-        #        x_iter=0
-        #        gpsy = gpsy + stepy
-        #        y_iter=y_iter+1
-        #    ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
-        #    ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
-        #    ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
-        #    ABL_f.write('G2929'+'\n')
-            
+    def execute_ABL(self): 
         self.width=float(self.b53.toPlainText().strip())
         self.length=float(self.b54.toPlainText().strip())
         self.rows=float(self.b55.toPlainText().strip())
@@ -991,6 +997,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p16.setEnabled(True)
         self.p19.setEnabled(True)
         self.p20.setEnabled(True)
+
+    def disable_rapid_buttons(self):
+        self.p5.setEnabled(False)
+        self.p6.setEnabled(False)  
+        self.p9.setEnabled(False)
+        self.p10.setEnabled(False)
+        self.p13.setEnabled(False)
+        self.p14.setEnabled(False)
+        self.p7.setEnabled(False)
+        self.p8.setEnabled(False)
+        self.p11.setEnabled(False)
+        self.p12.setEnabled(False)
+        self.p15.setEnabled(False)
+        self.p16.setEnabled(False)
+        self.p19.setEnabled(False)
+        self.p20.setEnabled(False)    
 
     def setHOME_Xbuttons(self,state):
         if state == Qt.Checked and self.c2.isChecked() and self.USB_CONNECTED==1:
@@ -1429,6 +1451,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
  
     def update_bed_temp(self, new_bed_temp):
         self.Bed_LCD.display(new_bed_temp)
+
+    def update_xpos(self, x_pos_report):
+        self.Nozz_LCD_2.display(x_pos_report)
 
     def start_bar(self):
         self.bar_thread = ProgressBarWorker()
