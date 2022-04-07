@@ -142,6 +142,8 @@ struct data4{
   volatile double nozz_temp;
   volatile double bed_temp;
   volatile long x_pos;
+  volatile long y_pos;
+  volatile long z_pos;
 };
 
 struct data5{
@@ -188,7 +190,7 @@ volatile int8_t p;
 double input, output, setpoint=0;
 int state_r,ABL_ITERATIONS;
 volatile boolean AUTOTUNE=false,ABL=false;
-volatile int XPOS=0;
+volatile int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
 
 
@@ -322,6 +324,20 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
           XPOS=XPOS-1;
         }
       }
+      if (bitRead(buffer1.byte_1[j-1],3)){
+        if(bitRead(buffer1.byte_1[j-1],2)){
+          YPOS=YPOS+1;
+        }else{
+          YPOS=YPOS-1;
+        }
+      }
+      if (bitRead(buffer1.byte_1[j-1],5)){
+        if(bitRead(buffer1.byte_1[j-1],4)){
+          ZPOS=ZPOS+1;
+        }else{
+          ZPOS=ZPOS-1;
+        }
+      }
       terminate_counter=0;
       //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
@@ -341,6 +357,20 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
           XPOS=XPOS-1;
         }
       }
+      if (bitRead(buffer2.byte_2[j-1],3)){
+        if(bitRead(buffer2.byte_2[j-1],2)){
+          YPOS=YPOS+1;
+        }else{
+          YPOS=YPOS-1;
+        }
+      }
+      if (bitRead(buffer2.byte_2[j-1],5)){
+        if(bitRead(buffer2.byte_2[j-1],4)){
+          ZPOS=ZPOS+1;
+        }else{
+          ZPOS=ZPOS-1;
+        }
+      }
       terminate_counter=0;
       //check_command(1);
    }else{
@@ -353,12 +383,23 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    }
 }
 
+#define X_STEP A0        //PF0
+#define Y_STEP A6        //PF6
+#define Z_STEP 46        //PL3
+#define E_STEP 26        //PA4
+#define X_DIR A1         //PF1
+#define Y_DIR A7         //PF7
+#define Z_DIR 48         //PL1
+#define E_DIR 28         //PA6
+
 void position_report(){
   currentMillis_pos = millis();
-  if (currentMillis_pos - previousMillis_USBupdate_pos >= 100) {
+  if (currentMillis_pos - previousMillis_USBupdate_pos >= 200) {
        previousMillis_USBupdate_pos=currentMillis_pos;
            buffer4.command = -243;
            buffer4.x_pos=XPOS;
+           buffer4.y_pos=YPOS;
+           buffer4.z_pos=ZPOS;
            Serial.write((char*)&buffer4,sizeof(buffer4));
   }
 
@@ -765,6 +806,8 @@ void temperature_USB_update(){
   buffer4.bed_temp = therm2.analog2temp();  // bed
   buffer4.command = -243;
   buffer4.x_pos=XPOS;
+  buffer4.y_pos=YPOS;
+  buffer4.z_pos=ZPOS;
   Serial.write((char*)&buffer4,sizeof(buffer4));
 }
 
@@ -1006,6 +1049,11 @@ void rapid_position(){
       PORTF = (buffer5.E<<PF7);
       PORTF = (buffer5.E<<PF7)|(0<<PF6);
       delayMicroseconds(buffer5.I);
+      if(buffer5.E){
+        YPOS=YPOS+1;
+      }else{
+        YPOS=YPOS-1;
+      }
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
@@ -1017,6 +1065,11 @@ void rapid_position(){
       PORTL = (buffer5.E<<PL1)|(0<<PL3);
       delayMicroseconds(buffer5.I);
       step_counter++;
+      if(buffer5.E){
+        ZPOS=ZPOS+1;
+      }else{
+        ZPOS=ZPOS-1;
+      }
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
    while(step_counter<buffer5.J && buffer5.C==3 && buffer5.D==1 && setoff==false && Serial.available()==0){

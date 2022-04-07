@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1124</width>
-    <height>649</height>
+    <width>1190</width>
+    <height>679</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -232,13 +232,13 @@ background-color: rgb(63, 63, 63);</string>
          <property name="minimumSize">
           <size>
            <width>550</width>
-           <height>40</height>
+           <height>55</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>800</width>
-           <height>40</height>
+           <height>55</height>
           </size>
          </property>
          <property name="frameShape">
@@ -264,9 +264,7 @@ background-color: rgb(63, 63, 63);</string>
             </property>
             <property name="font">
              <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
@@ -278,119 +276,34 @@ background-color: rgb(63, 63, 63);</string>
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="Nozz_LCD_2">
+           <widget class="QLabel" name="XPOSITION">
             <property name="minimumSize">
              <size>
-              <width>90</width>
-              <height>25</height>
+              <width>100</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>90</width>
-              <height>25</height>
+              <width>100</width>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>8</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="smallDecimalPoint">
-             <bool>false</bool>
-            </property>
-            <property name="digitCount">
-             <number>7</number>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-            <property name="value" stdset="0">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="intValue" stdset="0">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="l19_8">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+color: rgb(255, 115, 30);
+}</string>
             </property>
             <property name="text">
-             <string>Y [mm]</string>
+             <string>0.000</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLCDNumber" name="Nozz_LCD_3">
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>90</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-             </font>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="smallDecimalPoint">
-             <bool>false</bool>
-            </property>
-            <property name="digitCount">
-             <number>7</number>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-            <property name="value" stdset="0">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="intValue" stdset="0">
-             <number>0</number>
             </property>
            </widget>
           </item>
@@ -410,7 +323,66 @@ background-color: rgb(63, 63, 63);</string>
             </property>
             <property name="font">
              <font>
-              <pointsize>11</pointsize>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Y [mm]</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="YPOSITION">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+color: rgb(255, 115, 30);
+}</string>
+            </property>
+            <property name="text">
+             <string>0.000</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="l19_10">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
@@ -422,47 +394,34 @@ background-color: rgb(63, 63, 63);</string>
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="Nozz_LCD_4">
+           <widget class="QLabel" name="ZPOSITION">
             <property name="minimumSize">
              <size>
-              <width>90</width>
-              <height>25</height>
+              <width>100</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>90</width>
-              <height>25</height>
+              <width>100</width>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>8</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+color: rgb(255, 115, 30);
+}</string>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
+            <property name="text">
+             <string>0.000</string>
             </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="smallDecimalPoint">
-             <bool>false</bool>
-            </property>
-            <property name="digitCount">
-             <number>7</number>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-            <property name="value" stdset="0">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="intValue" stdset="0">
-             <number>0</number>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -474,13 +433,13 @@ background-color: rgb(63, 63, 63);</string>
          <property name="minimumSize">
           <size>
            <width>550</width>
-           <height>40</height>
+           <height>55</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>800</width>
-           <height>40</height>
+           <height>55</height>
           </size>
          </property>
          <property name="frameShape">
@@ -506,7 +465,7 @@ background-color: rgb(63, 63, 63);</string>
             </property>
             <property name="font">
              <font>
-              <pointsize>11</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
@@ -518,41 +477,34 @@ background-color: rgb(63, 63, 63);</string>
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="Nozz_LCD">
+           <widget class="QLabel" name="NOZZ_TEMP">
             <property name="minimumSize">
              <size>
-              <width>70</width>
-              <height>25</height>
+              <width>80</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>70</width>
-              <height>25</height>
+              <width>80</width>
+              <height>30</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>8</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+color: rgb(255, 115, 30);
+}</string>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
+            <property name="text">
+             <string>0.0000</string>
             </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="smallDecimalPoint">
-             <bool>false</bool>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-            <property name="value" stdset="0">
-             <double>0.000000000000000</double>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -572,7 +524,7 @@ background-color: rgb(63, 63, 63);</string>
             </property>
             <property name="font">
              <font>
-              <pointsize>11</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
@@ -584,21 +536,34 @@ background-color: rgb(63, 63, 63);</string>
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="Bed_LCD">
+           <widget class="QLabel" name="BED_TEMP">
             <property name="minimumSize">
              <size>
-              <width>70</width>
-              <height>25</height>
+              <width>80</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>70</width>
-              <height>25</height>
+              <width>80</width>
+              <height>30</height>
              </size>
             </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+color: rgb(255, 115, 30);
+}</string>
+            </property>
+            <property name="text">
+             <string>0.0000</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -10005,7 +9970,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1124</width>
+     <width>1190</width>
      <height>21</height>
     </rect>
    </property>
