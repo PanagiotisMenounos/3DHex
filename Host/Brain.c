@@ -212,10 +212,10 @@ int main(){
 	ABL_XCOORD = (float*)malloc(sizeof(float));
 	ABL_YCOORD = (float*)malloc(sizeof(float));
 	ABL_ZCOORD = (float*)malloc(sizeof(float));
-	//HWND hWnd = GetConsoleWindow();
-    //ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
-    //ShowWindow( hWnd, SW_HIDE );
-    //int *ABL_XCOORD;
+	HWND hWnd = GetConsoleWindow();
+    ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
+    ShowWindow( hWnd, SW_HIDE );
+    int *ABL_XCOORD;
     
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (pipe == INVALID_HANDLE_VALUE)
@@ -536,7 +536,7 @@ int main(){
 		free(ABL_XCOORD);
 		free(ABL_YCOORD);
 		free(ABL_ZCOORD);
-		printf("%s %f\n","z",Z_GLOB);
+		//printf("%s %f\n","z",Z_GLOB);
 		CloseHandle(pipe);
 }
 

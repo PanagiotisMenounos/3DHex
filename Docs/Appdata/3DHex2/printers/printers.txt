@@ -1,1 +1,25 @@
-1,Default
+0,Default,1
+0,CoreXY,1
+1,Ender3 Pro,1
+0,BiquX,1
+0,Ender5,1
+0,hrth,0
+0,fwwfwffwwf,0
+0,hr,0
+0,htw,0
+0,hwtt,0
+0,p,0
+0,y,0
+0,hre,0
+0,hrtthr,0
+0,hrth,0
+0,whrhwrgwrgwgew,0
+0,hr,0
+0,htw,0
+0,hwtt,0
+0,hre,0
+0,hrtthr,0
+0,hrth,0
+0,egegewgeweg,0
+0,hr,0
+0,htw,0

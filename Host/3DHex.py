@@ -284,7 +284,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         buffer1_file.close()
         buffer2_file.close()
         self.message.emit(">>> GCODE Post processing..this may take a while..") #emit the signal
-        p1 = subprocess.Popen("3DHex.exe") #Start 3DHex.C Proccess 
+        p1 = subprocess.Popen("Brain.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
         buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
@@ -1469,7 +1469,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
            self.child_file.write(str(struct.pack("i",self.mirror)))
            self.child_file.close()
-           p2 = subprocess.Popen("3DHex.exe")
+           p2 = subprocess.Popen("Brain.exe")
         else:
            self.Message_panel.append(">>> Aborted ")
 

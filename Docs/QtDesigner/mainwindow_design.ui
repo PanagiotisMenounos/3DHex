@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1190</width>
+    <width>1292</width>
     <height>679</height>
    </rect>
   </property>
@@ -501,7 +501,7 @@ color: rgb(255, 115, 30);
 }</string>
             </property>
             <property name="text">
-             <string>0.0000</string>
+             <string>0.00</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -560,7 +560,7 @@ color: rgb(255, 115, 30);
 }</string>
             </property>
             <property name="text">
-             <string>0.0000</string>
+             <string>0.00</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -5134,7 +5134,7 @@ border-color:rgb(120, 120, 120)
                  </font>
                 </property>
                 <property name="text">
-                 <string>Angle°</string>
+                 <string>Threshold°</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -9970,7 +9970,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1190</width>
+     <width>1292</width>
      <height>21</height>
     </rect>
    </property>
