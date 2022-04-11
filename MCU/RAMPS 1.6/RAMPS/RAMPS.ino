@@ -141,9 +141,9 @@ struct data4{
   volatile double command;
   volatile double nozz_temp;
   volatile double bed_temp;
-  volatile long x_pos;
-  volatile long y_pos;
-  volatile long z_pos;
+  volatile unsigned int x_pos;
+  volatile unsigned int y_pos;
+  volatile unsigned int z_pos;
 };
 
 struct data5{
@@ -394,7 +394,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
 
 void position_report(){
   currentMillis_pos = millis();
-  if (currentMillis_pos - previousMillis_USBupdate_pos >= 200) {
+  if (currentMillis_pos - previousMillis_USBupdate_pos >= 100) {
        previousMillis_USBupdate_pos=currentMillis_pos;
            buffer4.command = -243;
            buffer4.x_pos=XPOS;

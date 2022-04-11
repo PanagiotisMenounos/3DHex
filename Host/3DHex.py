@@ -179,13 +179,13 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.message.emit(">>> Mode: Idle") #emit the signal
         try:
             while window.USB_CONNECTED==1:
-                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #Read temperature
+                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read temperature
                 #print("XPOS="+str(window.X_POS))
                 if window.A==0: #if in idle mode
                     if self.serial_command==-200: #-200 autotune read settings
                       window.Auto_P = round(window.nozz_temp,2)
                       window.Auto_I = round(window.bed_temp,2)
-                      (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #Read temperature
+                      (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read temperature
                       window.Auto_D = round(window.nozz_temp,2)
                       self.message.emit(">>> AUTOTUNE RESULTS") #emit the signal
                       self.message.emit(">>> P=" +str(window.Auto_P))
@@ -230,7 +230,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
            #print("FAILED")
 
     def packet_decode(self):
-        (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #This first time read buffer1 contains all the necessary settings for Printer
+        (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
         while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
             if int(self.serial_command)==-300: #300-> start of ABL
                 self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt',"w")
@@ -266,7 +266,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.y_pos_report.emit(window.Y_POS)
                 self.z_pos_report.emit(window.Z_POS)
                 ##print("XPOS="+str(window.X_POS))               
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #This first time read buffer1 contains all the necessary settings for Printer
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
 
     def usb_printing(self): #USB Printing function 
@@ -284,13 +284,13 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         buffer1_file.close()
         buffer2_file.close()
         self.message.emit(">>> GCODE Post processing..this may take a while..") #emit the signal
-        p1 = subprocess.Popen("Brain.exe") #Start 3DHex.C Proccess 
+        p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
         buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #Read arduino temp report
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
             self.x_pos_report.emit(window.X_POS)
@@ -325,7 +325,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 flag_file.close()
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         while self.serial_command!=-10 and self.child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #Read arduino temp report
+            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
             self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
             self.new_bed_temp.emit(window.bed_temp) #emit the signal
             self.x_pos_report.emit(window.X_POS)
@@ -460,7 +460,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
 
             if window.rapid_pos==1: #Rapid positioning command
                 self.send_buffer()
-                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3l",window.ser.read(24)) #wait for arduino to end process
+                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #wait for arduino to end process
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
                 if window.C==0:
@@ -653,7 +653,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_num=0
         self.min=0
         self.x_pos_last=0
+        self.stepx_pos=0
+        self.stepy_pos=0
+        self.stepz_pos=0
         self.x_overflow=0
+        self.sum_Xpos=0
+        self.sum_Ypos=0
+        self.sum_Zpos=0
         self.x_overflow_last=0
         self.y_pos_last=0
         self.y_overflow=0
@@ -1469,7 +1475,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
            self.child_file.write(str(struct.pack("i",self.mirror)))
            self.child_file.close()
-           p2 = subprocess.Popen("Brain.exe")
+           p2 = subprocess.Popen("3DBrain.exe")
         else:
            self.Message_panel.append(">>> Aborted ")
 
@@ -1498,132 +1504,40 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.BED_TEMP.setText("{:.2f}".format(round(new_bed_temp, 2)))
 
     def update_xpos(self, x_pos_report):
-        if abs(x_pos_report-self.x_pos_last) > 10000: #Below algorithm handles 16bit overflow arduino position
-            if x_pos_report<0:
-                 if abs(self.x_overflow) !=1:
-                    if abs(self.x_overflow) !=0:
-                        self.x_overflow_last = self.x_overflow
-                        self.x_overflow = self.x_overflow + 2
-                        self.int16_base = 32768
-                    else:
-                        self.x_overflow_last = self.x_overflow
-                        self.x_overflow = self.x_overflow + 1
-                        self.int16_base = -32768
-                 else:
-                    if self.x_overflow_last == 0:
-                        self.x_overflow = self.x_overflow + 2
-                    else:
-                        self.x_overflow = self.x_overflow + 1
-                    self.x_overflow_last = self.x_overflow
-                    self.int16_base = -32768
+        self.stepx_pos = x_pos_report - self.x_pos_last
+        if abs(self.stepx_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
+            if self.stepx_pos<0:
+                self.stepx_pos = (65536-self.x_pos_last) + x_pos_report
             else:
-                 if abs(self.x_overflow) !=1:
-                    if abs(self.x_overflow) !=0:
-                        self.x_overflow = self.x_overflow - 2
-                        self.int16_base = -32768
-                    else:
-                        self.x_overflow = self.x_overflow - 1
-                        self.int16_base = 32768
-                 else:
-                    if self.x_overflow_last == 0:
-                        self.x_overflow = self.x_overflow - 2
-                    else:
-                        self.x_overflow = self.x_overflow - 1
-                    self.x_overflow_last = self.x_overflow
-                    self.int16_base = 32768
-        if (self.x_overflow==0):
-            self.int16_base=0
+                self.stepx_pos = (x_pos_report -65536) - self.x_pos_last
         self.x_pos_last=x_pos_report
-        x_pos_report = (self.x_overflow*32768) + (x_pos_report-self.int16_base)
-        x_pos_report=self.InvertX*x_pos_report/100 #pulses to mm
-        self.XPOSITION.setText("{:.3f}".format(round(x_pos_report, 3)))
-        #b.insertPlainText(boxes[i].strip())
+        self.sum_Xpos = self.sum_Xpos + self.stepx_pos
+        self.x_overflow=self.sum_Xpos/100 #pulses to mm
+        self.XPOSITION.setText("{:.3f}".format(round(self.x_overflow, 3)))
         
     def update_ypos(self, y_pos_report):
-        if abs(y_pos_report-self.y_pos_last) > 10000: #Below algorithm handles 16bit overflow arduino position
-            if y_pos_report<0:
-                 if abs(self.y_overflow) !=1:
-                    if abs(self.y_overflow) !=0:
-                        self.y_overflow_last = self.y_overflow
-                        self.y_overflow = self.y_overflow + 2
-                        self.int16_base = 32768
-                    else:
-                        self.y_overflow_last = self.y_overflow
-                        self.y_overflow = self.y_overflow + 1
-                        self.int16_base = -32768
-                 else:
-                    if self.y_overflow_last == 0:
-                        self.y_overflow = self.y_overflow + 2
-                    else:
-                        self.y_overflow = self.y_overflow + 1
-                    self.y_overflow_last = self.y_overflow
-                    self.int16_base = -32768
+        self.stepy_pos = y_pos_report - self.y_pos_last
+        if abs(self.stepy_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
+            if self.stepy_pos<0:
+                self.stepy_pos = (65536-self.y_pos_last) + y_pos_report
             else:
-                 if abs(self.y_overflow) !=1:
-                    if abs(self.y_overflow) !=0:
-                        self.y_overflow = self.y_overflow - 2
-                        self.int16_base = -32768
-                    else:
-                        self.y_overflow = self.y_overflow - 1
-                        self.int16_base = 32768
-                 else:
-                    if self.y_overflow_last == 0:
-                        self.y_overflow = self.y_overflow - 2
-                    else:
-                        self.y_overflow = self.y_overflow - 1
-                    self.y_overflow_last = self.y_overflow
-                    self.int16_base = 32768
-        if (self.y_overflow==0):
-            self.int16_base=0
+                self.stepy_pos = (y_pos_report -65536) - self.y_pos_last
         self.y_pos_last=y_pos_report
-        y_pos_report = (self.y_overflow*32768) + (y_pos_report-self.int16_base)
-        y_pos_report=self.InvertY*y_pos_report/100 #pulses to mm
-        #self.Nozz_LCD_3.display(y_pos_report)
-        #self.Y_POS.setPlainText(y_pos_report)
-        self.YPOSITION.setText("{:.3f}".format(round(y_pos_report, 3)))
+        self.sum_Ypos = self.sum_Ypos + self.stepy_pos
+        self.y_overflow=self.sum_Ypos/100 #pulses to mm
+        self.YPOSITION.setText("{:.3f}".format(round(self.y_overflow, 3)))
 
     def update_zpos(self, z_pos_report):
-        if abs(z_pos_report-self.z_pos_last) > 10000: #Below algorithm handles 16bit overflow arduino position
-            if z_pos_report<0:
-                 if abs(self.z_overflow) !=1:
-                    if abs(self.z_overflow) !=0:
-                        self.z_overflow_last = self.z_overflow
-                        self.z_overflow = self.z_overflow + 2
-                        self.int16_base = 32768
-                    else:
-                        self.z_overflow_last = self.z_overflow
-                        self.z_overflow = self.z_overflow + 1
-                        self.int16_base = -32768
-                 else:
-                    if self.z_overflow_last == 0:
-                        self.z_overflow = self.z_overflow + 2
-                    else:
-                        self.z_overflow = self.z_overflow + 1
-                    self.z_overflow_last = self.z_overflow
-                    self.int16_base = -32768
+        self.stepz_pos = z_pos_report - self.z_pos_last
+        if abs(self.stepz_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
+            if self.stepz_pos<0:
+                self.stepz_pos = (65536-self.z_pos_last) + z_pos_report
             else:
-                 if abs(self.z_overflow) !=1:
-                    if abs(self.z_overflow) !=0:
-                        self.z_overflow = self.z_overflow - 2
-                        self.int16_base = -32768
-                    else:
-                        self.z_overflow = self.z_overflow - 1
-                        self.int16_base = 32768
-                 else:
-                    if self.z_overflow_last == 0:
-                        self.z_overflow = self.z_overflow - 2
-                    else:
-                        self.z_overflow = self.z_overflow - 1
-                    self.z_overflow_last = self.z_overflow
-                    self.int16_base = 32768
-        if (self.z_overflow==0):
-            self.int16_base=0
+                self.stepz_pos = (z_pos_report -65536) - self.z_pos_last
         self.z_pos_last=z_pos_report
-        z_pos_report = (self.z_overflow*32768) + (z_pos_report-self.int16_base)
-        z_pos_report=self.InvertZ*z_pos_report/100 #pulses to mm
-        #self.Nozz_LCD_4.display(z_pos_report)
-        #self.Z_POS.setPlainText(z_pos_report)
-        self.ZPOSITION.setText("{:.3f}".format(round(z_pos_report, 3)))
+        self.sum_Zpos = self.sum_Zpos + self.stepz_pos
+        self.z_overflow=self.sum_Zpos/100 #pulses to mm
+        self.ZPOSITION.setText("{:.3f}".format(round(self.z_overflow, 3)))
 
     def start_bar(self):
         self.bar_thread = ProgressBarWorker()
