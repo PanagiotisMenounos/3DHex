@@ -259,7 +259,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 window.ABL=0
                 #self.ABL_interpolation_thread=ABL_Interpolation()
                 #self.ABL_interpolation_thread.start()
-            if int(self.serial_command)==-243: #temp report
+            if int(self.serial_command)==-243: #temp report + xyz pos
                 self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
                 self.x_pos_report.emit(window.X_POS)
@@ -513,7 +513,6 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
             #print(text)
             window.freeroom=0
             window.added=0
-            window.Message_panel.append(">>> Added: " + text)
             printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
             printers = printer_file.readlines()
             printer_file.close()
@@ -620,7 +619,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.home_axis=0
         self.usb_printing=0
         self.rapid_pos=0
+        self.rapid_X=0
+        self.rapid_Y=0
+        self.rapid_Z=0
         self.nozz_auto_tune=0
+        self.InvertX_tongle=1
+        self.InvertY_tongle=1
+        self.InvertZ_tongle=1
         self.A=0
         self.B=0
         self.C=0
@@ -653,6 +658,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_num=0
         self.min=0
         self.x_pos_last=0
+        self.stepx_direction=1
+        self.stepy_direction=1
+        self.stepz_direction=1
         self.stepx_pos=0
         self.stepy_pos=0
         self.stepz_pos=0
@@ -790,9 +798,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.c3.stateChanged.connect(self.setYmotor)                                                             
         self.c4.stateChanged.connect(self.setZmotor)                                                             
         self.c5.stateChanged.connect(self.setEmotor)
-        #self.c7.stateChanged.connect(self.readInvertX)
-        #self.c8.stateChanged.connect(self.readInvertY)
-        #self.c9.stateChanged.connect(self.readInvertZ)
+        self.c7.stateChanged.connect(self.readInvertX)
+        self.c8.stateChanged.connect(self.readInvertY)
+        self.c9.stateChanged.connect(self.readInvertZ)
         self.c12.stateChanged.connect(self.setHOME_Xbuttons)
         self.c13.stateChanged.connect(self.setHOME_Ybuttons)
         self.c14.stateChanged.connect(self.setHOME_Zbuttons)
@@ -969,11 +977,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 x_iter=0
                 gpsy = gpsy + stepy
                 y_iter=y_iter+1
+            ABL_f.write('G2929'+'\n')
             ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
             ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
             ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
             ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
-            ABL_f.write('G2929'+'\n')
+           
             
         ABL_f.close()
         self.ABL=1
@@ -1001,7 +1010,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         fig.tight_layout()
         pyplot.ion()
         pyplot.show()
-            
+
+    def readInvertX(self):
+        self.InvertX_tongle=1
+
+    def readInvertY(self):
+        self.InvertY_tongle=1
+
+    def readInvertZ(self):
+        self.InvertZ_tongle=1
+
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
         window.c3.setEnabled(True) 
@@ -1246,13 +1264,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    if self.E==1:               
                        self.E=0                #Direction
                        self.InvertX = -1
-                       print("1")
+                       self.rapid_X=-1
                    else:
                        self.E=1
                        self.InvertX = 1
-                       print("-1")
+                       self.rapid_X=-1
                else:
                    self.p8.setEnabled(False)
+                   self.rapid_X=1
             if axis == 1:
                self.I=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #delay time
                self.J=int(window.d2.value()*int(window.b2.toPlainText().strip()))
@@ -1262,10 +1281,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    self.p11.setEnabled(False)
                    if self.E==1:               
                        self.E=0                #Direction
+                       self.rapid_Y=-1
                    else:
                        self.E=1
+                       self.rapid_Y=-1
                else:
                    self.p12.setEnabled(False)
+                   self.rapid_Y=1
             if axis == 2:
                self.I=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #delay time
                self.J=int(window.d3.value()*int(window.b3.toPlainText().strip()))
@@ -1275,10 +1297,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    self.p15.setEnabled(False)
                    if self.E==1:               
                        self.E=0                #Direction
+                       self.rapid_Z=-1
                    else:
                        self.E=1
+                       self.rapid_Z=-1
                else:
                    self.p16.setEnabled(False)
+                   self.rapid_Z=1
             if axis == 3:
                self.I=int(1000000/(int(window.b4.toPlainText().strip())*window.d8.value()*2))  #delay time
                self.J=int(window.d4.value()*int(window.b4.toPlainText().strip()))
@@ -1504,12 +1529,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.BED_TEMP.setText("{:.2f}".format(round(new_bed_temp, 2)))
 
     def update_xpos(self, x_pos_report):
-        self.stepx_pos = x_pos_report - self.x_pos_last
+        self.stepx_pos = x_pos_report - self.x_pos_last    
         if abs(self.stepx_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
             if self.stepx_pos<0:
                 self.stepx_pos = (65536-self.x_pos_last) + x_pos_report
             else:
                 self.stepx_pos = (x_pos_report -65536) - self.x_pos_last
+        if self.rapid_X != 0 and self.stepx_pos!=0 and self.InvertX_tongle==1:
+            if self.rapid_X>0 and self.stepx_pos<0:
+                window.Message_panel.append(">>> X Position calibrated")
+                self.InvertX_tongle=0
+                self.stepx_direction=-1
+            else:
+                if self.rapid_X<0 and self.stepx_pos>0:
+                    window.Message_panel.append(">>> X Position calibrated")
+                    self.stepx_direction=-1
+                    self.InvertX_tongle=0
+                else:
+                    window.Message_panel.append(">>> X Position calibrated")
+                    self.stepx_direction=1
+                    self.InvertX_tongle=0
+            self.rapid_X=0
+        self.stepx_pos=self.stepx_pos*self.stepx_direction
         self.x_pos_last=x_pos_report
         self.sum_Xpos = self.sum_Xpos + self.stepx_pos
         self.x_overflow=self.sum_Xpos/100 #pulses to mm
@@ -1522,6 +1563,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.stepy_pos = (65536-self.y_pos_last) + y_pos_report
             else:
                 self.stepy_pos = (y_pos_report -65536) - self.y_pos_last
+        if self.rapid_Y != 0 and self.stepy_pos!=0 and self.InvertY_tongle==1:
+            if self.rapid_Y>0 and self.stepy_pos<0:
+                window.Message_panel.append(">>> Y Position calibrated")
+                self.InvertY_tongle=0
+                self.stepy_direction=-1
+            else:
+                if self.rapid_Y<0 and self.stepy_pos>0:
+                    window.Message_panel.append(">>> Y Position calibrated")
+                    self.stepy_direction=-1
+                    self.InvertY_tongle=0
+                else:
+                    window.Message_panel.append(">>> Y Position calibrated")
+                    self.stepy_direction=1
+                    self.InvertΥ_tongle=0
+            self.rapid_Y=0
+        self.stepy_pos=self.stepy_pos*self.stepy_direction
         self.y_pos_last=y_pos_report
         self.sum_Ypos = self.sum_Ypos + self.stepy_pos
         self.y_overflow=self.sum_Ypos/100 #pulses to mm
@@ -1534,6 +1591,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.stepz_pos = (65536-self.z_pos_last) + z_pos_report
             else:
                 self.stepz_pos = (z_pos_report -65536) - self.z_pos_last
+        if self.rapid_Z != 0 and self.stepz_pos!=0 and self.InvertZ_tongle==1:
+            if self.rapid_Z>0 and self.stepz_pos<0:
+                window.Message_panel.append(">>> Z Position calibrated")
+                self.InvertZ_tongle=0
+                self.stepz_direction=-1
+            else:
+                if self.rapid_Z<0 and self.stepz_pos>0:
+                    window.Message_panel.append(">>> Z Position calibrated")
+                    self.stepz_direction=-1
+                    self.InvertZ_tongle=0
+                else:
+                    window.Message_panel.append(">>> Z Position calibrated")
+                    self.stepz_direction=1
+                    self.InvertZ_tongle=0
+            self.rapid_Z=0
+        self.stepz_pos=self.stepz_pos*self.stepz_direction
         self.z_pos_last=z_pos_report
         self.sum_Zpos = self.sum_Zpos + self.stepz_pos
         self.z_overflow=self.sum_Zpos/100 #pulses to mm

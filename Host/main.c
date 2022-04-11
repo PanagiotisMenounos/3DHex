@@ -84,7 +84,7 @@ bool embedded_line=false;
 double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
 
 double ABL_X=0,ABL_Y=0,BED_WIDTH=200,BED_LENGTH=200,ABL_Z_Fade;
-double BED_XSIZE, BED_YSIZE,ABL_Z_last=0;
+double BED_XSIZE, BED_YSIZE,ABL_Z_last=0,GRID_RESOLUTION=1;
 bool ABL_Process=false,ABL_Data=false;
 int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
@@ -212,9 +212,9 @@ int main(){
 	ABL_XCOORD = (float*)malloc(sizeof(float));
 	ABL_YCOORD = (float*)malloc(sizeof(float));
 	ABL_ZCOORD = (float*)malloc(sizeof(float));
-	HWND hWnd = GetConsoleWindow();
-    ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
-    ShowWindow( hWnd, SW_HIDE );
+	//HWND hWnd = GetConsoleWindow();
+    //ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
+    //ShowWindow( hWnd, SW_HIDE );
     int *ABL_XCOORD;
     
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
@@ -240,6 +240,7 @@ int main(){
         path_files();
     	read_settings();
     	ABL_readXYZ();
+    	printf("%s\n","HERE IAM");
     	T_ACCEL_ERATION=ACCELERATION;
     	T_JMFEED=JMFEED;
     	T_JERK=JERK;
@@ -1461,12 +1462,12 @@ void read_settings()
 {
     FILE *box_sett;
     FILE *cbox_sett;
-    char b[65][30],c[29][30],temp_str[30];  
+    char b[70][30],c[29][30],temp_str[30];  
     int i;
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
     
-    for (i=0;i<65;i++){
+    for (i=0;i<70;i++){
         fgets (temp_str, 30, box_sett);
         strcpy(b[i],temp_str);
     }
@@ -1518,6 +1519,7 @@ void read_settings()
 	sscanf(b[54], "%lf", &BED_YSIZE);
 	ABL_ITERATIONS=atoi(b[57]);
 	sscanf(b[61], "%lf", &ABL_Z_Fade);
+	sscanf(b[66], "%lf", &GRID_RESOLUTION);
     i=0;
     for (i=0;i<29;i++){
         fgets (temp_str, 30, cbox_sett);
@@ -2960,7 +2962,8 @@ void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
 				bits[j]='0';
 			}
 			j=0;
-			ABL_Coord_Position=(abs(Y_GLOB+0.00000001)*(BED_XSIZE+1))+abs(X_GLOB+0.5); //0.00000001 FIX A FLOAT BUG
+			//ABL_Coord_Position=(abs(Y_GLOB+0.00000001)*(BED_XSIZE+1))+abs(X_GLOB+0.5); //0.00000001 FIX A FLOAT BUG
+			ABL_Coord_Position=(abs((Y_GLOB/GRID_RESOLUTION)+0.00000001)*((BED_XSIZE/GRID_RESOLUTION)+1))+abs((X_GLOB/GRID_RESOLUTION)+0.5); //0.00000001 FIX A FLOAT BUG
 			ABL_Z_steps = (ABL_ZCOORD[ABL_Coord_Position]-ABL_Z_last);
 			//printf("%s %f %f %f %i %i\n","X Y Z correction",X_GLOB,Y_GLOB,ABL_ZCOORD[ABL_Coord_Position],ABL_Coord_Position,abs(ABL_Z_steps));
 			if(ABL_Z_steps==0){

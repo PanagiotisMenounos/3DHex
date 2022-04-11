@@ -190,7 +190,7 @@ volatile int8_t p;
 double input, output, setpoint=0;
 int state_r,ABL_ITERATIONS;
 volatile boolean AUTOTUNE=false,ABL=false;
-volatile int XPOS=0,YPOS=0,ZPOS=0;
+volatile unsigned int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
 
 
@@ -394,7 +394,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
 
 void position_report(){
   currentMillis_pos = millis();
-  if (currentMillis_pos - previousMillis_USBupdate_pos >= 100) {
+  if (currentMillis_pos - previousMillis_USBupdate_pos >= 200) {
        previousMillis_USBupdate_pos=currentMillis_pos;
            buffer4.command = -243;
            buffer4.x_pos=XPOS;
