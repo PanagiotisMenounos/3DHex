@@ -22,7 +22,7 @@
 #along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+import shutil
 import sys
 import serial.tools.list_ports
 from PyQt5 import QtWidgets, uic, QtCore
@@ -125,9 +125,9 @@ class ABL_Interpolation(QThread):
         length=float(window.b54.toPlainText().strip())
         grid=float(window.b66.toPlainText().strip())
   
-        x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt')
-        y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt')
-        z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt')
+        x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
+        y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
+        z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt')
         
         xx = np.arange(0, width+1, grid)
         yy = np.arange(0, length+1, grid)
@@ -137,7 +137,7 @@ class ABL_Interpolation(QThread):
         znew = rbfi(xx, yy)   # interpolated values
         
         
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt','w')
         size = xx.ravel().size
         view_step = int((100/view_percentage)*grid)
         i=0
@@ -153,7 +153,7 @@ class ABL_Interpolation(QThread):
         rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
         znew = rbfi(xx, yy)
 
-        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')      
+        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt','w')      
         size = xx.ravel().size
         i=0
         while i < size:
@@ -162,7 +162,9 @@ class ABL_Interpolation(QThread):
                 view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
             i=i+1
         view_file.close()
-        self.message.emit("nothing")
+        shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt')
+        shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt')
+
 
 class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
     message = pyqtSignal(str) #define signal
@@ -233,7 +235,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
         while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
             if int(self.serial_command)==-300: #300-> start of ABL
-                self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_z.txt',"w")
+                self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt',"w")
             if int(self.serial_command)==-301: #-301-> TRACK_Z
                 self.trackZ=self.trackZ+window.nozz_temp
                 if window.ABL_Sample==0:
@@ -257,6 +259,8 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.trackZ=0
                 self.abl_z_file.close()
                 window.ABL=0
+                shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
+                shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
                 #self.ABL_interpolation_thread=ABL_Interpolation()
                 #self.ABL_interpolation_thread.start()
             if int(self.serial_command)==-243: #temp report + xyz pos
@@ -911,6 +915,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.usb_printing=1
             self.start_bar()
             if self.ABL==0:
+                gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+                gcode = self.GCODE_Panel.toPlainText()
+                gcode_file.write(gcode)
+                gcode_file.close()
                 self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
                 self.data = self.GCODE_Panel.toPlainText()
                 self.file1.write(self.data)
@@ -982,17 +990,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
             ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
             ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
-           
-            
         ABL_f.close()
         self.ABL=1
         self.USB()
         
-    def View(self):
+    def View(self):         
         if pyplot.fignum_exists(self.plot_num)==False:
-            self.ABL_interpolation_thread=ABL_Interpolation()
-            self.ABL_interpolation_thread.message.connect(self.Plot)
-            self.ABL_interpolation_thread.start()
+            bedx = float(window.b53.toPlainText().strip())
+            bedy = float(window.b54.toPlainText().strip())
+            grid = float(window.b66.toPlainText().strip())
+            interpolation = 1
+            if grid < 1:
+                interpolation = 0
+                self.Message_panel.append(">>> Invalid grid value: <0")
+            if grid % 1 != 0:
+                interpolation = 0
+                self.Message_panel.append(">>> Invalid grid value: float")
+            if bedx % grid !=0:
+                interpolation = 0
+                self.Message_panel.append(">>> Invalid grid value: bed x_size modulus grid ")
+            if bedy % grid != 0:
+                interpolation = 0
+                self.Message_panel.append(">>> Invalid grid value: bed y_size modulus grid ")
+            if interpolation == 1:
+                self.ABL_interpolation_thread=ABL_Interpolation()
+                self.ABL_interpolation_thread.message.connect(self.Plot)
+                self.ABL_interpolation_thread.start()
 
     def Plot(self,message):    
         plt.style.use('dark_background')
@@ -1379,13 +1402,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         path = easygui.fileopenbox() #open window to select file and save path
         if path != None:
            self.Message_panel.append(">>> Successfully loaded: "+path)
-           self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+           #self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
            self.file = open(path) #open this file
            self.data = self.file.read() #read the file
            self.GCODE_Panel.setPlainText(self.data)
            self.file.close() #close the file
-           self.file1.write(self.data)
-           self.file1.close()
+           #self.file1.write(self.data)
+           #self.file1.close()
+          
+           
         else:
            self.Message_panel.append(">>> Aborted")
 
@@ -1477,6 +1502,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.import_GCODE(self.data)
 
     def SD_CARD(self):
+        gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+        gcode = self.GCODE_Panel.toPlainText()
+        gcode_file.write(gcode)
+        gcode_file.close()
         self.Message_panel.append(">>> Mode: SD Printing")
         path = QtWidgets.QFileDialog.getExistingDirectory(self, "Select Directory")
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w',encoding="utf-8") #encoding is important
