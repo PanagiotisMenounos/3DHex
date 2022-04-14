@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1291</width>
+    <width>1288</width>
     <height>679</height>
    </rect>
   </property>
@@ -7191,7 +7191,7 @@ border-color:rgb(83, 83, 83);
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="p29_3">
+               <widget class="QPushButton" name="p30">
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
@@ -7244,7 +7244,7 @@ border-color:rgb(83, 83, 83);
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="p29_4">
+               <widget class="QPushButton" name="p31">
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
@@ -7350,7 +7350,7 @@ border-color:rgb(83, 83, 83);
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="p29_2">
+               <widget class="QPushButton" name="p32">
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
@@ -9970,7 +9970,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1291</width>
+     <width>1288</width>
      <height>21</height>
     </rect>
    </property>

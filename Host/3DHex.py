@@ -124,7 +124,7 @@ class ABL_Interpolation(QThread):
         width=float(window.b53.toPlainText().strip())
         length=float(window.b54.toPlainText().strip())
         grid=float(window.b66.toPlainText().strip())
-  
+       
         x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
         y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
         z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt')
@@ -137,7 +137,7 @@ class ABL_Interpolation(QThread):
         znew = rbfi(xx, yy)   # interpolated values
         
         
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt','w')
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
         size = xx.ravel().size
         view_step = int((100/view_percentage)*grid)
         i=0
@@ -153,7 +153,7 @@ class ABL_Interpolation(QThread):
         rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
         znew = rbfi(xx, yy)
 
-        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt','w')      
+        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')      
         size = xx.ravel().size
         i=0
         while i < size:
@@ -162,8 +162,9 @@ class ABL_Interpolation(QThread):
                 view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
             i=i+1
         view_file.close()
-        shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt')
-        shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt')
+        self.message.emit("Plot BED")
+        #shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt')
+        #shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt')
 
 
 class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
@@ -424,38 +425,44 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.send_buffer()
                 window.enable_idle_buttons()
 
-            if window.home_axis==1: #Homing
+            if window.home_axis!=0: #Homing
                 window.A=0
                 window.B=2
-                if window.C==0:
-                    window.D = int(window.c2.isChecked())                                             #X ENABLE
-                    window.E = int(window.c12.isChecked())                                            #HOME_X_ENABLE
+                if window.home_axis==1:            
+                    window.C = int(window.c12.isChecked())                                            #HOME_X_ENABLE
                     window.F = int(window.c17.isChecked())                                            #HOME_X_STATE
-                    window.I=int(1000000/(int(window.b1.toPlainText().strip())*window.d5.value()*2))  #DURATION
-                if window.C==1:
-                    window.D = int(window.c3.isChecked())                                             #Y ENABLE
-                    window.E = int(window.c13.isChecked())                                            #HOME_Y_ENABLE
-                    window.F = int(window.c18.isChecked())                                            #HOME_Y_STATE
-                    window.I=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #DURATION
-                if window.C==2:
-                    window.D = int(window.c4.isChecked())                                             #Z ENABLE
+                    window.O=int(1000000/(int(window.b1.toPlainText().strip())*window.d5.value()*2))  #DURATION
+                    window.R=1
+                    window.S=0
+                    window.T=0
+                if window.home_axis==2:
+                    window.D = int(window.c13.isChecked())                                            #HOME_Y_ENABLE
+                    window.G = int(window.c18.isChecked())                                            #HOME_Y_STATE
+                    window.P=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #DURATION
+                    window.S=1
+                    window.R=0
+                    window.T=0
+                if window.home_axis==3:
                     window.E = int(window.c14.isChecked())                                            #HOME_Z_ENABLE
-                    window.F = int(window.c19.isChecked())                                            #HOME_Z_STATE
-                    window.I=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #DURATION
+                    window.K = int(window.c19.isChecked())                                            #HOME_Z_STATE
+                    window.Q=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #DURATION
+                    window.T=1
+                    window.R=0
+                    window.S=0
                 time.sleep(0.2)
                 self.send_buffer()
-                if window.C==0:
-                      if window.H==1:
+                if window.home_axis==1:
+                      if window.L==1:
                           window.p5.setEnabled(True)
                       else:
                           window.p6.setEnabled(True)
-                if window.C==1:
-                      if window.H==1:
+                if window.home_axis==2:
+                      if window.L==1:
                           window.p9.setEnabled(True)
                       else:
                           window.p10.setEnabled(True)
-                if window.C==2:
-                      if window.H==1:
+                if window.home_axis==3:
+                      if window.L==1:
                           window.p13.setEnabled(True)
                       else:
                           window.p14.setEnabled(True)
@@ -497,7 +504,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                      print(window.B)                     
                 else:          
                      self.message.emit(">>> BED AUTOTUNE")                
-                self.send_buffer()                
+                self.send_buffer()          
+
+            if window.bl_toggle==1: #Rapid positioning command
+                window.bl_toggle=0
+                self.message.emit(">>> BL_TOUCH TOGGLE")
+                self.send_buffer()
                                 
 
 class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
@@ -630,6 +642,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.InvertX_tongle=1
         self.InvertY_tongle=1
         self.InvertZ_tongle=1
+        self.bl_toggle=0
+        self.BL_TOUCH_STATE=0
         self.A=0
         self.B=0
         self.C=0
@@ -794,6 +808,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p90.clicked.connect(self.nozz_AUTOTUNE)
         self.p91.clicked.connect(self.bed_AUTOTUNE)
         self.p29.clicked.connect(self.View)
+        self.p30.clicked.connect(lambda:self.BL_TOUCH_TOGGLE(0))
+        self.p31.clicked.connect(lambda:self.BL_TOUCH_TOGGLE(1))
         self.p27.clicked.connect(self.execute_ABL)
         self.action_Open.triggered.connect(self.openfile)
         #self.p2.clicked.connect(self.start_USB_worker)
@@ -1206,70 +1222,79 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def HOME_X_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=1
             self.disable_idle_buttons()
-            self.C=0
-            self.G = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
-            self.H=1
-            if self.G==1:
-               self.G=0
+            self.I = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
+            if self.I==1:
+               self.I=0
             else:
-               self.G=1 
+               self.I=1 
             self.p5.setEnabled(False)
             self.home_axis=1
 
     def HOME_X_MAX(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=0
             self.disable_idle_buttons()
-            self.C=0
             self.G = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
-            self.H=0
             self.p6.setEnabled(False)
             self.home_axis=1
 
     def HOME_Y_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=1
             self.disable_idle_buttons()
-            self.C=1
-            self.H=1
-            self.G = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
-            if self.G==1:
-               self.G=0
+            self.J = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
+            if self.J==1:
+               self.J=0
             else:
-               self.G=1 
+               self.J=1 
             self.p9.setEnabled(False)
-            self.home_axis=1
+            self.home_axis=2
 
     def HOME_Y_MAX(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=0
             self.disable_idle_buttons()
-            self.C=1
-            self.H=0
             self.G = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
             self.p10.setEnabled(False)
-            self.home_axis=1
+            self.home_axis=2
 
     def HOME_Z_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=1
             self.disable_idle_buttons()
-            self.C=2
-            self.H=1
-            self.G = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
-            if self.G==1:
-               self.G=0
+            self.K = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
+            if self.K==1:
+               self.K=0
             else:
-               self.G=1 
+               self.K=1 
             self.p13.setEnabled(False)
-            self.home_axis=1
+            self.home_axis=3
 
     def HOME_Z_MAX(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.L=0
             self.disable_idle_buttons()
-            self.C=2
-            self.H=0
             self.p14.setEnabled(False)
             self.G = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
-            self.home_axis=1
+            self.home_axis=3
 
+    def BL_TOUCH_TOGGLE(self,case):
+        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
+            self.bl_toggle=1
+            self.A=0
+            self.B=7
+            if case==0: #toggle button
+                if self.BL_TOUCH_STATE==0: #UP
+                    self.C=1
+                    self.BL_TOUCH_STATE=1
+                else:
+                    self.C=2
+                    self.BL_TOUCH_STATE=0
+            else: #test button
+                self.C=0
+            
     def rapid_idle_position(self,axis,dir):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.disable_idle_buttons()

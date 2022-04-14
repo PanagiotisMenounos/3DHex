@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1291, 679)
+        MainWindow.resize(1288, 679)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -3535,14 +3535,14 @@ class Ui_MainWindow(object):
 "")
         self.p27.setObjectName("p27")
         self.horizontalLayout_2.addWidget(self.p27)
-        self.p29_3 = QtWidgets.QPushButton(self.frame_22)
-        self.p29_3.setEnabled(True)
-        self.p29_3.setMinimumSize(QtCore.QSize(60, 26))
-        self.p29_3.setMaximumSize(QtCore.QSize(60, 26))
+        self.p30 = QtWidgets.QPushButton(self.frame_22)
+        self.p30.setEnabled(True)
+        self.p30.setMinimumSize(QtCore.QSize(60, 26))
+        self.p30.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p29_3.setFont(font)
-        self.p29_3.setStyleSheet("QPushButton {\n"
+        self.p30.setFont(font)
+        self.p30.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3566,16 +3566,16 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p29_3.setObjectName("p29_3")
-        self.horizontalLayout_2.addWidget(self.p29_3)
-        self.p29_4 = QtWidgets.QPushButton(self.frame_22)
-        self.p29_4.setEnabled(True)
-        self.p29_4.setMinimumSize(QtCore.QSize(60, 26))
-        self.p29_4.setMaximumSize(QtCore.QSize(60, 26))
+        self.p30.setObjectName("p30")
+        self.horizontalLayout_2.addWidget(self.p30)
+        self.p31 = QtWidgets.QPushButton(self.frame_22)
+        self.p31.setEnabled(True)
+        self.p31.setMinimumSize(QtCore.QSize(60, 26))
+        self.p31.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p29_4.setFont(font)
-        self.p29_4.setStyleSheet("QPushButton {\n"
+        self.p31.setFont(font)
+        self.p31.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3599,8 +3599,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p29_4.setObjectName("p29_4")
-        self.horizontalLayout_2.addWidget(self.p29_4)
+        self.p31.setObjectName("p31")
+        self.horizontalLayout_2.addWidget(self.p31)
         self.p28 = QtWidgets.QPushButton(self.frame_22)
         self.p28.setEnabled(True)
         self.p28.setMinimumSize(QtCore.QSize(60, 26))
@@ -3634,14 +3634,14 @@ class Ui_MainWindow(object):
 "")
         self.p28.setObjectName("p28")
         self.horizontalLayout_2.addWidget(self.p28)
-        self.p29_2 = QtWidgets.QPushButton(self.frame_22)
-        self.p29_2.setEnabled(True)
-        self.p29_2.setMinimumSize(QtCore.QSize(60, 26))
-        self.p29_2.setMaximumSize(QtCore.QSize(60, 26))
+        self.p32 = QtWidgets.QPushButton(self.frame_22)
+        self.p32.setEnabled(True)
+        self.p32.setMinimumSize(QtCore.QSize(60, 26))
+        self.p32.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p29_2.setFont(font)
-        self.p29_2.setStyleSheet("QPushButton {\n"
+        self.p32.setFont(font)
+        self.p32.setStyleSheet("QPushButton {\n"
 "background-color:rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -3665,8 +3665,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.p29_2.setObjectName("p29_2")
-        self.horizontalLayout_2.addWidget(self.p29_2)
+        self.p32.setObjectName("p32")
+        self.horizontalLayout_2.addWidget(self.p32)
         self.p29 = QtWidgets.QPushButton(self.frame_22)
         self.p29.setEnabled(True)
         self.p29.setMinimumSize(QtCore.QSize(60, 26))
@@ -5109,7 +5109,7 @@ class Ui_MainWindow(object):
         self.gridLayout_4.addWidget(self.frame_3, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1291, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1288, 21))
         self.menubar.setObjectName("menubar")
         self.menu_Files = QtWidgets.QMenu(self.menubar)
         self.menu_Files.setObjectName("menu_Files")
@@ -5323,10 +5323,10 @@ class Ui_MainWindow(object):
         self.comboBox4.setItemText(1, _translate("MainWindow", "Plane"))
         self.comboBox4.setItemText(2, _translate("MainWindow", "Mesh"))
         self.p27.setText(_translate("MainWindow", "Probe"))
-        self.p29_3.setText(_translate("MainWindow", "Toggle"))
-        self.p29_4.setText(_translate("MainWindow", "Test"))
+        self.p30.setText(_translate("MainWindow", "Toggle"))
+        self.p31.setText(_translate("MainWindow", "Test"))
         self.p28.setText(_translate("MainWindow", "Repeat"))
-        self.p29_2.setText(_translate("MainWindow", "Remove"))
+        self.p32.setText(_translate("MainWindow", "Remove"))
         self.p29.setText(_translate("MainWindow", "View"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "ABL"))
         self.l16.setText(_translate("MainWindow", "COM PORT"))

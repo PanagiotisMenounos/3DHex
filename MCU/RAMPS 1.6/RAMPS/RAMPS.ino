@@ -490,25 +490,18 @@ void execute_command(){
        check_steppers();
     break;
     case 3: //homing
-       buffer3.X_ENABLE=buffer5.N;
-       buffer3.Y_ENABLE=buffer5.O;
-       buffer3.Z_ENABLE=buffer5.P;
-       
-       buffer3.HOME_X_ENABLE=buffer5.E;
-       buffer3.HOME_Y_ENABLE=buffer5.F;
-       buffer3.HOME_Z_ENABLE=buffer5.G;
-       
-       buffer3.HOME_X_STATE=buffer5.H;
-       buffer3.HOME_Y_STATE=buffer5.L;
-       buffer3.HOME_Z_STATE=buffer5.M;
-       
-       buffer3.HOME_X_DIR=buffer5.B;
-       buffer3.HOME_Y_DIR=buffer5.C;
-       buffer3.HOME_Z_DIR=buffer5.D;
-       
-       buffer3.HOME_X_DURATION=buffer5.I;
-       buffer3.HOME_Y_DURATION=buffer5.J;
-       buffer3.HOME_Z_DURATION=buffer5.K;
+       buffer3.HOME_X_ENABLE=buffer5.C;
+       buffer3.HOME_Y_ENABLE=buffer5.D;
+       buffer3.HOME_Z_ENABLE=buffer5.E;
+       buffer3.HOME_X_STATE=buffer5.F;
+       buffer3.HOME_Y_STATE=buffer5.G;
+       buffer3.HOME_Z_STATE=buffer5.H;
+       buffer3.HOME_X_DIR=buffer5.I;
+       buffer3.HOME_Y_DIR=buffer5.J;
+       buffer3.HOME_Z_DIR=buffer5.K;
+       buffer3.HOME_X_DURATION=buffer5.O;
+       buffer3.HOME_Y_DURATION=buffer5.P;
+       buffer3.HOME_Z_DURATION=buffer5.Q;
        homing_routine();
     break;
     case 4: //fan control
@@ -892,28 +885,19 @@ int check_inputs(){
                 }
               check_steppers();
             }else if(buffer5.B == 2){              //B=2 => Home
-                if(buffer5.C==0){                  //C=0 => XAXIS
-                     buffer3.X_ENABLE=buffer5.D;
-                     buffer3.HOME_X_ENABLE=buffer5.E;
-                     buffer3.HOME_X_STATE=buffer5.F;
-                     buffer3.HOME_X_DIR=buffer5.G;
-                     buffer3.HOME_X_DURATION=buffer5.I;
-                }
-                if(buffer5.C==1){                  //C=1 => YAXIS
-                     buffer3.Y_ENABLE=buffer5.D;
-                     buffer3.HOME_Y_ENABLE=buffer5.E;
-                     buffer3.HOME_Y_STATE=buffer5.F;
-                     buffer3.HOME_Y_DIR=buffer5.G;
-                     buffer3.HOME_Y_DURATION=buffer5.I;
-                }
-                if(buffer5.C==2){                  //C=2 => ZAXIS
-                     buffer3.Z_ENABLE=buffer5.D;
-                     buffer3.HOME_Z_ENABLE=buffer5.E;
-                     buffer3.HOME_Z_STATE=buffer5.F;
-                     buffer3.HOME_Z_DIR=buffer5.G;
-                     buffer3.HOME_Z_DURATION=buffer5.I;
-                }
-                homing_routine();
+               buffer3.HOME_X_ENABLE=buffer5.C;
+               buffer3.HOME_Y_ENABLE=buffer5.D;
+               buffer3.HOME_Z_ENABLE=buffer5.E;
+               buffer3.HOME_X_STATE=buffer5.F;
+               buffer3.HOME_Y_STATE=buffer5.G;
+               buffer3.HOME_Z_STATE=buffer5.H;
+               buffer3.HOME_X_DIR=buffer5.I;
+               buffer3.HOME_Y_DIR=buffer5.J;
+               buffer3.HOME_Z_DIR=buffer5.K;
+               buffer3.HOME_X_DURATION=buffer5.O;
+               buffer3.HOME_Y_DURATION=buffer5.P;
+               buffer3.HOME_Z_DURATION=buffer5.Q;
+               homing_routine();
             }else if(buffer5.B == 3){              //B=3 => Rapid potision 
                     rapid_position();
             }else if(buffer5.B == 4){
@@ -922,6 +906,17 @@ int check_inputs(){
                    digitalWrite(LED_BUILTIN,HIGH);
                    Atune_loop(buffer5.C);
                    digitalWrite(LED_BUILTIN,LOW);
+            }else if(buffer5.B == 7){ //BLtouch
+              if(buffer5.C==0){ //test
+                 bltouch.write(160);
+                 delay(300);
+                 bltouch.write(120);
+              }else if(buffer5.C==1){ //deploy
+                 bltouch.write(90);
+              }else if(buffer5.C==2){ //stow
+                 bltouch.write(10);
+              }
+              
             }
             while(Serial.available()<3){
                  temperature_control();  
@@ -1089,125 +1084,118 @@ void rapid_position(){
 }
 
 void homing_routine(){ 
-   boolean signalstate=true;
-   unsigned long prev=0;
-   long  ABL_Height=500, rev=0;
-   float ABL_Z=0;
-   int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
-   
-   digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
-   digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
-  /* if(LCD_16x4 == true && (buffer3.HOME_X_ENABLE==true || buffer3.HOME_Y_ENABLE==true || buffer3.HOME_Z_ENABLE==true)){lcd.setCursor(0, 2);lcd.print("HOMING");lcd.blink();}
-   delay(800);
-   XMIN_READ=digitalRead(HOME_XMIN_PIN);
-   if(buffer5.A==1 || buffer5.A==3){buffer5.C=0;}
-   while(buffer3.X_ENABLE==1 && buffer3.HOME_X_ENABLE==true && buffer5.C==0 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      XMIN_READ=digitalRead(HOME_XMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-
-   }
-   delay(1000);
-   if(buffer5.A==1 || buffer5.A==3){buffer5.C=1;}
-   YMIN_READ=digitalRead(HOME_XMIN_PIN);
-   while(buffer3.Y_ENABLE==1 && buffer3.HOME_Y_ENABLE==true && buffer5.C==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      YMIN_READ=digitalRead(HOME_XMIN_PIN);
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-*/
-   
-   if(buffer5.A==1 || buffer5.A==3){buffer5.C=2;}
-   if(ABL){
-   bltouch.write(10);
-   delay(300);
-   while(iter<ABL_ITERATIONS){
+  boolean signalstate=true;
+  unsigned long prev=0;
+  long  ABL_Height=500, rev=0;
+  float ABL_Z=0;
+  int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
+    
+  digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
+  digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
+  XMIN_READ=digitalRead(HOME_XMIN_PIN);
+  while(buffer3.HOME_X_ENABLE==true && buffer5.R==1 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
+    PORTF = (buffer3.HOME_X_DIR<<PF1);
+    PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
+    delayMicroseconds(buffer3.HOME_X_DURATION);
+    PORTF = (buffer3.HOME_X_DIR<<PF1);
+    PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
+    delayMicroseconds(buffer3.HOME_X_DURATION);
+    XMIN_READ=digitalRead(HOME_XMIN_PIN);
+    if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+  }
+  YMIN_READ=digitalRead(HOME_YMIN_PIN);
+  while(buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
+    PORTF = (buffer3.HOME_Y_DIR<<PF7);
+    PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
+    delayMicroseconds(buffer3.HOME_Y_DURATION);
+    PORTF = (buffer3.HOME_Y_DIR<<PF7);
+    PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
+    delayMicroseconds(buffer3.HOME_Y_DURATION);
+    YMIN_READ=digitalRead(HOME_YMIN_PIN);
+    if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+  }   
+  if(ABL){
+    bltouch.write(10);
+    delay(300);
+    while(iter<ABL_ITERATIONS){
       ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-      while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-         //if (micros()-prev >= buffer3.HOME_Z_DURATION){
-          if (micros()-prev >= 3000){
-           ABL_Z=ABL_Z+1;
-           prev = micros();
-           if (signalstate){
-              PORTL = (buffer3.HOME_Z_DIR<<PL1);
-              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
-           }else{
-              PORTL = (buffer3.HOME_Z_DIR<<PL1);
-              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-           }
-           signalstate=!signalstate;
-         }
-         if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-         if(ZMIN_READ!=buffer3.HOME_Z_STATE){
-               bltouch.write(90);
-               delay(200);
-               buffer4.command =-301; //ABL_ZTrack_Packet
-               buffer4.nozz_temp = ABL_Z;
-               Serial.write((char*)&buffer4,sizeof(buffer4));
-               if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
-                  while(ABL_Z>0){
-                     //if (micros()-prev >= buffer3.HOME_Z_DURATION){
-                      if (micros()-prev >= 3000){
-                        ABL_Z=ABL_Z-1;
-                        prev = micros();
-                        if (signalstate){
-                           PORTL = (Z_revdir<<PL1);
-                           PORTL = (Z_revdir<<PL1)|(1<<PL3);
-                        }else{
-                           PORTL = (Z_revdir<<PL1);
-                           PORTL = (Z_revdir<<PL1)|(0<<PL3);
-                        }
-                        signalstate=!signalstate;
-                    }            
+      while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
+        if (micros()-prev >= buffer3.HOME_Z_DURATION){
+          ABL_Z=ABL_Z+1;
+          prev = micros();
+          if (signalstate){
+            PORTL = (buffer3.HOME_Z_DIR<<PL1);
+            PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+          }else{
+            PORTL = (buffer3.HOME_Z_DIR<<PL1);
+            PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+          }
+          signalstate=!signalstate;
+        }
+        if(digitalRead(ENCODER_PIN)==LOW){
+          setoff=true;
+        }
+        ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+        if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+          bltouch.write(90);
+          delay(200);
+          buffer4.command =-301; //ABL_ZTrack_Packet
+          buffer4.nozz_temp = ABL_Z;
+          Serial.write((char*)&buffer4,sizeof(buffer4));
+          if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
+          while(ABL_Z>0){
+            if (micros()-prev >= buffer3.HOME_Z_DURATION){
+              ABL_Z=ABL_Z-1;
+              prev = micros();
+              if (signalstate){
+                PORTL = (Z_revdir<<PL1);
+                PORTL = (Z_revdir<<PL1)|(1<<PL3);
+              }else{
+                PORTL = (Z_revdir<<PL1);
+                PORTL = (Z_revdir<<PL1)|(0<<PL3);
               }
-              if(iter<ABL_ITERATIONS-1){
-                bltouch.write(10);
-                delay(300);
-              }
-              ABL_Z=0;
-              rev=0;
-         }            
+              signalstate=!signalstate;
+            }            
+          }
+          if(iter<ABL_ITERATIONS-1){
+            bltouch.write(10);
+            delay(300);
+          }
+          ABL_Z=0;
+          rev=0;
+        }            
       }
       iter++;
-   }
-     bltouch.write(90);
-     delay(300);
-     buffer4.command =-303; //ABL_ZTrack_Packet
-     Serial.write((char*)&buffer4,sizeof(buffer4));
-     GM_command=false;
-     iter=0;
-   }/*else{
+    }
+    bltouch.write(90);
+    delay(300);
+    buffer4.command =-303; //ABL_ZTrack_Packet
+    Serial.write((char*)&buffer4,sizeof(buffer4));
+    GM_command=false;
+    iter=0;
+  }else{              
+    bltouch.write(10);
+    delay(300);
+    ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+    while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
       ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-      while(buffer3.Z_ENABLE==1 && buffer3.HOME_Z_ENABLE==true && buffer5.C==2 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-         ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
-         if (micros()-prev >= buffer3.HOME_Z_DURATION){
-           //temperature_control();
-           prev = micros();
-           if (signalstate){
-              PORTL = (buffer3.HOME_Z_DIR<<PL1);
-              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
-           }else{
-              PORTL = (buffer3.HOME_Z_DIR<<PL1);
-              PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
-              ABL_Z=ABL_Z+1;
-           }
-           signalstate=!signalstate;
-         }
-         if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-         if(ZMIN_READ!=buffer3.HOME_Z_STATE){
-               bltouch.write(90);
-         }
+      if (micros()-prev >= buffer3.HOME_Z_DURATION){
+        prev = micros();
+        if (signalstate){
+        PORTL = (buffer3.HOME_Z_DIR<<PL1);
+        PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+        }else{
+        PORTL = (buffer3.HOME_Z_DIR<<PL1);
+        PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+        ABL_Z=ABL_Z+1;
+        }
+        signalstate=!signalstate;
       }
-   }*/
+      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+      if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+          bltouch.write(90);
+          delay(300);
+      }
+    }
+  }
 }

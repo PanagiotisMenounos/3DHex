@@ -350,22 +350,19 @@ int main(){
 				      fprintf(abl_y_file,"%lf\n",ABL_Y);
 					}
 				    GM_command=true;
-					MG_data.A=3;
-					MG_data.B=HOME_X_DIR;
-					MG_data.C=HOME_Y_DIR;
-					MG_data.D=HOME_Z_DIR;
-					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.E=1;}else{MG_data.E=0;}
-					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.F=1;}else{MG_data.F=0;}
-					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.G=1;}else{MG_data.G=0;}
-					MG_data.H=HOME_X_STATE;
-					MG_data.L=HOME_Y_STATE;
-					MG_data.M=HOME_Z_STATE;
-					MG_data.N=X_ENABLE;
-					MG_data.O=Y_ENABLE;
-					MG_data.P=Z_ENABLE;
-					MG_data.I=HOME_X_DURATION;
-					MG_data.J=HOME_Y_DURATION;
-					MG_data.K=HOME_Z_DURATION;
+					MG_data.A=3;               
+					MG_data.I=HOME_X_DIR;
+					MG_data.J=HOME_Y_DIR;
+					MG_data.K=HOME_Z_DIR;
+					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.C=1;MG_data.R=1;}else{MG_data.C=0;MG_data.R=0;}
+					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.D=1;MG_data.S=1;}else{MG_data.D=0;MG_data.S=0;}
+					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.E=1;MG_data.T=1;}else{MG_data.E=0;MG_data.T=0;}
+					MG_data.F=HOME_X_STATE;
+					MG_data.G=HOME_Y_STATE;
+					MG_data.H=HOME_Z_STATE;
+					MG_data.O=HOME_X_DURATION;
+					MG_data.P=HOME_Y_DURATION;
+					MG_data.Q=HOME_Z_DURATION;
 				}
 				if(Gl==4){ // G4 pause
 					GM_command=true;
