@@ -1,54 +1,50 @@
 # 3DHex
 
-3DHex is a windows host controller 3D printer firmware.  
-The Host runs on windows and uses the CPU power of any typical desktop computer to solve really complex mathematical equations for the kinematics. In it's core function the MCU sets it's outputs according to a "move" byte which contains the step(4bits) & direction(4bits) signal for XYZE axes and one more "delay" byte corresponding to the steprate at that time. When printing from USB the host is calculating real time and sends the raw binary data via USB. Unlike typical 3D Printer firmwares, the MCU cannot accept GCODE and in order to print from SD Card the Host saves the generated data to a .bin file which then can be transferred to the MCU with SD card.
+3DHex is a windows host controller 3D printer firmware.
+Αll kinematics calculations are executed by the computer while the MCU accepts raw 0s & 1s. 
 
 ## Downloads
 								
-Please note: DO NOT LEAVE YOUR PRINTER UNATTENDED!!! ...compiled are not final releases but just for quick review with major bugs and pending features.
-
-Host:  
-[3DHex_setup.exe (64bit)](https://drive.google.com/uc?export=download&id=1IUAwvQlQW2fMJM42fx39prPbyUTiclch)
-
-MCU:  
-[RAMPS 1.6.bin](https://drive.google.com/uc?export=download&id=17jIRwRCjPPezmSyDSkK-8Dl3-rQlhC1g)  or upload RAMPS.ino via Arduino IDE
+Still in development, first BETA release soon
 
 ## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Adv.PNG" />
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_ABL.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Mesh.PNG" />
 
-## Specs
+## Features
 
-* Easy configuration from the UI  
-* Up to 10 different printer configurations  
-* Trapezoidal / S-Curve motion planner supported for all kind of motions: G0/G1 & G2/G3  
+* SD/USB Printing
+* Compiled setup installation 
+* Direct configuration from the UI 
+* Up to 25 configurations   
+* S-Curve analytic mathematic solver for G0/G1 & G2/G3
+* S-Curve = 0: Trapezoidal analytic mathematic solver for G0/G1 & G2/G3
 * Optimized arc motion algorithm for G2/G3: microstepping grid resolution  
-* Smart curve detection algorithm: No deceleration will occur when the direction change is small for the next move. Both linear G0/G1 & G2/G3 are considered  
-* Basic thermal protection  
-* Software axis alignment   
-* Support only for Arduino Mega 2560 - RAMPS board  
-* LCD Display 16x2 Module HD44780 only  
-* Cartesian 3D printers only  
-* PID/Bang-Bang temperature control  
+* Smart curve detection post processing algorithm, integrating multiple movements into one velocity profile if the direction change is below threshold angle  
+* XY-XZ-YZ Skew correction      
+* PID/Bang-Bang temperature control
+* AutoPID tuning
+* Auto Bed Leveling plane interpollation
+* Auto Bed Leveling mesh interpollation algorithms: Multiquadric, Inverse, Gaussian, Linear, Cubic, Quintic, Thin plate
+* Auto Bed Leveling plane/mesh view
 * USB idle functions: Temperature control, Fan control, Move toolhead, Enable/Disable stepper, Homing, AutoPID  
 * USB on the fly functions: Temperature control, Fan control, Pause, Cancel, (Jump/Jerk/Acceleration/Feedrate)% control  
 * Supported G/M commands: G0, G1, G2, G3, G4, G28, G90, G91, G92, M104, M109, M140, M190, M106, M107, M17, M18, M84, M204, M205, M82,M83, M226
+* Basic thermal protection
+
+## Supported hardware
+* Arduino Mega 2560 - RAMPS board 
+* Ramps 2004 LCD Smart Controller
+* Cartesian 3D printers only
 
 ## Pending
 
-* AutoPID tuning  
-* 32bit boards  
-* G29 Autobed leveling  
-* CoreXY and delta printers  
-* Realtime kinematics plots  
+* 32bit boards   
+* CoreXY and delta printers   
 * Update manuals  
-
-
-## Manual
-
-Take a look at the (old) [Guide](https://github.com/3DHexfw/3DHex/blob/develop/Docs/Appdata/3DHex2/guide/Guide_1.0.2.pdf)
 
 ## Presentation 
 

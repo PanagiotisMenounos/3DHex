@@ -3303,7 +3303,7 @@ class Ui_MainWindow(object):
 "}\n"
 "QPlainTextEdit:disabled {\n"
 "background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
+"color: rgb(255, 255, 255);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
         self.m1.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)

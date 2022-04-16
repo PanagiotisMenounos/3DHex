@@ -21,7 +21,6 @@
 #You should have received a copy of the GNU General Public License
 #along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import shutil
 import sys
 import serial.tools.list_ports
@@ -49,6 +48,7 @@ import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 from numpy import loadtxt
 from PyQt5 import QtGui
+import pyqtgraph as pg
 from PyQt5.QtGui import *
 
 class ProgressBarWorker(QThread):
@@ -117,7 +117,7 @@ class FLYWorker(QThread):
         window.froze=0        
 
 class ABL_Interpolation(QThread):
-    message = pyqtSignal(str)
+    message = pyqtSignal(str) 
     def run(self):
         method = str(window.comboBox1.currentText())
         view_percentage = int(window.comboBox2.currentText().replace("%", ""))
@@ -132,40 +132,70 @@ class ABL_Interpolation(QThread):
         xx = np.arange(0, width+1, grid)
         yy = np.arange(0, length+1, grid)
         xx, yy = np.meshgrid(xx, yy)
-        
-        rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
-        znew = rbfi(xx, yy)   # interpolated values
-        
-        
+               
+        if window.ABL_INTERPOLATION_TYPE==1: #https://www.geeksforgeeks.org/program-to-find-equation-of-a-plane-passing-through-3-points/
+            a1 = x[2] - x[1]
+            b1 = y[2] - y[1]
+            c1 = z[2] - z[1]
+            a2 = x[3] - x[1]
+            b2 = y[3] - y[1]
+            c2 = z[3] - z[1]
+            a = b1 * c2 - b2 * c1
+            b = a2 * c1 - a1 * c2
+            c = a1 * b2 - b1 * a2
+            d = (- a * x[1] - b * y[1] - c * z[1])
+            print ("equation of plane is "+str(a)+ "x +"+str(b)+ "y +"+str(c)+ "z +"+str(d)+ "= 0.")
+        elif window.ABL_INTERPOLATION_TYPE==2:
+            rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
+            znew = rbfi(xx, yy)   # interpolated values              
+
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
         size = xx.ravel().size
         view_step = int((100/view_percentage)*grid)
-        i=0
-        while i < size:
-            file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(znew.ravel()[i]*int(window.b3.toPlainText().strip())))+'\n')
-            i=i+1
-        file.close()
+        
+        
+        if window.ABL_INTERPOLATION_TYPE==1:
+            i=1 # remove center point
+            while i < size:
+                z = (-d - (a*xx.ravel()[i])-(b*yy.ravel()[i]))/c
+                file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(z*int(window.b3.toPlainText().strip())))+'\n')
+                i=i+1
+            file.close()        
+        elif window.ABL_INTERPOLATION_TYPE==2:
+            i=0
+            while i < size:
+                file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(znew.ravel()[i]*int(window.b3.toPlainText().strip())))+'\n')
+                i=i+1
+            file.close()
+        
+        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')
         
         xx = np.arange(0, width, view_step)
         yy = np.arange(0, length, view_step)
         xx, yy = np.meshgrid(xx, yy)
-        
-        rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
-        znew = rbfi(xx, yy)
-
-        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')      
         size = xx.ravel().size
-        i=0
-        while i < size:
-            view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
-            if(i%view_step==0):
+ 
+        if window.ABL_INTERPOLATION_TYPE==1:
+            i=1
+            while i < size:
+                z = (-d - (a*xx.ravel()[i])-(b*yy.ravel()[i]))/c
+                view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(z)+'\n')
+                if(i%view_step==0):
+                    view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(z)+'\n')
+                i=i+1
+            view_file.close()
+            self.message.emit("Plot BED plane") 
+        elif window.ABL_INTERPOLATION_TYPE==2:
+            i=0
+            rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
+            znew = rbfi(xx, yy)
+            while i < size:
                 view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
-            i=i+1
-        view_file.close()
-        self.message.emit("Plot BED")
-        #shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt')
-        #shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\XYZ_view.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt')
-
+                if(i%view_step==0):
+                    view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
+                i=i+1
+            view_file.close()
+            self.message.emit("Plot BED mesh")      
 
 class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
     message = pyqtSignal(str) #define signal
@@ -262,6 +292,15 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 window.ABL=0
                 shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
                 shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
+                self.abl_type_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_type.txt',"w")
+                self.abl_type_file.write(str(window.abl_type)+"\n")
+                self.abl_type_file.close()
+                if window.abl_type==1:
+                    window.ABL_INTERPOLATION_TYPE=window.abl_type
+                elif window.abl_type==2:
+                    window.ABL_INTERPOLATION_TYPE=window.abl_type
+                elif window.abl_type==0:
+                    window.ABL_INTERPOLATION_TYPE=window.abl_type
                 #self.ABL_interpolation_thread=ABL_Interpolation()
                 #self.ABL_interpolation_thread.start()
             if int(self.serial_command)==-243: #temp report + xyz pos
@@ -644,6 +683,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.InvertZ_tongle=1
         self.bl_toggle=0
         self.BL_TOUCH_STATE=0
+        self.ABL_INTERPOLATION_TYPE=0
         self.A=0
         self.B=0
         self.C=0
@@ -975,6 +1015,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Ystart=float(self.b67.toPlainText().strip())
         self.Yend=float(self.b68.toPlainText().strip())
         self.repeat=int(self.b69.toPlainText().strip())
+        self.abl_type = window.comboBox4.currentIndex()
         
         centerX = (self.width/2.0)-self.xtool_offset
         centerY = (self.length/2.0)-self.ytool_offset
@@ -984,28 +1025,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         gpsx = self.Xstart
         gpsy = self.Ystart
         with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
-            ABL_f.write('G2929'+'\n')
-            ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
-            ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
-            ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
-            ABL_f.write('G28 Z'+'\n')
-            x_iter=0
-            y_iter=0
-            while y_iter < self.rows:
-                gpsx = self.Xstart
-                while x_iter < self.columns:
-                    ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
-                    ABL_f.write('G28 Z'+'\n')
-                    gpsx = gpsx + stepx
-                    x_iter=x_iter+1
+            if self.abl_type == 2:
+                ABL_f.write('G2929'+'\n')
+                ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
+                ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
+                ABL_f.write('G28 Z'+'\n')
                 x_iter=0
-                gpsy = gpsy + stepy
-                y_iter=y_iter+1
-            ABL_f.write('G2929'+'\n')
-            ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
-            ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
-            ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
-            ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+                y_iter=0
+                while y_iter < self.rows:
+                    gpsx = self.Xstart
+                    while x_iter < self.columns:
+                        ABL_f.write('G1 X'+str(gpsx)+' Y'+str(gpsy)+' F'+str(int(self.XY_Feed))+'\n')
+                        ABL_f.write('G28 Z'+'\n')
+                        gpsx = gpsx + stepx
+                        x_iter=x_iter+1
+                    x_iter=0
+                    gpsy = gpsy + stepy
+                    y_iter=y_iter+1
+                ABL_f.write('G2929'+'\n')
+                ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
+                ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+                window.m1.setPlainText('MESH')
+            elif self.abl_type == 1:
+                ABL_f.write('G2929'+'\n')
+                ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
+                ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G92 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+'\n')
+                ABL_f.write('G28 Z'+'\n')
+                ABL_f.write('G1 X'+str(self.Xstart)+' Y'+str(self.Ystart)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G28 Z'+'\n')
+                ABL_f.write('G1 X'+str(self.Xend)+' Y'+str(self.Ystart)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G28 Z'+'\n')
+                ABL_f.write('G1 X'+str((self.Xend-self.Xstart)/2.0)+' Y'+str(self.Yend)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G28 Z'+'\n')
+                ABL_f.write('G2929'+'\n')
+                ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
+                ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
+                window.m1.setPlainText('PLANE')
+            elif self.abl_type == 0:
+                window.m1.setPlainText('NULL')
         ABL_f.close()
         self.ABL=1
         self.USB()
@@ -1503,6 +1566,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
         cbboxes = file.readlines()
         file.close()
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
+        abldata = file.readlines()
         for i in range (0,70): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            b.setPlainText('')
@@ -1519,6 +1584,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (1,4): #c0-cmax
            cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            cb.setCurrentIndex(int(cbboxes[i-1].strip()))
+           
+        self.ABL_INTERPOLATION_TYPE = int(abldata[0].strip())
+        if self.ABL_INTERPOLATION_TYPE==1:
+            self.m1.setPlainText('PLANE')
+        elif self.ABL_INTERPOLATION_TYPE==2:
+            self.m1.setPlainText('MESH')
+        elif self.ABL_INTERPOLATION_TYPE==0:
+            self.m1.setPlainText('NO_DATA')
+        
 
     def clear_GCODE(self):
         self.data=''
