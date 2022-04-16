@@ -33,6 +33,12 @@ Still in development, first BETA release soon
 * Ramps 2004 LCD Smart Controller
 * Cartesian 3D printers only
 
+## Pending
+
+* 32bit boards   
+* CoreXY and delta printers   
+* Update manuals  
+
 ## User interface
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
@@ -40,13 +46,7 @@ Still in development, first BETA release soon
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_ABL.PNG" />
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Mesh.PNG" />
 
-## Pending
-
-* 32bit boards   
-* CoreXY and delta printers   
-* Update manuals  
-
-## Presentation 
+## Theory 
 
 <img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/3D%20Printer.JPG" />
 
