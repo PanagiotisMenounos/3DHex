@@ -7,13 +7,6 @@
 								
 Still in development, first BETA release soon
 
-## User interface
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Adv.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_ABL.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Mesh.PNG" />
-
 ## Features
 
 * SD/USB Printing
@@ -39,6 +32,13 @@ Still in development, first BETA release soon
 * Arduino Mega 2560 - RAMPS board 
 * Ramps 2004 LCD Smart Controller
 * Cartesian 3D printers only
+
+## User interface
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Adv.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_ABL.PNG" />
+<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Mesh.PNG" />
 
 ## Pending
 
