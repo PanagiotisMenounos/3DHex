@@ -255,7 +255,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             window.USB_CONNECTED=0
 
     def send_buffer(self):
-        window.ser.write(struct.pack("8B4H2B6H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T))
+        window.ser.write(struct.pack("8B4H2B9H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         #if pass_fail==1: #pass_fail should be 1, else communication has failed
            #print("PASS")
@@ -704,6 +704,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.R=0
         self.S=0
         self.T=0
+        self.U=0
+        self.V=0
+        self.W=0
         self.Auto_P=0
         self.Auto_I=0
         self.Auto_D=0
@@ -1025,7 +1028,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         gpsx = self.Xstart
         gpsy = self.Ystart
         with open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w') as ABL_f:
-            if self.abl_type == 2:
+            if self.abl_type == 2: #MESH Interpolation
                 ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
                 ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
@@ -1049,7 +1052,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
                 window.m1.setPlainText('MESH')
-            elif self.abl_type == 1:
+            elif self.abl_type == 1: #PLANE Interpolation
                 ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 Z'+str(safez)+' F'+str(int(self.Z_Feed))+'\n')
                 ABL_f.write('G1 X'+str(centerX)+' Y'+str(centerY)+' F'+str(int(self.XY_Feed))+'\n')
@@ -1059,7 +1062,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 ABL_f.write('G28 Z'+'\n')
                 ABL_f.write('G1 X'+str(self.Xend)+' Y'+str(self.Ystart)+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G28 Z'+'\n')
-                ABL_f.write('G1 X'+str((self.Xend-self.Xstart)/2.0)+' Y'+str(self.Yend)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G1 X'+str((self.Xend+self.Xstart)/2.0)+' Y'+str(self.Yend)+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G28 Z'+'\n')
                 ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
@@ -1512,7 +1515,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         cb_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cbboxes settings.txt','w')
         i=0
-        for i in range (0,70):
+        for i in range (0,71):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
           text = b.toPlainText().strip() #strip() removes'/n'
           if (text==''): #check if it is aan empty string
@@ -1566,9 +1569,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
         cbboxes = file.readlines()
         file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
-        abldata = file.readlines()
-        for i in range (0,70): #b0-bmax
+        try:
+            file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
+            abldata = file.readlines()
+            self.ABL_INTERPOLATION_TYPE = int(abldata[0].strip())
+            if self.ABL_INTERPOLATION_TYPE==1:
+                self.m1.setPlainText('PLANE')
+            elif self.ABL_INTERPOLATION_TYPE==2:
+                self.m1.setPlainText('MESH')
+            elif self.ABL_INTERPOLATION_TYPE==0:
+                self.m1.setPlainText('NO DATA')
+        except:
+            self.m1.setPlainText('NO DATA')
+        for i in range (0,71): #b0-bmax
            b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            b.setPlainText('')
            b.insertPlainText(boxes[i].strip()) #strip() removes'/n'
@@ -1585,13 +1598,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            cb.setCurrentIndex(int(cbboxes[i-1].strip()))
            
-        self.ABL_INTERPOLATION_TYPE = int(abldata[0].strip())
-        if self.ABL_INTERPOLATION_TYPE==1:
-            self.m1.setPlainText('PLANE')
-        elif self.ABL_INTERPOLATION_TYPE==2:
-            self.m1.setPlainText('MESH')
-        elif self.ABL_INTERPOLATION_TYPE==0:
-            self.m1.setPlainText('NO_DATA')
+
         
 
     def clear_GCODE(self):

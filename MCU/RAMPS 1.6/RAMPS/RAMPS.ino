@@ -167,6 +167,9 @@ struct data5{
   volatile uint16_t R;
   volatile uint16_t S;
   volatile uint16_t T;
+  volatile uint16_t U;
+  volatile uint16_t V;
+  volatile uint16_t W;
 };
 
 volatile struct data1 buffer1;
@@ -383,15 +386,6 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    }
 }
 
-#define X_STEP A0        //PF0
-#define Y_STEP A6        //PF6
-#define Z_STEP 46        //PL3
-#define E_STEP 26        //PA4
-#define X_DIR A1         //PF1
-#define Y_DIR A7         //PF7
-#define Z_DIR 48         //PL1
-#define E_DIR 28         //PA6
-
 void position_report(){
   currentMillis_pos = millis();
   if (currentMillis_pos - previousMillis_USBupdate_pos >= 200) {
@@ -448,7 +442,7 @@ void read_GM_data(){
       }
     }
     if(temp_counter>2){if(state_r==0){state_r=1;}else{state_r=0;}}//that state means that the data is at the other buffer
-    for(cc=0;cc<sizeof(buffer5);cc++){//total 30 bytes of data
+    for(cc=0;cc<sizeof(buffer5);cc++){//total bytes of data
       if(state_r==0){
         while(buffer1.byte_1[j]==command_value){ //clear command_values
             j++;

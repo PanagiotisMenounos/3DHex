@@ -58,7 +58,7 @@ union {
        ///////////////**************GLOBAL VARIABLES FOR SETTINGS******************/////////////////////
 double STPU_X,STPU_Y,STPU_Z,STPU_E,MAX_FX,MAX_FY,MAX_FZ,MAX_FE,MAX_ACCX,MAX_ACCY,MAX_ACCZ,MAX_ACCE, ACCELERATION,T_ACCEL_ERATION\
        ,JERK,T_JERK,MAX_JFX,\
-       MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,T_JMFEED,PARK_X,PARK_Y,PARK_Z,PARK_FEED,MAX_FILE_SIZE;
+       MAX_JFY,MAX_JFZ,MAX_JFE,JMFEED,T_JMFEED,PARK_X=0,PARK_Y=0,PARK_Z=100,PARK_FEED=30,MAX_FILE_SIZE,T0_X_OFFSET,T0_Y_OFFSET,T0_Z_OFFSET;
 int Invrt_X,Invrt_Y,Invrt_Z,Invrt_E,COM_PORT,UNITS,ABL_ITERATIONS;
 int32_t BAUD_RATE;
 uint16_t CORE_FREQ;
@@ -76,7 +76,7 @@ uint8_t HOME_X_ENABLE,HOME_Y_ENABLE,HOME_Z_ENABLE,HOME_X_STATE,HOME_Y_STATE,HOME
 double XY_PLANE,ZX_PLANE,ZY_PLANE;
 
 int CURVE_DETECTION;
-double ANGLE_TOLERANCE,FEEDRATE_TOLERANCE;
+double ANGLE_THRESHOLD;
 
 uint8_t GP,GC,LAST_TIME_BOXES;
 bool embedded_line=false;
@@ -206,6 +206,9 @@ struct data{
   volatile uint16_t R;
   volatile uint16_t S;
   volatile uint16_t T;
+  volatile uint16_t U;
+  volatile uint16_t V;
+  volatile uint16_t W;
 }MG_data;
 
 int main(){
@@ -240,7 +243,6 @@ int main(){
         path_files();
     	read_settings();
     	ABL_readXYZ();
-    	printf("%s\n","HERE IAM");
     	T_ACCEL_ERATION=ACCELERATION;
     	T_JMFEED=JMFEED;
     	T_JERK=JERK;
@@ -487,7 +489,7 @@ int main(){
 				write_hex2file(GP);
 				write_hex2file(GP);
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
-                if(e_space<=30 && e_space!=0){
+                if(e_space<=sizeof(MG_data) && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
         	          write_hex2file(GP);
     	           }
@@ -1194,7 +1196,7 @@ void curve_detection(unsigned long total_lines)
                 if(theta>180){
                  	theta=360-theta;
 		     	}
-                if(theta<=15 && ((Xf!=Xl || Yf!=Yl))){
+                if(theta<=ANGLE_THRESHOLD && ((Xf!=Xl || Yf!=Yl))){
 		    	  new_curve=0;
 		        }else{
 	    	       new_curve=1;
@@ -1464,7 +1466,7 @@ void read_settings()
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
     
-    for (i=0;i<70;i++){
+    for (i=0;i<71;i++){
         fgets (temp_str, 30, box_sett);
         strcpy(b[i],temp_str);
     }
@@ -1490,10 +1492,9 @@ void read_settings()
 	sscanf(b[23], "%lf", &MAX_ACCZ); 
 	sscanf(b[24], "%lf", &MAX_ACCE);
 	sscanf(b[25], "%lf", &JERK);
-	sscanf(b[30], "%lf", &PARK_FEED);
-    sscanf(b[31], "%lf", &PARK_X);
-	sscanf(b[32], "%lf", &PARK_Y);
-	sscanf(b[33], "%lf", &PARK_Z);
+    sscanf(b[31], "%lf", &T0_X_OFFSET);
+	sscanf(b[32], "%lf", &T0_Y_OFFSET);
+	sscanf(b[33], "%lf", &T0_Z_OFFSET);
 	NOZZLE_TEMP=atoi(b[35]);
 	BED_TEMP=atoi(b[36]);
     THERMISTOR_TYPE_NOZZLE=atoi(b[37]);
@@ -1517,6 +1518,7 @@ void read_settings()
 	ABL_ITERATIONS=atoi(b[57]);
 	sscanf(b[61], "%lf", &ABL_Z_Fade);
 	sscanf(b[66], "%lf", &GRID_RESOLUTION);
+	sscanf(b[70], "%lf", &ANGLE_THRESHOLD);
     i=0;
     for (i=0;i<29;i++){
         fgets (temp_str, 30, cbox_sett);

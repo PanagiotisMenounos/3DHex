@@ -654,7 +654,7 @@ margin: 0; /* if there is only one tab, we don't want overlapping margins */
 }</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1163,6 +1163,9 @@ border-color:rgb(120, 120, 120)
            </item>
            <item row="12" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
             <widget class="QPlainTextEdit" name="b30">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>75</width>
@@ -5142,7 +5145,7 @@ border-color:rgb(120, 120, 120)
                </widget>
               </item>
               <item row="1" column="1" alignment="Qt::AlignHCenter">
-               <widget class="QPlainTextEdit" name="b49_2">
+               <widget class="QPlainTextEdit" name="b70">
                 <property name="minimumSize">
                  <size>
                   <width>75</width>

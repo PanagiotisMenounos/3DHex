@@ -532,6 +532,7 @@ class Ui_MainWindow(object):
         self.b8.setObjectName("b8")
         self.gridLayout.addWidget(self.b8, 7, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.b30 = QtWidgets.QPlainTextEdit(self.tab)
+        self.b30.setEnabled(False)
         self.b30.setMinimumSize(QtCore.QSize(75, 25))
         self.b30.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
@@ -2553,13 +2554,13 @@ class Ui_MainWindow(object):
         self.l35_2.setAlignment(QtCore.Qt.AlignCenter)
         self.l35_2.setObjectName("l35_2")
         self.gridLayout_13.addWidget(self.l35_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter)
-        self.b49_2 = QtWidgets.QPlainTextEdit(self.frame_16)
-        self.b49_2.setMinimumSize(QtCore.QSize(75, 25))
-        self.b49_2.setMaximumSize(QtCore.QSize(75, 25))
+        self.b70 = QtWidgets.QPlainTextEdit(self.frame_16)
+        self.b70.setMinimumSize(QtCore.QSize(75, 25))
+        self.b70.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.b49_2.setFont(font)
-        self.b49_2.setStyleSheet("QPlainTextEdit{\n"
+        self.b70.setFont(font)
+        self.b70.setStyleSheet("QPlainTextEdit{\n"
 "background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
@@ -2578,10 +2579,10 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "border-color:rgb(120, 120, 120)\n"
 "}")
-        self.b49_2.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b49_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b49_2.setObjectName("b49_2")
-        self.gridLayout_13.addWidget(self.b49_2, 1, 1, 1, 1, QtCore.Qt.AlignHCenter)
+        self.b70.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b70.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b70.setObjectName("b70")
+        self.gridLayout_13.addWidget(self.b70, 1, 1, 1, 1, QtCore.Qt.AlignHCenter)
         self.verticalLayout_4.addWidget(self.frame_16, 0, QtCore.Qt.AlignLeft)
         self.line_4 = QtWidgets.QFrame(self.tab_5)
         self.line_4.setStyleSheet("")
@@ -5218,7 +5219,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_About.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
