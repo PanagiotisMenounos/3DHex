@@ -40,6 +40,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #define pi 3.14159265358979323846
 #define max_bufferfile_size 3100
 #define pipename "\\\\.\\pipe\\Foo"
+#define MG_DATA_SIZE 36
 
 union{
     int progress;
@@ -85,7 +86,7 @@ double JM_PRC=1,FD_PRC=1,AC_PRC=1,JR_PRC=1;
 
 double ABL_X=0,ABL_Y=0,BED_WIDTH=200,BED_LENGTH=200,ABL_Z_Fade;
 double BED_XSIZE, BED_YSIZE,ABL_Z_last=0,GRID_RESOLUTION=1;
-bool ABL_Process=false,ABL_Data=false;
+bool ABL_Process=false,ABL_Data=false,HOME_ALL=false;
 int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
 
@@ -178,7 +179,7 @@ void mcu_settings_send();
 int check_print_state();                                                                                                        //return 0 => USB return 1 => SD_CARD
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl);
 void ABL_readXYZ();
-uint8_t bits2val(char *bits);                                                                                                   //convert a serial of 0,1 to a number 16bit (0,1) = 2 bytes(unsigned integer=uint16_t)
+uint8_t bits2val(char *bits);                                                                                                  //convert a serial of 0,1 to a number 16bit (0,1) = 2 bytes(unsigned integer=uint16_t)
 
 ///////////////////////****************//////////////////////////
 float *ABL_XCOORD;
@@ -206,9 +207,9 @@ struct data{
   volatile uint16_t R;
   volatile uint16_t S;
   volatile uint16_t T;
-  volatile uint16_t U;
-  volatile uint16_t V;
-  volatile uint16_t W;
+  volatile int16_t U;
+  volatile int16_t V;
+  volatile int16_t W;
 }MG_data;
 
 int main(){
@@ -365,6 +366,13 @@ int main(){
 					MG_data.O=HOME_X_DURATION;
 					MG_data.P=HOME_Y_DURATION;
 					MG_data.Q=HOME_Z_DURATION;
+					MG_data.U=T0_X_OFFSET*STPU_X;
+					MG_data.V=T0_Y_OFFSET*STPU_Y;
+					MG_data.W=T0_Z_OFFSET*STPU_Z;
+					Xl=T0_X_OFFSET;
+               	    Yl=T0_Y_OFFSET;
+               	    Zl=0;
+					HOME_ALL=true;
 				}
 				if(Gl==4){ // G4 pause
 					GM_command=true;
@@ -408,7 +416,7 @@ int main(){
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
                     e_space=max_bufferfile_size-(file_buffer_size); 
-                    if(e_space<=30 && e_space!=0){
+                    if(e_space<=MG_DATA_SIZE&& e_space!=0){
                     	e_space=30;//fix a bug arduino side
                         for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
             	           write_hex2file(GP);
@@ -489,7 +497,7 @@ int main(){
 				write_hex2file(GP);
 				write_hex2file(GP);
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
-                if(e_space<=sizeof(MG_data) && e_space!=0){
+                if(e_space<=MG_DATA_SIZE && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
         	          write_hex2file(GP);
     	           }
@@ -1099,8 +1107,13 @@ void curve_detection(unsigned long total_lines)
     fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gf,&Mf,&Xf,&Yf,&Zf,&If,&Jf,&Ef,&Ff,&Sf,&Pf,&Rf,&Tf,&trash); 
     j++;
     fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,trash);
-    fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash);
-	j++;   
+    do{ //FIX BUG WHEN INITIAL GCODE HAS MANY NON MOVE GCODE
+    	fscanf(coord,"%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf" "%lf",&Gl,&Ml,&Xl,&Yl,&Zl,&Il,&Jl,&El,&Fl,&Sl,&Pl,&Rl,&Tl,&trash);
+    	if(Gl!=1 && Gl!=01 && Gl!=0 && Gl!=00 && Gl!=02 && Gl!=03 && Gl!=02 && Gl!=03){
+    		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,trash);
+		}
+		j++; 
+	}while(Gl!=1 && Gl!=01 && Gl!=0 && Gl!=00 && Gl!=02 && Gl!=03 && Gl!=02 && Gl!=03 && j<total_lines);
 	if(Gl==1 || Gl==01 || Gl==0 || Gl==00){
         if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
         	last_printing_move=1;
@@ -1547,7 +1560,6 @@ void read_settings()
 	PID_bed=atoi(c[26]);
     CURVE_DETECTION=atoi(c[27]);
 	ABL_Include	= atoi(c[28]);
-	printf("%s %i\n","ABL",ABL_Include);
 	//FOR THE MOMMENT
 	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
 	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
@@ -1596,11 +1608,11 @@ void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide
 unsigned long gc2info(double flag_num)
 {
     #define arrays_size 13
-    char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'}; 
+    char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'},buf[10]; 
 	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0,temp_pos=0;
     double line1[arrays_size],line2[arrays_size],trash=0;
-    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true;
-    int threshold_pos=7;
+    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false;
+    int threshold_pos=7,cur=0,emb=1;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
 	FILE *g1;
@@ -1610,7 +1622,10 @@ unsigned long gc2info(double flag_num)
     total_lines++;
     while (fgets(string, 200, fp) != NULL){//TILL THE END OF FILE
 	   if (string[0]=='G' || string[0]=='M'){
-	        total_lines++;								  
+	        total_lines++;
+			cur=0;	
+			while (cur<emb){
+			cur++;							  
 		    for(poslet=0;poslet<arrays_size;poslet++){// check for each letter		  
 		        while (string[i] != '\0' && string[i] != ';' ){ //till the end of line
 		            if ((string[i]) == (letters[poslet])){ //
@@ -1633,6 +1648,7 @@ unsigned long gc2info(double flag_num)
 				}
 				if(notfound==true){ //if letter not found
 		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
+		                home=true;
 		            	temp_pos=0;
 		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
 		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
@@ -1689,6 +1705,21 @@ unsigned long gc2info(double flag_num)
 		        notfound=true;
 		        found_axis=false;
 		        fprintf(g1,"%c",' ');
+ 	        }
+ 	        if (home==true){
+				  emb=2;
+				  home=false;
+				  strcpy(string,"G92 X"); 
+				  gcvt(T0_X_OFFSET, 7, buf);
+				  strcat(string, buf);
+				  strcat(string, " Y");
+				  gcvt(T0_Y_OFFSET, 7, buf);
+				  strcat(string, buf);
+				  strcat(string, " Z0\n");
+				  total_lines++;
+			    }else{
+			    	emb=1;
+			}
  	        }
  	        first_line1=false;
             fprintf(g1, "%c\n",' ' );

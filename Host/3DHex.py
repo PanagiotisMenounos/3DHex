@@ -144,7 +144,7 @@ class ABL_Interpolation(QThread):
             b = a2 * c1 - a1 * c2
             c = a1 * b2 - b1 * a2
             d = (- a * x[1] - b * y[1] - c * z[1])
-            print ("equation of plane is "+str(a)+ "x +"+str(b)+ "y +"+str(c)+ "z +"+str(d)+ "= 0.")
+            #print ("equation of plane is "+str(a)+ "x +"+str(b)+ "y +"+str(c)+ "z +"+str(d)+ "= 0.")
         elif window.ABL_INTERPOLATION_TYPE==2:
             rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
             znew = rbfi(xx, yy)   # interpolated values              
@@ -1111,7 +1111,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         my_cmap = plt.get_cmap('viridis')
         XYZ=loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt',delimiter=' ')
         surf=ax.plot_trisurf(XYZ[:,0], XYZ[:,1], XYZ[:,2],cmap = my_cmap,linewidth = 0.2,antialiased = True,edgecolor = 'grey')
-        fig.colorbar(surf, location='right', shrink=0.4, aspect=20, pad=0.1)
+        fig.colorbar(surf, shrink=0.4, aspect=20, pad=0.1)
         fig.tight_layout()
         pyplot.ion()
         pyplot.show()

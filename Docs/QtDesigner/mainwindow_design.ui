@@ -654,7 +654,7 @@ margin: 0; /* if there is only one tab, we don't want overlapping margins */
 }</string>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">

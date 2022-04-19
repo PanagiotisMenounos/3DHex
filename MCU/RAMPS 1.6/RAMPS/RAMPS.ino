@@ -43,7 +43,7 @@ Servo bltouch;
 #define HOME_ZMIN_PIN 18
 #define BLTOUCH_PIN 4
 #define USB_SETTING_BYTES 52
-#define MG_BYTES 30
+#define MG_BYTES 36
 #define BUFFERSIZE 3100
 #define X_EN 38
 #define Y_EN A2
@@ -167,9 +167,9 @@ struct data5{
   volatile uint16_t R;
   volatile uint16_t S;
   volatile uint16_t T;
-  volatile uint16_t U;
-  volatile uint16_t V;
-  volatile uint16_t W;
+  volatile int16_t U;
+  volatile int16_t V;
+  volatile int16_t W;
 };
 
 volatile struct data1 buffer1;
@@ -177,6 +177,7 @@ volatile struct data2 buffer2;
 volatile struct data3 buffer3;
 volatile struct data4 buffer4;
 volatile struct data5 buffer5;
+
 
 thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
 thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
@@ -442,7 +443,7 @@ void read_GM_data(){
       }
     }
     if(temp_counter>2){if(state_r==0){state_r=1;}else{state_r=0;}}//that state means that the data is at the other buffer
-    for(cc=0;cc<sizeof(buffer5);cc++){//total bytes of data
+    for(cc=0;cc<MG_BYTES;cc++){//total bytes of data
       if(state_r==0){
         while(buffer1.byte_1[j]==command_value){ //clear command_values
             j++;
@@ -1107,7 +1108,32 @@ void homing_routine(){
     delayMicroseconds(buffer3.HOME_Y_DURATION);
     YMIN_READ=digitalRead(HOME_YMIN_PIN);
     if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-  }   
+  }
+  if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
+  step_counter=0;
+   while(step_counter<buffer5.U){
+      PORTF = (buffer3.HOME_X_DIR<<PF1);
+      PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
+      delayMicroseconds(buffer3.HOME_X_DURATION);
+      PORTF = (buffer3.HOME_X_DIR<<PF1);
+      PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
+      delayMicroseconds(buffer3.HOME_X_DURATION);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+   if(buffer5.V>0){buffer3.HOME_Y_DIR=!buffer3.HOME_Y_DIR;}else{buffer5.V=-buffer5.V;}
+   step_counter=0;
+   while(step_counter<buffer5.V){
+      PORTF = (buffer3.HOME_Y_DIR<<PF7);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7);
+      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      step_counter++;
+      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+   }
+    step_counter=0;
   if(ABL){
     bltouch.write(10);
     delay(300);
@@ -1192,4 +1218,16 @@ void homing_routine(){
       }
     }
   }
+  if(buffer5.W<0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
+  step_counter=0;
+  while(step_counter<buffer5.W){
+      PORTL = (buffer3.HOME_Z_DIR<<PL1);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1);
+      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+      delayMicroseconds(buffer3.HOME_Y_DURATION);
+      step_counter++;
+   }
+   step_counter=0;
 }
