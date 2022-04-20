@@ -1,4 +1,0 @@
-stm32f1xx_it.c:42:6:SDTimer_Handler	4	static
-stm32f1xx_it.c:62:6:SVC_Handler	4	static
-stm32f1xx_it.c:75:6:PendSV_Handler	4	static
-stm32f1xx_it.c:88:6:SysTick_Handler	8	static
