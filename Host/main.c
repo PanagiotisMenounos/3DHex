@@ -38,7 +38,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
-#define max_bufferfile_size 3000
+#define max_bufferfile_size 3100
 #define pipename "\\\\.\\pipe\\Foo"
 #define MG_DATA_SIZE 36
 
