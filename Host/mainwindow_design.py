@@ -14,8 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1288, 679)
-        MainWindow.setMinimumSize(QtCore.QSize(0, 0))
+        MainWindow.resize(1263, 645)
+        MainWindow.setMinimumSize(QtCore.QSize(1075, 645))
+        MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -75,176 +76,40 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("color: rgb(255, 255, 255);\n"
-"background-color: rgb(63, 63, 63);")
+"background-color: rgb(47, 47, 47);")
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setMinimumSize(QtCore.QSize(0, 0))
-        self.frame.setMaximumSize(QtCore.QSize(1100, 1000000))
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.frame_24 = QtWidgets.QFrame(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_24.sizePolicy().hasHeightForWidth())
-        self.frame_24.setSizePolicy(sizePolicy)
-        self.frame_24.setMinimumSize(QtCore.QSize(550, 55))
-        self.frame_24.setMaximumSize(QtCore.QSize(800, 55))
-        self.frame_24.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_24.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_24.setObjectName("frame_24")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame_24)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.l19_7 = QtWidgets.QLabel(self.frame_24)
-        self.l19_7.setMinimumSize(QtCore.QSize(60, 20))
-        self.l19_7.setMaximumSize(QtCore.QSize(60, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.l19_7.setFont(font)
-        self.l19_7.setAlignment(QtCore.Qt.AlignCenter)
-        self.l19_7.setObjectName("l19_7")
-        self.horizontalLayout_5.addWidget(self.l19_7)
-        self.XPOSITION = QtWidgets.QLabel(self.frame_24)
-        self.XPOSITION.setMinimumSize(QtCore.QSize(100, 30))
-        self.XPOSITION.setMaximumSize(QtCore.QSize(100, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.XPOSITION.setFont(font)
-        self.XPOSITION.setStyleSheet("QLabel{\n"
-"color: rgb(255, 115, 30);\n"
-"}")
-        self.XPOSITION.setAlignment(QtCore.Qt.AlignCenter)
-        self.XPOSITION.setObjectName("XPOSITION")
-        self.horizontalLayout_5.addWidget(self.XPOSITION)
-        self.l19_9 = QtWidgets.QLabel(self.frame_24)
-        self.l19_9.setMinimumSize(QtCore.QSize(60, 20))
-        self.l19_9.setMaximumSize(QtCore.QSize(60, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.l19_9.setFont(font)
-        self.l19_9.setAlignment(QtCore.Qt.AlignCenter)
-        self.l19_9.setObjectName("l19_9")
-        self.horizontalLayout_5.addWidget(self.l19_9)
-        self.YPOSITION = QtWidgets.QLabel(self.frame_24)
-        self.YPOSITION.setMinimumSize(QtCore.QSize(100, 30))
-        self.YPOSITION.setMaximumSize(QtCore.QSize(100, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.YPOSITION.setFont(font)
-        self.YPOSITION.setStyleSheet("QLabel{\n"
-"color: rgb(255, 115, 30);\n"
-"}")
-        self.YPOSITION.setAlignment(QtCore.Qt.AlignCenter)
-        self.YPOSITION.setObjectName("YPOSITION")
-        self.horizontalLayout_5.addWidget(self.YPOSITION)
-        self.l19_10 = QtWidgets.QLabel(self.frame_24)
-        self.l19_10.setMinimumSize(QtCore.QSize(60, 20))
-        self.l19_10.setMaximumSize(QtCore.QSize(60, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.l19_10.setFont(font)
-        self.l19_10.setAlignment(QtCore.Qt.AlignCenter)
-        self.l19_10.setObjectName("l19_10")
-        self.horizontalLayout_5.addWidget(self.l19_10)
-        self.ZPOSITION = QtWidgets.QLabel(self.frame_24)
-        self.ZPOSITION.setMinimumSize(QtCore.QSize(100, 30))
-        self.ZPOSITION.setMaximumSize(QtCore.QSize(100, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.ZPOSITION.setFont(font)
-        self.ZPOSITION.setStyleSheet("QLabel{\n"
-"color: rgb(255, 115, 30);\n"
-"}")
-        self.ZPOSITION.setAlignment(QtCore.Qt.AlignCenter)
-        self.ZPOSITION.setObjectName("ZPOSITION")
-        self.horizontalLayout_5.addWidget(self.ZPOSITION)
-        self.verticalLayout.addWidget(self.frame_24, 0, QtCore.Qt.AlignHCenter)
-        self.frame_15 = QtWidgets.QFrame(self.frame)
-        self.frame_15.setMinimumSize(QtCore.QSize(550, 55))
-        self.frame_15.setMaximumSize(QtCore.QSize(800, 55))
-        self.frame_15.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_15.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_15.setObjectName("frame_15")
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_15)
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.l19_5 = QtWidgets.QLabel(self.frame_15)
-        self.l19_5.setMinimumSize(QtCore.QSize(120, 20))
-        self.l19_5.setMaximumSize(QtCore.QSize(120, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.l19_5.setFont(font)
-        self.l19_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.l19_5.setObjectName("l19_5")
-        self.horizontalLayout_7.addWidget(self.l19_5)
-        self.NOZZ_TEMP = QtWidgets.QLabel(self.frame_15)
-        self.NOZZ_TEMP.setMinimumSize(QtCore.QSize(80, 30))
-        self.NOZZ_TEMP.setMaximumSize(QtCore.QSize(80, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.NOZZ_TEMP.setFont(font)
-        self.NOZZ_TEMP.setStyleSheet("QLabel{\n"
-"color: rgb(255, 115, 30);\n"
-"}")
-        self.NOZZ_TEMP.setAlignment(QtCore.Qt.AlignCenter)
-        self.NOZZ_TEMP.setObjectName("NOZZ_TEMP")
-        self.horizontalLayout_7.addWidget(self.NOZZ_TEMP)
-        self.l19_6 = QtWidgets.QLabel(self.frame_15)
-        self.l19_6.setMinimumSize(QtCore.QSize(120, 20))
-        self.l19_6.setMaximumSize(QtCore.QSize(120, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.l19_6.setFont(font)
-        self.l19_6.setAlignment(QtCore.Qt.AlignCenter)
-        self.l19_6.setObjectName("l19_6")
-        self.horizontalLayout_7.addWidget(self.l19_6)
-        self.BED_TEMP = QtWidgets.QLabel(self.frame_15)
-        self.BED_TEMP.setMinimumSize(QtCore.QSize(80, 30))
-        self.BED_TEMP.setMaximumSize(QtCore.QSize(80, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.BED_TEMP.setFont(font)
-        self.BED_TEMP.setStyleSheet("QLabel{\n"
-"color: rgb(255, 115, 30);\n"
-"}")
-        self.BED_TEMP.setAlignment(QtCore.Qt.AlignCenter)
-        self.BED_TEMP.setObjectName("BED_TEMP")
-        self.horizontalLayout_7.addWidget(self.BED_TEMP)
-        self.verticalLayout.addWidget(self.frame_15, 0, QtCore.Qt.AlignHCenter)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        self.verticalLayout.addItem(spacerItem)
-        self.tabWidget = QtWidgets.QTabWidget(self.frame)
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setEnabled(True)
         self.tabWidget.setMinimumSize(QtCore.QSize(550, 400))
-        self.tabWidget.setMaximumSize(QtCore.QSize(1000000, 660))
+        self.tabWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.tabWidget.setAutoFillBackground(False)
         self.tabWidget.setStyleSheet("/*https://www.qt.io/blog/2007/06/22/styling-the-tab-widget*/\n"
 "QTabWidget::pane { /* The tab widget frame */\n"
-"border-top: 1px solid rgb(161, 161, 161);\n"
+"border-top: 1px solid rgb(82,82,82);\n"
 "}\n"
 "QTabWidget::tab-bar {\n"
 "left: 5px; /* move to the right by 5px */\n"
 "}\n"
 "/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */\n"
 "QTabBar::tab {\n"
-"color: rgb(0, 0, 0);\n"
-"background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E1E1E1, stop: 0.4 #DDDDDD, stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);\n"
-"border: 2px solid #C4C4C3;\n"
+"color: rgb(255, 255, 255);\n"
+"background: rgb(47, 47, 47);\n"
+"border: 1px solid #C4C4C3;\n"
 "border-bottom-color: #C2C7CB; /* same as the pane color */\n"
-"border-top-left-radius: 4px;\n"
-"border-top-right-radius: 4px;\n"
+"border-top-left-radius: 2px;\n"
+"border-top-right-radius: 2px;\n"
+"border-color:    rgb(82,82,82);\n"
 "/*min-width: 20ex;*/\n"
-"min-width: 20ex;\n"
-"max-width: 20ex; /*prevent large width*/\n"
+"min-width: 30ex;\n"
+"max-width: 30ex; /*prevent large width*/\n"
+"min-height: 18px;\n"
 "font-size:11px;\n"
 "padding: 2px;\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
-"background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #fafafa, stop: 0.4 #f4f4f4, stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);\n"
+"background: rgb(47, 47, 47);\n"
 "}\n"
 "QTabBar::tab:selected {\n"
 "border-color: #9B9B9B;\n"
@@ -268,6 +133,1485 @@ class Ui_MainWindow(object):
 "margin: 0; /* if there is only one tab, we don\'t want overlapping margins */\n"
 "}")
         self.tabWidget.setObjectName("tabWidget")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.tab_3)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.frame_18 = QtWidgets.QFrame(self.tab_3)
+        self.frame_18.setMinimumSize(QtCore.QSize(50, 0))
+        self.frame_18.setMaximumSize(QtCore.QSize(1190, 16777215))
+        self.frame_18.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_18.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_18.setObjectName("frame_18")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.frame_18)
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.groupBox = QtWidgets.QGroupBox(self.frame_18)
+        self.groupBox.setMaximumSize(QtCore.QSize(1000, 85))
+        self.groupBox.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox.setObjectName("groupBox")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.frame_5 = QtWidgets.QFrame(self.groupBox)
+        self.frame_5.setMinimumSize(QtCore.QSize(330, 45))
+        self.frame_5.setMaximumSize(QtCore.QSize(380, 45))
+        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_5.setObjectName("frame_5")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_5)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.l16 = QtWidgets.QLabel(self.frame_5)
+        self.l16.setMinimumSize(QtCore.QSize(65, 30))
+        self.l16.setMaximumSize(QtCore.QSize(65, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.l16.setFont(font)
+        self.l16.setAlignment(QtCore.Qt.AlignCenter)
+        self.l16.setObjectName("l16")
+        self.horizontalLayout_3.addWidget(self.l16, 0, QtCore.Qt.AlignVCenter)
+        self.comboBox = QtWidgets.QComboBox(self.frame_5)
+        self.comboBox.setMinimumSize(QtCore.QSize(80, 30))
+        self.comboBox.setMaximumSize(QtCore.QSize(80, 30))
+        self.comboBox.setObjectName("comboBox")
+        self.horizontalLayout_3.addWidget(self.comboBox, 0, QtCore.Qt.AlignVCenter)
+        self.p1 = QtWidgets.QPushButton(self.frame_5)
+        self.p1.setEnabled(True)
+        self.p1.setMinimumSize(QtCore.QSize(75, 30))
+        self.p1.setMaximumSize(QtCore.QSize(75, 30))
+        self.p1.setSizeIncrement(QtCore.QSize(0, 0))
+        self.p1.setBaseSize(QtCore.QSize(0, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.p1.setFont(font)
+        self.p1.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.p1.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p1.setObjectName("p1")
+        self.horizontalLayout_3.addWidget(self.p1, 0, QtCore.Qt.AlignVCenter)
+        self.p2 = QtWidgets.QPushButton(self.frame_5)
+        self.p2.setEnabled(True)
+        self.p2.setMinimumSize(QtCore.QSize(70, 30))
+        self.p2.setMaximumSize(QtCore.QSize(70, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.p2.setFont(font)
+        self.p2.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p2.setObjectName("p2")
+        self.horizontalLayout_3.addWidget(self.p2)
+        self.horizontalLayout.addWidget(self.frame_5)
+        self.verticalLayout_10.addWidget(self.groupBox)
+        self.groupBox_12 = QtWidgets.QGroupBox(self.frame_18)
+        self.groupBox_12.setMinimumSize(QtCore.QSize(500, 0))
+        self.groupBox_12.setMaximumSize(QtCore.QSize(1000, 240))
+        self.groupBox_12.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_12.setObjectName("groupBox_12")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_12)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.frame = QtWidgets.QFrame(self.groupBox_12)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.frame_3 = QtWidgets.QFrame(self.frame)
+        self.frame_3.setMaximumSize(QtCore.QSize(220, 150))
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.gridLayout_12 = QtWidgets.QGridLayout(self.frame_3)
+        self.gridLayout_12.setObjectName("gridLayout_12")
+        self.p15 = QtWidgets.QPushButton(self.frame_3)
+        self.p15.setEnabled(False)
+        self.p15.setMinimumSize(QtCore.QSize(30, 30))
+        self.p15.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p15.setFont(font)
+        self.p15.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p15.setObjectName("p15")
+        self.gridLayout_12.addWidget(self.p15, 2, 3, 1, 1)
+        self.p16 = QtWidgets.QPushButton(self.frame_3)
+        self.p16.setEnabled(False)
+        self.p16.setMinimumSize(QtCore.QSize(30, 30))
+        self.p16.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p16.setFont(font)
+        self.p16.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p16.setObjectName("p16")
+        self.gridLayout_12.addWidget(self.p16, 0, 3, 1, 1)
+        self.p8 = QtWidgets.QPushButton(self.frame_3)
+        self.p8.setEnabled(False)
+        self.p8.setMinimumSize(QtCore.QSize(30, 30))
+        self.p8.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p8.setFont(font)
+        self.p8.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p8.setObjectName("p8")
+        self.gridLayout_12.addWidget(self.p8, 1, 2, 1, 1)
+        self.p12 = QtWidgets.QPushButton(self.frame_3)
+        self.p12.setEnabled(False)
+        self.p12.setMinimumSize(QtCore.QSize(30, 30))
+        self.p12.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p12.setFont(font)
+        self.p12.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p12.setObjectName("p12")
+        self.gridLayout_12.addWidget(self.p12, 0, 1, 1, 1)
+        self.p11 = QtWidgets.QPushButton(self.frame_3)
+        self.p11.setEnabled(False)
+        self.p11.setMinimumSize(QtCore.QSize(30, 30))
+        self.p11.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p11.setFont(font)
+        self.p11.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p11.setObjectName("p11")
+        self.gridLayout_12.addWidget(self.p11, 2, 1, 1, 1)
+        self.p7 = QtWidgets.QPushButton(self.frame_3)
+        self.p7.setEnabled(False)
+        self.p7.setMinimumSize(QtCore.QSize(30, 30))
+        self.p7.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p7.setFont(font)
+        self.p7.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p7.setObjectName("p7")
+        self.gridLayout_12.addWidget(self.p7, 1, 0, 1, 1)
+        self.p9 = QtWidgets.QPushButton(self.frame_3)
+        self.p9.setEnabled(False)
+        self.p9.setMinimumSize(QtCore.QSize(30, 30))
+        self.p9.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p9.setFont(font)
+        self.p9.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p9.setObjectName("p9")
+        self.gridLayout_12.addWidget(self.p9, 2, 2, 1, 1)
+        self.p5 = QtWidgets.QPushButton(self.frame_3)
+        self.p5.setEnabled(False)
+        self.p5.setMinimumSize(QtCore.QSize(30, 30))
+        self.p5.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p5.setFont(font)
+        self.p5.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p5.setObjectName("p5")
+        self.gridLayout_12.addWidget(self.p5, 2, 0, 1, 1)
+        self.p13 = QtWidgets.QPushButton(self.frame_3)
+        self.p13.setEnabled(False)
+        self.p13.setMinimumSize(QtCore.QSize(30, 30))
+        self.p13.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p13.setFont(font)
+        self.p13.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p13.setObjectName("p13")
+        self.gridLayout_12.addWidget(self.p13, 1, 3, 1, 1)
+        self.p19 = QtWidgets.QPushButton(self.frame_3)
+        self.p19.setEnabled(False)
+        self.p19.setMinimumSize(QtCore.QSize(30, 30))
+        self.p19.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p19.setFont(font)
+        self.p19.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p19.setObjectName("p19")
+        self.gridLayout_12.addWidget(self.p19, 0, 0, 1, 1)
+        self.p20 = QtWidgets.QPushButton(self.frame_3)
+        self.p20.setEnabled(False)
+        self.p20.setMinimumSize(QtCore.QSize(30, 30))
+        self.p20.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p20.setFont(font)
+        self.p20.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p20.setObjectName("p20")
+        self.gridLayout_12.addWidget(self.p20, 0, 2, 1, 1)
+        self.p13_2 = QtWidgets.QPushButton(self.frame_3)
+        self.p13_2.setEnabled(False)
+        self.p13_2.setMinimumSize(QtCore.QSize(30, 30))
+        self.p13_2.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p13_2.setFont(font)
+        self.p13_2.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p13_2.setObjectName("p13_2")
+        self.gridLayout_12.addWidget(self.p13_2, 1, 1, 1, 1)
+        self.horizontalLayout_2.addWidget(self.frame_3)
+        self.frame_10 = QtWidgets.QFrame(self.frame)
+        self.frame_10.setMinimumSize(QtCore.QSize(359, 100))
+        self.frame_10.setMaximumSize(QtCore.QSize(400, 100))
+        self.frame_10.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_10.setObjectName("frame_10")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.frame_10)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.d3 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d3.setMinimumSize(QtCore.QSize(65, 25))
+        self.d3.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d3.setFont(font)
+        self.d3.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d3.setMaximum(999.0)
+        self.d3.setObjectName("d3")
+        self.gridLayout_6.addWidget(self.d3, 0, 3, 1, 1)
+        self.d6 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d6.setMinimumSize(QtCore.QSize(65, 25))
+        self.d6.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d6.setFont(font)
+        self.d6.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d6.setMaximum(999.0)
+        self.d6.setObjectName("d6")
+        self.gridLayout_6.addWidget(self.d6, 1, 2, 1, 1)
+        self.l18 = QtWidgets.QLabel(self.frame_10)
+        self.l18.setMinimumSize(QtCore.QSize(55, 25))
+        self.l18.setMaximumSize(QtCore.QSize(55, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l18.setFont(font)
+        self.l18.setAlignment(QtCore.Qt.AlignCenter)
+        self.l18.setObjectName("l18")
+        self.gridLayout_6.addWidget(self.l18, 1, 0, 1, 1)
+        self.d1 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d1.setMinimumSize(QtCore.QSize(65, 25))
+        self.d1.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d1.setFont(font)
+        self.d1.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d1.setMaximum(999.0)
+        self.d1.setObjectName("d1")
+        self.gridLayout_6.addWidget(self.d1, 0, 1, 1, 1)
+        self.d7 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d7.setMinimumSize(QtCore.QSize(65, 25))
+        self.d7.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d7.setFont(font)
+        self.d7.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d7.setMaximum(999.0)
+        self.d7.setObjectName("d7")
+        self.gridLayout_6.addWidget(self.d7, 1, 3, 1, 1)
+        self.d5 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d5.setMinimumSize(QtCore.QSize(65, 25))
+        self.d5.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d5.setFont(font)
+        self.d5.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d5.setMaximum(999.0)
+        self.d5.setObjectName("d5")
+        self.gridLayout_6.addWidget(self.d5, 1, 1, 1, 1)
+        self.d2 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d2.setMinimumSize(QtCore.QSize(65, 25))
+        self.d2.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d2.setFont(font)
+        self.d2.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d2.setMaximum(999.0)
+        self.d2.setObjectName("d2")
+        self.gridLayout_6.addWidget(self.d2, 0, 2, 1, 1)
+        self.d8 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d8.setMinimumSize(QtCore.QSize(65, 25))
+        self.d8.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d8.setFont(font)
+        self.d8.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d8.setMaximum(999.0)
+        self.d8.setObjectName("d8")
+        self.gridLayout_6.addWidget(self.d8, 1, 4, 1, 1)
+        self.l17 = QtWidgets.QLabel(self.frame_10)
+        self.l17.setMinimumSize(QtCore.QSize(55, 25))
+        self.l17.setMaximumSize(QtCore.QSize(55, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l17.setFont(font)
+        self.l17.setAlignment(QtCore.Qt.AlignCenter)
+        self.l17.setObjectName("l17")
+        self.gridLayout_6.addWidget(self.l17, 0, 0, 1, 1)
+        self.d4 = QtWidgets.QDoubleSpinBox(self.frame_10)
+        self.d4.setMinimumSize(QtCore.QSize(65, 25))
+        self.d4.setMaximumSize(QtCore.QSize(65, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d4.setFont(font)
+        self.d4.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d4.setMaximum(999.0)
+        self.d4.setObjectName("d4")
+        self.gridLayout_6.addWidget(self.d4, 0, 4, 1, 1)
+        self.horizontalLayout_2.addWidget(self.frame_10)
+        self.verticalLayout_2.addWidget(self.frame)
+        self.frame_9 = QtWidgets.QFrame(self.groupBox_12)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_9.sizePolicy().hasHeightForWidth())
+        self.frame_9.setSizePolicy(sizePolicy)
+        self.frame_9.setMinimumSize(QtCore.QSize(0, 70))
+        self.frame_9.setMaximumSize(QtCore.QSize(600, 75))
+        self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_9.setObjectName("frame_9")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.frame_9)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.l7_3 = QtWidgets.QLabel(self.frame_9)
+        self.l7_3.setMinimumSize(QtCore.QSize(80, 20))
+        self.l7_3.setMaximumSize(QtCore.QSize(80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l7_3.setFont(font)
+        self.l7_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.l7_3.setObjectName("l7_3")
+        self.gridLayout_3.addWidget(self.l7_3, 1, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.l9_2 = QtWidgets.QLabel(self.frame_9)
+        self.l9_2.setMinimumSize(QtCore.QSize(80, 20))
+        self.l9_2.setMaximumSize(QtCore.QSize(80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l9_2.setFont(font)
+        self.l9_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.l9_2.setObjectName("l9_2")
+        self.gridLayout_3.addWidget(self.l9_2, 1, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.l9_3 = QtWidgets.QLabel(self.frame_9)
+        self.l9_3.setMinimumSize(QtCore.QSize(80, 20))
+        self.l9_3.setMaximumSize(QtCore.QSize(80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l9_3.setFont(font)
+        self.l9_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.l9_3.setObjectName("l9_3")
+        self.gridLayout_3.addWidget(self.l9_3, 1, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d100 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d100.setMinimumSize(QtCore.QSize(50, 25))
+        self.d100.setMaximumSize(QtCore.QSize(50, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d100.setFont(font)
+        self.d100.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d100.setDecimals(0)
+        self.d100.setMaximum(999.0)
+        self.d100.setProperty("value", 100.0)
+        self.d100.setObjectName("d100")
+        self.gridLayout_3.addWidget(self.d100, 2, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.p22 = QtWidgets.QPushButton(self.frame_9)
+        self.p22.setMinimumSize(QtCore.QSize(60, 26))
+        self.p22.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.p22.setFont(font)
+        self.p22.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p22.setObjectName("p22")
+        self.gridLayout_3.addWidget(self.p22, 1, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d103 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d103.setMinimumSize(QtCore.QSize(50, 25))
+        self.d103.setMaximumSize(QtCore.QSize(50, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d103.setFont(font)
+        self.d103.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d103.setDecimals(0)
+        self.d103.setMaximum(999.0)
+        self.d103.setProperty("value", 100.0)
+        self.d103.setObjectName("d103")
+        self.gridLayout_3.addWidget(self.d103, 2, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d102 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d102.setMinimumSize(QtCore.QSize(50, 25))
+        self.d102.setMaximumSize(QtCore.QSize(50, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d102.setFont(font)
+        self.d102.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d102.setDecimals(0)
+        self.d102.setMaximum(999.0)
+        self.d102.setProperty("value", 100.0)
+        self.d102.setObjectName("d102")
+        self.gridLayout_3.addWidget(self.d102, 2, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.d101 = QtWidgets.QDoubleSpinBox(self.frame_9)
+        self.d101.setMinimumSize(QtCore.QSize(50, 25))
+        self.d101.setMaximumSize(QtCore.QSize(50, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.d101.setFont(font)
+        self.d101.setStyleSheet("QDoubleSpinBox{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QDoubleSpinBox:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QDoubleSpinBox:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.d101.setDecimals(0)
+        self.d101.setMaximum(999.0)
+        self.d101.setProperty("value", 100.0)
+        self.d101.setObjectName("d101")
+        self.gridLayout_3.addWidget(self.d101, 2, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.p21 = QtWidgets.QPushButton(self.frame_9)
+        self.p21.setEnabled(True)
+        self.p21.setMinimumSize(QtCore.QSize(60, 26))
+        self.p21.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.p21.setFont(font)
+        self.p21.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p21.setObjectName("p21")
+        self.gridLayout_3.addWidget(self.p21, 2, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.p24 = QtWidgets.QPushButton(self.frame_9)
+        self.p24.setEnabled(True)
+        self.p24.setMinimumSize(QtCore.QSize(60, 26))
+        self.p24.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p24.setFont(font)
+        self.p24.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p24.setObjectName("p24")
+        self.gridLayout_3.addWidget(self.p24, 2, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.l7_2 = QtWidgets.QLabel(self.frame_9)
+        self.l7_2.setMinimumSize(QtCore.QSize(80, 20))
+        self.l7_2.setMaximumSize(QtCore.QSize(80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l7_2.setFont(font)
+        self.l7_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.l7_2.setObjectName("l7_2")
+        self.gridLayout_3.addWidget(self.l7_2, 1, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.frame_9, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout_10.addWidget(self.groupBox_12)
+        self.frame_11 = QtWidgets.QFrame(self.frame_18)
+        self.frame_11.setMaximumSize(QtCore.QSize(16777215, 505))
+        self.frame_11.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_11.setObjectName("frame_11")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_11)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.groupBox_10 = QtWidgets.QGroupBox(self.frame_11)
+        self.groupBox_10.setMinimumSize(QtCore.QSize(400, 190))
+        self.groupBox_10.setMaximumSize(QtCore.QSize(16777215, 500))
+        self.groupBox_10.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_10.setObjectName("groupBox_10")
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.groupBox_10)
+        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.MplWidget = MplWidget(self.groupBox_10)
+        self.MplWidget.setStyleSheet("background-color: rgb(47, 47, 47);")
+        self.MplWidget.setObjectName("MplWidget")
+        self.gridLayout_10.addWidget(self.MplWidget, 0, 0, 1, 1)
+        self.horizontalLayout_4.addWidget(self.groupBox_10)
+        self.frame_15 = QtWidgets.QFrame(self.frame_11)
+        self.frame_15.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.frame_15.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_15.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_15.setObjectName("frame_15")
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.frame_15)
+        self.verticalLayout_9.setObjectName("verticalLayout_9")
+        self.groupBox_5 = QtWidgets.QGroupBox(self.frame_15)
+        self.groupBox_5.setMinimumSize(QtCore.QSize(120, 50))
+        self.groupBox_5.setMaximumSize(QtCore.QSize(120, 50))
+        self.groupBox_5.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_5.setObjectName("groupBox_5")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.groupBox_5)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.NOZZ_TEMP = QtWidgets.QLabel(self.groupBox_5)
+        self.NOZZ_TEMP.setMinimumSize(QtCore.QSize(80, 30))
+        self.NOZZ_TEMP.setMaximumSize(QtCore.QSize(80, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.NOZZ_TEMP.setFont(font)
+        self.NOZZ_TEMP.setStyleSheet("QLabel{\n"
+"color: rgb(255, 115, 30);\n"
+"}")
+        self.NOZZ_TEMP.setAlignment(QtCore.Qt.AlignCenter)
+        self.NOZZ_TEMP.setObjectName("NOZZ_TEMP")
+        self.horizontalLayout_5.addWidget(self.NOZZ_TEMP)
+        self.verticalLayout_9.addWidget(self.groupBox_5)
+        self.groupBox_6 = QtWidgets.QGroupBox(self.frame_15)
+        self.groupBox_6.setMinimumSize(QtCore.QSize(120, 50))
+        self.groupBox_6.setMaximumSize(QtCore.QSize(120, 50))
+        self.groupBox_6.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_6.setObjectName("groupBox_6")
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.groupBox_6)
+        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.BED_TEMP = QtWidgets.QLabel(self.groupBox_6)
+        self.BED_TEMP.setMinimumSize(QtCore.QSize(80, 30))
+        self.BED_TEMP.setMaximumSize(QtCore.QSize(80, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.BED_TEMP.setFont(font)
+        self.BED_TEMP.setStyleSheet("QLabel{\n"
+"color: rgb(255, 115, 30);\n"
+"}")
+        self.BED_TEMP.setAlignment(QtCore.Qt.AlignCenter)
+        self.BED_TEMP.setObjectName("BED_TEMP")
+        self.horizontalLayout_12.addWidget(self.BED_TEMP)
+        self.verticalLayout_9.addWidget(self.groupBox_6)
+        self.horizontalLayout_4.addWidget(self.frame_15)
+        self.verticalLayout_10.addWidget(self.frame_11)
+        self.horizontalLayout_14.addWidget(self.frame_18)
+        self.frame_4 = QtWidgets.QFrame(self.tab_3)
+        self.frame_4.setMaximumSize(QtCore.QSize(600, 16777215))
+        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frame_4)
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.frame_2 = QtWidgets.QFrame(self.frame_4)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_2)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.groupBox_2 = QtWidgets.QGroupBox(self.frame_2)
+        self.groupBox_2.setMinimumSize(QtCore.QSize(130, 50))
+        self.groupBox_2.setMaximumSize(QtCore.QSize(130, 50))
+        self.groupBox_2.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.XPOSITION = QtWidgets.QLabel(self.groupBox_2)
+        self.XPOSITION.setMinimumSize(QtCore.QSize(100, 30))
+        self.XPOSITION.setMaximumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.XPOSITION.setFont(font)
+        self.XPOSITION.setStyleSheet("QLabel{\n"
+"color: rgb(255, 115, 30);\n"
+"}")
+        self.XPOSITION.setAlignment(QtCore.Qt.AlignCenter)
+        self.XPOSITION.setObjectName("XPOSITION")
+        self.horizontalLayout_9.addWidget(self.XPOSITION)
+        self.horizontalLayout_7.addWidget(self.groupBox_2)
+        self.groupBox_3 = QtWidgets.QGroupBox(self.frame_2)
+        self.groupBox_3.setMinimumSize(QtCore.QSize(130, 50))
+        self.groupBox_3.setMaximumSize(QtCore.QSize(130, 50))
+        self.groupBox_3.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.groupBox_3)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.YPOSITION = QtWidgets.QLabel(self.groupBox_3)
+        self.YPOSITION.setMinimumSize(QtCore.QSize(100, 30))
+        self.YPOSITION.setMaximumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.YPOSITION.setFont(font)
+        self.YPOSITION.setStyleSheet("QLabel{\n"
+"color: rgb(255, 115, 30);\n"
+"}")
+        self.YPOSITION.setAlignment(QtCore.Qt.AlignCenter)
+        self.YPOSITION.setObjectName("YPOSITION")
+        self.horizontalLayout_10.addWidget(self.YPOSITION)
+        self.horizontalLayout_7.addWidget(self.groupBox_3)
+        self.groupBox_4 = QtWidgets.QGroupBox(self.frame_2)
+        self.groupBox_4.setMinimumSize(QtCore.QSize(130, 50))
+        self.groupBox_4.setMaximumSize(QtCore.QSize(130, 50))
+        self.groupBox_4.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_4.setObjectName("groupBox_4")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.groupBox_4)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.ZPOSITION = QtWidgets.QLabel(self.groupBox_4)
+        self.ZPOSITION.setMinimumSize(QtCore.QSize(100, 30))
+        self.ZPOSITION.setMaximumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.ZPOSITION.setFont(font)
+        self.ZPOSITION.setStyleSheet("QLabel{\n"
+"color: rgb(255, 115, 30);\n"
+"}")
+        self.ZPOSITION.setAlignment(QtCore.Qt.AlignCenter)
+        self.ZPOSITION.setObjectName("ZPOSITION")
+        self.horizontalLayout_11.addWidget(self.ZPOSITION)
+        self.horizontalLayout_7.addWidget(self.groupBox_4)
+        self.verticalLayout_8.addWidget(self.frame_2)
+        self.groupBox_9 = QtWidgets.QGroupBox(self.frame_4)
+        self.groupBox_9.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_9.setObjectName("groupBox_9")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_9)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.GCODE_Panel = QtWidgets.QPlainTextEdit(self.groupBox_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.GCODE_Panel.sizePolicy().hasHeightForWidth())
+        self.GCODE_Panel.setSizePolicy(sizePolicy)
+        self.GCODE_Panel.setMinimumSize(QtCore.QSize(0, 0))
+        self.GCODE_Panel.setMaximumSize(QtCore.QSize(1100, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.GCODE_Panel.setFont(font)
+        self.GCODE_Panel.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color:rgb(255, 115, 30);\n"
+"border-style: solid;\n"
+"border-width:1px; \n"
+"border-color:rgb(47, 47, 47);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.GCODE_Panel.setLineWidth(1)
+        self.GCODE_Panel.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.GCODE_Panel.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.GCODE_Panel.setCenterOnScroll(False)
+        self.GCODE_Panel.setObjectName("GCODE_Panel")
+        self.verticalLayout.addWidget(self.GCODE_Panel)
+        self.verticalLayout_8.addWidget(self.groupBox_9)
+        self.groupBox_13 = QtWidgets.QGroupBox(self.frame_4)
+        self.groupBox_13.setMinimumSize(QtCore.QSize(200, 70))
+        self.groupBox_13.setMaximumSize(QtCore.QSize(16777215, 70))
+        self.groupBox_13.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_13.setObjectName("groupBox_13")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.groupBox_13)
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.p3 = QtWidgets.QPushButton(self.groupBox_13)
+        self.p3.setEnabled(True)
+        self.p3.setMinimumSize(QtCore.QSize(80, 30))
+        self.p3.setMaximumSize(QtCore.QSize(80, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.p3.setFont(font)
+        self.p3.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p3.setObjectName("p3")
+        self.horizontalLayout_13.addWidget(self.p3)
+        self.c21 = QtWidgets.QCheckBox(self.groupBox_13)
+        self.c21.setMinimumSize(QtCore.QSize(80, 20))
+        self.c21.setMaximumSize(QtCore.QSize(80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.c21.setFont(font)
+        self.c21.setObjectName("c21")
+        self.horizontalLayout_13.addWidget(self.c21)
+        self.p4 = QtWidgets.QPushButton(self.groupBox_13)
+        self.p4.setEnabled(True)
+        self.p4.setMinimumSize(QtCore.QSize(80, 30))
+        self.p4.setMaximumSize(QtCore.QSize(80, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.p4.setFont(font)
+        self.p4.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p4.setObjectName("p4")
+        self.horizontalLayout_13.addWidget(self.p4)
+        self.verticalLayout_8.addWidget(self.groupBox_13)
+        self.groupBox_8 = QtWidgets.QGroupBox(self.frame_4)
+        self.groupBox_8.setMaximumSize(QtCore.QSize(16777215, 150))
+        self.groupBox_8.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_8.setObjectName("groupBox_8")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.groupBox_8)
+        self.gridLayout_9.setObjectName("gridLayout_9")
+        self.Message_panel = QtWidgets.QTextBrowser(self.groupBox_8)
+        self.Message_panel.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.Message_panel.sizePolicy().hasHeightForWidth())
+        self.Message_panel.setSizePolicy(sizePolicy)
+        self.Message_panel.setMinimumSize(QtCore.QSize(0, 0))
+        self.Message_panel.setMaximumSize(QtCore.QSize(1100, 200))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.Message_panel.setFont(font)
+        self.Message_panel.setStyleSheet("QTextBrowser{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color:rgb(255, 115, 30);\n"
+"border-style: solid;\n"
+"border-width:1px; \n"
+"border-color:rgb(47, 47, 47);\n"
+"}\n"
+"QTextBrowser:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.Message_panel.setObjectName("Message_panel")
+        self.gridLayout_9.addWidget(self.Message_panel, 0, 1, 1, 1)
+        self.verticalLayout_8.addWidget(self.groupBox_8)
+        self.frame_6 = QtWidgets.QFrame(self.frame_4)
+        self.frame_6.setMinimumSize(QtCore.QSize(0, 45))
+        self.frame_6.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_6.setObjectName("frame_6")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_6)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.progressBar = QtWidgets.QProgressBar(self.frame_6)
+        self.progressBar.setMinimumSize(QtCore.QSize(200, 20))
+        self.progressBar.setMaximumSize(QtCore.QSize(300, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.progressBar.setFont(font)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.horizontalLayout_6.addWidget(self.progressBar)
+        self.p23 = QtWidgets.QPushButton(self.frame_6)
+        self.p23.setMinimumSize(QtCore.QSize(60, 26))
+        self.p23.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.p23.setFont(font)
+        self.p23.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p23.setObjectName("p23")
+        self.horizontalLayout_6.addWidget(self.p23, 0, QtCore.Qt.AlignVCenter)
+        self.verticalLayout_8.addWidget(self.frame_6)
+        self.horizontalLayout_14.addWidget(self.frame_4)
+        self.tabWidget.addTab(self.tab_3, "")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.gridLayout = QtWidgets.QGridLayout(self.tab)
@@ -2721,9 +4065,22 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_5, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
-        self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
-        self.gridLayout_5.setObjectName("gridLayout_5")
-        self.frame_8 = QtWidgets.QFrame(self.tab_2)
+        self.gridLayout_11 = QtWidgets.QGridLayout(self.tab_2)
+        self.gridLayout_11.setObjectName("gridLayout_11")
+        self.groupBox_11 = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox_11.setMaximumSize(QtCore.QSize(800, 500))
+        self.groupBox_11.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_11.setObjectName("groupBox_11")
+        self.gridLayout_8 = QtWidgets.QGridLayout(self.groupBox_11)
+        self.gridLayout_8.setObjectName("gridLayout_8")
+        self.frame_8 = QtWidgets.QFrame(self.groupBox_11)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -2734,8 +4091,8 @@ class Ui_MainWindow(object):
         self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_8.setObjectName("frame_8")
-        self.gridLayout_12 = QtWidgets.QGridLayout(self.frame_8)
-        self.gridLayout_12.setObjectName("gridLayout_12")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.frame_8)
+        self.gridLayout_5.setObjectName("gridLayout_5")
         self.l29_5 = QtWidgets.QLabel(self.frame_8)
         self.l29_5.setMinimumSize(QtCore.QSize(90, 20))
         self.l29_5.setMaximumSize(QtCore.QSize(90, 20))
@@ -2744,7 +4101,7 @@ class Ui_MainWindow(object):
         self.l29_5.setFont(font)
         self.l29_5.setAlignment(QtCore.Qt.AlignCenter)
         self.l29_5.setObjectName("l29_5")
-        self.gridLayout_12.addWidget(self.l29_5, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.l29_5, 0, 0, 1, 1)
         self.b53 = QtWidgets.QPlainTextEdit(self.frame_8)
         self.b53.setMinimumSize(QtCore.QSize(75, 25))
         self.b53.setMaximumSize(QtCore.QSize(75, 25))
@@ -2773,197 +4130,7 @@ class Ui_MainWindow(object):
         self.b53.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b53.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b53.setObjectName("b53")
-        self.gridLayout_12.addWidget(self.b53, 0, 1, 1, 1)
-        self.b55 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b55.setMinimumSize(QtCore.QSize(75, 25))
-        self.b55.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b55.setFont(font)
-        self.b55.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b55.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b55.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b55.setObjectName("b55")
-        self.gridLayout_12.addWidget(self.b55, 1, 1, 1, 1)
-        self.l29_4 = QtWidgets.QLabel(self.frame_8)
-        self.l29_4.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_4.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_4.setFont(font)
-        self.l29_4.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_4.setObjectName("l29_4")
-        self.gridLayout_12.addWidget(self.l29_4, 1, 2, 1, 1)
-        self.l29_7 = QtWidgets.QLabel(self.frame_8)
-        self.l29_7.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_7.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_7.setFont(font)
-        self.l29_7.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_7.setObjectName("l29_7")
-        self.gridLayout_12.addWidget(self.l29_7, 1, 4, 1, 1)
-        self.b57 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b57.setMinimumSize(QtCore.QSize(75, 25))
-        self.b57.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b57.setFont(font)
-        self.b57.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b57.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b57.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b57.setObjectName("b57")
-        self.gridLayout_12.addWidget(self.b57, 1, 5, 1, 1)
-        self.l29_11 = QtWidgets.QLabel(self.frame_8)
-        self.l29_11.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_11.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_11.setFont(font)
-        self.l29_11.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_11.setObjectName("l29_11")
-        self.gridLayout_12.addWidget(self.l29_11, 2, 0, 1, 1)
-        self.b58 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b58.setMinimumSize(QtCore.QSize(75, 25))
-        self.b58.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b58.setFont(font)
-        self.b58.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b58.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b58.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b58.setObjectName("b58")
-        self.gridLayout_12.addWidget(self.b58, 2, 1, 1, 1)
-        self.l29_12 = QtWidgets.QLabel(self.frame_8)
-        self.l29_12.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_12.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_12.setFont(font)
-        self.l29_12.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_12.setObjectName("l29_12")
-        self.gridLayout_12.addWidget(self.l29_12, 2, 2, 1, 1)
-        self.b59 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b59.setMinimumSize(QtCore.QSize(75, 25))
-        self.b59.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b59.setFont(font)
-        self.b59.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b59.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b59.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b59.setObjectName("b59")
-        self.gridLayout_12.addWidget(self.b59, 2, 3, 1, 1)
-        self.b56 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b56.setMinimumSize(QtCore.QSize(75, 25))
-        self.b56.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b56.setFont(font)
-        self.b56.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b56.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b56.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b56.setObjectName("b56")
-        self.gridLayout_12.addWidget(self.b56, 1, 3, 1, 1)
-        self.l29_15 = QtWidgets.QLabel(self.frame_8)
-        self.l29_15.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_15.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_15.setFont(font)
-        self.l29_15.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_15.setObjectName("l29_15")
-        self.gridLayout_12.addWidget(self.l29_15, 0, 4, 1, 1)
+        self.gridLayout_5.addWidget(self.b53, 0, 1, 1, 1)
         self.l29_6 = QtWidgets.QLabel(self.frame_8)
         self.l29_6.setMinimumSize(QtCore.QSize(90, 20))
         self.l29_6.setMaximumSize(QtCore.QSize(90, 20))
@@ -2972,7 +4139,7 @@ class Ui_MainWindow(object):
         self.l29_6.setFont(font)
         self.l29_6.setAlignment(QtCore.Qt.AlignCenter)
         self.l29_6.setObjectName("l29_6")
-        self.gridLayout_12.addWidget(self.l29_6, 0, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.l29_6, 0, 2, 1, 1)
         self.b54 = QtWidgets.QPlainTextEdit(self.frame_8)
         self.b54.setMinimumSize(QtCore.QSize(75, 25))
         self.b54.setMaximumSize(QtCore.QSize(75, 25))
@@ -3001,7 +4168,16 @@ class Ui_MainWindow(object):
         self.b54.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b54.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b54.setObjectName("b54")
-        self.gridLayout_12.addWidget(self.b54, 0, 3, 1, 1)
+        self.gridLayout_5.addWidget(self.b54, 0, 3, 1, 1)
+        self.l29_15 = QtWidgets.QLabel(self.frame_8)
+        self.l29_15.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_15.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_15.setFont(font)
+        self.l29_15.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_15.setObjectName("l29_15")
+        self.gridLayout_5.addWidget(self.l29_15, 0, 4, 1, 1)
         self.comboBox3 = QtWidgets.QComboBox(self.frame_8)
         self.comboBox3.setMinimumSize(QtCore.QSize(75, 26))
         self.comboBox3.setMaximumSize(QtCore.QSize(75, 26))
@@ -3015,7 +4191,7 @@ class Ui_MainWindow(object):
         self.comboBox3.addItem("")
         self.comboBox3.addItem("")
         self.comboBox3.addItem("")
-        self.gridLayout_12.addWidget(self.comboBox3, 0, 5, 1, 1)
+        self.gridLayout_5.addWidget(self.comboBox3, 0, 5, 1, 1)
         self.l29_3 = QtWidgets.QLabel(self.frame_8)
         self.l29_3.setMinimumSize(QtCore.QSize(90, 20))
         self.l29_3.setMaximumSize(QtCore.QSize(90, 20))
@@ -3024,7 +4200,197 @@ class Ui_MainWindow(object):
         self.l29_3.setFont(font)
         self.l29_3.setAlignment(QtCore.Qt.AlignCenter)
         self.l29_3.setObjectName("l29_3")
-        self.gridLayout_12.addWidget(self.l29_3, 1, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.l29_3, 1, 0, 1, 1)
+        self.b55 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b55.setMinimumSize(QtCore.QSize(75, 25))
+        self.b55.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b55.setFont(font)
+        self.b55.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b55.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b55.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b55.setObjectName("b55")
+        self.gridLayout_5.addWidget(self.b55, 1, 1, 1, 1)
+        self.l29_4 = QtWidgets.QLabel(self.frame_8)
+        self.l29_4.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_4.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_4.setFont(font)
+        self.l29_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_4.setObjectName("l29_4")
+        self.gridLayout_5.addWidget(self.l29_4, 1, 2, 1, 1)
+        self.b56 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b56.setMinimumSize(QtCore.QSize(75, 25))
+        self.b56.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b56.setFont(font)
+        self.b56.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b56.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b56.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b56.setObjectName("b56")
+        self.gridLayout_5.addWidget(self.b56, 1, 3, 1, 1)
+        self.l29_7 = QtWidgets.QLabel(self.frame_8)
+        self.l29_7.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_7.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_7.setFont(font)
+        self.l29_7.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_7.setObjectName("l29_7")
+        self.gridLayout_5.addWidget(self.l29_7, 1, 4, 1, 1)
+        self.b57 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b57.setMinimumSize(QtCore.QSize(75, 25))
+        self.b57.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b57.setFont(font)
+        self.b57.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b57.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b57.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b57.setObjectName("b57")
+        self.gridLayout_5.addWidget(self.b57, 1, 5, 1, 1)
+        self.l29_11 = QtWidgets.QLabel(self.frame_8)
+        self.l29_11.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_11.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_11.setFont(font)
+        self.l29_11.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_11.setObjectName("l29_11")
+        self.gridLayout_5.addWidget(self.l29_11, 2, 0, 1, 1)
+        self.b58 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b58.setMinimumSize(QtCore.QSize(75, 25))
+        self.b58.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b58.setFont(font)
+        self.b58.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b58.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b58.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b58.setObjectName("b58")
+        self.gridLayout_5.addWidget(self.b58, 2, 1, 1, 1)
+        self.l29_12 = QtWidgets.QLabel(self.frame_8)
+        self.l29_12.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_12.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_12.setFont(font)
+        self.l29_12.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_12.setObjectName("l29_12")
+        self.gridLayout_5.addWidget(self.l29_12, 2, 2, 1, 1)
+        self.b59 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b59.setMinimumSize(QtCore.QSize(75, 25))
+        self.b59.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b59.setFont(font)
+        self.b59.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b59.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b59.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b59.setObjectName("b59")
+        self.gridLayout_5.addWidget(self.b59, 2, 3, 1, 1)
+        self.l29_8 = QtWidgets.QLabel(self.frame_8)
+        self.l29_8.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_8.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_8.setFont(font)
+        self.l29_8.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_8.setObjectName("l29_8")
+        self.gridLayout_5.addWidget(self.l29_8, 2, 4, 1, 1)
         self.b60 = QtWidgets.QPlainTextEdit(self.frame_8)
         self.b60.setMinimumSize(QtCore.QSize(75, 25))
         self.b60.setMaximumSize(QtCore.QSize(75, 25))
@@ -3053,16 +4419,7 @@ class Ui_MainWindow(object):
         self.b60.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b60.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b60.setObjectName("b60")
-        self.gridLayout_12.addWidget(self.b60, 2, 5, 1, 1)
-        self.l29_8 = QtWidgets.QLabel(self.frame_8)
-        self.l29_8.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_8.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_8.setFont(font)
-        self.l29_8.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_8.setObjectName("l29_8")
-        self.gridLayout_12.addWidget(self.l29_8, 2, 4, 1, 1)
+        self.gridLayout_5.addWidget(self.b60, 2, 5, 1, 1)
         self.l29_10 = QtWidgets.QLabel(self.frame_8)
         self.l29_10.setMinimumSize(QtCore.QSize(90, 20))
         self.l29_10.setMaximumSize(QtCore.QSize(90, 20))
@@ -3071,16 +4428,7 @@ class Ui_MainWindow(object):
         self.l29_10.setFont(font)
         self.l29_10.setAlignment(QtCore.Qt.AlignCenter)
         self.l29_10.setObjectName("l29_10")
-        self.gridLayout_12.addWidget(self.l29_10, 3, 0, 1, 1)
-        self.l29_20 = QtWidgets.QLabel(self.frame_8)
-        self.l29_20.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_20.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_20.setFont(font)
-        self.l29_20.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_20.setObjectName("l29_20")
-        self.gridLayout_12.addWidget(self.l29_20, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.l29_10, 3, 0, 1, 1)
         self.b61 = QtWidgets.QPlainTextEdit(self.frame_8)
         self.b61.setMinimumSize(QtCore.QSize(75, 25))
         self.b61.setMaximumSize(QtCore.QSize(75, 25))
@@ -3109,335 +4457,16 @@ class Ui_MainWindow(object):
         self.b61.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b61.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b61.setObjectName("b61")
-        self.gridLayout_12.addWidget(self.b61, 3, 1, 1, 1)
-        self.b63 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b63.setMinimumSize(QtCore.QSize(75, 25))
-        self.b63.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b63.setFont(font)
-        self.b63.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b63.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b63.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b63.setObjectName("b63")
-        self.gridLayout_12.addWidget(self.b63, 3, 5, 1, 1)
-        self.b64 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b64.setMinimumSize(QtCore.QSize(75, 25))
-        self.b64.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b64.setFont(font)
-        self.b64.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b64.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b64.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b64.setObjectName("b64")
-        self.gridLayout_12.addWidget(self.b64, 4, 1, 1, 1)
-        self.b66 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b66.setMinimumSize(QtCore.QSize(75, 25))
-        self.b66.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b66.setFont(font)
-        self.b66.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b66.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b66.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b66.setObjectName("b66")
-        self.gridLayout_12.addWidget(self.b66, 4, 5, 1, 1)
-        self.l29_23 = QtWidgets.QLabel(self.frame_8)
-        self.l29_23.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_23.setMaximumSize(QtCore.QSize(90, 20))
+        self.gridLayout_5.addWidget(self.b61, 3, 1, 1, 1)
+        self.l29_20 = QtWidgets.QLabel(self.frame_8)
+        self.l29_20.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_20.setMaximumSize(QtCore.QSize(90, 20))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.l29_23.setFont(font)
-        self.l29_23.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_23.setObjectName("l29_23")
-        self.gridLayout_12.addWidget(self.l29_23, 5, 2, 1, 1)
-        self.l29_21 = QtWidgets.QLabel(self.frame_8)
-        self.l29_21.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_21.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_21.setFont(font)
-        self.l29_21.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_21.setObjectName("l29_21")
-        self.gridLayout_12.addWidget(self.l29_21, 4, 2, 1, 1)
-        self.comboBox1 = QtWidgets.QComboBox(self.frame_8)
-        self.comboBox1.setMinimumSize(QtCore.QSize(75, 26))
-        self.comboBox1.setMaximumSize(QtCore.QSize(75, 26))
-        self.comboBox1.setObjectName("comboBox1")
-        self.comboBox1.addItem("")
-        self.comboBox1.setItemText(0, "")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.comboBox1.addItem("")
-        self.gridLayout_12.addWidget(self.comboBox1, 5, 5, 1, 1)
-        self.c29 = QtWidgets.QCheckBox(self.frame_8)
-        self.c29.setMinimumSize(QtCore.QSize(30, 25))
-        self.c29.setMaximumSize(QtCore.QSize(90, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.c29.setFont(font)
-        self.c29.setObjectName("c29")
-        self.gridLayout_12.addWidget(self.c29, 6, 0, 1, 1, QtCore.Qt.AlignHCenter)
-        self.l29_19 = QtWidgets.QLabel(self.frame_8)
-        self.l29_19.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_19.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_19.setFont(font)
-        self.l29_19.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_19.setObjectName("l29_19")
-        self.gridLayout_12.addWidget(self.l29_19, 4, 4, 1, 1)
-        self.b67 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b67.setMinimumSize(QtCore.QSize(75, 25))
-        self.b67.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b67.setFont(font)
-        self.b67.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b67.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b67.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b67.setObjectName("b67")
-        self.gridLayout_12.addWidget(self.b67, 5, 1, 1, 1)
-        self.l29_24 = QtWidgets.QLabel(self.frame_8)
-        self.l29_24.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_24.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_24.setFont(font)
-        self.l29_24.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_24.setObjectName("l29_24")
-        self.gridLayout_12.addWidget(self.l29_24, 5, 4, 1, 1)
-        self.m1 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.m1.setEnabled(False)
-        self.m1.setMinimumSize(QtCore.QSize(75, 25))
-        self.m1.setMaximumSize(QtCore.QSize(75, 25))
-        self.m1.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(255, 255, 255);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.m1.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.m1.setObjectName("m1")
-        self.gridLayout_12.addWidget(self.m1, 6, 1, 1, 1)
-        self.b69 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b69.setMinimumSize(QtCore.QSize(75, 25))
-        self.b69.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b69.setFont(font)
-        self.b69.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b69.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b69.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b69.setObjectName("b69")
-        self.gridLayout_12.addWidget(self.b69, 6, 3, 1, 1)
-        self.l29_18 = QtWidgets.QLabel(self.frame_8)
-        self.l29_18.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_18.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_18.setFont(font)
-        self.l29_18.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_18.setObjectName("l29_18")
-        self.gridLayout_12.addWidget(self.l29_18, 6, 4, 1, 1)
-        self.comboBox2 = QtWidgets.QComboBox(self.frame_8)
-        self.comboBox2.setMinimumSize(QtCore.QSize(75, 26))
-        self.comboBox2.setMaximumSize(QtCore.QSize(75, 26))
-        self.comboBox2.setObjectName("comboBox2")
-        self.comboBox2.addItem("")
-        self.comboBox2.setItemText(0, "")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.comboBox2.addItem("")
-        self.gridLayout_12.addWidget(self.comboBox2, 6, 5, 1, 1)
-        self.b65 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b65.setMinimumSize(QtCore.QSize(75, 25))
-        self.b65.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b65.setFont(font)
-        self.b65.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b65.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b65.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b65.setObjectName("b65")
-        self.gridLayout_12.addWidget(self.b65, 4, 3, 1, 1)
-        self.l29_22 = QtWidgets.QLabel(self.frame_8)
-        self.l29_22.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_22.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_22.setFont(font)
-        self.l29_22.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_22.setObjectName("l29_22")
-        self.gridLayout_12.addWidget(self.l29_22, 5, 0, 1, 1)
-        self.l29_17 = QtWidgets.QLabel(self.frame_8)
-        self.l29_17.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_17.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_17.setFont(font)
-        self.l29_17.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_17.setObjectName("l29_17")
-        self.gridLayout_12.addWidget(self.l29_17, 6, 2, 1, 1)
-        self.b68 = QtWidgets.QPlainTextEdit(self.frame_8)
-        self.b68.setMinimumSize(QtCore.QSize(75, 25))
-        self.b68.setMaximumSize(QtCore.QSize(75, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.b68.setFont(font)
-        self.b68.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.b68.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b68.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.b68.setObjectName("b68")
-        self.gridLayout_12.addWidget(self.b68, 5, 3, 1, 1)
+        self.l29_20.setFont(font)
+        self.l29_20.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_20.setObjectName("l29_20")
+        self.gridLayout_5.addWidget(self.l29_20, 3, 2, 1, 1)
         self.b62 = QtWidgets.QPlainTextEdit(self.frame_8)
         self.b62.setMinimumSize(QtCore.QSize(75, 25))
         self.b62.setMaximumSize(QtCore.QSize(75, 25))
@@ -3466,16 +4495,7 @@ class Ui_MainWindow(object):
         self.b62.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b62.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.b62.setObjectName("b62")
-        self.gridLayout_12.addWidget(self.b62, 3, 3, 1, 1)
-        self.l29_13 = QtWidgets.QLabel(self.frame_8)
-        self.l29_13.setMinimumSize(QtCore.QSize(90, 20))
-        self.l29_13.setMaximumSize(QtCore.QSize(90, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l29_13.setFont(font)
-        self.l29_13.setAlignment(QtCore.Qt.AlignCenter)
-        self.l29_13.setObjectName("l29_13")
-        self.gridLayout_12.addWidget(self.l29_13, 4, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.b62, 3, 3, 1, 1)
         self.l29_14 = QtWidgets.QLabel(self.frame_8)
         self.l29_14.setMinimumSize(QtCore.QSize(90, 20))
         self.l29_14.setMaximumSize(QtCore.QSize(90, 20))
@@ -3484,191 +4504,360 @@ class Ui_MainWindow(object):
         self.l29_14.setFont(font)
         self.l29_14.setAlignment(QtCore.Qt.AlignCenter)
         self.l29_14.setObjectName("l29_14")
-        self.gridLayout_12.addWidget(self.l29_14, 3, 4, 1, 1)
-        self.gridLayout_5.addWidget(self.frame_8, 0, 0, 1, 1)
-        self.frame_22 = QtWidgets.QFrame(self.tab_2)
-        self.frame_22.setMinimumSize(QtCore.QSize(0, 45))
-        self.frame_22.setMaximumSize(QtCore.QSize(16777215, 45))
-        self.frame_22.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_22.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_22.setObjectName("frame_22")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_22)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.comboBox4 = QtWidgets.QComboBox(self.frame_22)
-        self.comboBox4.setMinimumSize(QtCore.QSize(75, 26))
-        self.comboBox4.setMaximumSize(QtCore.QSize(75, 26))
-        self.comboBox4.setObjectName("comboBox4")
-        self.comboBox4.addItem("")
-        self.comboBox4.setItemText(0, "")
-        self.comboBox4.addItem("")
-        self.comboBox4.addItem("")
-        self.horizontalLayout_2.addWidget(self.comboBox4)
-        self.p27 = QtWidgets.QPushButton(self.frame_22)
-        self.p27.setEnabled(True)
-        self.p27.setMinimumSize(QtCore.QSize(60, 26))
-        self.p27.setMaximumSize(QtCore.QSize(60, 26))
+        self.gridLayout_5.addWidget(self.l29_14, 3, 4, 1, 1)
+        self.b63 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b63.setMinimumSize(QtCore.QSize(75, 25))
+        self.b63.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p27.setFont(font)
-        self.p27.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
+        self.b63.setFont(font)
+        self.b63.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p27.setObjectName("p27")
-        self.horizontalLayout_2.addWidget(self.p27)
-        self.p30 = QtWidgets.QPushButton(self.frame_22)
-        self.p30.setEnabled(True)
-        self.p30.setMinimumSize(QtCore.QSize(60, 26))
-        self.p30.setMaximumSize(QtCore.QSize(60, 26))
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b63.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b63.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b63.setObjectName("b63")
+        self.gridLayout_5.addWidget(self.b63, 3, 5, 1, 1)
+        self.l29_13 = QtWidgets.QLabel(self.frame_8)
+        self.l29_13.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_13.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_13.setFont(font)
+        self.l29_13.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_13.setObjectName("l29_13")
+        self.gridLayout_5.addWidget(self.l29_13, 4, 0, 1, 1)
+        self.b64 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b64.setMinimumSize(QtCore.QSize(75, 25))
+        self.b64.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p30.setFont(font)
-        self.p30.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
+        self.b64.setFont(font)
+        self.b64.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p30.setObjectName("p30")
-        self.horizontalLayout_2.addWidget(self.p30)
-        self.p31 = QtWidgets.QPushButton(self.frame_22)
-        self.p31.setEnabled(True)
-        self.p31.setMinimumSize(QtCore.QSize(60, 26))
-        self.p31.setMaximumSize(QtCore.QSize(60, 26))
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b64.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b64.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b64.setObjectName("b64")
+        self.gridLayout_5.addWidget(self.b64, 4, 1, 1, 1)
+        self.l29_21 = QtWidgets.QLabel(self.frame_8)
+        self.l29_21.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_21.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_21.setFont(font)
+        self.l29_21.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_21.setObjectName("l29_21")
+        self.gridLayout_5.addWidget(self.l29_21, 4, 2, 1, 1)
+        self.b65 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b65.setMinimumSize(QtCore.QSize(75, 25))
+        self.b65.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p31.setFont(font)
-        self.p31.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
+        self.b65.setFont(font)
+        self.b65.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p31.setObjectName("p31")
-        self.horizontalLayout_2.addWidget(self.p31)
-        self.p28 = QtWidgets.QPushButton(self.frame_22)
-        self.p28.setEnabled(True)
-        self.p28.setMinimumSize(QtCore.QSize(60, 26))
-        self.p28.setMaximumSize(QtCore.QSize(60, 26))
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b65.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b65.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b65.setObjectName("b65")
+        self.gridLayout_5.addWidget(self.b65, 4, 3, 1, 1)
+        self.l29_19 = QtWidgets.QLabel(self.frame_8)
+        self.l29_19.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_19.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_19.setFont(font)
+        self.l29_19.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_19.setObjectName("l29_19")
+        self.gridLayout_5.addWidget(self.l29_19, 4, 4, 1, 1)
+        self.b66 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b66.setMinimumSize(QtCore.QSize(75, 25))
+        self.b66.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p28.setFont(font)
-        self.p28.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
+        self.b66.setFont(font)
+        self.b66.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p28.setObjectName("p28")
-        self.horizontalLayout_2.addWidget(self.p28)
-        self.p32 = QtWidgets.QPushButton(self.frame_22)
-        self.p32.setEnabled(True)
-        self.p32.setMinimumSize(QtCore.QSize(60, 26))
-        self.p32.setMaximumSize(QtCore.QSize(60, 26))
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b66.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b66.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b66.setObjectName("b66")
+        self.gridLayout_5.addWidget(self.b66, 4, 5, 1, 1)
+        self.l29_22 = QtWidgets.QLabel(self.frame_8)
+        self.l29_22.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_22.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_22.setFont(font)
+        self.l29_22.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_22.setObjectName("l29_22")
+        self.gridLayout_5.addWidget(self.l29_22, 5, 0, 1, 1)
+        self.b67 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b67.setMinimumSize(QtCore.QSize(75, 25))
+        self.b67.setMaximumSize(QtCore.QSize(75, 25))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.p32.setFont(font)
-        self.p32.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
+        self.b67.setFont(font)
+        self.b67.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
 "}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b67.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b67.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b67.setObjectName("b67")
+        self.gridLayout_5.addWidget(self.b67, 5, 1, 1, 1)
+        self.l29_23 = QtWidgets.QLabel(self.frame_8)
+        self.l29_23.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_23.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_23.setFont(font)
+        self.l29_23.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_23.setObjectName("l29_23")
+        self.gridLayout_5.addWidget(self.l29_23, 5, 2, 1, 1)
+        self.b68 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b68.setMinimumSize(QtCore.QSize(75, 25))
+        self.b68.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b68.setFont(font)
+        self.b68.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
 "}\n"
-"\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b68.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b68.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b68.setObjectName("b68")
+        self.gridLayout_5.addWidget(self.b68, 5, 3, 1, 1)
+        self.l29_24 = QtWidgets.QLabel(self.frame_8)
+        self.l29_24.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_24.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_24.setFont(font)
+        self.l29_24.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_24.setObjectName("l29_24")
+        self.gridLayout_5.addWidget(self.l29_24, 5, 4, 1, 1)
+        self.comboBox1 = QtWidgets.QComboBox(self.frame_8)
+        self.comboBox1.setMinimumSize(QtCore.QSize(75, 26))
+        self.comboBox1.setMaximumSize(QtCore.QSize(75, 26))
+        self.comboBox1.setObjectName("comboBox1")
+        self.comboBox1.addItem("")
+        self.comboBox1.setItemText(0, "")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.comboBox1.addItem("")
+        self.gridLayout_5.addWidget(self.comboBox1, 5, 5, 1, 1)
+        self.c29 = QtWidgets.QCheckBox(self.frame_8)
+        self.c29.setMinimumSize(QtCore.QSize(30, 25))
+        self.c29.setMaximumSize(QtCore.QSize(90, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.c29.setFont(font)
+        self.c29.setObjectName("c29")
+        self.gridLayout_5.addWidget(self.c29, 6, 0, 1, 1)
+        self.m1 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.m1.setEnabled(False)
+        self.m1.setMinimumSize(QtCore.QSize(75, 25))
+        self.m1.setMaximumSize(QtCore.QSize(75, 25))
+        self.m1.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(255, 255, 255);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.m1.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.m1.setObjectName("m1")
+        self.gridLayout_5.addWidget(self.m1, 6, 1, 1, 1)
+        self.l29_17 = QtWidgets.QLabel(self.frame_8)
+        self.l29_17.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_17.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_17.setFont(font)
+        self.l29_17.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_17.setObjectName("l29_17")
+        self.gridLayout_5.addWidget(self.l29_17, 6, 2, 1, 1)
+        self.b69 = QtWidgets.QPlainTextEdit(self.frame_8)
+        self.b69.setMinimumSize(QtCore.QSize(75, 25))
+        self.b69.setMaximumSize(QtCore.QSize(75, 25))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.b69.setFont(font)
+        self.b69.setStyleSheet("QPlainTextEdit{\n"
+"background-color: rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:3px;\n"
+"border-width:1px; \n"
+"border-color:white;\n"
+"}\n"
+"QPlainTextEdit:hover{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:focus{\n"
+"border-color: rgb(85, 170, 255);\n"
+"}\n"
+"QPlainTextEdit:disabled {\n"
+"background-color: rgb(63, 63, 63);\n"
+"color: rgb(0, 0, 0);\n"
+"border-color:rgb(120, 120, 120)\n"
+"}")
+        self.b69.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b69.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.b69.setObjectName("b69")
+        self.gridLayout_5.addWidget(self.b69, 6, 3, 1, 1)
+        self.l29_18 = QtWidgets.QLabel(self.frame_8)
+        self.l29_18.setMinimumSize(QtCore.QSize(90, 20))
+        self.l29_18.setMaximumSize(QtCore.QSize(90, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.l29_18.setFont(font)
+        self.l29_18.setAlignment(QtCore.Qt.AlignCenter)
+        self.l29_18.setObjectName("l29_18")
+        self.gridLayout_5.addWidget(self.l29_18, 6, 4, 1, 1)
+        self.comboBox2 = QtWidgets.QComboBox(self.frame_8)
+        self.comboBox2.setMinimumSize(QtCore.QSize(75, 26))
+        self.comboBox2.setMaximumSize(QtCore.QSize(75, 26))
+        self.comboBox2.setObjectName("comboBox2")
+        self.comboBox2.addItem("")
+        self.comboBox2.setItemText(0, "")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.comboBox2.addItem("")
+        self.gridLayout_5.addWidget(self.comboBox2, 6, 5, 1, 1)
+        self.gridLayout_8.addWidget(self.frame_8, 0, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.groupBox_11, 0, 0, 1, 1)
+        self.groupBox_7 = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox_7.setMaximumSize(QtCore.QSize(250, 200))
+        self.groupBox_7.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
 "")
-        self.p32.setObjectName("p32")
-        self.horizontalLayout_2.addWidget(self.p32)
-        self.p29 = QtWidgets.QPushButton(self.frame_22)
+        self.groupBox_7.setObjectName("groupBox_7")
+        self.gridLayout_15 = QtWidgets.QGridLayout(self.groupBox_7)
+        self.gridLayout_15.setObjectName("gridLayout_15")
+        self.p29 = QtWidgets.QPushButton(self.groupBox_7)
         self.p29.setEnabled(True)
         self.p29.setMinimumSize(QtCore.QSize(60, 26))
         self.p29.setMaximumSize(QtCore.QSize(60, 26))
@@ -3700,1417 +4889,187 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.p29.setObjectName("p29")
-        self.horizontalLayout_2.addWidget(self.p29)
-        self.gridLayout_5.addWidget(self.frame_22, 2, 0, 1, 1)
+        self.gridLayout_15.addWidget(self.p29, 0, 1, 1, 1)
+        self.p30 = QtWidgets.QPushButton(self.groupBox_7)
+        self.p30.setEnabled(True)
+        self.p30.setMinimumSize(QtCore.QSize(60, 26))
+        self.p30.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p30.setFont(font)
+        self.p30.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p30.setObjectName("p30")
+        self.gridLayout_15.addWidget(self.p30, 1, 1, 1, 1)
+        self.p28 = QtWidgets.QPushButton(self.groupBox_7)
+        self.p28.setEnabled(True)
+        self.p28.setMinimumSize(QtCore.QSize(60, 26))
+        self.p28.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p28.setFont(font)
+        self.p28.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p28.setObjectName("p28")
+        self.gridLayout_15.addWidget(self.p28, 2, 1, 1, 1)
+        self.p27 = QtWidgets.QPushButton(self.groupBox_7)
+        self.p27.setEnabled(True)
+        self.p27.setMinimumSize(QtCore.QSize(60, 26))
+        self.p27.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p27.setFont(font)
+        self.p27.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p27.setObjectName("p27")
+        self.gridLayout_15.addWidget(self.p27, 0, 0, 1, 1)
+        self.p31 = QtWidgets.QPushButton(self.groupBox_7)
+        self.p31.setEnabled(True)
+        self.p31.setMinimumSize(QtCore.QSize(60, 26))
+        self.p31.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p31.setFont(font)
+        self.p31.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p31.setObjectName("p31")
+        self.gridLayout_15.addWidget(self.p31, 1, 0, 1, 1)
+        self.p32 = QtWidgets.QPushButton(self.groupBox_7)
+        self.p32.setEnabled(True)
+        self.p32.setMinimumSize(QtCore.QSize(60, 26))
+        self.p32.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.p32.setFont(font)
+        self.p32.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p32.setObjectName("p32")
+        self.gridLayout_15.addWidget(self.p32, 2, 0, 1, 1)
+        self.comboBox4 = QtWidgets.QComboBox(self.groupBox_7)
+        self.comboBox4.setMinimumSize(QtCore.QSize(75, 26))
+        self.comboBox4.setMaximumSize(QtCore.QSize(75, 26))
+        self.comboBox4.setObjectName("comboBox4")
+        self.comboBox4.addItem("")
+        self.comboBox4.setItemText(0, "")
+        self.comboBox4.addItem("")
+        self.comboBox4.addItem("")
+        self.gridLayout_15.addWidget(self.comboBox4, 3, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.groupBox_7, 0, 1, 1, 1)
         self.tabWidget.addTab(self.tab_2, "")
-        self.verticalLayout.addWidget(self.tabWidget)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        self.verticalLayout.addItem(spacerItem1)
-        self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setMinimumSize(QtCore.QSize(262, 60))
-        self.frame_2.setMaximumSize(QtCore.QSize(100000, 60))
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame_2)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.frame_5 = QtWidgets.QFrame(self.frame_2)
-        self.frame_5.setMinimumSize(QtCore.QSize(330, 45))
-        self.frame_5.setMaximumSize(QtCore.QSize(380, 45))
-        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_5.setObjectName("frame_5")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_5)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.l16 = QtWidgets.QLabel(self.frame_5)
-        self.l16.setMinimumSize(QtCore.QSize(65, 30))
-        self.l16.setMaximumSize(QtCore.QSize(65, 30))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.l16.setFont(font)
-        self.l16.setAlignment(QtCore.Qt.AlignCenter)
-        self.l16.setObjectName("l16")
-        self.horizontalLayout_3.addWidget(self.l16, 0, QtCore.Qt.AlignVCenter)
-        self.comboBox = QtWidgets.QComboBox(self.frame_5)
-        self.comboBox.setMinimumSize(QtCore.QSize(80, 30))
-        self.comboBox.setMaximumSize(QtCore.QSize(80, 30))
-        self.comboBox.setObjectName("comboBox")
-        self.horizontalLayout_3.addWidget(self.comboBox, 0, QtCore.Qt.AlignVCenter)
-        self.p1 = QtWidgets.QPushButton(self.frame_5)
-        self.p1.setEnabled(True)
-        self.p1.setMinimumSize(QtCore.QSize(75, 30))
-        self.p1.setMaximumSize(QtCore.QSize(75, 30))
-        self.p1.setSizeIncrement(QtCore.QSize(0, 0))
-        self.p1.setBaseSize(QtCore.QSize(0, 0))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.p1.setFont(font)
-        self.p1.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.p1.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p1.setObjectName("p1")
-        self.horizontalLayout_3.addWidget(self.p1, 0, QtCore.Qt.AlignVCenter)
-        self.p2 = QtWidgets.QPushButton(self.frame_5)
-        self.p2.setEnabled(True)
-        self.p2.setMinimumSize(QtCore.QSize(70, 30))
-        self.p2.setMaximumSize(QtCore.QSize(70, 30))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.p2.setFont(font)
-        self.p2.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p2.setObjectName("p2")
-        self.horizontalLayout_3.addWidget(self.p2)
-        self.horizontalLayout.addWidget(self.frame_5, 0, QtCore.Qt.AlignVCenter)
-        self.frame_4 = QtWidgets.QFrame(self.frame_2)
-        self.frame_4.setMinimumSize(QtCore.QSize(210, 40))
-        self.frame_4.setMaximumSize(QtCore.QSize(210, 45))
-        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_4)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.p3 = QtWidgets.QPushButton(self.frame_4)
-        self.p3.setEnabled(True)
-        self.p3.setMinimumSize(QtCore.QSize(80, 30))
-        self.p3.setMaximumSize(QtCore.QSize(80, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.p3.setFont(font)
-        self.p3.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p3.setObjectName("p3")
-        self.horizontalLayout_4.addWidget(self.p3)
-        self.p4 = QtWidgets.QPushButton(self.frame_4)
-        self.p4.setEnabled(True)
-        self.p4.setMinimumSize(QtCore.QSize(80, 30))
-        self.p4.setMaximumSize(QtCore.QSize(80, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.p4.setFont(font)
-        self.p4.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p4.setObjectName("p4")
-        self.horizontalLayout_4.addWidget(self.p4)
-        self.horizontalLayout.addWidget(self.frame_4, 0, QtCore.Qt.AlignVCenter)
-        self.verticalLayout.addWidget(self.frame_2)
-        self.gridLayout_4.addWidget(self.frame, 1, 0, 1, 1)
-        self.frame_3 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_3.setMaximumSize(QtCore.QSize(1100, 16777215))
-        self.frame_3.setStyleSheet("")
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_3)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.frame_10 = QtWidgets.QFrame(self.frame_3)
-        self.frame_10.setMinimumSize(QtCore.QSize(359, 146))
-        self.frame_10.setMaximumSize(QtCore.QSize(400, 146))
-        self.frame_10.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_10.setObjectName("frame_10")
-        self.gridLayout_6 = QtWidgets.QGridLayout(self.frame_10)
-        self.gridLayout_6.setObjectName("gridLayout_6")
-        self.frame_18 = QtWidgets.QFrame(self.frame_10)
-        self.frame_18.setMinimumSize(QtCore.QSize(70, 65))
-        self.frame_18.setMaximumSize(QtCore.QSize(70, 65))
-        self.frame_18.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_18.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_18.setObjectName("frame_18")
-        self.gridLayout_8 = QtWidgets.QGridLayout(self.frame_18)
-        self.gridLayout_8.setObjectName("gridLayout_8")
-        self.p5 = QtWidgets.QPushButton(self.frame_18)
-        self.p5.setEnabled(False)
-        self.p5.setMinimumSize(QtCore.QSize(25, 25))
-        self.p5.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p5.setFont(font)
-        self.p5.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p5.setObjectName("p5")
-        self.gridLayout_8.addWidget(self.p5, 0, 0, 1, 1)
-        self.p6 = QtWidgets.QPushButton(self.frame_18)
-        self.p6.setEnabled(False)
-        self.p6.setMinimumSize(QtCore.QSize(25, 25))
-        self.p6.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p6.setFont(font)
-        self.p6.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p6.setObjectName("p6")
-        self.gridLayout_8.addWidget(self.p6, 0, 1, 1, 1)
-        self.p7 = QtWidgets.QPushButton(self.frame_18)
-        self.p7.setEnabled(False)
-        self.p7.setMinimumSize(QtCore.QSize(25, 25))
-        self.p7.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p7.setFont(font)
-        self.p7.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p7.setObjectName("p7")
-        self.gridLayout_8.addWidget(self.p7, 1, 0, 1, 1)
-        self.p8 = QtWidgets.QPushButton(self.frame_18)
-        self.p8.setEnabled(False)
-        self.p8.setMinimumSize(QtCore.QSize(25, 25))
-        self.p8.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p8.setFont(font)
-        self.p8.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p8.setObjectName("p8")
-        self.gridLayout_8.addWidget(self.p8, 1, 1, 1, 1)
-        self.gridLayout_6.addWidget(self.frame_18, 0, 1, 1, 1)
-        self.frame_20 = QtWidgets.QFrame(self.frame_10)
-        self.frame_20.setMinimumSize(QtCore.QSize(70, 65))
-        self.frame_20.setMaximumSize(QtCore.QSize(70, 65))
-        self.frame_20.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_20.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_20.setObjectName("frame_20")
-        self.gridLayout_10 = QtWidgets.QGridLayout(self.frame_20)
-        self.gridLayout_10.setObjectName("gridLayout_10")
-        self.p13 = QtWidgets.QPushButton(self.frame_20)
-        self.p13.setEnabled(False)
-        self.p13.setMinimumSize(QtCore.QSize(25, 25))
-        self.p13.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p13.setFont(font)
-        self.p13.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p13.setObjectName("p13")
-        self.gridLayout_10.addWidget(self.p13, 0, 0, 1, 1)
-        self.p14 = QtWidgets.QPushButton(self.frame_20)
-        self.p14.setEnabled(False)
-        self.p14.setMinimumSize(QtCore.QSize(25, 25))
-        self.p14.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p14.setFont(font)
-        self.p14.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p14.setObjectName("p14")
-        self.gridLayout_10.addWidget(self.p14, 0, 1, 1, 1)
-        self.p15 = QtWidgets.QPushButton(self.frame_20)
-        self.p15.setEnabled(False)
-        self.p15.setMinimumSize(QtCore.QSize(25, 25))
-        self.p15.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p15.setFont(font)
-        self.p15.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p15.setObjectName("p15")
-        self.gridLayout_10.addWidget(self.p15, 1, 0, 1, 1)
-        self.p16 = QtWidgets.QPushButton(self.frame_20)
-        self.p16.setEnabled(False)
-        self.p16.setMinimumSize(QtCore.QSize(25, 25))
-        self.p16.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p16.setFont(font)
-        self.p16.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p16.setObjectName("p16")
-        self.gridLayout_10.addWidget(self.p16, 1, 1, 1, 1)
-        self.gridLayout_6.addWidget(self.frame_20, 0, 3, 1, 1)
-        self.frame_19 = QtWidgets.QFrame(self.frame_10)
-        self.frame_19.setMinimumSize(QtCore.QSize(70, 65))
-        self.frame_19.setMaximumSize(QtCore.QSize(70, 65))
-        self.frame_19.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_19.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_19.setObjectName("frame_19")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.frame_19)
-        self.gridLayout_9.setObjectName("gridLayout_9")
-        self.p10 = QtWidgets.QPushButton(self.frame_19)
-        self.p10.setEnabled(False)
-        self.p10.setMinimumSize(QtCore.QSize(25, 25))
-        self.p10.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p10.setFont(font)
-        self.p10.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p10.setObjectName("p10")
-        self.gridLayout_9.addWidget(self.p10, 0, 1, 1, 1)
-        self.p12 = QtWidgets.QPushButton(self.frame_19)
-        self.p12.setEnabled(False)
-        self.p12.setMinimumSize(QtCore.QSize(25, 25))
-        self.p12.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p12.setFont(font)
-        self.p12.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p12.setObjectName("p12")
-        self.gridLayout_9.addWidget(self.p12, 1, 1, 1, 1)
-        self.p11 = QtWidgets.QPushButton(self.frame_19)
-        self.p11.setEnabled(False)
-        self.p11.setMinimumSize(QtCore.QSize(25, 25))
-        self.p11.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p11.setFont(font)
-        self.p11.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p11.setObjectName("p11")
-        self.gridLayout_9.addWidget(self.p11, 1, 0, 1, 1)
-        self.p9 = QtWidgets.QPushButton(self.frame_19)
-        self.p9.setEnabled(False)
-        self.p9.setMinimumSize(QtCore.QSize(25, 25))
-        self.p9.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p9.setFont(font)
-        self.p9.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p9.setObjectName("p9")
-        self.gridLayout_9.addWidget(self.p9, 0, 0, 1, 1)
-        self.gridLayout_6.addWidget(self.frame_19, 0, 2, 1, 1)
-        self.frame_11 = QtWidgets.QFrame(self.frame_10)
-        self.frame_11.setMinimumSize(QtCore.QSize(70, 65))
-        self.frame_11.setMaximumSize(QtCore.QSize(70, 65))
-        self.frame_11.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_11.setObjectName("frame_11")
-        self.gridLayout_11 = QtWidgets.QGridLayout(self.frame_11)
-        self.gridLayout_11.setObjectName("gridLayout_11")
-        self.p17 = QtWidgets.QPushButton(self.frame_11)
-        self.p17.setEnabled(False)
-        self.p17.setMinimumSize(QtCore.QSize(25, 25))
-        self.p17.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p17.setFont(font)
-        self.p17.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p17.setObjectName("p17")
-        self.gridLayout_11.addWidget(self.p17, 0, 0, 1, 1)
-        self.p19 = QtWidgets.QPushButton(self.frame_11)
-        self.p19.setEnabled(False)
-        self.p19.setMinimumSize(QtCore.QSize(25, 25))
-        self.p19.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p19.setFont(font)
-        self.p19.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p19.setObjectName("p19")
-        self.gridLayout_11.addWidget(self.p19, 1, 0, 1, 1)
-        self.p20 = QtWidgets.QPushButton(self.frame_11)
-        self.p20.setEnabled(False)
-        self.p20.setMinimumSize(QtCore.QSize(25, 25))
-        self.p20.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p20.setFont(font)
-        self.p20.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p20.setObjectName("p20")
-        self.gridLayout_11.addWidget(self.p20, 1, 1, 1, 1)
-        self.p18 = QtWidgets.QPushButton(self.frame_11)
-        self.p18.setEnabled(False)
-        self.p18.setMinimumSize(QtCore.QSize(25, 25))
-        self.p18.setMaximumSize(QtCore.QSize(25, 25))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p18.setFont(font)
-        self.p18.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p18.setObjectName("p18")
-        self.gridLayout_11.addWidget(self.p18, 0, 1, 1, 1)
-        self.gridLayout_6.addWidget(self.frame_11, 0, 4, 1, 1)
-        self.d3 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d3.setMinimumSize(QtCore.QSize(65, 25))
-        self.d3.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d3.setFont(font)
-        self.d3.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d3.setMaximum(999.0)
-        self.d3.setObjectName("d3")
-        self.gridLayout_6.addWidget(self.d3, 1, 3, 1, 1)
-        self.d6 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d6.setMinimumSize(QtCore.QSize(65, 25))
-        self.d6.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d6.setFont(font)
-        self.d6.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d6.setMaximum(999.0)
-        self.d6.setObjectName("d6")
-        self.gridLayout_6.addWidget(self.d6, 2, 2, 1, 1)
-        self.d7 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d7.setMinimumSize(QtCore.QSize(65, 25))
-        self.d7.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d7.setFont(font)
-        self.d7.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d7.setMaximum(999.0)
-        self.d7.setObjectName("d7")
-        self.gridLayout_6.addWidget(self.d7, 2, 3, 1, 1)
-        self.l18 = QtWidgets.QLabel(self.frame_10)
-        self.l18.setMinimumSize(QtCore.QSize(55, 25))
-        self.l18.setMaximumSize(QtCore.QSize(55, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l18.setFont(font)
-        self.l18.setAlignment(QtCore.Qt.AlignCenter)
-        self.l18.setObjectName("l18")
-        self.gridLayout_6.addWidget(self.l18, 2, 0, 1, 1)
-        self.d1 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d1.setMinimumSize(QtCore.QSize(65, 25))
-        self.d1.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d1.setFont(font)
-        self.d1.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d1.setMaximum(999.0)
-        self.d1.setObjectName("d1")
-        self.gridLayout_6.addWidget(self.d1, 1, 1, 1, 1)
-        self.d2 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d2.setMinimumSize(QtCore.QSize(65, 25))
-        self.d2.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d2.setFont(font)
-        self.d2.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d2.setMaximum(999.0)
-        self.d2.setObjectName("d2")
-        self.gridLayout_6.addWidget(self.d2, 1, 2, 1, 1)
-        self.d5 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d5.setMinimumSize(QtCore.QSize(65, 25))
-        self.d5.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d5.setFont(font)
-        self.d5.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d5.setMaximum(999.0)
-        self.d5.setObjectName("d5")
-        self.gridLayout_6.addWidget(self.d5, 2, 1, 1, 1)
-        self.l17 = QtWidgets.QLabel(self.frame_10)
-        self.l17.setMinimumSize(QtCore.QSize(55, 25))
-        self.l17.setMaximumSize(QtCore.QSize(55, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l17.setFont(font)
-        self.l17.setAlignment(QtCore.Qt.AlignCenter)
-        self.l17.setObjectName("l17")
-        self.gridLayout_6.addWidget(self.l17, 1, 0, 1, 1)
-        self.d4 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d4.setMinimumSize(QtCore.QSize(65, 25))
-        self.d4.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d4.setFont(font)
-        self.d4.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d4.setMaximum(999.0)
-        self.d4.setObjectName("d4")
-        self.gridLayout_6.addWidget(self.d4, 1, 4, 1, 1)
-        self.d8 = QtWidgets.QDoubleSpinBox(self.frame_10)
-        self.d8.setMinimumSize(QtCore.QSize(65, 25))
-        self.d8.setMaximumSize(QtCore.QSize(65, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d8.setFont(font)
-        self.d8.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d8.setMaximum(999.0)
-        self.d8.setObjectName("d8")
-        self.gridLayout_6.addWidget(self.d8, 2, 4, 1, 1)
-        self.verticalLayout_2.addWidget(self.frame_10, 0, QtCore.Qt.AlignHCenter)
-        self.GCODE_Panel = QtWidgets.QPlainTextEdit(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.GCODE_Panel.sizePolicy().hasHeightForWidth())
-        self.GCODE_Panel.setSizePolicy(sizePolicy)
-        self.GCODE_Panel.setMinimumSize(QtCore.QSize(359, 200))
-        self.GCODE_Panel.setMaximumSize(QtCore.QSize(1100, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.GCODE_Panel.setFont(font)
-        self.GCODE_Panel.setStyleSheet("QPlainTextEdit{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color:rgb(255, 115, 30);\n"
-"border-style: solid;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QPlainTextEdit:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.GCODE_Panel.setLineWidth(1)
-        self.GCODE_Panel.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.GCODE_Panel.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.GCODE_Panel.setCenterOnScroll(False)
-        self.GCODE_Panel.setObjectName("GCODE_Panel")
-        self.verticalLayout_2.addWidget(self.GCODE_Panel)
-        self.frame_9 = QtWidgets.QFrame(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_9.sizePolicy().hasHeightForWidth())
-        self.frame_9.setSizePolicy(sizePolicy)
-        self.frame_9.setMinimumSize(QtCore.QSize(0, 70))
-        self.frame_9.setMaximumSize(QtCore.QSize(600, 75))
-        self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_9.setObjectName("frame_9")
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.frame_9)
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.c21 = QtWidgets.QCheckBox(self.frame_9)
-        self.c21.setMinimumSize(QtCore.QSize(80, 20))
-        self.c21.setMaximumSize(QtCore.QSize(80, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.c21.setFont(font)
-        self.c21.setObjectName("c21")
-        self.gridLayout_3.addWidget(self.c21, 1, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.l9_2 = QtWidgets.QLabel(self.frame_9)
-        self.l9_2.setMinimumSize(QtCore.QSize(80, 20))
-        self.l9_2.setMaximumSize(QtCore.QSize(80, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l9_2.setFont(font)
-        self.l9_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.l9_2.setObjectName("l9_2")
-        self.gridLayout_3.addWidget(self.l9_2, 1, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.l9_3 = QtWidgets.QLabel(self.frame_9)
-        self.l9_3.setMinimumSize(QtCore.QSize(80, 20))
-        self.l9_3.setMaximumSize(QtCore.QSize(80, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l9_3.setFont(font)
-        self.l9_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.l9_3.setObjectName("l9_3")
-        self.gridLayout_3.addWidget(self.l9_3, 1, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.l7_3 = QtWidgets.QLabel(self.frame_9)
-        self.l7_3.setMinimumSize(QtCore.QSize(80, 20))
-        self.l7_3.setMaximumSize(QtCore.QSize(80, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l7_3.setFont(font)
-        self.l7_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.l7_3.setObjectName("l7_3")
-        self.gridLayout_3.addWidget(self.l7_3, 1, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.l7_2 = QtWidgets.QLabel(self.frame_9)
-        self.l7_2.setMinimumSize(QtCore.QSize(80, 20))
-        self.l7_2.setMaximumSize(QtCore.QSize(80, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.l7_2.setFont(font)
-        self.l7_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.l7_2.setObjectName("l7_2")
-        self.gridLayout_3.addWidget(self.l7_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d100 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d100.setMinimumSize(QtCore.QSize(50, 25))
-        self.d100.setMaximumSize(QtCore.QSize(50, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d100.setFont(font)
-        self.d100.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d100.setDecimals(0)
-        self.d100.setMaximum(999.0)
-        self.d100.setProperty("value", 100.0)
-        self.d100.setObjectName("d100")
-        self.gridLayout_3.addWidget(self.d100, 2, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p22 = QtWidgets.QPushButton(self.frame_9)
-        self.p22.setMinimumSize(QtCore.QSize(60, 26))
-        self.p22.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.p22.setFont(font)
-        self.p22.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p22.setObjectName("p22")
-        self.gridLayout_3.addWidget(self.p22, 1, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d101 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d101.setMinimumSize(QtCore.QSize(50, 25))
-        self.d101.setMaximumSize(QtCore.QSize(50, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d101.setFont(font)
-        self.d101.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d101.setDecimals(0)
-        self.d101.setMaximum(999.0)
-        self.d101.setProperty("value", 100.0)
-        self.d101.setObjectName("d101")
-        self.gridLayout_3.addWidget(self.d101, 2, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d102 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d102.setMinimumSize(QtCore.QSize(50, 25))
-        self.d102.setMaximumSize(QtCore.QSize(50, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d102.setFont(font)
-        self.d102.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d102.setDecimals(0)
-        self.d102.setMaximum(999.0)
-        self.d102.setProperty("value", 100.0)
-        self.d102.setObjectName("d102")
-        self.gridLayout_3.addWidget(self.d102, 2, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.d103 = QtWidgets.QDoubleSpinBox(self.frame_9)
-        self.d103.setMinimumSize(QtCore.QSize(50, 25))
-        self.d103.setMaximumSize(QtCore.QSize(50, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.d103.setFont(font)
-        self.d103.setStyleSheet("QDoubleSpinBox{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:3px;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QDoubleSpinBox:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QPlainTextEdit:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QDoubleSpinBox:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.d103.setDecimals(0)
-        self.d103.setMaximum(999.0)
-        self.d103.setProperty("value", 100.0)
-        self.d103.setObjectName("d103")
-        self.gridLayout_3.addWidget(self.d103, 2, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p24 = QtWidgets.QPushButton(self.frame_9)
-        self.p24.setEnabled(True)
-        self.p24.setMinimumSize(QtCore.QSize(60, 26))
-        self.p24.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.p24.setFont(font)
-        self.p24.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p24.setObjectName("p24")
-        self.gridLayout_3.addWidget(self.p24, 2, 4, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p21 = QtWidgets.QPushButton(self.frame_9)
-        self.p21.setEnabled(True)
-        self.p21.setMinimumSize(QtCore.QSize(60, 26))
-        self.p21.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.p21.setFont(font)
-        self.p21.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p21.setObjectName("p21")
-        self.gridLayout_3.addWidget(self.p21, 2, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.verticalLayout_2.addWidget(self.frame_9, 0, QtCore.Qt.AlignHCenter)
-        self.Message_panel = QtWidgets.QTextBrowser(self.frame_3)
-        self.Message_panel.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.Message_panel.sizePolicy().hasHeightForWidth())
-        self.Message_panel.setSizePolicy(sizePolicy)
-        self.Message_panel.setMinimumSize(QtCore.QSize(359, 40))
-        self.Message_panel.setMaximumSize(QtCore.QSize(1100, 200))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.Message_panel.setFont(font)
-        self.Message_panel.setStyleSheet("QTextBrowser{\n"
-"background-color: rgb(47, 47, 47);\n"
-"color:rgb(255, 115, 30);\n"
-"border-style: solid;\n"
-"border-width:1px; \n"
-"border-color:white;\n"
-"}\n"
-"QTextBrowser:hover{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QTextBrowser:focus{\n"
-"border-color: rgb(85, 170, 255);\n"
-"}\n"
-"QTextBrowser:disabled {\n"
-"background-color: rgb(63, 63, 63);\n"
-"color: rgb(0, 0, 0);\n"
-"border-color:rgb(120, 120, 120)\n"
-"}")
-        self.Message_panel.setObjectName("Message_panel")
-        self.verticalLayout_2.addWidget(self.Message_panel)
-        self.frame_6 = QtWidgets.QFrame(self.frame_3)
-        self.frame_6.setMinimumSize(QtCore.QSize(0, 45))
-        self.frame_6.setMaximumSize(QtCore.QSize(16777215, 45))
-        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_6.setObjectName("frame_6")
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_6)
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.progressBar = QtWidgets.QProgressBar(self.frame_6)
-        self.progressBar.setMinimumSize(QtCore.QSize(280, 20))
-        self.progressBar.setMaximumSize(QtCore.QSize(1100, 20))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.progressBar.setFont(font)
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
-        self.horizontalLayout_6.addWidget(self.progressBar, 0, QtCore.Qt.AlignVCenter)
-        self.p23 = QtWidgets.QPushButton(self.frame_6)
-        self.p23.setMinimumSize(QtCore.QSize(60, 26))
-        self.p23.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.p23.setFont(font)
-        self.p23.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p23.setObjectName("p23")
-        self.horizontalLayout_6.addWidget(self.p23, 0, QtCore.Qt.AlignVCenter)
-        self.verticalLayout_2.addWidget(self.frame_6)
-        self.gridLayout_4.addWidget(self.frame_3, 1, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1288, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1263, 21))
         self.menubar.setObjectName("menubar")
         self.menu_Files = QtWidgets.QMenu(self.menubar)
         self.menu_Files.setObjectName("menu_Files")
@@ -5225,16 +5184,51 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.l19_7.setText(_translate("MainWindow", "X [mm]"))
-        self.XPOSITION.setText(_translate("MainWindow", "0.000"))
-        self.l19_9.setText(_translate("MainWindow", "Y [mm]"))
-        self.YPOSITION.setText(_translate("MainWindow", "0.000"))
-        self.l19_10.setText(_translate("MainWindow", "Z [mm]"))
-        self.ZPOSITION.setText(_translate("MainWindow", "0.000"))
-        self.l19_5.setText(_translate("MainWindow", "Nozzle Temp [C]"))
+        self.groupBox.setTitle(_translate("MainWindow", "Connection"))
+        self.l16.setText(_translate("MainWindow", "COM PORT"))
+        self.p1.setText(_translate("MainWindow", "Connect"))
+        self.p2.setText(_translate("MainWindow", "Reset"))
+        self.groupBox_12.setTitle(_translate("MainWindow", "Idle"))
+        self.p15.setText(_translate("MainWindow", "-Z"))
+        self.p16.setText(_translate("MainWindow", "+Z"))
+        self.p8.setText(_translate("MainWindow", "+X"))
+        self.p12.setText(_translate("MainWindow", "+Y"))
+        self.p11.setText(_translate("MainWindow", "-Y"))
+        self.p7.setText(_translate("MainWindow", "-X"))
+        self.p9.setText(_translate("MainWindow", "HY"))
+        self.p5.setText(_translate("MainWindow", "HX"))
+        self.p13.setText(_translate("MainWindow", "HZ"))
+        self.p19.setText(_translate("MainWindow", "-E"))
+        self.p20.setText(_translate("MainWindow", "+E"))
+        self.p13_2.setText(_translate("MainWindow", "HA"))
+        self.l18.setText(_translate("MainWindow", "[mm/sec]"))
+        self.l17.setText(_translate("MainWindow", "[mm]"))
+        self.l7_3.setText(_translate("MainWindow", "Feed%"))
+        self.l9_2.setText(_translate("MainWindow", "Accel%"))
+        self.l9_3.setText(_translate("MainWindow", "Jerk%"))
+        self.p22.setText(_translate("MainWindow", "Clear"))
+        self.p21.setText(_translate("MainWindow", "Pause"))
+        self.p24.setText(_translate("MainWindow", "Set"))
+        self.l7_2.setText(_translate("MainWindow", "Jump%"))
+        self.groupBox_10.setTitle(_translate("MainWindow", "Monitor"))
+        self.groupBox_5.setTitle(_translate("MainWindow", "Nozzle"))
         self.NOZZ_TEMP.setText(_translate("MainWindow", "0.00"))
-        self.l19_6.setText(_translate("MainWindow", "Bed Temp [C]"))
+        self.groupBox_6.setTitle(_translate("MainWindow", "Bed"))
         self.BED_TEMP.setText(_translate("MainWindow", "0.00"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "Xaxis"))
+        self.XPOSITION.setText(_translate("MainWindow", "0.000"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "Yaxis"))
+        self.YPOSITION.setText(_translate("MainWindow", "0.000"))
+        self.groupBox_4.setTitle(_translate("MainWindow", "Zaxis"))
+        self.ZPOSITION.setText(_translate("MainWindow", "0.000"))
+        self.groupBox_9.setTitle(_translate("MainWindow", "GCODE"))
+        self.groupBox_13.setTitle(_translate("MainWindow", "Print"))
+        self.p3.setText(_translate("MainWindow", "USB"))
+        self.c21.setText(_translate("MainWindow", "[mm/min]"))
+        self.p4.setText(_translate("MainWindow", "SD"))
+        self.groupBox_8.setTitle(_translate("MainWindow", "Reports"))
+        self.p23.setText(_translate("MainWindow", "Cancel"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Dashboard"))
         self.l14.setText(_translate("MainWindow", "Z AXIS"))
         self.l13.setText(_translate("MainWindow", "Y AXIS"))
         self.l12.setText(_translate("MainWindow", "X AXIS"))
@@ -5250,7 +5244,7 @@ class Ui_MainWindow(object):
         self.l8.setText(_translate("MainWindow", "Jump [mm/sec]"))
         self.l7.setText(_translate("MainWindow", "Feed [mm/sec]"))
         self.l4.setText(_translate("MainWindow", "Homing"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Main"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Configuration"))
         self.l25_2.setText(_translate("MainWindow", "I"))
         self.l22_2.setText(_translate("MainWindow", "Wait"))
         self.l24_2.setText(_translate("MainWindow", "P"))
@@ -5279,13 +5273,10 @@ class Ui_MainWindow(object):
         self.l27_2.setText(_translate("MainWindow", "XY Plane°"))
         self.l28_2.setText(_translate("MainWindow", "ZX Plane°"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Advanced"))
+        self.groupBox_11.setTitle(_translate("MainWindow", "Configuration"))
         self.l29_5.setText(_translate("MainWindow", "Width [mm]"))
-        self.l29_4.setText(_translate("MainWindow", "Columns"))
-        self.l29_7.setText(_translate("MainWindow", "Iterations"))
-        self.l29_11.setText(_translate("MainWindow", "XTool [mm]"))
-        self.l29_12.setText(_translate("MainWindow", "YTool [mm]"))
-        self.l29_15.setText(_translate("MainWindow", "Tool"))
         self.l29_6.setText(_translate("MainWindow", "Length [mm]"))
+        self.l29_15.setText(_translate("MainWindow", "Tool"))
         self.comboBox3.setItemText(1, _translate("MainWindow", "BLTouch"))
         self.comboBox3.setItemText(2, _translate("MainWindow", "Inductive"))
         self.comboBox3.setItemText(3, _translate("MainWindow", "Capacitive"))
@@ -5294,11 +5285,20 @@ class Ui_MainWindow(object):
         self.comboBox3.setItemText(6, _translate("MainWindow", "Piezo"))
         self.comboBox3.setItemText(7, _translate("MainWindow", "Hall Effect"))
         self.l29_3.setText(_translate("MainWindow", " Rows"))
+        self.l29_4.setText(_translate("MainWindow", "Columns"))
+        self.l29_7.setText(_translate("MainWindow", "Iterations"))
+        self.l29_11.setText(_translate("MainWindow", "XTool [mm]"))
+        self.l29_12.setText(_translate("MainWindow", "YTool [mm]"))
         self.l29_8.setText(_translate("MainWindow", "XY [mm/sec]"))
         self.l29_10.setText(_translate("MainWindow", "Fade [mm]"))
         self.l29_20.setText(_translate("MainWindow", "SafeZ [mm]"))
-        self.l29_23.setText(_translate("MainWindow", "Y end [mm]"))
+        self.l29_14.setText(_translate("MainWindow", "Z [mm/sec]"))
+        self.l29_13.setText(_translate("MainWindow", "X start [mm]"))
         self.l29_21.setText(_translate("MainWindow", "X end [mm]"))
+        self.l29_19.setText(_translate("MainWindow", "Grid [mm]"))
+        self.l29_22.setText(_translate("MainWindow", "Y start [mm]"))
+        self.l29_23.setText(_translate("MainWindow", "Y end [mm]"))
+        self.l29_24.setText(_translate("MainWindow", "Method"))
         self.comboBox1.setItemText(1, _translate("MainWindow", "multiquadric"))
         self.comboBox1.setItemText(2, _translate("MainWindow", "inverse"))
         self.comboBox1.setItemText(3, _translate("MainWindow", "gaussian"))
@@ -5307,8 +5307,7 @@ class Ui_MainWindow(object):
         self.comboBox1.setItemText(6, _translate("MainWindow", "quintic"))
         self.comboBox1.setItemText(7, _translate("MainWindow", "thin_plate"))
         self.c29.setText(_translate("MainWindow", "ABL"))
-        self.l29_19.setText(_translate("MainWindow", "Grid [mm]"))
-        self.l29_24.setText(_translate("MainWindow", "Method"))
+        self.l29_17.setText(_translate("MainWindow", "Repeatability"))
         self.l29_18.setText(_translate("MainWindow", "View%"))
         self.comboBox2.setItemText(1, _translate("MainWindow", "1%"))
         self.comboBox2.setItemText(2, _translate("MainWindow", "2%"))
@@ -5317,51 +5316,16 @@ class Ui_MainWindow(object):
         self.comboBox2.setItemText(5, _translate("MainWindow", "20%"))
         self.comboBox2.setItemText(6, _translate("MainWindow", "50%"))
         self.comboBox2.setItemText(7, _translate("MainWindow", "100%"))
-        self.l29_22.setText(_translate("MainWindow", "Y start [mm]"))
-        self.l29_17.setText(_translate("MainWindow", "Repeatability"))
-        self.l29_13.setText(_translate("MainWindow", "X start [mm]"))
-        self.l29_14.setText(_translate("MainWindow", "Z [mm/sec]"))
+        self.groupBox_7.setTitle(_translate("MainWindow", "Commands"))
+        self.p29.setText(_translate("MainWindow", "View"))
+        self.p30.setText(_translate("MainWindow", "Toggle"))
+        self.p28.setText(_translate("MainWindow", "Repeat"))
+        self.p27.setText(_translate("MainWindow", "Probe"))
+        self.p31.setText(_translate("MainWindow", "Test"))
+        self.p32.setText(_translate("MainWindow", "Remove"))
         self.comboBox4.setItemText(1, _translate("MainWindow", "Plane"))
         self.comboBox4.setItemText(2, _translate("MainWindow", "Mesh"))
-        self.p27.setText(_translate("MainWindow", "Probe"))
-        self.p30.setText(_translate("MainWindow", "Toggle"))
-        self.p31.setText(_translate("MainWindow", "Test"))
-        self.p28.setText(_translate("MainWindow", "Repeat"))
-        self.p32.setText(_translate("MainWindow", "Remove"))
-        self.p29.setText(_translate("MainWindow", "View"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "ABL"))
-        self.l16.setText(_translate("MainWindow", "COM PORT"))
-        self.p1.setText(_translate("MainWindow", "Connect"))
-        self.p2.setText(_translate("MainWindow", "Reset"))
-        self.p3.setText(_translate("MainWindow", "USB"))
-        self.p4.setText(_translate("MainWindow", "SD"))
-        self.p5.setText(_translate("MainWindow", "-H"))
-        self.p6.setText(_translate("MainWindow", "+H"))
-        self.p7.setText(_translate("MainWindow", "-X"))
-        self.p8.setText(_translate("MainWindow", "+X"))
-        self.p13.setText(_translate("MainWindow", "-H"))
-        self.p14.setText(_translate("MainWindow", "+H"))
-        self.p15.setText(_translate("MainWindow", "-Z"))
-        self.p16.setText(_translate("MainWindow", "+Z"))
-        self.p10.setText(_translate("MainWindow", "+H"))
-        self.p12.setText(_translate("MainWindow", "+Y"))
-        self.p11.setText(_translate("MainWindow", "-Y"))
-        self.p9.setText(_translate("MainWindow", "-H"))
-        self.p17.setText(_translate("MainWindow", "-H"))
-        self.p19.setText(_translate("MainWindow", "-E"))
-        self.p20.setText(_translate("MainWindow", "+E"))
-        self.p18.setText(_translate("MainWindow", "+H"))
-        self.l18.setText(_translate("MainWindow", "[mm/sec]"))
-        self.l17.setText(_translate("MainWindow", "[mm]"))
-        self.c21.setText(_translate("MainWindow", "[mm/min]"))
-        self.l9_2.setText(_translate("MainWindow", "Accel%"))
-        self.l9_3.setText(_translate("MainWindow", "Jerk%"))
-        self.l7_3.setText(_translate("MainWindow", "Feed%"))
-        self.l7_2.setText(_translate("MainWindow", "Jump%"))
-        self.p22.setText(_translate("MainWindow", "Clear"))
-        self.p24.setText(_translate("MainWindow", "Set"))
-        self.p21.setText(_translate("MainWindow", "Pause"))
-        self.p23.setText(_translate("MainWindow", "Cancel"))
         self.menu_Files.setTitle(_translate("MainWindow", "&File"))
         self.menu_About.setTitle(_translate("MainWindow", "Manual"))
         self.menuPrinter.setTitle(_translate("MainWindow", "Config"))
@@ -5396,3 +5360,4 @@ class Ui_MainWindow(object):
         self.actionPrinter22.setText(_translate("MainWindow", "Printer22"))
         self.actionPrinter23.setText(_translate("MainWindow", "Printer23"))
         self.actionPrinter24.setText(_translate("MainWindow", "Printer24"))
+from mplwidget import MplWidget

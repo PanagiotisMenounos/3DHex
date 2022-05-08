@@ -44,7 +44,7 @@ Servo bltouch;
 #define BLTOUCH_PIN 4
 #define USB_SETTING_BYTES 52
 #define MG_BYTES 36
-#define BUFFERSIZE 3000
+#define BUFFERSIZE 3100
 #define X_EN 38
 #define Y_EN A2
 #define Z_EN A8
@@ -67,7 +67,6 @@ Servo bltouch;
 #define BED_TUNE_TEMP 50
 #define pi 3.14159265358979323846
 
-
 void service_routine();
 void temperature_control();
 void temperature_USB_update();
@@ -88,39 +87,6 @@ void check_command(int state_c);
 void read_GM_data();
 void Atune_loop(uint8_t tune_case);
 void position_report();
-void configure_outputs();
-
-int CONF_XSTEP = 40;
-int CONF_XDIR = 41;
-int CONF_YSTEP = 46;
-int CONF_YDIR = 47;
-int CONF_ZSTEP = 93;
-int CONF_ZDIR = 91;
-int CONF_ESTEP = 4;
-int CONF_EDIR = 6;
-int CONF_E1STEP = 101;
-int CONF_E1DIR = 101;
-
-volatile uint8_t *PORTX_STEP;
-volatile uint8_t *PORTX_DIR;
-volatile uint8_t *PORTY_STEP;
-volatile uint8_t *PORTY_DIR;
-volatile uint8_t *PORTZ_STEP;
-volatile uint8_t *PORTZ_DIR;
-volatile uint8_t *PORTE_STEP; 
-volatile uint8_t *PORTE_DIR;
-volatile uint8_t *PORTE1_STEP; 
-volatile uint8_t *PORTE1_DIR;
-
-  int XSTEP=0;//PF0
-  int YSTEP=6;//PF6
-  int ZSTEP=3;//PL3
-  int ESTEP=4;//PA4
-  int XDIR=1;//PF1
-  int YDIR=7;//PF7
-  int ZDIR=1;//PL1
-  int EDIR=6;//PA6
-
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -212,6 +178,7 @@ volatile struct data3 buffer3;
 volatile struct data4 buffer4;
 volatile struct data5 buffer5;
 
+
 thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
 thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
 
@@ -231,151 +198,10 @@ volatile unsigned int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
 
 
-
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
 PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
 PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
-
-void configure_outputs(){
-  /*
-   if(CONF_XSTEP<10){
-      PORTX_STEP = &PORTA;
-      XSTEP = CONF_XSTEP;
-   }else if(CONF_XSTEP <20){
-      PORTX_STEP = &PORTB;
-      XSTEP = CONF_XSTEP-10;
-   }else if(CONF_XSTEP <30){
-      PORTX_STEP = &PORTD; 
-      XSTEP = CONF_XSTEP-20;
-   }else if(CONF_XSTEP <40){
-      PORTX_STEP = &PORTE;
-      XSTEP = CONF_XSTEP-30; 
-   }else if(CONF_XSTEP <50){
-      PORTX_STEP = &PORTF;
-      XSTEP = CONF_XSTEP-40; 
-   }else if(CONF_XSTEP <60){
-      PORTX_STEP = &PORTG;
-      XSTEP = CONF_XSTEP-50; 
-   }else if(CONF_XSTEP <70){
-      PORTX_STEP = &PORTH;
-      XSTEP = CONF_XSTEP-60; 
-   }else if(CONF_XSTEP <80){
-      PORTX_STEP = &PORTJ;
-      XSTEP = CONF_XSTEP-70; 
-   }else if(CONF_XSTEP <90){
-      PORTX_STEP = &PORTK;
-      XSTEP = CONF_XSTEP-80; 
-   }else if(CONF_XSTEP <100){
-      PORTX_STEP = &PORTL;
-       XSTEP = CONF_XSTEP-90; 
-   }
-
-   if(CONF_XDIR<10){
-      PORTX_DIR = &PORTA;
-      XDIR = CONF_XDIR;
-   }else if(CONF_XDIR <20){
-      PORTX_DIR = &PORTB;
-      XDIR = CONF_XDIR-10;
-   }else if(CONF_XDIR <30){
-      PORTX_DIR = &PORTD; 
-      XDIR = CONF_XDIR-20;
-   }else if(CONF_XDIR <40){
-      PORTX_DIR = &PORTE;
-      XDIR = CONF_XDIR-30; 
-   }else if(CONF_XDIR <50){
-      PORTX_DIR = &PORTF;
-      XDIR = CONF_XDIR-40; 
-   }else if(CONF_XDIR <60){
-      PORTX_DIR = &PORTG;
-      XDIR = CONF_XDIR-50; 
-   }else if(CONF_XDIR <70){
-      PORTX_DIR = &PORTH;
-      XDIR = CONF_XDIR-60; 
-   }else if(CONF_XDIR <80){
-      PORTX_DIR = &PORTJ;
-      XDIR = CONF_XDIR-70; 
-   }else if(CONF_XDIR <90){
-      PORTX_DIR = &PORTK;
-      XDIR = CONF_XDIR-80; 
-   }else if(CONF_XDIR <100){
-      PORTX_DIR = &PORTL;
-      XDIR = CONF_XDIR-90;
-   }
-
-   if(CONF_YSTEP<10){
-      PORTY_STEP = &PORTA;
-      YSTEP = CONF_YSTEP;
-   }else if(CONF_YSTEP <20){
-      PORTY_STEP = &PORTB;
-      YSTEP = CONF_YSTEP-10;
-   }else if(CONF_YSTEP <30){
-      PORTY_STEP = &PORTD; 
-      YSTEP = CONF_YSTEP-20;
-   }else if(CONF_YSTEP <40){
-      PORTY_STEP = &PORTE;
-      YSTEP = CONF_YSTEP-30; 
-   }else if(CONF_YSTEP <50){
-      PORTY_STEP = &PORTF;
-      YSTEP = CONF_YSTEP-40; 
-   }else if(CONF_YSTEP <60){
-      PORTY_STEP = &PORTG;
-      YSTEP = CONF_YSTEP-50; 
-   }else if(CONF_YSTEP <70){
-      PORTY_STEP = &PORTH;
-      YSTEP = CONF_YSTEP-60; 
-   }else if(CONF_YSTEP <80){
-      PORTY_STEP = &PORTJ;
-      YSTEP = CONF_YSTEP-70; 
-   }else if(CONF_YSTEP <90){
-      PORTY_STEP = &PORTK;
-      YSTEP = CONF_YSTEP-80; 
-   }else if(CONF_YSTEP <100){
-      PORTY_STEP = &PORTL;
-      YSTEP = CONF_YSTEP-90; 
-   }
-
-   if(CONF_YDIR<10){
-      PORTY_DIR = &PORTA;
-      YDIR = CONF_YDIR;
-   }else if(CONF_YDIR <20){
-      PORTY_DIR = &PORTB;
-      YDIR = CONF_YDIR-10;
-   }else if(CONF_YDIR <30){
-      PORTY_DIR = &PORTD; 
-      YDIR = CONF_YDIR-20;
-   }else if(CONF_YDIR <40){
-      PORTY_DIR = &PORTE;
-      YDIR = CONF_YDIR-30; 
-   }else if(CONF_YDIR <50){
-      PORTY_DIR = &PORTF;
-      YDIR = CONF_YDIR-40; 
-   }else if(CONF_YDIR <60){
-      PORTY_DIR = &PORTG;
-      YDIR = CONF_YDIR-50; 
-   }else if(CONF_YDIR <70){
-      PORTY_DIR = &PORTH;
-      YDIR = CONF_YDIR-60; 
-   }else if(CONF_YDIR <80){
-      PORTY_DIR = &PORTJ;
-      YDIR = CONF_YDIR-70; 
-   }else if(CONF_YDIR <90){
-      PORTY_DIR = &PORTK;
-      YDIR = CONF_YDIR-80; 
-   }else if(CONF_YDIR <100){
-      PORTY_DIR = &PORTL;
-      YDIR = CONF_YDIR-90;
-   }
-   */
-   PORTX_STEP = &PORTF;
-   PORTY_STEP = &PORTF;
-   PORTX_DIR = &PORTF;
-   PORTY_DIR = &PORTF;
-   PORTZ_STEP = &PORTL;
-   PORTZ_DIR = &PORTL;
-   PORTE_STEP = &PORTA; 
-   PORTE_DIR = &PORTA;
-}
 
 void initialization_var(){
    buffer3.X_ENABLE=1;
@@ -394,7 +220,6 @@ void initialization_var(){
 }
 
 void setup() {
-   configure_outputs();
    bltouch.attach(BLTOUCH_PIN);
    pinMode(ENCODER_PIN,INPUT_PULLUP);
    pinMode(SD_ENABLE,OUTPUT);
@@ -459,7 +284,6 @@ void setup() {
    Serial.write((char*)&buffer4,sizeof(buffer4));
    delay(1000);
    if(LCD_16x4==true && setoff==false){lcd.noBlink();lcd.setCursor(0, 3);lcd.print("PRINTING..");lcd.blink();delay(1200);}
-   configure_outputs();
    Timer3.initialize(time_duration); //[microseconds]
    Timer3.attachInterrupt(service_routine);
 }
@@ -489,14 +313,12 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    i++;
    if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
       j++;
-      *PORTX_DIR = *PORTX_DIR | (bitRead(buffer1.byte_1[j],0)<<XDIR);
-      *PORTX_STEP = *PORTX_STEP | (bitRead(buffer1.byte_1[j],1)<<XSTEP);
-      *PORTY_DIR = *PORTY_DIR | (bitRead(buffer1.byte_1[j],2)<<YDIR); 
-      *PORTY_STEP = *PORTY_STEP | (bitRead(buffer1.byte_1[j],3)<<YSTEP);
-      *PORTZ_DIR = *PORTZ_DIR | (bitRead(buffer1.byte_1[j],4)<<ZDIR);
-      *PORTZ_STEP = *PORTZ_STEP | (bitRead(buffer1.byte_1[j],5)<<ZSTEP);
-      *PORTE_DIR = *PORTE_DIR | (bitRead(buffer1.byte_1[j],6)<<EDIR);
-      *PORTE_STEP = *PORTE_STEP | (bitRead(buffer1.byte_1[j],7)<<ESTEP);
+      PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],2)<<PF7);
+      PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],1)<<PF0)|(bitRead(buffer1.byte_1[j],2)<<PF7)|(bitRead(buffer1.byte_1[j],3)<<PF6);
+      PORTL = (bitRead(buffer1.byte_1[j],4)<<PL1);
+      PORTL = (bitRead(buffer1.byte_1[j],4)<<PL1)|(bitRead(buffer1.byte_1[j],5)<<PL3);
+      PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6);
+      PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6)|(bitRead(buffer1.byte_1[j],7)<<PA4);
       j++;
       i=0;
       if (bitRead(buffer1.byte_1[j-1],1)){
@@ -521,16 +343,15 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
         }
       }
       terminate_counter=0;
+      //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
       j++;
-      *PORTX_DIR = *PORTX_DIR | (bitRead(buffer2.byte_2[j],0)<<XDIR);
-      *PORTX_STEP = *PORTX_STEP | (bitRead(buffer2.byte_2[j],1)<<XSTEP);
-      *PORTY_DIR = *PORTY_DIR | (bitRead(buffer2.byte_2[j],2)<<YDIR);
-      *PORTY_STEP = *PORTY_STEP | (bitRead(buffer2.byte_2[j],3)<<YSTEP);
-      *PORTZ_DIR = *PORTZ_DIR | (bitRead(buffer2.byte_2[j],4)<<ZDIR);
-      *PORTZ_STEP = *PORTZ_STEP | (bitRead(buffer2.byte_2[j],5)<<ZSTEP);
-      *PORTE_DIR = *PORTE_DIR | (bitRead(buffer2.byte_2[j],6)<<EDIR);
-      *PORTE_STEP = *PORTE_STEP | (bitRead(buffer2.byte_2[j],7)<<ESTEP);
+      PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],2)<<PF7);
+      PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],1)<<PF0)|(bitRead(buffer2.byte_2[j],2)<<PF7)|(bitRead(buffer2.byte_2[j],3)<<PF6);
+      PORTL = (bitRead(buffer2.byte_2[j],4)<<PL1);
+      PORTL = (bitRead(buffer2.byte_2[j],4)<<PL1)|(bitRead(buffer2.byte_2[j],5)<<PL3);
+      PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6);
+      PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6)|(bitRead(buffer2.byte_2[j],7)<<PA4);
       j++;
       i=0;
       if (bitRead(buffer2.byte_2[j-1],1)){
@@ -555,11 +376,11 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
         }
       }
       terminate_counter=0;
+      //check_command(1);
    }else{
-      *PORTX_STEP = *PORTX_STEP & (0<<XSTEP);
-      *PORTY_STEP = *PORTY_STEP & (0<<YSTEP);
-      *PORTZ_STEP = *PORTZ_STEP & (0<<ZSTEP);
-      *PORTE_STEP = *PORTE_STEP & (0<<ESTEP);
+      PORTF = (0<<PF0)|(0<<PF6);
+      PORTL = (0<<PL3);
+      PORTA = (0<<PA4);
    }
    check_buffer();
    sei();

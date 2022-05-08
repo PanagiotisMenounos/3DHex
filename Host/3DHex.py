@@ -41,11 +41,18 @@ import struct
 import win32pipe, win32file, pywintypes
 import numpy as np
 from scipy import interpolate
+import random
+
 from matplotlib import pyplot
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.interpolate import Rbf
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+
+
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import Rbf
+
 from numpy import loadtxt
 from PyQt5 import QtGui
 import pyqtgraph as pg
@@ -331,7 +338,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
-        buffer_file_size=3000 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
+        buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
@@ -346,12 +353,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.send_buffer() #Command Printer to go into printig mode window.A=1
         self.message.emit(">>> Post processing successfully completed") #emit the signal
         self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
+        if buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
             if filecase==1: #Read from buffer1 binary file
                 filecase=2  #Note to read buffer2 next time
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer1_file.read(3000)) #Send binary data to Printer
+                window.ser.write(buffer1_file.read(3100)) #Send binary data to Printer
                 buffer1_file.close() 
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
@@ -361,7 +368,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3000))
+                window.ser.write(buffer2_file.read(3100))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
@@ -375,12 +382,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             self.x_pos_report.emit(window.X_POS)
             self.y_pos_report.emit(window.Y_POS)
             self.z_pos_report.emit(window.Z_POS)
-        while buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
+        while buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()                      
-                window.ser.write(buffer1_file.read(3000))
+                window.ser.write(buffer1_file.read(3100))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -390,7 +397,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3000))
+                window.ser.write(buffer2_file.read(3100))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -493,18 +500,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 if window.home_axis==1:
                       if window.L==1:
                           window.p5.setEnabled(True)
-                      else:
-                          window.p6.setEnabled(True)
                 if window.home_axis==2:
                       if window.L==1:
                           window.p9.setEnabled(True)
-                      else:
-                          window.p10.setEnabled(True)
                 if window.home_axis==3:
                       if window.L==1:
                           window.p13.setEnabled(True)
-                      else:
-                          window.p14.setEnabled(True)
                 window.enable_idle_buttons()
                 window.home_axis=0
 
@@ -646,7 +647,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Message_panel.append(">>> 3DHex")
         self.declare_vars()
         self.load_printers()
-        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
+        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
         self.ABL_include()
@@ -657,6 +658,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ZPOSITION.setFont(QFont("Digital-7", 20))
         self.NOZZ_TEMP.setFont(QFont("Digital-7", 20))
         self.BED_TEMP.setFont(QFont("Digital-7", 20))
+        self.setup_temp_monitor()
+
+    def setup_temp_monitor(self):
+        length_of_signal = 50
+        self.t = np.linspace(0,1,length_of_signal)
+        
+        self.cosinus_signal = np.zeros(length_of_signal)
+        self.sinus_signal = np.zeros(length_of_signal)
+
+        self.MplWidget.canvas.axes.clear()
+        self.MplWidget.canvas.axes.plot(self.t, self.cosinus_signal, color="#ff5500")
+        self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
+        self.MplWidget.canvas.draw()
 
     def declare_vars(self):
         self.MM = 0
@@ -827,11 +841,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p1.clicked.connect(self.CONNECT)
         self.p3.clicked.connect(self.USB)
         self.p5.clicked.connect(self.HOME_X_MIN)
-        self.p6.clicked.connect(self.HOME_X_MAX)
         self.p9.clicked.connect(self.HOME_Y_MIN)
-        self.p10.clicked.connect(self.HOME_Y_MAX)
         self.p13.clicked.connect(self.HOME_Z_MIN)
-        self.p14.clicked.connect(self.HOME_Z_MAX)
         self.p7.clicked.connect(lambda:self.rapid_idle_position(0,1))
         self.p8.clicked.connect(lambda:self.rapid_idle_position(0,0))
         self.p11.clicked.connect(lambda:self.rapid_idle_position(1,1))
@@ -1152,13 +1163,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def enable_rapid_buttons(self):
         if self.c12.isChecked():
             self.p5.setEnabled(True)
-            self.p6.setEnabled(True)
         if self.c13.isChecked():   
             self.p9.setEnabled(True)
-            self.p10.setEnabled(True)
         if self.c14.isChecked():  
             self.p13.setEnabled(True)
-            self.p14.setEnabled(True)
         self.p7.setEnabled(True)
         self.p8.setEnabled(True)
         self.p11.setEnabled(True)
@@ -1169,12 +1177,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p20.setEnabled(True)
 
     def disable_rapid_buttons(self):
-        self.p5.setEnabled(False)
-        self.p6.setEnabled(False)  
+        self.p5.setEnabled(False) 
         self.p9.setEnabled(False)
-        self.p10.setEnabled(False)
         self.p13.setEnabled(False)
-        self.p14.setEnabled(False)
         self.p7.setEnabled(False)
         self.p8.setEnabled(False)
         self.p11.setEnabled(False)
@@ -1187,24 +1192,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def setHOME_Xbuttons(self,state):
         if state == Qt.Checked and self.c2.isChecked() and self.USB_CONNECTED==1:
             self.p5.setEnabled(True)
-            self.p6.setEnabled(True)
         else:
-            self.p5.setEnabled(False)
-            self.p6.setEnabled(False) 
+            self.p5.setEnabled(False) 
     def setHOME_Ybuttons(self,state):
         if state == Qt.Checked and self.USB_CONNECTED==1:
             self.p9.setEnabled(True)
-            self.p10.setEnabled(True)
         else:
             self.p9.setEnabled(False)
-            self.p10.setEnabled(False)
     def setHOME_Zbuttons(self,state):
         if state == Qt.Checked and self.USB_CONNECTED==1:
             self.p13.setEnabled(True)
-            self.p14.setEnabled(True)
         else:
             self.p13.setEnabled(False)
-            self.p14.setEnabled(False)
 
     def setXmotor(self,state):
         self.C=0
@@ -1213,14 +1212,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c12.isChecked():
                     self.p5.setEnabled(True)
-                    self.p6.setEnabled(True)
                 self.p7.setEnabled(True)
                 self.p8.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p5.setEnabled(False)
-                self.p6.setEnabled(False)
                 self.p7.setEnabled(False)
                 self.p8.setEnabled(False)
         self.disable_idle_buttons()
@@ -1233,14 +1230,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c13.isChecked():
                     self.p9.setEnabled(True)
-                    self.p10.setEnabled(True)
                 self.p11.setEnabled(True)
                 self.p12.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p9.setEnabled(False)
-                self.p10.setEnabled(False)
                 self.p11.setEnabled(False)
                 self.p12.setEnabled(False)
         self.disable_idle_buttons()
@@ -1253,14 +1248,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c14.isChecked():
                     self.p13.setEnabled(True)
-                    self.p14.setEnabled(True)
                 self.p15.setEnabled(True)
                 self.p16.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p13.setEnabled(False)
-                self.p14.setEnabled(False)
                 self.p15.setEnabled(False)
                 self.p16.setEnabled(False)
         self.disable_idle_buttons()
@@ -1298,14 +1291,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p5.setEnabled(False)
             self.home_axis=1
 
-    def HOME_X_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.G = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
-            self.p6.setEnabled(False)
-            self.home_axis=1
-
     def HOME_Y_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.L=1
@@ -1318,14 +1303,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p9.setEnabled(False)
             self.home_axis=2
 
-    def HOME_Y_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.G = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
-            self.p10.setEnabled(False)
-            self.home_axis=2
-
     def HOME_Z_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.L=1
@@ -1336,14 +1313,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                self.K=1 
             self.p13.setEnabled(False)
-            self.home_axis=3
-
-    def HOME_Z_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.p14.setEnabled(False)
-            self.G = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
             self.home_axis=3
 
     def BL_TOUCH_TOGGLE(self,case):
@@ -1659,9 +1628,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_nozz_temp(self, new_nozz_temp):
         self.NOZZ_TEMP.setText("{:.2f}".format(round(new_nozz_temp, 2)))
+        self.cosinus_signal[49]= float("{:.2f}".format(round(new_nozz_temp, 2)))
  
     def update_bed_temp(self, new_bed_temp):
         self.BED_TEMP.setText("{:.2f}".format(round(new_bed_temp, 2)))
+        self.sinus_signal[49]= float("{:.2f}".format(round(new_bed_temp, 2)))
+        self.MplWidget.canvas.axes.clear()
+        self.MplWidget.canvas.axes.plot(self.t, self.cosinus_signal,color="#ff5500")
+        self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
+        self.MplWidget.canvas.axes.set_ylim(bottom=0)
+        self.MplWidget.canvas.draw()
+        self.cosinus_signal= np.roll(self.cosinus_signal, -1)
+        self.sinus_signal = np.roll(self.sinus_signal, -1)
 
     def update_xpos(self, x_pos_report):
         self.stepx_pos = x_pos_report - self.x_pos_last    
