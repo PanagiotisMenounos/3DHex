@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1263</width>
+    <width>1075</width>
     <height>645</height>
    </rect>
   </property>
@@ -206,7 +206,7 @@
 background-color: rgb(47, 47, 47);</string>
    </property>
    <layout class="QGridLayout" name="gridLayout_4">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
@@ -399,14 +399,14 @@ margin: 0; /* if there is only one tab, we don't want overlapping margins */
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>75</width>
-                     <height>30</height>
+                     <width>70</width>
+                     <height>26</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>75</width>
-                     <height>30</height>
+                     <width>70</width>
+                     <height>26</height>
                     </size>
                    </property>
                    <property name="sizeIncrement">
@@ -468,13 +468,13 @@ border-color:rgb(83, 83, 83);
                    <property name="minimumSize">
                     <size>
                      <width>70</width>
-                     <height>30</height>
+                     <height>26</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>70</width>
-                     <height>30</height>
+                     <height>26</height>
                     </size>
                    </property>
                    <property name="font">
@@ -1810,56 +1810,6 @@ border-color:rgb(120, 120, 120)
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="5" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                  <widget class="QPushButton" name="p22">
-                   <property name="minimumSize">
-                    <size>
-                     <width>60</width>
-                     <height>26</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>60</width>
-                     <height>26</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-background-color:rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:5px;
-border-width:2px; 
-border-color:rgb(255, 85, 0);
-}
-QPushButton:hover {
-border-width:3px; 
-border-color:rgb(255, 115, 30);
-}
-QPushButton:pressed {
-background-color:rgb(255, 115, 30);
-border-color: rgb(255, 195, 110);
-border-width: 4px;     
-}
-QPushButton:disabled{
-background-color: rgb(255, 149, 62);
-color: rgb(83, 83, 83);
-border-color:rgb(83, 83, 83);
-}
-
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Clear</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="2" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                   <widget class="QDoubleSpinBox" name="d103">
                    <property name="minimumSize">
@@ -2010,61 +1960,6 @@ border-color:rgb(120, 120, 120)
                    </property>
                    <property name="value">
                     <double>100.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="5" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                  <widget class="QPushButton" name="p21">
-                   <property name="enabled">
-                    <bool>true</bool>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>60</width>
-                     <height>26</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>60</width>
-                     <height>26</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-background-color:rgb(47, 47, 47);
-color: rgb(255, 255, 255);
-border-style: solid;
-border-radius:5px;
-border-width:2px; 
-border-color:rgb(255, 85, 0);
-}
-QPushButton:hover {
-border-width:3px; 
-border-color:rgb(255, 115, 30);
-}
-QPushButton:pressed {
-background-color:rgb(255, 115, 30);
-border-color: rgb(255, 195, 110);
-border-width: 4px;     
-}
-QPushButton:disabled{
-background-color: rgb(255, 149, 62);
-color: rgb(83, 83, 83);
-border-color:rgb(83, 83, 83);
-}
-
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Pause</string>
                    </property>
                   </widget>
                  </item>
@@ -2680,19 +2575,19 @@ border-color:rgb(120, 120, 120)
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>80</width>
-                  <height>30</height>
+                  <width>60</width>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>80</width>
-                  <height>30</height>
+                  <width>60</width>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>10</pointsize>
                   <weight>75</weight>
                   <bold>true</bold>
                  </font>
@@ -2729,6 +2624,61 @@ border-color:rgb(83, 83, 83);
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="p21">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Pause</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QCheckBox" name="c21">
                 <property name="minimumSize">
                  <size>
@@ -2753,25 +2703,75 @@ border-color:rgb(83, 83, 83);
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="p22">
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>26</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Clear</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="p4">
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>80</width>
-                  <height>30</height>
+                  <width>60</width>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>80</width>
-                  <height>30</height>
+                  <width>60</width>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>10</pointsize>
                   <weight>75</weight>
                   <bold>true</bold>
                  </font>
@@ -9815,6 +9815,4170 @@ border-color:rgb(83, 83, 83);
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Pins</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_16">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QGroupBox" name="groupBox_34">
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>500</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+          </property>
+          <property name="title">
+           <string>Actuators</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_46">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_24">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>X EN</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_26">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_0">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QGroupBox" name="groupBox_15">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>X DIR</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_17">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_2">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QGroupBox" name="groupBox_29">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>X END</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_31">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_3">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_25">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Y EN</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_27">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_4">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_16">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Y STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_18">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_5">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QGroupBox" name="groupBox_17">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Y DIR</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_19">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_6">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QGroupBox" name="groupBox_30">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Y END</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_32">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_7">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QGroupBox" name="groupBox_26">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z EN</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_28">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_8">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QGroupBox" name="groupBox_18">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_20">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_9">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QGroupBox" name="groupBox_19">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z DIR</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_21">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_10">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QGroupBox" name="groupBox_31">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z END</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_33">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_11">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QGroupBox" name="groupBox_27">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z1 EN</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_29">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_12">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QGroupBox" name="groupBox_22">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z1 STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_24">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_13">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QGroupBox" name="groupBox_23">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z2 STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_25">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_14">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QGroupBox" name="groupBox_32">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Z1 END</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_34">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_15">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QGroupBox" name="groupBox_28">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>E EN</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_30">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_16">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QGroupBox" name="groupBox_20">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>E STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_22">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_17">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QGroupBox" name="groupBox_21">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>E DIR</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_23">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_18">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QGroupBox" name="groupBox_33">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>E FIL</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_35">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_19">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_67">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>X STEP</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_36">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_1">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="groupBox_41">
+          <property name="maximumSize">
+           <size>
+            <width>250</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+          </property>
+          <property name="title">
+           <string>Heaters</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_43">
+           <item row="0" column="2">
+            <widget class="QGroupBox" name="groupBox_39">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>N Fan</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_41">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_22">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_37">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>B Heater</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_39">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_23">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_36">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>N Sensor</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_38">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_21">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_35">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>N Heater</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_37">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_20">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QGroupBox" name="groupBox_40">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Fan</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_42">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_25">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_38">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>B Sensor</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_40">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_24">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QGroupBox" name="groupBox_44">
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+          </property>
+          <property name="title">
+           <string>EXP1</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_69">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_45">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_1</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_48">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_28">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_47">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_3</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_50">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_29">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QGroupBox" name="groupBox_49">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_5</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_52">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_30">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QGroupBox" name="groupBox_51">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_7</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_54">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_31">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QGroupBox" name="groupBox_62">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_9</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_56">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_32">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_46">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_2</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_49">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_33">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_48">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_4</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_51">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_34">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QGroupBox" name="groupBox_50">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_6</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_53">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_35">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QGroupBox" name="groupBox_52">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_8</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_55">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_36">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QGroupBox" name="groupBox_63">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP1_10</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_66">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_37">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="groupBox_66">
+          <property name="maximumSize">
+           <size>
+            <width>250</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+          </property>
+          <property name="title">
+           <string>Servos</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_70">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_42">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Servo 1</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_45">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_26">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_43">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>Servo 2</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_47">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_27">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QGroupBox" name="groupBox_53">
+          <property name="maximumSize">
+           <size>
+            <width>400</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+          </property>
+          <property name="title">
+           <string>EXP2</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_57">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_54">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_1</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_58">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_38">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_55">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_3</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_59">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_39">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QGroupBox" name="groupBox_56">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_5</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_60">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_40">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QGroupBox" name="groupBox_57">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_7</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_61">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_41">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QGroupBox" name="groupBox_64">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_9</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_67">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_42">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_58">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_2</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_62">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_43">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_59">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_4</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_63">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_44">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QGroupBox" name="groupBox_60">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_6</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_64">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_45">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QGroupBox" name="groupBox_61">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_8</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_65">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_46">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QGroupBox" name="groupBox_65">
+             <property name="minimumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+             </property>
+             <property name="title">
+              <string>EXP2_10</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_68">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="Pin_Button_47">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>N</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -9824,7 +13988,7 @@ border-color:rgb(83, 83, 83);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1263</width>
+     <width>1075</width>
      <height>21</height>
     </rect>
    </property>

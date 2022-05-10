@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1263, 645)
+        MainWindow.resize(1075, 645)
         MainWindow.setMinimumSize(QtCore.QSize(1075, 645))
         MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         palette = QtGui.QPalette()
@@ -184,8 +184,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.comboBox, 0, QtCore.Qt.AlignVCenter)
         self.p1 = QtWidgets.QPushButton(self.frame_5)
         self.p1.setEnabled(True)
-        self.p1.setMinimumSize(QtCore.QSize(75, 30))
-        self.p1.setMaximumSize(QtCore.QSize(75, 30))
+        self.p1.setMinimumSize(QtCore.QSize(70, 26))
+        self.p1.setMaximumSize(QtCore.QSize(70, 26))
         self.p1.setSizeIncrement(QtCore.QSize(0, 0))
         self.p1.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
@@ -220,8 +220,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.p1, 0, QtCore.Qt.AlignVCenter)
         self.p2 = QtWidgets.QPushButton(self.frame_5)
         self.p2.setEnabled(True)
-        self.p2.setMinimumSize(QtCore.QSize(70, 30))
-        self.p2.setMaximumSize(QtCore.QSize(70, 30))
+        self.p2.setMinimumSize(QtCore.QSize(70, 26))
+        self.p2.setMaximumSize(QtCore.QSize(70, 26))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.p2.setFont(font)
@@ -999,38 +999,6 @@ class Ui_MainWindow(object):
         self.d100.setProperty("value", 100.0)
         self.d100.setObjectName("d100")
         self.gridLayout_3.addWidget(self.d100, 2, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p22 = QtWidgets.QPushButton(self.frame_9)
-        self.p22.setMinimumSize(QtCore.QSize(60, 26))
-        self.p22.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.p22.setFont(font)
-        self.p22.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p22.setObjectName("p22")
-        self.gridLayout_3.addWidget(self.p22, 1, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.d103 = QtWidgets.QDoubleSpinBox(self.frame_9)
         self.d103.setMinimumSize(QtCore.QSize(50, 25))
         self.d103.setMaximumSize(QtCore.QSize(50, 25))
@@ -1121,41 +1089,6 @@ class Ui_MainWindow(object):
         self.d101.setProperty("value", 100.0)
         self.d101.setObjectName("d101")
         self.gridLayout_3.addWidget(self.d101, 2, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        self.p21 = QtWidgets.QPushButton(self.frame_9)
-        self.p21.setEnabled(True)
-        self.p21.setMinimumSize(QtCore.QSize(60, 26))
-        self.p21.setMaximumSize(QtCore.QSize(60, 26))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.p21.setFont(font)
-        self.p21.setStyleSheet("QPushButton {\n"
-"background-color:rgb(47, 47, 47);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-radius:5px;\n"
-"border-width:2px; \n"
-"border-color:rgb(255, 85, 0);\n"
-"}\n"
-"QPushButton:hover {\n"
-"border-width:3px; \n"
-"border-color:rgb(255, 115, 30);\n"
-"}\n"
-"QPushButton:pressed {\n"
-"background-color:rgb(255, 115, 30);\n"
-"border-color: rgb(255, 195, 110);\n"
-"border-width: 4px;     \n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(255, 149, 62);\n"
-"color: rgb(83, 83, 83);\n"
-"border-color:rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"")
-        self.p21.setObjectName("p21")
-        self.gridLayout_3.addWidget(self.p21, 2, 5, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.p24 = QtWidgets.QPushButton(self.frame_9)
         self.p24.setEnabled(True)
         self.p24.setMinimumSize(QtCore.QSize(60, 26))
@@ -1443,10 +1376,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.p3 = QtWidgets.QPushButton(self.groupBox_13)
         self.p3.setEnabled(True)
-        self.p3.setMinimumSize(QtCore.QSize(80, 30))
-        self.p3.setMaximumSize(QtCore.QSize(80, 30))
+        self.p3.setMinimumSize(QtCore.QSize(60, 26))
+        self.p3.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
         self.p3.setFont(font)
@@ -1476,6 +1409,41 @@ class Ui_MainWindow(object):
 "")
         self.p3.setObjectName("p3")
         self.horizontalLayout_13.addWidget(self.p3)
+        self.p21 = QtWidgets.QPushButton(self.groupBox_13)
+        self.p21.setEnabled(True)
+        self.p21.setMinimumSize(QtCore.QSize(60, 26))
+        self.p21.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.p21.setFont(font)
+        self.p21.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p21.setObjectName("p21")
+        self.horizontalLayout_13.addWidget(self.p21)
         self.c21 = QtWidgets.QCheckBox(self.groupBox_13)
         self.c21.setMinimumSize(QtCore.QSize(80, 20))
         self.c21.setMaximumSize(QtCore.QSize(80, 20))
@@ -1484,12 +1452,44 @@ class Ui_MainWindow(object):
         self.c21.setFont(font)
         self.c21.setObjectName("c21")
         self.horizontalLayout_13.addWidget(self.c21)
+        self.p22 = QtWidgets.QPushButton(self.groupBox_13)
+        self.p22.setMinimumSize(QtCore.QSize(60, 26))
+        self.p22.setMaximumSize(QtCore.QSize(60, 26))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.p22.setFont(font)
+        self.p22.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.p22.setObjectName("p22")
+        self.horizontalLayout_13.addWidget(self.p22)
         self.p4 = QtWidgets.QPushButton(self.groupBox_13)
         self.p4.setEnabled(True)
-        self.p4.setMinimumSize(QtCore.QSize(80, 30))
-        self.p4.setMaximumSize(QtCore.QSize(80, 30))
+        self.p4.setMinimumSize(QtCore.QSize(60, 26))
+        self.p4.setMaximumSize(QtCore.QSize(60, 26))
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
         self.p4.setFont(font)
@@ -5066,10 +5066,2389 @@ class Ui_MainWindow(object):
         self.gridLayout_15.addWidget(self.comboBox4, 3, 0, 1, 1)
         self.gridLayout_11.addWidget(self.groupBox_7, 0, 1, 1, 1)
         self.tabWidget.addTab(self.tab_2, "")
-        self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
+        self.tab_4 = QtWidgets.QWidget()
+        self.tab_4.setObjectName("tab_4")
+        self.gridLayout_16 = QtWidgets.QGridLayout(self.tab_4)
+        self.gridLayout_16.setObjectName("gridLayout_16")
+        self.groupBox_34 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_34.setMaximumSize(QtCore.QSize(400, 500))
+        self.groupBox_34.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_34.setObjectName("groupBox_34")
+        self.gridLayout_46 = QtWidgets.QGridLayout(self.groupBox_34)
+        self.gridLayout_46.setObjectName("gridLayout_46")
+        self.groupBox_24 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_24.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_24.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_24.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_24.setObjectName("groupBox_24")
+        self.gridLayout_26 = QtWidgets.QGridLayout(self.groupBox_24)
+        self.gridLayout_26.setObjectName("gridLayout_26")
+        self.Pin_Button_0 = QtWidgets.QPushButton(self.groupBox_24)
+        self.Pin_Button_0.setEnabled(True)
+        self.Pin_Button_0.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_0.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_0.setFont(font)
+        self.Pin_Button_0.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_0.setObjectName("Pin_Button_0")
+        self.gridLayout_26.addWidget(self.Pin_Button_0, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_24, 0, 0, 1, 1)
+        self.groupBox_15 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_15.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_15.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_15.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_15.setObjectName("groupBox_15")
+        self.gridLayout_17 = QtWidgets.QGridLayout(self.groupBox_15)
+        self.gridLayout_17.setObjectName("gridLayout_17")
+        self.Pin_Button_2 = QtWidgets.QPushButton(self.groupBox_15)
+        self.Pin_Button_2.setEnabled(True)
+        self.Pin_Button_2.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_2.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_2.setFont(font)
+        self.Pin_Button_2.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_2.setObjectName("Pin_Button_2")
+        self.gridLayout_17.addWidget(self.Pin_Button_2, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_15, 0, 2, 1, 1)
+        self.groupBox_29 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_29.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_29.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_29.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_29.setObjectName("groupBox_29")
+        self.gridLayout_31 = QtWidgets.QGridLayout(self.groupBox_29)
+        self.gridLayout_31.setObjectName("gridLayout_31")
+        self.Pin_Button_3 = QtWidgets.QPushButton(self.groupBox_29)
+        self.Pin_Button_3.setEnabled(True)
+        self.Pin_Button_3.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_3.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_3.setFont(font)
+        self.Pin_Button_3.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_3.setObjectName("Pin_Button_3")
+        self.gridLayout_31.addWidget(self.Pin_Button_3, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_29, 0, 3, 1, 1)
+        self.groupBox_25 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_25.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_25.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_25.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_25.setObjectName("groupBox_25")
+        self.gridLayout_27 = QtWidgets.QGridLayout(self.groupBox_25)
+        self.gridLayout_27.setObjectName("gridLayout_27")
+        self.Pin_Button_4 = QtWidgets.QPushButton(self.groupBox_25)
+        self.Pin_Button_4.setEnabled(True)
+        self.Pin_Button_4.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_4.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_4.setFont(font)
+        self.Pin_Button_4.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_4.setObjectName("Pin_Button_4")
+        self.gridLayout_27.addWidget(self.Pin_Button_4, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_25, 1, 0, 1, 1)
+        self.groupBox_16 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_16.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_16.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_16.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_16.setObjectName("groupBox_16")
+        self.gridLayout_18 = QtWidgets.QGridLayout(self.groupBox_16)
+        self.gridLayout_18.setObjectName("gridLayout_18")
+        self.Pin_Button_5 = QtWidgets.QPushButton(self.groupBox_16)
+        self.Pin_Button_5.setEnabled(True)
+        self.Pin_Button_5.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_5.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_5.setFont(font)
+        self.Pin_Button_5.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_5.setObjectName("Pin_Button_5")
+        self.gridLayout_18.addWidget(self.Pin_Button_5, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_16, 1, 1, 1, 1)
+        self.groupBox_17 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_17.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_17.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_17.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_17.setObjectName("groupBox_17")
+        self.gridLayout_19 = QtWidgets.QGridLayout(self.groupBox_17)
+        self.gridLayout_19.setObjectName("gridLayout_19")
+        self.Pin_Button_6 = QtWidgets.QPushButton(self.groupBox_17)
+        self.Pin_Button_6.setEnabled(True)
+        self.Pin_Button_6.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_6.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_6.setFont(font)
+        self.Pin_Button_6.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_6.setObjectName("Pin_Button_6")
+        self.gridLayout_19.addWidget(self.Pin_Button_6, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_17, 1, 2, 1, 1)
+        self.groupBox_30 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_30.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_30.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_30.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_30.setObjectName("groupBox_30")
+        self.gridLayout_32 = QtWidgets.QGridLayout(self.groupBox_30)
+        self.gridLayout_32.setObjectName("gridLayout_32")
+        self.Pin_Button_7 = QtWidgets.QPushButton(self.groupBox_30)
+        self.Pin_Button_7.setEnabled(True)
+        self.Pin_Button_7.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_7.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_7.setFont(font)
+        self.Pin_Button_7.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_7.setObjectName("Pin_Button_7")
+        self.gridLayout_32.addWidget(self.Pin_Button_7, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_30, 1, 3, 1, 1)
+        self.groupBox_26 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_26.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_26.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_26.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_26.setObjectName("groupBox_26")
+        self.gridLayout_28 = QtWidgets.QGridLayout(self.groupBox_26)
+        self.gridLayout_28.setObjectName("gridLayout_28")
+        self.Pin_Button_8 = QtWidgets.QPushButton(self.groupBox_26)
+        self.Pin_Button_8.setEnabled(True)
+        self.Pin_Button_8.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_8.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_8.setFont(font)
+        self.Pin_Button_8.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_8.setObjectName("Pin_Button_8")
+        self.gridLayout_28.addWidget(self.Pin_Button_8, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_26, 2, 0, 1, 1)
+        self.groupBox_18 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_18.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_18.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_18.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_18.setObjectName("groupBox_18")
+        self.gridLayout_20 = QtWidgets.QGridLayout(self.groupBox_18)
+        self.gridLayout_20.setObjectName("gridLayout_20")
+        self.Pin_Button_9 = QtWidgets.QPushButton(self.groupBox_18)
+        self.Pin_Button_9.setEnabled(True)
+        self.Pin_Button_9.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_9.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_9.setFont(font)
+        self.Pin_Button_9.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_9.setObjectName("Pin_Button_9")
+        self.gridLayout_20.addWidget(self.Pin_Button_9, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_18, 2, 1, 1, 1)
+        self.groupBox_19 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_19.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_19.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_19.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_19.setObjectName("groupBox_19")
+        self.gridLayout_21 = QtWidgets.QGridLayout(self.groupBox_19)
+        self.gridLayout_21.setObjectName("gridLayout_21")
+        self.Pin_Button_10 = QtWidgets.QPushButton(self.groupBox_19)
+        self.Pin_Button_10.setEnabled(True)
+        self.Pin_Button_10.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_10.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_10.setFont(font)
+        self.Pin_Button_10.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_10.setObjectName("Pin_Button_10")
+        self.gridLayout_21.addWidget(self.Pin_Button_10, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_19, 2, 2, 1, 1)
+        self.groupBox_31 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_31.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_31.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_31.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_31.setObjectName("groupBox_31")
+        self.gridLayout_33 = QtWidgets.QGridLayout(self.groupBox_31)
+        self.gridLayout_33.setObjectName("gridLayout_33")
+        self.Pin_Button_11 = QtWidgets.QPushButton(self.groupBox_31)
+        self.Pin_Button_11.setEnabled(True)
+        self.Pin_Button_11.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_11.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_11.setFont(font)
+        self.Pin_Button_11.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_11.setObjectName("Pin_Button_11")
+        self.gridLayout_33.addWidget(self.Pin_Button_11, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_31, 2, 3, 1, 1)
+        self.groupBox_27 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_27.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_27.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_27.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_27.setObjectName("groupBox_27")
+        self.gridLayout_29 = QtWidgets.QGridLayout(self.groupBox_27)
+        self.gridLayout_29.setObjectName("gridLayout_29")
+        self.Pin_Button_12 = QtWidgets.QPushButton(self.groupBox_27)
+        self.Pin_Button_12.setEnabled(True)
+        self.Pin_Button_12.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_12.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_12.setFont(font)
+        self.Pin_Button_12.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_12.setObjectName("Pin_Button_12")
+        self.gridLayout_29.addWidget(self.Pin_Button_12, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_27, 3, 0, 1, 1)
+        self.groupBox_22 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_22.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_22.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_22.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_22.setObjectName("groupBox_22")
+        self.gridLayout_24 = QtWidgets.QGridLayout(self.groupBox_22)
+        self.gridLayout_24.setObjectName("gridLayout_24")
+        self.Pin_Button_13 = QtWidgets.QPushButton(self.groupBox_22)
+        self.Pin_Button_13.setEnabled(True)
+        self.Pin_Button_13.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_13.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_13.setFont(font)
+        self.Pin_Button_13.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_13.setObjectName("Pin_Button_13")
+        self.gridLayout_24.addWidget(self.Pin_Button_13, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_22, 3, 1, 1, 1)
+        self.groupBox_23 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_23.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_23.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_23.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_23.setObjectName("groupBox_23")
+        self.gridLayout_25 = QtWidgets.QGridLayout(self.groupBox_23)
+        self.gridLayout_25.setObjectName("gridLayout_25")
+        self.Pin_Button_14 = QtWidgets.QPushButton(self.groupBox_23)
+        self.Pin_Button_14.setEnabled(True)
+        self.Pin_Button_14.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_14.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_14.setFont(font)
+        self.Pin_Button_14.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_14.setObjectName("Pin_Button_14")
+        self.gridLayout_25.addWidget(self.Pin_Button_14, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_23, 3, 2, 1, 1)
+        self.groupBox_32 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_32.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_32.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_32.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_32.setObjectName("groupBox_32")
+        self.gridLayout_34 = QtWidgets.QGridLayout(self.groupBox_32)
+        self.gridLayout_34.setObjectName("gridLayout_34")
+        self.Pin_Button_15 = QtWidgets.QPushButton(self.groupBox_32)
+        self.Pin_Button_15.setEnabled(True)
+        self.Pin_Button_15.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_15.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_15.setFont(font)
+        self.Pin_Button_15.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_15.setObjectName("Pin_Button_15")
+        self.gridLayout_34.addWidget(self.Pin_Button_15, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_32, 3, 3, 1, 1)
+        self.groupBox_28 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_28.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_28.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_28.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_28.setObjectName("groupBox_28")
+        self.gridLayout_30 = QtWidgets.QGridLayout(self.groupBox_28)
+        self.gridLayout_30.setObjectName("gridLayout_30")
+        self.Pin_Button_16 = QtWidgets.QPushButton(self.groupBox_28)
+        self.Pin_Button_16.setEnabled(True)
+        self.Pin_Button_16.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_16.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_16.setFont(font)
+        self.Pin_Button_16.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_16.setObjectName("Pin_Button_16")
+        self.gridLayout_30.addWidget(self.Pin_Button_16, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_28, 4, 0, 1, 1)
+        self.groupBox_20 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_20.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_20.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_20.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_20.setObjectName("groupBox_20")
+        self.gridLayout_22 = QtWidgets.QGridLayout(self.groupBox_20)
+        self.gridLayout_22.setObjectName("gridLayout_22")
+        self.Pin_Button_17 = QtWidgets.QPushButton(self.groupBox_20)
+        self.Pin_Button_17.setEnabled(True)
+        self.Pin_Button_17.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_17.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_17.setFont(font)
+        self.Pin_Button_17.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_17.setObjectName("Pin_Button_17")
+        self.gridLayout_22.addWidget(self.Pin_Button_17, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_20, 4, 1, 1, 1)
+        self.groupBox_21 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_21.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_21.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_21.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_21.setObjectName("groupBox_21")
+        self.gridLayout_23 = QtWidgets.QGridLayout(self.groupBox_21)
+        self.gridLayout_23.setObjectName("gridLayout_23")
+        self.Pin_Button_18 = QtWidgets.QPushButton(self.groupBox_21)
+        self.Pin_Button_18.setEnabled(True)
+        self.Pin_Button_18.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_18.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_18.setFont(font)
+        self.Pin_Button_18.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_18.setObjectName("Pin_Button_18")
+        self.gridLayout_23.addWidget(self.Pin_Button_18, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_21, 4, 2, 1, 1)
+        self.groupBox_33 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_33.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_33.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_33.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_33.setObjectName("groupBox_33")
+        self.gridLayout_35 = QtWidgets.QGridLayout(self.groupBox_33)
+        self.gridLayout_35.setObjectName("gridLayout_35")
+        self.Pin_Button_19 = QtWidgets.QPushButton(self.groupBox_33)
+        self.Pin_Button_19.setEnabled(True)
+        self.Pin_Button_19.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_19.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_19.setFont(font)
+        self.Pin_Button_19.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_19.setObjectName("Pin_Button_19")
+        self.gridLayout_35.addWidget(self.Pin_Button_19, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_33, 4, 3, 1, 1)
+        self.groupBox_67 = QtWidgets.QGroupBox(self.groupBox_34)
+        self.groupBox_67.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_67.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_67.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_67.setObjectName("groupBox_67")
+        self.gridLayout_36 = QtWidgets.QGridLayout(self.groupBox_67)
+        self.gridLayout_36.setObjectName("gridLayout_36")
+        self.Pin_Button_1 = QtWidgets.QPushButton(self.groupBox_67)
+        self.Pin_Button_1.setEnabled(True)
+        self.Pin_Button_1.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_1.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_1.setFont(font)
+        self.Pin_Button_1.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_1.setObjectName("Pin_Button_1")
+        self.gridLayout_36.addWidget(self.Pin_Button_1, 0, 0, 1, 1)
+        self.gridLayout_46.addWidget(self.groupBox_67, 0, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_34, 0, 0, 2, 1)
+        self.groupBox_41 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_41.setMaximumSize(QtCore.QSize(250, 200))
+        self.groupBox_41.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_41.setObjectName("groupBox_41")
+        self.gridLayout_43 = QtWidgets.QGridLayout(self.groupBox_41)
+        self.gridLayout_43.setObjectName("gridLayout_43")
+        self.groupBox_39 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_39.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_39.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_39.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_39.setObjectName("groupBox_39")
+        self.gridLayout_41 = QtWidgets.QGridLayout(self.groupBox_39)
+        self.gridLayout_41.setObjectName("gridLayout_41")
+        self.Pin_Button_22 = QtWidgets.QPushButton(self.groupBox_39)
+        self.Pin_Button_22.setEnabled(True)
+        self.Pin_Button_22.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_22.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_22.setFont(font)
+        self.Pin_Button_22.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_22.setObjectName("Pin_Button_22")
+        self.gridLayout_41.addWidget(self.Pin_Button_22, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_39, 0, 2, 1, 1)
+        self.groupBox_37 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_37.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_37.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_37.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_37.setObjectName("groupBox_37")
+        self.gridLayout_39 = QtWidgets.QGridLayout(self.groupBox_37)
+        self.gridLayout_39.setObjectName("gridLayout_39")
+        self.Pin_Button_23 = QtWidgets.QPushButton(self.groupBox_37)
+        self.Pin_Button_23.setEnabled(True)
+        self.Pin_Button_23.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_23.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_23.setFont(font)
+        self.Pin_Button_23.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_23.setObjectName("Pin_Button_23")
+        self.gridLayout_39.addWidget(self.Pin_Button_23, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_37, 1, 0, 1, 1)
+        self.groupBox_36 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_36.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_36.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_36.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_36.setObjectName("groupBox_36")
+        self.gridLayout_38 = QtWidgets.QGridLayout(self.groupBox_36)
+        self.gridLayout_38.setObjectName("gridLayout_38")
+        self.Pin_Button_21 = QtWidgets.QPushButton(self.groupBox_36)
+        self.Pin_Button_21.setEnabled(True)
+        self.Pin_Button_21.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_21.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_21.setFont(font)
+        self.Pin_Button_21.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_21.setObjectName("Pin_Button_21")
+        self.gridLayout_38.addWidget(self.Pin_Button_21, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_36, 0, 1, 1, 1)
+        self.groupBox_35 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_35.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_35.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_35.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_35.setObjectName("groupBox_35")
+        self.gridLayout_37 = QtWidgets.QGridLayout(self.groupBox_35)
+        self.gridLayout_37.setObjectName("gridLayout_37")
+        self.Pin_Button_20 = QtWidgets.QPushButton(self.groupBox_35)
+        self.Pin_Button_20.setEnabled(True)
+        self.Pin_Button_20.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_20.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_20.setFont(font)
+        self.Pin_Button_20.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_20.setObjectName("Pin_Button_20")
+        self.gridLayout_37.addWidget(self.Pin_Button_20, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_35, 0, 0, 1, 1)
+        self.groupBox_40 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_40.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_40.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_40.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_40.setObjectName("groupBox_40")
+        self.gridLayout_42 = QtWidgets.QGridLayout(self.groupBox_40)
+        self.gridLayout_42.setObjectName("gridLayout_42")
+        self.Pin_Button_25 = QtWidgets.QPushButton(self.groupBox_40)
+        self.Pin_Button_25.setEnabled(True)
+        self.Pin_Button_25.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_25.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_25.setFont(font)
+        self.Pin_Button_25.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_25.setObjectName("Pin_Button_25")
+        self.gridLayout_42.addWidget(self.Pin_Button_25, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_40, 1, 2, 1, 1)
+        self.groupBox_38 = QtWidgets.QGroupBox(self.groupBox_41)
+        self.groupBox_38.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_38.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_38.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_38.setObjectName("groupBox_38")
+        self.gridLayout_40 = QtWidgets.QGridLayout(self.groupBox_38)
+        self.gridLayout_40.setObjectName("gridLayout_40")
+        self.Pin_Button_24 = QtWidgets.QPushButton(self.groupBox_38)
+        self.Pin_Button_24.setEnabled(True)
+        self.Pin_Button_24.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_24.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_24.setFont(font)
+        self.Pin_Button_24.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_24.setObjectName("Pin_Button_24")
+        self.gridLayout_40.addWidget(self.Pin_Button_24, 0, 0, 1, 1)
+        self.gridLayout_43.addWidget(self.groupBox_38, 1, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_41, 0, 1, 1, 1)
+        self.groupBox_44 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_44.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.groupBox_44.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_44.setObjectName("groupBox_44")
+        self.gridLayout_69 = QtWidgets.QGridLayout(self.groupBox_44)
+        self.gridLayout_69.setObjectName("gridLayout_69")
+        self.groupBox_45 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_45.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_45.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_45.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_45.setObjectName("groupBox_45")
+        self.gridLayout_48 = QtWidgets.QGridLayout(self.groupBox_45)
+        self.gridLayout_48.setObjectName("gridLayout_48")
+        self.Pin_Button_28 = QtWidgets.QPushButton(self.groupBox_45)
+        self.Pin_Button_28.setEnabled(True)
+        self.Pin_Button_28.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_28.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_28.setFont(font)
+        self.Pin_Button_28.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_28.setObjectName("Pin_Button_28")
+        self.gridLayout_48.addWidget(self.Pin_Button_28, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_45, 0, 0, 1, 1)
+        self.groupBox_47 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_47.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_47.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_47.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_47.setObjectName("groupBox_47")
+        self.gridLayout_50 = QtWidgets.QGridLayout(self.groupBox_47)
+        self.gridLayout_50.setObjectName("gridLayout_50")
+        self.Pin_Button_29 = QtWidgets.QPushButton(self.groupBox_47)
+        self.Pin_Button_29.setEnabled(True)
+        self.Pin_Button_29.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_29.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_29.setFont(font)
+        self.Pin_Button_29.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_29.setObjectName("Pin_Button_29")
+        self.gridLayout_50.addWidget(self.Pin_Button_29, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_47, 0, 1, 1, 1)
+        self.groupBox_49 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_49.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_49.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_49.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_49.setObjectName("groupBox_49")
+        self.gridLayout_52 = QtWidgets.QGridLayout(self.groupBox_49)
+        self.gridLayout_52.setObjectName("gridLayout_52")
+        self.Pin_Button_30 = QtWidgets.QPushButton(self.groupBox_49)
+        self.Pin_Button_30.setEnabled(True)
+        self.Pin_Button_30.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_30.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_30.setFont(font)
+        self.Pin_Button_30.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_30.setObjectName("Pin_Button_30")
+        self.gridLayout_52.addWidget(self.Pin_Button_30, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_49, 0, 2, 1, 1)
+        self.groupBox_51 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_51.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_51.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_51.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_51.setObjectName("groupBox_51")
+        self.gridLayout_54 = QtWidgets.QGridLayout(self.groupBox_51)
+        self.gridLayout_54.setObjectName("gridLayout_54")
+        self.Pin_Button_31 = QtWidgets.QPushButton(self.groupBox_51)
+        self.Pin_Button_31.setEnabled(True)
+        self.Pin_Button_31.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_31.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_31.setFont(font)
+        self.Pin_Button_31.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_31.setObjectName("Pin_Button_31")
+        self.gridLayout_54.addWidget(self.Pin_Button_31, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_51, 0, 3, 1, 1)
+        self.groupBox_62 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_62.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_62.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_62.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_62.setObjectName("groupBox_62")
+        self.gridLayout_56 = QtWidgets.QGridLayout(self.groupBox_62)
+        self.gridLayout_56.setObjectName("gridLayout_56")
+        self.Pin_Button_32 = QtWidgets.QPushButton(self.groupBox_62)
+        self.Pin_Button_32.setEnabled(True)
+        self.Pin_Button_32.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_32.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_32.setFont(font)
+        self.Pin_Button_32.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_32.setObjectName("Pin_Button_32")
+        self.gridLayout_56.addWidget(self.Pin_Button_32, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_62, 0, 4, 1, 1)
+        self.groupBox_46 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_46.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_46.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_46.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_46.setObjectName("groupBox_46")
+        self.gridLayout_49 = QtWidgets.QGridLayout(self.groupBox_46)
+        self.gridLayout_49.setObjectName("gridLayout_49")
+        self.Pin_Button_33 = QtWidgets.QPushButton(self.groupBox_46)
+        self.Pin_Button_33.setEnabled(True)
+        self.Pin_Button_33.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_33.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_33.setFont(font)
+        self.Pin_Button_33.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_33.setObjectName("Pin_Button_33")
+        self.gridLayout_49.addWidget(self.Pin_Button_33, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_46, 1, 0, 1, 1)
+        self.groupBox_48 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_48.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_48.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_48.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_48.setObjectName("groupBox_48")
+        self.gridLayout_51 = QtWidgets.QGridLayout(self.groupBox_48)
+        self.gridLayout_51.setObjectName("gridLayout_51")
+        self.Pin_Button_34 = QtWidgets.QPushButton(self.groupBox_48)
+        self.Pin_Button_34.setEnabled(True)
+        self.Pin_Button_34.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_34.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_34.setFont(font)
+        self.Pin_Button_34.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_34.setObjectName("Pin_Button_34")
+        self.gridLayout_51.addWidget(self.Pin_Button_34, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_48, 1, 1, 1, 1)
+        self.groupBox_50 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_50.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_50.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_50.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_50.setObjectName("groupBox_50")
+        self.gridLayout_53 = QtWidgets.QGridLayout(self.groupBox_50)
+        self.gridLayout_53.setObjectName("gridLayout_53")
+        self.Pin_Button_35 = QtWidgets.QPushButton(self.groupBox_50)
+        self.Pin_Button_35.setEnabled(True)
+        self.Pin_Button_35.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_35.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_35.setFont(font)
+        self.Pin_Button_35.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_35.setObjectName("Pin_Button_35")
+        self.gridLayout_53.addWidget(self.Pin_Button_35, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_50, 1, 2, 1, 1)
+        self.groupBox_52 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_52.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_52.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_52.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_52.setObjectName("groupBox_52")
+        self.gridLayout_55 = QtWidgets.QGridLayout(self.groupBox_52)
+        self.gridLayout_55.setObjectName("gridLayout_55")
+        self.Pin_Button_36 = QtWidgets.QPushButton(self.groupBox_52)
+        self.Pin_Button_36.setEnabled(True)
+        self.Pin_Button_36.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_36.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_36.setFont(font)
+        self.Pin_Button_36.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_36.setObjectName("Pin_Button_36")
+        self.gridLayout_55.addWidget(self.Pin_Button_36, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_52, 1, 3, 1, 1)
+        self.groupBox_63 = QtWidgets.QGroupBox(self.groupBox_44)
+        self.groupBox_63.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_63.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_63.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_63.setObjectName("groupBox_63")
+        self.gridLayout_66 = QtWidgets.QGridLayout(self.groupBox_63)
+        self.gridLayout_66.setObjectName("gridLayout_66")
+        self.Pin_Button_37 = QtWidgets.QPushButton(self.groupBox_63)
+        self.Pin_Button_37.setEnabled(True)
+        self.Pin_Button_37.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_37.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_37.setFont(font)
+        self.Pin_Button_37.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_37.setObjectName("Pin_Button_37")
+        self.gridLayout_66.addWidget(self.Pin_Button_37, 0, 0, 1, 1)
+        self.gridLayout_69.addWidget(self.groupBox_63, 1, 4, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_44, 0, 2, 1, 1)
+        self.groupBox_66 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_66.setMaximumSize(QtCore.QSize(250, 200))
+        self.groupBox_66.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_66.setObjectName("groupBox_66")
+        self.gridLayout_70 = QtWidgets.QGridLayout(self.groupBox_66)
+        self.gridLayout_70.setObjectName("gridLayout_70")
+        self.groupBox_42 = QtWidgets.QGroupBox(self.groupBox_66)
+        self.groupBox_42.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_42.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_42.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_42.setObjectName("groupBox_42")
+        self.gridLayout_45 = QtWidgets.QGridLayout(self.groupBox_42)
+        self.gridLayout_45.setObjectName("gridLayout_45")
+        self.Pin_Button_26 = QtWidgets.QPushButton(self.groupBox_42)
+        self.Pin_Button_26.setEnabled(True)
+        self.Pin_Button_26.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_26.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_26.setFont(font)
+        self.Pin_Button_26.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_26.setObjectName("Pin_Button_26")
+        self.gridLayout_45.addWidget(self.Pin_Button_26, 0, 0, 1, 1)
+        self.gridLayout_70.addWidget(self.groupBox_42, 0, 0, 1, 1)
+        self.groupBox_43 = QtWidgets.QGroupBox(self.groupBox_66)
+        self.groupBox_43.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_43.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_43.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_43.setObjectName("groupBox_43")
+        self.gridLayout_47 = QtWidgets.QGridLayout(self.groupBox_43)
+        self.gridLayout_47.setObjectName("gridLayout_47")
+        self.Pin_Button_27 = QtWidgets.QPushButton(self.groupBox_43)
+        self.Pin_Button_27.setEnabled(True)
+        self.Pin_Button_27.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_27.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_27.setFont(font)
+        self.Pin_Button_27.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_27.setObjectName("Pin_Button_27")
+        self.gridLayout_47.addWidget(self.Pin_Button_27, 0, 0, 1, 1)
+        self.gridLayout_70.addWidget(self.groupBox_43, 0, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_66, 1, 1, 1, 1)
+        self.groupBox_53 = QtWidgets.QGroupBox(self.tab_4)
+        self.groupBox_53.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.groupBox_53.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_53.setObjectName("groupBox_53")
+        self.gridLayout_57 = QtWidgets.QGridLayout(self.groupBox_53)
+        self.gridLayout_57.setObjectName("gridLayout_57")
+        self.groupBox_54 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_54.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_54.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_54.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_54.setObjectName("groupBox_54")
+        self.gridLayout_58 = QtWidgets.QGridLayout(self.groupBox_54)
+        self.gridLayout_58.setObjectName("gridLayout_58")
+        self.Pin_Button_38 = QtWidgets.QPushButton(self.groupBox_54)
+        self.Pin_Button_38.setEnabled(True)
+        self.Pin_Button_38.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_38.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_38.setFont(font)
+        self.Pin_Button_38.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_38.setObjectName("Pin_Button_38")
+        self.gridLayout_58.addWidget(self.Pin_Button_38, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_54, 0, 0, 1, 1)
+        self.groupBox_55 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_55.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_55.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_55.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_55.setObjectName("groupBox_55")
+        self.gridLayout_59 = QtWidgets.QGridLayout(self.groupBox_55)
+        self.gridLayout_59.setObjectName("gridLayout_59")
+        self.Pin_Button_39 = QtWidgets.QPushButton(self.groupBox_55)
+        self.Pin_Button_39.setEnabled(True)
+        self.Pin_Button_39.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_39.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_39.setFont(font)
+        self.Pin_Button_39.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_39.setObjectName("Pin_Button_39")
+        self.gridLayout_59.addWidget(self.Pin_Button_39, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_55, 0, 1, 1, 1)
+        self.groupBox_56 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_56.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_56.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_56.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_56.setObjectName("groupBox_56")
+        self.gridLayout_60 = QtWidgets.QGridLayout(self.groupBox_56)
+        self.gridLayout_60.setObjectName("gridLayout_60")
+        self.Pin_Button_40 = QtWidgets.QPushButton(self.groupBox_56)
+        self.Pin_Button_40.setEnabled(True)
+        self.Pin_Button_40.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_40.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_40.setFont(font)
+        self.Pin_Button_40.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_40.setObjectName("Pin_Button_40")
+        self.gridLayout_60.addWidget(self.Pin_Button_40, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_56, 0, 2, 1, 1)
+        self.groupBox_57 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_57.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_57.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_57.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_57.setObjectName("groupBox_57")
+        self.gridLayout_61 = QtWidgets.QGridLayout(self.groupBox_57)
+        self.gridLayout_61.setObjectName("gridLayout_61")
+        self.Pin_Button_41 = QtWidgets.QPushButton(self.groupBox_57)
+        self.Pin_Button_41.setEnabled(True)
+        self.Pin_Button_41.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_41.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_41.setFont(font)
+        self.Pin_Button_41.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_41.setObjectName("Pin_Button_41")
+        self.gridLayout_61.addWidget(self.Pin_Button_41, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_57, 0, 3, 1, 1)
+        self.groupBox_64 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_64.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_64.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_64.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_64.setObjectName("groupBox_64")
+        self.gridLayout_67 = QtWidgets.QGridLayout(self.groupBox_64)
+        self.gridLayout_67.setObjectName("gridLayout_67")
+        self.Pin_Button_42 = QtWidgets.QPushButton(self.groupBox_64)
+        self.Pin_Button_42.setEnabled(True)
+        self.Pin_Button_42.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_42.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_42.setFont(font)
+        self.Pin_Button_42.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_42.setObjectName("Pin_Button_42")
+        self.gridLayout_67.addWidget(self.Pin_Button_42, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_64, 0, 4, 1, 1)
+        self.groupBox_58 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_58.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_58.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_58.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_58.setObjectName("groupBox_58")
+        self.gridLayout_62 = QtWidgets.QGridLayout(self.groupBox_58)
+        self.gridLayout_62.setObjectName("gridLayout_62")
+        self.Pin_Button_43 = QtWidgets.QPushButton(self.groupBox_58)
+        self.Pin_Button_43.setEnabled(True)
+        self.Pin_Button_43.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_43.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_43.setFont(font)
+        self.Pin_Button_43.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_43.setObjectName("Pin_Button_43")
+        self.gridLayout_62.addWidget(self.Pin_Button_43, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_58, 1, 0, 1, 1)
+        self.groupBox_59 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_59.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_59.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_59.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_59.setObjectName("groupBox_59")
+        self.gridLayout_63 = QtWidgets.QGridLayout(self.groupBox_59)
+        self.gridLayout_63.setObjectName("gridLayout_63")
+        self.Pin_Button_44 = QtWidgets.QPushButton(self.groupBox_59)
+        self.Pin_Button_44.setEnabled(True)
+        self.Pin_Button_44.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_44.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_44.setFont(font)
+        self.Pin_Button_44.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_44.setObjectName("Pin_Button_44")
+        self.gridLayout_63.addWidget(self.Pin_Button_44, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_59, 1, 1, 1, 1)
+        self.groupBox_60 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_60.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_60.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_60.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_60.setObjectName("groupBox_60")
+        self.gridLayout_64 = QtWidgets.QGridLayout(self.groupBox_60)
+        self.gridLayout_64.setObjectName("gridLayout_64")
+        self.Pin_Button_45 = QtWidgets.QPushButton(self.groupBox_60)
+        self.Pin_Button_45.setEnabled(True)
+        self.Pin_Button_45.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_45.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_45.setFont(font)
+        self.Pin_Button_45.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_45.setObjectName("Pin_Button_45")
+        self.gridLayout_64.addWidget(self.Pin_Button_45, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_60, 1, 2, 1, 1)
+        self.groupBox_61 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_61.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_61.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_61.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_61.setObjectName("groupBox_61")
+        self.gridLayout_65 = QtWidgets.QGridLayout(self.groupBox_61)
+        self.gridLayout_65.setObjectName("gridLayout_65")
+        self.Pin_Button_46 = QtWidgets.QPushButton(self.groupBox_61)
+        self.Pin_Button_46.setEnabled(True)
+        self.Pin_Button_46.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_46.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_46.setFont(font)
+        self.Pin_Button_46.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_46.setObjectName("Pin_Button_46")
+        self.gridLayout_65.addWidget(self.Pin_Button_46, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_61, 1, 3, 1, 1)
+        self.groupBox_65 = QtWidgets.QGroupBox(self.groupBox_53)
+        self.groupBox_65.setMinimumSize(QtCore.QSize(65, 65))
+        self.groupBox_65.setMaximumSize(QtCore.QSize(65, 65))
+        self.groupBox_65.setStyleSheet("QGroupBox  {\n"
+"    color: white;\n"
+"    border-style: solid;    \n"
+"    border-width:2px; \n"
+"    border-color:    rgb(82,82,82);\n"
+"    border-radius:5px;\n"
+"}\n"
+"")
+        self.groupBox_65.setObjectName("groupBox_65")
+        self.gridLayout_68 = QtWidgets.QGridLayout(self.groupBox_65)
+        self.gridLayout_68.setObjectName("gridLayout_68")
+        self.Pin_Button_47 = QtWidgets.QPushButton(self.groupBox_65)
+        self.Pin_Button_47.setEnabled(True)
+        self.Pin_Button_47.setMinimumSize(QtCore.QSize(30, 30))
+        self.Pin_Button_47.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.Pin_Button_47.setFont(font)
+        self.Pin_Button_47.setStyleSheet("QPushButton {\n"
+"background-color:rgb(47, 47, 47);\n"
+"color: rgb(255, 255, 255);\n"
+"border-style: solid;\n"
+"border-radius:5px;\n"
+"border-width:2px; \n"
+"border-color:rgb(255, 85, 0);\n"
+"}\n"
+"QPushButton:hover {\n"
+"border-width:3px; \n"
+"border-color:rgb(255, 115, 30);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:rgb(255, 115, 30);\n"
+"border-color: rgb(255, 195, 110);\n"
+"border-width: 4px;     \n"
+"}\n"
+"QPushButton:disabled{\n"
+"background-color: rgb(255, 149, 62);\n"
+"color: rgb(83, 83, 83);\n"
+"border-color:rgb(83, 83, 83);\n"
+"}\n"
+"\n"
+"")
+        self.Pin_Button_47.setObjectName("Pin_Button_47")
+        self.gridLayout_68.addWidget(self.Pin_Button_47, 0, 0, 1, 1)
+        self.gridLayout_57.addWidget(self.groupBox_65, 1, 4, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_53, 1, 2, 1, 1)
+        self.tabWidget.addTab(self.tab_4, "")
+        self.gridLayout_4.addWidget(self.tabWidget, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1263, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1075, 21))
         self.menubar.setObjectName("menubar")
         self.menu_Files = QtWidgets.QMenu(self.menubar)
         self.menu_Files.setObjectName("menu_Files")
@@ -5206,8 +7585,6 @@ class Ui_MainWindow(object):
         self.l7_3.setText(_translate("MainWindow", "Feed%"))
         self.l9_2.setText(_translate("MainWindow", "Accel%"))
         self.l9_3.setText(_translate("MainWindow", "Jerk%"))
-        self.p22.setText(_translate("MainWindow", "Clear"))
-        self.p21.setText(_translate("MainWindow", "Pause"))
         self.p24.setText(_translate("MainWindow", "Set"))
         self.l7_2.setText(_translate("MainWindow", "Jump%"))
         self.groupBox_10.setTitle(_translate("MainWindow", "Monitor"))
@@ -5224,7 +7601,9 @@ class Ui_MainWindow(object):
         self.groupBox_9.setTitle(_translate("MainWindow", "GCODE"))
         self.groupBox_13.setTitle(_translate("MainWindow", "Print"))
         self.p3.setText(_translate("MainWindow", "USB"))
+        self.p21.setText(_translate("MainWindow", "Pause"))
         self.c21.setText(_translate("MainWindow", "[mm/min]"))
+        self.p22.setText(_translate("MainWindow", "Clear"))
         self.p4.setText(_translate("MainWindow", "SD"))
         self.groupBox_8.setTitle(_translate("MainWindow", "Reports"))
         self.p23.setText(_translate("MainWindow", "Cancel"))
@@ -5326,6 +7705,108 @@ class Ui_MainWindow(object):
         self.comboBox4.setItemText(1, _translate("MainWindow", "Plane"))
         self.comboBox4.setItemText(2, _translate("MainWindow", "Mesh"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "ABL"))
+        self.groupBox_34.setTitle(_translate("MainWindow", "Actuators"))
+        self.groupBox_24.setTitle(_translate("MainWindow", "X EN"))
+        self.Pin_Button_0.setText(_translate("MainWindow", "N"))
+        self.groupBox_15.setTitle(_translate("MainWindow", "X DIR"))
+        self.Pin_Button_2.setText(_translate("MainWindow", "N"))
+        self.groupBox_29.setTitle(_translate("MainWindow", "X END"))
+        self.Pin_Button_3.setText(_translate("MainWindow", "N"))
+        self.groupBox_25.setTitle(_translate("MainWindow", "Y EN"))
+        self.Pin_Button_4.setText(_translate("MainWindow", "N"))
+        self.groupBox_16.setTitle(_translate("MainWindow", "Y STEP"))
+        self.Pin_Button_5.setText(_translate("MainWindow", "N"))
+        self.groupBox_17.setTitle(_translate("MainWindow", "Y DIR"))
+        self.Pin_Button_6.setText(_translate("MainWindow", "N"))
+        self.groupBox_30.setTitle(_translate("MainWindow", "Y END"))
+        self.Pin_Button_7.setText(_translate("MainWindow", "N"))
+        self.groupBox_26.setTitle(_translate("MainWindow", "Z EN"))
+        self.Pin_Button_8.setText(_translate("MainWindow", "N"))
+        self.groupBox_18.setTitle(_translate("MainWindow", "Z STEP"))
+        self.Pin_Button_9.setText(_translate("MainWindow", "N"))
+        self.groupBox_19.setTitle(_translate("MainWindow", "Z DIR"))
+        self.Pin_Button_10.setText(_translate("MainWindow", "N"))
+        self.groupBox_31.setTitle(_translate("MainWindow", "Z END"))
+        self.Pin_Button_11.setText(_translate("MainWindow", "N"))
+        self.groupBox_27.setTitle(_translate("MainWindow", "Z1 EN"))
+        self.Pin_Button_12.setText(_translate("MainWindow", "N"))
+        self.groupBox_22.setTitle(_translate("MainWindow", "Z1 STEP"))
+        self.Pin_Button_13.setText(_translate("MainWindow", "N"))
+        self.groupBox_23.setTitle(_translate("MainWindow", "Z2 STEP"))
+        self.Pin_Button_14.setText(_translate("MainWindow", "N"))
+        self.groupBox_32.setTitle(_translate("MainWindow", "Z1 END"))
+        self.Pin_Button_15.setText(_translate("MainWindow", "N"))
+        self.groupBox_28.setTitle(_translate("MainWindow", "E EN"))
+        self.Pin_Button_16.setText(_translate("MainWindow", "N"))
+        self.groupBox_20.setTitle(_translate("MainWindow", "E STEP"))
+        self.Pin_Button_17.setText(_translate("MainWindow", "N"))
+        self.groupBox_21.setTitle(_translate("MainWindow", "E DIR"))
+        self.Pin_Button_18.setText(_translate("MainWindow", "N"))
+        self.groupBox_33.setTitle(_translate("MainWindow", "E FIL"))
+        self.Pin_Button_19.setText(_translate("MainWindow", "N"))
+        self.groupBox_67.setTitle(_translate("MainWindow", "X STEP"))
+        self.Pin_Button_1.setText(_translate("MainWindow", "N"))
+        self.groupBox_41.setTitle(_translate("MainWindow", "Heaters"))
+        self.groupBox_39.setTitle(_translate("MainWindow", "N Fan"))
+        self.Pin_Button_22.setText(_translate("MainWindow", "N"))
+        self.groupBox_37.setTitle(_translate("MainWindow", "B Heater"))
+        self.Pin_Button_23.setText(_translate("MainWindow", "N"))
+        self.groupBox_36.setTitle(_translate("MainWindow", "N Sensor"))
+        self.Pin_Button_21.setText(_translate("MainWindow", "N"))
+        self.groupBox_35.setTitle(_translate("MainWindow", "N Heater"))
+        self.Pin_Button_20.setText(_translate("MainWindow", "N"))
+        self.groupBox_40.setTitle(_translate("MainWindow", "Fan"))
+        self.Pin_Button_25.setText(_translate("MainWindow", "N"))
+        self.groupBox_38.setTitle(_translate("MainWindow", "B Sensor"))
+        self.Pin_Button_24.setText(_translate("MainWindow", "N"))
+        self.groupBox_44.setTitle(_translate("MainWindow", "EXP1"))
+        self.groupBox_45.setTitle(_translate("MainWindow", "EXP1_1"))
+        self.Pin_Button_28.setText(_translate("MainWindow", "N"))
+        self.groupBox_47.setTitle(_translate("MainWindow", "EXP1_3"))
+        self.Pin_Button_29.setText(_translate("MainWindow", "N"))
+        self.groupBox_49.setTitle(_translate("MainWindow", "EXP1_5"))
+        self.Pin_Button_30.setText(_translate("MainWindow", "N"))
+        self.groupBox_51.setTitle(_translate("MainWindow", "EXP1_7"))
+        self.Pin_Button_31.setText(_translate("MainWindow", "N"))
+        self.groupBox_62.setTitle(_translate("MainWindow", "EXP1_9"))
+        self.Pin_Button_32.setText(_translate("MainWindow", "N"))
+        self.groupBox_46.setTitle(_translate("MainWindow", "EXP1_2"))
+        self.Pin_Button_33.setText(_translate("MainWindow", "N"))
+        self.groupBox_48.setTitle(_translate("MainWindow", "EXP1_4"))
+        self.Pin_Button_34.setText(_translate("MainWindow", "N"))
+        self.groupBox_50.setTitle(_translate("MainWindow", "EXP1_6"))
+        self.Pin_Button_35.setText(_translate("MainWindow", "N"))
+        self.groupBox_52.setTitle(_translate("MainWindow", "EXP1_8"))
+        self.Pin_Button_36.setText(_translate("MainWindow", "N"))
+        self.groupBox_63.setTitle(_translate("MainWindow", "EXP1_10"))
+        self.Pin_Button_37.setText(_translate("MainWindow", "N"))
+        self.groupBox_66.setTitle(_translate("MainWindow", "Servos"))
+        self.groupBox_42.setTitle(_translate("MainWindow", "Servo 1"))
+        self.Pin_Button_26.setText(_translate("MainWindow", "N"))
+        self.groupBox_43.setTitle(_translate("MainWindow", "Servo 2"))
+        self.Pin_Button_27.setText(_translate("MainWindow", "N"))
+        self.groupBox_53.setTitle(_translate("MainWindow", "EXP2"))
+        self.groupBox_54.setTitle(_translate("MainWindow", "EXP2_1"))
+        self.Pin_Button_38.setText(_translate("MainWindow", "N"))
+        self.groupBox_55.setTitle(_translate("MainWindow", "EXP2_3"))
+        self.Pin_Button_39.setText(_translate("MainWindow", "N"))
+        self.groupBox_56.setTitle(_translate("MainWindow", "EXP2_5"))
+        self.Pin_Button_40.setText(_translate("MainWindow", "N"))
+        self.groupBox_57.setTitle(_translate("MainWindow", "EXP2_7"))
+        self.Pin_Button_41.setText(_translate("MainWindow", "N"))
+        self.groupBox_64.setTitle(_translate("MainWindow", "EXP2_9"))
+        self.Pin_Button_42.setText(_translate("MainWindow", "N"))
+        self.groupBox_58.setTitle(_translate("MainWindow", "EXP2_2"))
+        self.Pin_Button_43.setText(_translate("MainWindow", "N"))
+        self.groupBox_59.setTitle(_translate("MainWindow", "EXP2_4"))
+        self.Pin_Button_44.setText(_translate("MainWindow", "N"))
+        self.groupBox_60.setTitle(_translate("MainWindow", "EXP2_6"))
+        self.Pin_Button_45.setText(_translate("MainWindow", "N"))
+        self.groupBox_61.setTitle(_translate("MainWindow", "EXP2_8"))
+        self.Pin_Button_46.setText(_translate("MainWindow", "N"))
+        self.groupBox_65.setTitle(_translate("MainWindow", "EXP2_10"))
+        self.Pin_Button_47.setText(_translate("MainWindow", "N"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Pins"))
         self.menu_Files.setTitle(_translate("MainWindow", "&File"))
         self.menu_About.setTitle(_translate("MainWindow", "Manual"))
         self.menuPrinter.setTitle(_translate("MainWindow", "Config"))

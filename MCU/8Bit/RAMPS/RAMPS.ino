@@ -24,6 +24,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <PID_v1.h>
 #include <LiquidCrystal.h>
 #include <Servo.h>
+#include <digitalWriteFast.h>
 
 SdFat SD;
 File myFile;
@@ -49,14 +50,15 @@ Servo bltouch;
 #define Y_EN A2
 #define Z_EN A8
 #define E_EN 24 
-#define X_STEP A0        //PF0
-#define Y_STEP A6        //PF6
-#define Z_STEP 46        //PL3
-#define E_STEP 26        //PA4
-#define X_DIR A1         //PF1
-#define Y_DIR A7         //PF7
-#define Z_DIR 48         //PL1
-#define E_DIR 28         //PA6
+int X_STEP = 54;        //PF0
+int Y_STEP = 60;        //PF6
+int Z_STEP = 46;        //PL3
+int E_STEP = 26;        //PA4
+int X_DIR = 55;         //PF1
+int Y_DIR = 61;         //PF7
+int Z_DIR = 48;         //PL1
+int E_DIR = 28;
+//PA6
 #define NOZZ_THRMSTR A13
 #define BED_THRMSTR A14
 #define NOZZ_HEATER 10
@@ -229,14 +231,14 @@ void setup() {
    pinMode(Z_EN,OUTPUT);
    pinMode(E_EN,OUTPUT); 
    }
-   pinMode(X_STEP,OUTPUT);
-   pinMode(Y_STEP,OUTPUT);
-   pinMode(Z_STEP,OUTPUT);
-   pinMode(E_STEP,OUTPUT);
-   pinMode(X_DIR,OUTPUT);
-   pinMode(Y_DIR,OUTPUT);
-   pinMode(Z_DIR,OUTPUT);
-   pinMode(E_DIR,OUTPUT);
+   pinModeFast(X_STEP,OUTPUT);
+   pinModeFast(Y_STEP,OUTPUT);
+   pinModeFast(Z_STEP,OUTPUT);
+   pinModeFast(E_STEP,OUTPUT);
+   pinModeFast(X_DIR,OUTPUT);
+   pinModeFast(Y_DIR,OUTPUT);
+   pinModeFast(Z_DIR,OUTPUT);
+   pinModeFast(E_DIR,OUTPUT);
    pinMode(NOZZ_THRMSTR,INPUT);
    pinMode(BED_THRMSTR,INPUT);
    pinMode(NOZZ_HEATER,OUTPUT);
@@ -313,12 +315,14 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    i++;
    if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
       j++;
-      PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],2)<<PF7);
-      PORTF = (bitRead(buffer1.byte_1[j],0)<<PF1)|(bitRead(buffer1.byte_1[j],1)<<PF0)|(bitRead(buffer1.byte_1[j],2)<<PF7)|(bitRead(buffer1.byte_1[j],3)<<PF6);
-      PORTL = (bitRead(buffer1.byte_1[j],4)<<PL1);
-      PORTL = (bitRead(buffer1.byte_1[j],4)<<PL1)|(bitRead(buffer1.byte_1[j],5)<<PL3);
-      PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6);
-      PORTA = (bitRead(buffer1.byte_1[j],6)<<PA6)|(bitRead(buffer1.byte_1[j],7)<<PA4);
+      digitalWriteFast(X_DIR, bitRead(buffer1.byte_1[j],0));
+      digitalWriteFast(Y_DIR, bitRead(buffer1.byte_1[j],2));
+      digitalWriteFast(Z_DIR, bitRead(buffer1.byte_1[j],4));
+      digitalWriteFast(E_DIR, bitRead(buffer1.byte_1[j],6));
+      digitalWriteFast(X_STEP, bitRead(buffer1.byte_1[j],1));
+      digitalWriteFast(Y_STEP, bitRead(buffer1.byte_1[j],3));
+      digitalWriteFast(Z_STEP, bitRead(buffer1.byte_1[j],5));
+      digitalWriteFast(E_STEP, bitRead(buffer1.byte_1[j],7));
       j++;
       i=0;
       if (bitRead(buffer1.byte_1[j-1],1)){
@@ -346,12 +350,14 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
       j++;
-      PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],2)<<PF7);
-      PORTF = (bitRead(buffer2.byte_2[j],0)<<PF1)|(bitRead(buffer2.byte_2[j],1)<<PF0)|(bitRead(buffer2.byte_2[j],2)<<PF7)|(bitRead(buffer2.byte_2[j],3)<<PF6);
-      PORTL = (bitRead(buffer2.byte_2[j],4)<<PL1);
-      PORTL = (bitRead(buffer2.byte_2[j],4)<<PL1)|(bitRead(buffer2.byte_2[j],5)<<PL3);
-      PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6);
-      PORTA = (bitRead(buffer2.byte_2[j],6)<<PA6)|(bitRead(buffer2.byte_2[j],7)<<PA4);
+      digitalWriteFast(X_DIR, bitRead(buffer2.byte_2[j],0));
+      digitalWriteFast(Y_DIR, bitRead(buffer2.byte_2[j],2));
+      digitalWriteFast(Z_DIR, bitRead(buffer2.byte_2[j],4));
+      digitalWriteFast(E_DIR, bitRead(buffer2.byte_2[j],6));
+      digitalWriteFast(X_STEP, bitRead(buffer2.byte_2[j],1));
+      digitalWriteFast(Y_STEP, bitRead(buffer2.byte_2[j],3));
+      digitalWriteFast(Z_STEP, bitRead(buffer2.byte_2[j],5));
+      digitalWriteFast(E_STEP, bitRead(buffer2.byte_2[j],7));
       j++;
       i=0;
       if (bitRead(buffer2.byte_2[j-1],1)){
@@ -376,11 +382,11 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
         }
       }
       terminate_counter=0;
-      //check_command(1);
    }else{
-      PORTF = (0<<PF0)|(0<<PF6);
-      PORTL = (0<<PL3);
-      PORTA = (0<<PA4);
+      digitalWriteFast(X_STEP, LOW);
+      digitalWriteFast(Y_STEP, LOW);
+      digitalWriteFast(Z_STEP, LOW);
+      digitalWriteFast(E_STEP, LOW);
    }
    check_buffer();
    sei();
