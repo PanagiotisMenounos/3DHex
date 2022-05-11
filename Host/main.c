@@ -38,7 +38,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
-#define max_bufferfile_size 3100
+#define max_bufferfile_size 3000
 #define pipename "\\\\.\\pipe\\Foo"
 #define MG_DATA_SIZE 36
 
@@ -89,6 +89,13 @@ double BED_XSIZE, BED_YSIZE,ABL_Z_last=0,GRID_RESOLUTION=1;
 bool ABL_Process=false,ABL_Data=false,HOME_ALL=false;
 int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
+uint8_t X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_ENDSTOP_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_ENDSTOP_PIN,\
+    	Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_ENDSTOP_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_ENDSTOP_PIN,\
+		E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_ENDSTOP_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,\
+    	FAN_PIN,SERVO1_PIN,SERVO2_PIN,EXP1_1_PIN,EXP1_3_PIN,EXP1_5_PIN,EXP1_7_PIN,EXP1_9_PIN,EXP1_2_PIN,EXP1_4_PIN,\
+		EXP1_6_PIN,EXP1_8_PIN,EXP1_10_PIN,EXP2_1_PIN,EXP2_3_PIN,EXP2_5_PIN,EXP2_7_PIN,EXP2_9_PIN,EXP2_2_PIN,\
+		EXP2_4_PIN, EXP2_6_PIN, EXP2_8_PIN,EXP2_10_PIN;
+
 
 //float *ABL_YCOORD=(float*)malloc(sizeof(float));
 //float *ABL_ZCOORD=(float*)malloc(sizeof(float));
@@ -101,7 +108,7 @@ bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clock
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
 double X_GLOB=0,Y_GLOB=0,X_GLOB_STEP,Y_GLOB_STEP,Z_GLOB=0;
-wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
+wchar_t savepath[19][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
 						  ,L"//3DHex2//support files//savepath.txt\0"     \
@@ -118,7 +125,8 @@ wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
 						  ,L"//3DHex2//binary files//fly.bin\0"           \
 						  ,L"//3DHex2//settings//abl_x.txt\0"             \
 						  ,L"//3DHex2//settings//abl_y.txt\0"             \
-						  ,L"//3DHex2//settings//XYZ.txt\0"};                      		  
+						  ,L"//3DHex2//settings//XYZ.txt\0"				  \
+						  ,L"//3DHex2//settings//pins settings.txt\0"};                      		  
 
 wchar_t coordinates_path[150]  \
        ,fcoordinates_path[150] \
@@ -137,7 +145,8 @@ wchar_t coordinates_path[150]  \
 	   ,fly_path[150]          \
 	   ,abl_x_path[150]        \
 	   ,abl_y_path[150]        \
-	   ,abl_xyz_path[150];
+	   ,abl_xyz_path[150]      \
+	   ,pins_path[150];
  /////////////////////////*******//////////////////////
 
 FILE *SD_binary_file;
@@ -306,7 +315,7 @@ int main(){
             		fclose(fly_file);										
 				}
 			}
-			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3 || Gl==01 || Gl==02 || Gl==03)){
+			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3 || Gl==01 || Gl==02 || Gl==03 || Gl==0 || Gl==00)){
 			   last_time=0; //FIX time BUG at the begining of new command
                fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED); //read curvedistance and feedrate
                gen_FEED=FD_PRC*gen_FEED; 
@@ -592,9 +601,12 @@ int check_print_state(){
 
 void mcu_settings_send()
 {
+
     buffer1_file=_wfopen(buffer1_path,L"wb");
-    fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file);
-    fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&X_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file); 
+    fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&Y_ENABLE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&Z_ENABLE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&E_ENABLE, sizeof(uint8_t),1,buffer1_file);
@@ -629,9 +641,58 @@ void mcu_settings_send()
     fwrite(&HOME_Z_DIR, sizeof(uint8_t),1,buffer1_file);
     fwrite(&HOME_X_STATE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&HOME_Y_STATE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);//MUST BE WRITTEN TWICE
-    file_buffer_size=file_buffer_size+52;
+    /*fwrite(&X_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&X_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&X_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&X_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Y_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Y_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Y_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Y_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z1_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&Z1_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z1_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z1_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z1_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&N_HEATER_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&N_SENSOR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&N_FAN_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&B_HEATER_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&B_SENSOR_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&FAN_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&SERVO1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&SERVO2_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_5_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_7_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_9_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_2_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_4_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_6_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_8_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_10_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_5_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_7_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_2_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_4_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_6_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_8_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_10_PIN, sizeof(uint8_t),1,buffer1_file);*/
+	file_buffer_size=file_buffer_size+56;
 }
 
 void crt_file()
@@ -743,10 +804,11 @@ void path_files()
 		abl_x_path[j]=appdata_path[i];
 		abl_y_path[j]=appdata_path[i];
 		abl_xyz_path[j]=appdata_path[i];
+		pins_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<18;f++){
+    for(f=0;f<19;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -871,6 +933,13 @@ void path_files()
 		if(f==17){
 		    while(savepath[f][i]!=L'\0'){
              	abl_xyz_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==18){
+		    while(savepath[f][i]!=L'\0'){
+             	pins_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
@@ -1472,12 +1541,16 @@ double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl)
   
 void read_settings()
 {
+	#define total_pins 48
+	
     FILE *box_sett;
     FILE *cbox_sett;
-    char b[70][30],c[29][30],temp_str[30];  
+    FILE *pins_sett;
+    char b[70][30],c[29][30],temp_str[30],pins[total_pins][30];  
     int i;
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
+	pins_sett=_wfopen(pins_path,L"r");
     
     for (i=0;i<71;i++){
         fgets (temp_str, 30, box_sett);
@@ -1560,6 +1633,60 @@ void read_settings()
 	PID_bed=atoi(c[26]);
     CURVE_DETECTION=atoi(c[27]);
 	ABL_Include	= atoi(c[28]);
+	
+    for (i=0;i<total_pins;i++){
+        fgets (temp_str, 30, pins_sett);
+        strcpy(pins[i],temp_str);
+    }
+    X_ENABLE_PIN=atoi(pins[0]);
+    X_STEP_PIN=atoi(pins[1]);
+    X_DIR_PIN=atoi(pins[2]);
+    X_ENDSTOP_PIN=atoi(pins[3]);
+    Y_ENABLE_PIN=atoi(pins[4]);
+    Y_STEP_PIN=atoi(pins[5]);
+    Y_DIR_PIN=atoi(pins[6]);
+    Y_ENDSTOP_PIN=atoi(pins[7]);
+    Z_ENABLE_PIN=atoi(pins[8]);
+    Z_STEP_PIN=atoi(pins[9]);
+    Z_DIR_PIN=atoi(pins[10]);
+    Z_ENDSTOP_PIN=atoi(pins[11]);
+    Z1_ENABLE_PIN=atoi(pins[12]);
+    Z1_STEP_PIN=atoi(pins[13]);
+    Z1_DIR_PIN=atoi(pins[14]);
+    Z1_ENDSTOP_PIN=atoi(pins[15]);
+    E_ENABLE_PIN=atoi(pins[16]);
+    E_STEP_PIN=atoi(pins[17]);
+    E_DIR_PIN=atoi(pins[18]);
+    E_ENDSTOP_PIN=atoi(pins[19]);
+    N_HEATER_PIN=atoi(pins[20]);
+    N_SENSOR_PIN=atoi(pins[21]);
+    N_FAN_PIN=atoi(pins[22]);
+    B_HEATER_PIN=atoi(pins[23]);
+    B_SENSOR_PIN=atoi(pins[24]);
+    FAN_PIN=atoi(pins[25]);
+    SERVO1_PIN=atoi(pins[26]);
+    SERVO2_PIN=atoi(pins[27]);
+    EXP1_1_PIN=atoi(pins[28]);
+    EXP1_3_PIN=atoi(pins[29]);
+    EXP1_5_PIN=atoi(pins[30]);
+    EXP1_7_PIN=atoi(pins[31]);
+    EXP1_9_PIN=atoi(pins[32]);
+    EXP1_2_PIN=atoi(pins[33]);
+    EXP1_4_PIN=atoi(pins[34]);
+    EXP1_6_PIN=atoi(pins[35]);
+    EXP1_8_PIN=atoi(pins[36]);
+    EXP1_10_PIN=atoi(pins[37]);
+    EXP2_1_PIN=atoi(pins[38]);
+    EXP2_3_PIN=atoi(pins[39]);
+    EXP2_5_PIN=atoi(pins[40]);
+    EXP2_7_PIN=atoi(pins[41]);
+    EXP2_9_PIN=atoi(pins[42]);
+    EXP2_2_PIN=atoi(pins[43]);
+    EXP2_4_PIN=atoi(pins[44]);
+    EXP2_6_PIN=atoi(pins[45]);
+    EXP2_8_PIN=atoi(pins[46]);
+    EXP2_10_PIN=atoi(pins[47]);
+    
 	//FOR THE MOMMENT
 	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
 	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
@@ -1594,6 +1721,7 @@ void read_settings()
 	Y_GLOB_STEP=1.0/STPU_Y;
 	fclose(box_sett);
     fclose(cbox_sett);
+    fclose(pins_sett);
 }
 
 void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide-console-cursor-in-c

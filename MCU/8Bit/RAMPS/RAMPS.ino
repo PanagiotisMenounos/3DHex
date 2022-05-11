@@ -24,7 +24,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <PID_v1.h>
 #include <LiquidCrystal.h>
 #include <Servo.h>
-#include <digitalWriteFast.h>
+
 
 SdFat SD;
 File myFile;
@@ -43,9 +43,9 @@ Servo bltouch;
 #define HOME_YMIN_PIN 14
 #define HOME_ZMIN_PIN 18
 #define BLTOUCH_PIN 4
-#define USB_SETTING_BYTES 52
+#define USB_SETTING_BYTES 56
 #define MG_BYTES 36
-#define BUFFERSIZE 3100
+#define BUFFERSIZE 3000
 #define X_EN 38
 #define Y_EN A2
 #define Z_EN A8
@@ -99,6 +99,8 @@ struct data2 {
 };
 
 struct data3{ 
+   volatile int X_STEP_PIN;
+   volatile int X_DIR_PIN;
    volatile uint16_t CORE_FREQ;
    volatile uint8_t X_ENABLE;
    volatile uint8_t Y_ENABLE;
@@ -180,6 +182,10 @@ volatile struct data3 buffer3;
 volatile struct data4 buffer4;
 volatile struct data5 buffer5;
 
+uint8_t *portxstep;
+uint8_t portxstepmask;
+uint8_t *portxdir;
+uint8_t portxdirmask;
 
 thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
 thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
@@ -231,14 +237,14 @@ void setup() {
    pinMode(Z_EN,OUTPUT);
    pinMode(E_EN,OUTPUT); 
    }
-   pinModeFast(X_STEP,OUTPUT);
-   pinModeFast(Y_STEP,OUTPUT);
-   pinModeFast(Z_STEP,OUTPUT);
-   pinModeFast(E_STEP,OUTPUT);
-   pinModeFast(X_DIR,OUTPUT);
-   pinModeFast(Y_DIR,OUTPUT);
-   pinModeFast(Z_DIR,OUTPUT);
-   pinModeFast(E_DIR,OUTPUT);
+   pinMode(X_STEP,OUTPUT);
+   pinMode(Y_STEP,OUTPUT);
+   pinMode(Z_STEP,OUTPUT);
+   pinMode(E_STEP,OUTPUT);
+   pinMode(X_DIR,OUTPUT);
+   pinMode(Y_DIR,OUTPUT);
+   pinMode(Z_DIR,OUTPUT);
+   pinMode(E_DIR,OUTPUT);
    pinMode(NOZZ_THRMSTR,INPUT);
    pinMode(BED_THRMSTR,INPUT);
    pinMode(NOZZ_HEATER,OUTPUT);
@@ -272,6 +278,12 @@ void setup() {
    if(LCD_16x4==true){lcd.noBlink();}
    check_steppers();
    //homing_routine();
+   
+   portxstep = portOutputRegister(digitalPinToPort(buffer3.X_STEP_PIN));
+   portxstepmask = digitalPinToBitMask(buffer3.X_STEP_PIN);
+   portxdir = portOutputRegister(digitalPinToPort(buffer3.X_DIR_PIN));
+   portxdirmask = digitalPinToBitMask(buffer3.X_DIR_PIN);
+   
    if((buffer3.Wait_nozz==1 && buffer3.HEATED_NOZZLE==1) || (buffer3.Wait_bed==1 && buffer3.HEATED_BED==1)){
       if(LCD_16x4==true && setoff==false){lcd.setCursor(0, 2);lcd.print("HEAT UP");lcd.blink();delay(1200);}
    }else{
@@ -315,14 +327,25 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    i++;
    if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
       j++;
-      digitalWriteFast(X_DIR, bitRead(buffer1.byte_1[j],0));
+      if (bitRead(buffer1.byte_1[j],0)){
+        *portxdir |= portxdirmask;
+      }else{
+        *portxdir &= ~portxdirmask;
+      } 
+      if (bitRead(buffer1.byte_1[j],1)){
+        *portxstep |= portxstepmask;
+      }else{
+        *portxstep &= ~portxstepmask;
+      } 
+      /*digitalWrite(buffer3.X_DIR_PIN, bitRead(buffer1.byte_1[j],0));
       digitalWriteFast(Y_DIR, bitRead(buffer1.byte_1[j],2));
       digitalWriteFast(Z_DIR, bitRead(buffer1.byte_1[j],4));
       digitalWriteFast(E_DIR, bitRead(buffer1.byte_1[j],6));
-      digitalWriteFast(X_STEP, bitRead(buffer1.byte_1[j],1));
+      digitalWrite(buffer3.X_STEP_PIN, bitRead(buffer1.byte_1[j],1));
       digitalWriteFast(Y_STEP, bitRead(buffer1.byte_1[j],3));
       digitalWriteFast(Z_STEP, bitRead(buffer1.byte_1[j],5));
       digitalWriteFast(E_STEP, bitRead(buffer1.byte_1[j],7));
+      */
       j++;
       i=0;
       if (bitRead(buffer1.byte_1[j-1],1)){
@@ -350,14 +373,25 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
       j++;
-      digitalWriteFast(X_DIR, bitRead(buffer2.byte_2[j],0));
+      if (bitRead(buffer2.byte_2[j],0)){
+        *portxdir |= portxdirmask;
+      }else{
+        *portxdir &= ~portxdirmask;
+      } 
+      if (bitRead(buffer2.byte_2[j],1)){
+        *portxstep |= portxstepmask;
+      }else{
+        *portxstep &= ~portxstepmask;
+      } 
+      /*
+      digitalWrite(buffer3.X_DIR_PIN, bitRead(buffer2.byte_2[j],0));
       digitalWriteFast(Y_DIR, bitRead(buffer2.byte_2[j],2));
       digitalWriteFast(Z_DIR, bitRead(buffer2.byte_2[j],4));
       digitalWriteFast(E_DIR, bitRead(buffer2.byte_2[j],6));
-      digitalWriteFast(X_STEP, bitRead(buffer2.byte_2[j],1));
+      digitalWrite(buffer3.X_STEP_PIN, bitRead(buffer2.byte_2[j],1));
       digitalWriteFast(Y_STEP, bitRead(buffer2.byte_2[j],3));
       digitalWriteFast(Z_STEP, bitRead(buffer2.byte_2[j],5));
-      digitalWriteFast(E_STEP, bitRead(buffer2.byte_2[j],7));
+      digitalWriteFast(E_STEP, bitRead(buffer2.byte_2[j],7));*/
       j++;
       i=0;
       if (bitRead(buffer2.byte_2[j-1],1)){
@@ -383,10 +417,12 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       }
       terminate_counter=0;
    }else{
-      digitalWriteFast(X_STEP, LOW);
+    *portxstep &= ~portxstepmask;
+    /*
+      digitalWrite(buffer3.X_STEP_PIN, LOW);
       digitalWriteFast(Y_STEP, LOW);
       digitalWriteFast(Z_STEP, LOW);
-      digitalWriteFast(E_STEP, LOW);
+      digitalWriteFast(E_STEP, LOW);*/
    }
    check_buffer();
    sei();
@@ -773,7 +809,7 @@ void temperature_control(){
            }
          }else if(buffer3.THERMOSTAT_nozz==0){
              if (currentMillis - previousMillis_Nozz >=buffer3.CYCLE_NOZZ && buffer3.HEATED_NOZZLE==1){
-                 digitalWrite(LED_BUILTIN,HIGH);
+                 //digitalWrite(LED_BUILTIN,HIGH);
                  previousMillis_Nozz = currentMillis;
                  if(bed_block==false){
                     temp1 = therm1.analog2temp(); // nozzle
@@ -904,9 +940,9 @@ int check_inputs(){
             }else if(buffer5.B == 4){
                    analogWrite(FAN,buffer5.J);
             }else if(buffer5.B == 5){
-                   digitalWrite(LED_BUILTIN,HIGH);
+                   //digitalWrite(LED_BUILTIN,HIGH);
                    Atune_loop(buffer5.C);
-                   digitalWrite(LED_BUILTIN,LOW);
+                   //digitalWrite(LED_BUILTIN,LOW);
             }else if(buffer5.B == 7){ //BLtouch
               if(buffer5.C==0){ //test
                  bltouch.write(160);

@@ -341,7 +341,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
-        buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
+        buffer_file_size=3000 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
@@ -356,12 +356,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.send_buffer() #Command Printer to go into printig mode window.A=1
         self.message.emit(">>> Post processing successfully completed") #emit the signal
         self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
+        if buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
             if filecase==1: #Read from buffer1 binary file
                 filecase=2  #Note to read buffer2 next time
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer1_file.read(3100)) #Send binary data to Printer
+                window.ser.write(buffer1_file.read(3000)) #Send binary data to Printer
                 buffer1_file.close() 
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
@@ -371,7 +371,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3100))
+                window.ser.write(buffer2_file.read(3000))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
@@ -385,12 +385,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             self.x_pos_report.emit(window.X_POS)
             self.y_pos_report.emit(window.Y_POS)
             self.z_pos_report.emit(window.Z_POS)
-        while buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
+        while buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()                      
-                window.ser.write(buffer1_file.read(3100))
+                window.ser.write(buffer1_file.read(3000))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -400,7 +400,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3100))
+                window.ser.write(buffer2_file.read(3000))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -1646,10 +1646,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','w')
         dfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','w')
         cbfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','w')
+        pinsfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt','w')
         b_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','w')
         c_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         cb_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cbboxes settings.txt','w')
+        pins_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\pins settings.txt','w')
         i=0
         for i in range (0,71):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
@@ -1682,14 +1684,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             value = cb.currentIndex()
             cbfile.write(str(value)+"\n")
             cb_file.write(str(value)+"\n")
+        i=0
+        for i in range (0,48): #c0-cmax
+            pin = getattr(self, "Pin_Button_{}".format(i))
+            value = pin.text()
+            if value == 'N':
+                pinsfile.write("255\n")
+                pins_file.write("255\n")
+            else:
+                pinsfile.write(str(value)+"\n")
+                pins_file.write(str(value)+"\n")
         bfile.close()
         cfile.close()
         dfile.close()
         cbfile.close()
+        pinsfile.close()
         b_file.close()
         c_file.close()
         d_file.close()
         cb_file.close()
+        pins_file.close()
                     
 
     def load_settings(self):
@@ -1704,6 +1718,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file.close()
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
         cbboxes = file.readlines()
+        file.close()
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt','r') #read general setting file and set them
+        pins = file.readlines()
         file.close()
         try:
             file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
@@ -1733,9 +1750,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (1,4): #c0-cmax
            cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            cb.setCurrentIndex(int(cbboxes[i-1].strip()))
-           
-
-        
+        for i in range (0,48): #c0-cmax
+            pin = getattr(self, "Pin_Button_{}".format(i))
+            val = int(pins[i].strip())
+            if val == 255:
+                pin.setText('N')
+            else:
+                pin.setText(str(val))
 
     def clear_GCODE(self):
         self.data=''
