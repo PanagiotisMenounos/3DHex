@@ -40,7 +40,6 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #define pi 3.14159265358979323846
 #define max_bufferfile_size 3000
 #define pipename "\\\\.\\pipe\\Foo"
-#define MG_DATA_SIZE 36
 
 union{
     int progress;
@@ -89,7 +88,7 @@ double BED_XSIZE, BED_YSIZE,ABL_Z_last=0,GRID_RESOLUTION=1;
 bool ABL_Process=false,ABL_Data=false,HOME_ALL=false;
 int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
-uint8_t X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_ENDSTOP_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_ENDSTOP_PIN,\
+int16_t X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_ENDSTOP_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_ENDSTOP_PIN,\
     	Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_ENDSTOP_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_ENDSTOP_PIN,\
 		E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_ENDSTOP_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,\
     	FAN_PIN,SERVO1_PIN,SERVO2_PIN,EXP1_1_PIN,EXP1_3_PIN,EXP1_5_PIN,EXP1_7_PIN,EXP1_9_PIN,EXP1_2_PIN,EXP1_4_PIN,\
@@ -196,29 +195,55 @@ float *ABL_YCOORD;
 float *ABL_ZCOORD;
 
 struct data{
-  volatile uint8_t A;
-  volatile uint8_t B;
-  volatile uint8_t C;
-  volatile uint8_t D;
-  volatile uint8_t E;
-  volatile uint8_t F;
-  volatile uint8_t G;
-  volatile uint8_t H;
-  volatile uint16_t I;
-  volatile uint16_t J;
-  volatile uint16_t K;
-  volatile uint16_t L;
-  volatile uint8_t M;
-  volatile uint8_t N;
-  volatile uint16_t O;
-  volatile uint16_t P;
-  volatile uint16_t Q;
-  volatile uint16_t R;
-  volatile uint16_t S;
-  volatile uint16_t T;
-  volatile int16_t U;
-  volatile int16_t V;
-  volatile int16_t W;
+   volatile int16_t X_ENABLE_PIN;
+   volatile int16_t X_STEP_PIN;
+   volatile int16_t X_DIR_PIN;
+   volatile int16_t X_ENDSTOP_PIN;
+   volatile int16_t Y_ENABLE_PIN;
+   volatile int16_t Y_STEP_PIN;
+   volatile int16_t Y_DIR_PIN;
+   volatile int16_t Y_ENDSTOP_PIN;
+   volatile int16_t Z_ENABLE_PIN;
+   volatile int16_t Z_STEP_PIN;
+   volatile int16_t Z_DIR_PIN;
+   volatile int16_t Z_ENDSTOP_PIN;
+   volatile int16_t Z1_ENABLE_PIN;
+   volatile int16_t Z1_STEP_PIN;
+   volatile int16_t Z1_DIR_PIN;
+   volatile int16_t Z1_ENDSTOP_PIN;
+   volatile int16_t E_ENABLE_PIN;
+   volatile int16_t E_STEP_PIN;
+   volatile int16_t E_DIR_PIN;
+   volatile int16_t E_ENDSTOP_PIN;
+   volatile int16_t N_HEATER_PIN;
+   volatile int16_t N_SENSOR_PIN;
+   volatile int16_t N_FAN_PIN;
+   volatile int16_t B_HEATER_PIN;
+   volatile int16_t B_SENSOR_PIN;
+   volatile int16_t FAN_PIN;
+   volatile uint8_t A;
+   volatile uint8_t B;
+   volatile uint8_t C;
+   volatile uint8_t D;
+   volatile uint8_t E;
+   volatile uint8_t F;
+   volatile uint8_t G;
+   volatile uint8_t H;
+   volatile uint16_t I;
+   volatile uint16_t J;
+   volatile uint16_t K;
+   volatile uint16_t L;
+   volatile uint8_t M;
+   volatile uint8_t N;
+   volatile uint16_t O;
+   volatile uint16_t P;
+   volatile uint16_t Q;
+   volatile uint16_t R;
+   volatile uint16_t S;
+   volatile uint16_t T;
+   volatile int16_t U;
+   volatile int16_t V;
+   volatile int16_t W;
 }MG_data;
 
 int main(){
@@ -355,6 +380,33 @@ int main(){
 		    			clockwise=false; //counterclockwise
 		    		}
 		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
+				}else{
+				MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
+                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
+				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
+				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
+				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
+				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
+				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
+				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
+				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
+				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
+				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
+				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
+				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
+				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
+				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
+				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
+				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
+				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
+				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
+				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
+				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
+				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
+				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
+				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
+				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
+				MG_data.FAN_PIN       =FAN_PIN       ;
 				}
 				if(Gl==28){ // G28 homing
 				    if(ABL_Process){
@@ -425,7 +477,7 @@ int main(){
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
                     e_space=max_bufferfile_size-(file_buffer_size); 
-                    if(e_space<=MG_DATA_SIZE&& e_space!=0){
+                    if(e_space<=sizeof(MG_data) && e_space!=0){
                     	e_space=30;//fix a bug arduino side
                         for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
             	           write_hex2file(GP);
@@ -441,6 +493,32 @@ int main(){
 	            }
 			}
 			if(Ml!=flag_num){
+				MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
+                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
+				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
+				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
+				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
+				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
+				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
+				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
+				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
+				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
+				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
+				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
+				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
+				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
+				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
+				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
+				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
+				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
+				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
+				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
+				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
+				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
+				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
+				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
+				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
+				MG_data.FAN_PIN       =FAN_PIN       ;
                 if(Ml==104){ // M104 set hotend temp no wait
 			        MG_data.A=1;
 			        MG_data.B=0;
@@ -506,7 +584,7 @@ int main(){
 				write_hex2file(GP);
 				write_hex2file(GP);
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
-                if(e_space<=MG_DATA_SIZE && e_space!=0){
+                if(e_space<=sizeof(MG_data) && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
         	          write_hex2file(GP);
     	           }
@@ -601,10 +679,37 @@ int check_print_state(){
 
 void mcu_settings_send()
 {
-
+    file_buffer_size=file_buffer_size+108;
     buffer1_file=_wfopen(buffer1_path,L"wb");
+    fwrite(&X_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
     fwrite(&X_STEP_PIN, sizeof(int16_t),1,buffer1_file);
     fwrite(&X_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO1_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO2_PIN, sizeof(int16_t),1,buffer1_file);
+    
     fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file); 
     fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&Y_ENABLE, sizeof(uint8_t),1,buffer1_file);
@@ -643,36 +748,7 @@ void mcu_settings_send()
     fwrite(&HOME_Y_STATE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);
-    /*fwrite(&X_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&X_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&X_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&X_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Y_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Y_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Y_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Y_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z1_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-	fwrite(&Z1_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z1_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z1_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&Z1_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&E_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&E_ENABLE_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&E_STEP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&E_DIR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&E_ENDSTOP_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&N_HEATER_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&N_SENSOR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&N_FAN_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&B_HEATER_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&B_SENSOR_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&FAN_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&SERVO1_PIN, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&SERVO2_PIN, sizeof(uint8_t),1,buffer1_file);
+    /*
     fwrite(&EXP1_1_PIN, sizeof(uint8_t),1,buffer1_file);
     fwrite(&EXP1_3_PIN, sizeof(uint8_t),1,buffer1_file);
     fwrite(&EXP1_5_PIN, sizeof(uint8_t),1,buffer1_file);
@@ -692,7 +768,7 @@ void mcu_settings_send()
 	fwrite(&EXP2_6_PIN, sizeof(uint8_t),1,buffer1_file);
 	fwrite(&EXP2_8_PIN, sizeof(uint8_t),1,buffer1_file);
 	fwrite(&EXP2_10_PIN, sizeof(uint8_t),1,buffer1_file);*/
-	file_buffer_size=file_buffer_size+56;
+	
 }
 
 void crt_file()

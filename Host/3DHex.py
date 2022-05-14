@@ -265,7 +265,144 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             window.USB_CONNECTED=0
 
     def send_buffer(self):
-        window.ser.write(struct.pack("8B4H2B9H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
+        pin = window.Pin_Button_0.text()
+        if pin == 'N':
+           X_ENABLE_PIN=255
+        else:
+           X_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_1.text()
+        if pin == 'N':
+           X_STEP_PIN=255
+        else:
+           X_STEP_PIN=int(pin)
+        pin = window.Pin_Button_2.text()
+        if pin == 'N':
+           X_DIR_PIN=255
+        else:
+           X_DIR_PIN=int(pin)
+        pin = window.Pin_Button_3.text()
+        if pin == 'N':
+           X_HOME_PIN=255
+        else:
+           X_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_4.text()
+        if pin == 'N':
+           Y_ENABLE_PIN=255
+        else:
+           Y_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_5.text()
+        if pin == 'N':
+           Y_STEP_PIN=255
+        else:
+           Y_STEP_PIN=int(pin)
+        pin = window.Pin_Button_6.text()
+        if pin == 'N':
+           Y_DIR_PIN=255
+        else:
+           Y_DIR_PIN=int(pin)
+        pin = window.Pin_Button_7.text()
+        if pin == 'N':
+           Y_HOME_PIN=255
+        else:
+           Y_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_8.text()
+        if pin == 'N':
+           Z_ENABLE_PIN=255
+        else:
+           Z_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_9.text()
+        if pin == 'N':
+           Z_STEP_PIN=255
+        else:
+           Z_STEP_PIN=int(pin)
+        pin = window.Pin_Button_10.text()
+        if pin == 'N':
+           Z_DIR_PIN=255
+        else:
+           Z_DIR_PIN=int(pin)
+        pin = window.Pin_Button_11.text()
+        if pin == 'N':
+           Z_HOME_PIN=255
+        else:
+           Z_HOME_PIN=int(pin)
+           
+        pin = window.Pin_Button_12.text()
+        if pin == 'N':
+           Z1_ENABLE_PIN=255
+        else:
+           Z1_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_13.text()
+        if pin == 'N':
+           Z1_STEP_PIN=255
+        else:
+           Z1_STEP_PIN=int(pin)
+        pin = window.Pin_Button_14.text()
+        if pin == 'N':
+           Z1_DIR_PIN=255
+        else:
+           Z1_DIR_PIN=int(pin)
+        pin = window.Pin_Button_15.text()
+        if pin == 'N':
+           Z1_HOME_PIN=255
+        else:
+           Z1_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_16.text()
+        if pin == 'N':
+           E_ENABLE_PIN=255
+        else:
+           E_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_17.text()
+        if pin == 'N':
+           E_STEP_PIN=255
+        else:
+           E_STEP_PIN=int(pin)
+        pin = window.Pin_Button_18.text()
+        if pin == 'N':
+           E_DIR_PIN=255
+        else:
+           E_DIR_PIN=int(pin)
+        pin = window.Pin_Button_19.text()
+        if pin == 'N':
+           E_HOME_PIN=255
+        else:
+           E_HOME_PIN=int(pin)
+       
+        pin = window.Pin_Button_20.text()
+        if pin == 'N':
+           N_HEATER_PIN=255
+        else:
+           N_HEATER_PIN=int(pin)
+        pin = window.Pin_Button_21.text()
+        if pin == 'N':
+           N_SENSOR_PIN=255
+        else:
+           N_SENSOR_PIN=int(pin)
+        pin = window.Pin_Button_22.text()
+        if pin == 'N':
+           N_FAN_PIN=255
+        else:
+           N_FAN_PIN=int(pin)
+        pin = window.Pin_Button_23.text()
+        if pin == 'N':
+           B_HEATER_PIN=255
+        else:
+           B_HEATER_PIN=int(pin)
+        pin = window.Pin_Button_24.text()
+        if pin == 'N':
+           B_SENSOR_PIN=255
+        else:
+           B_SENSOR_PIN=int(pin)
+        pin = window.Pin_Button_25.text()
+        if pin == 'N':
+           FAN_PIN=255
+        else:
+           FAN_PIN=int(pin)
+        window.ser.write(struct.pack("4B",0,0,0,5))
+        (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
+        window.ser.write(struct.pack("26h8B4H2B9H",X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         #if pass_fail==1: #pass_fail should be 1, else communication has failed
            #print("PASS")
@@ -1100,7 +1237,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ser.flushInput() 
                 self.A=0 #A=0 => Idle mode
                 self.B=0 #B=0 => Temperature command
-                self.C=0 #C=0 => Report only temperature		
+                self.C=0 #C=0 => Report only temperature
+                self.stepx_pos=0
+                self.x_pos_last=0
+                self.sum_Xpos =0
+                self.x_overflow=0    
+                self.stepy_pos=0
+                self.y_pos_last=0
+                self.sum_Ypos =0
+                self.y_overflow=0   
+                self.stepz_pos=0
+                self.z_pos_last=0
+                self.sum_Zpos =0
+                self.z_overflow=0                 
                 self.usb_thread = USBWorker() 
                 self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
                 self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
@@ -1685,7 +1834,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             cbfile.write(str(value)+"\n")
             cb_file.write(str(value)+"\n")
         i=0
-        for i in range (0,48): #c0-cmax
+        for i in range (0,48):
             pin = getattr(self, "Pin_Button_{}".format(i))
             value = pin.text()
             if value == 'N':

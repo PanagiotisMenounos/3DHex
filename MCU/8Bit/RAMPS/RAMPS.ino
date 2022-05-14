@@ -39,31 +39,11 @@ Servo bltouch;
 #define MIN_TEMP_SAFETY 5
 #define MAX_TEMP_NOZZLE 250
 #define MAX_TEMP_BED 80
-#define HOME_XMIN_PIN 3
+//#define HOME_XMIN_PIN 3
 #define HOME_YMIN_PIN 14
 #define HOME_ZMIN_PIN 18
 #define BLTOUCH_PIN 4
-#define USB_SETTING_BYTES 56
-#define MG_BYTES 36
 #define BUFFERSIZE 3000
-#define X_EN 38
-#define Y_EN A2
-#define Z_EN A8
-#define E_EN 24 
-int X_STEP = 54;        //PF0
-int Y_STEP = 60;        //PF6
-int Z_STEP = 46;        //PL3
-int E_STEP = 26;        //PA4
-int X_DIR = 55;         //PF1
-int Y_DIR = 61;         //PF7
-int Z_DIR = 48;         //PL1
-int E_DIR = 28;
-//PA6
-#define NOZZ_THRMSTR A13
-#define BED_THRMSTR A14
-#define NOZZ_HEATER 10
-#define FAN 9
-#define BED_HEATER 8
 #define IDLE_USB_TEMP_UPDATE_INTERVAL 1000
 #define NOZZLE_TUNE_TEMP 80
 #define BED_TUNE_TEMP 50
@@ -89,6 +69,10 @@ void check_command(int state_c);
 void read_GM_data();
 void Atune_loop(uint8_t tune_case);
 void position_report();
+void configure_pin_modes();
+void configure_pin_ports();
+void configure_idle_pin_modes();
+void configure_idle_pin_ports();
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -98,9 +82,40 @@ struct data2 {
    volatile byte byte_2[BUFFERSIZE];
 };
 
+struct data6{ 
+   volatile uint8_t test;
+};
 struct data3{ 
-   volatile int X_STEP_PIN;
-   volatile int X_DIR_PIN;
+   volatile int16_t X_ENABLE_PIN;
+   volatile int16_t X_STEP_PIN;
+   volatile int16_t X_DIR_PIN;
+   volatile int16_t X_ENDSTOP_PIN;
+   volatile int16_t Y_ENABLE_PIN;
+   volatile int16_t Y_STEP_PIN;
+   volatile int16_t Y_DIR_PIN;
+   volatile int16_t Y_ENDSTOP_PIN;
+   volatile int16_t Z_ENABLE_PIN;
+   volatile int16_t Z_STEP_PIN;
+   volatile int16_t Z_DIR_PIN;
+   volatile int16_t Z_ENDSTOP_PIN;
+   volatile int16_t Z1_ENABLE_PIN;
+   volatile int16_t Z1_STEP_PIN;
+   volatile int16_t Z1_DIR_PIN;
+   volatile int16_t Z1_ENDSTOP_PIN;
+   volatile int16_t E_ENABLE_PIN;
+   volatile int16_t E_STEP_PIN;
+   volatile int16_t E_DIR_PIN;
+   volatile int16_t E_ENDSTOP_PIN;
+   
+   volatile int16_t N_HEATER_PIN;
+   volatile int16_t N_SENSOR_PIN;
+   volatile int16_t N_FAN_PIN;
+   volatile int16_t B_HEATER_PIN;
+   volatile int16_t B_SENSOR_PIN;
+   volatile int16_t FAN_PIN;
+   volatile int16_t SERVO1_PIN;
+   volatile int16_t SERVO2_PIN;
+   
    volatile uint16_t CORE_FREQ;
    volatile uint8_t X_ENABLE;
    volatile uint8_t Y_ENABLE;
@@ -151,6 +166,32 @@ struct data4{
 };
 
 struct data5{
+   volatile int16_t X_ENABLE_PIN;
+   volatile int16_t X_STEP_PIN;
+   volatile int16_t X_DIR_PIN;
+   volatile int16_t X_ENDSTOP_PIN;
+   volatile int16_t Y_ENABLE_PIN;
+   volatile int16_t Y_STEP_PIN;
+   volatile int16_t Y_DIR_PIN;
+   volatile int16_t Y_ENDSTOP_PIN;
+   volatile int16_t Z_ENABLE_PIN;
+   volatile int16_t Z_STEP_PIN;
+   volatile int16_t Z_DIR_PIN;
+   volatile int16_t Z_ENDSTOP_PIN;
+   volatile int16_t Z1_ENABLE_PIN;
+   volatile int16_t Z1_STEP_PIN;
+   volatile int16_t Z1_DIR_PIN;
+   volatile int16_t Z1_ENDSTOP_PIN;
+   volatile int16_t E_ENABLE_PIN;
+   volatile int16_t E_STEP_PIN;
+   volatile int16_t E_DIR_PIN;
+   volatile int16_t E_ENDSTOP_PIN;
+   volatile int16_t N_HEATER_PIN;
+   volatile int16_t N_SENSOR_PIN;
+   volatile int16_t N_FAN_PIN;
+   volatile int16_t B_HEATER_PIN;
+   volatile int16_t B_SENSOR_PIN;
+   volatile int16_t FAN_PIN;
   volatile uint8_t A;
   volatile uint8_t B;
   volatile uint8_t C;
@@ -181,19 +222,35 @@ volatile struct data2 buffer2;
 volatile struct data3 buffer3;
 volatile struct data4 buffer4;
 volatile struct data5 buffer5;
+volatile struct data6 buffer6;
 
 uint8_t *portxstep;
 uint8_t portxstepmask;
 uint8_t *portxdir;
 uint8_t portxdirmask;
 
-thermistor therm1(NOZZ_THRMSTR,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
-thermistor therm2(BED_THRMSTR,buffer3.THERMISTOR_TYPE_BED);  // bed
+uint8_t *portystep;
+uint8_t portystepmask;
+uint8_t *portydir;
+uint8_t portydirmask;
+
+uint8_t *portzstep;
+uint8_t portzstepmask;
+uint8_t *portzdir;
+uint8_t portzdirmask;
+
+uint8_t *portestep;
+uint8_t portestepmask;
+uint8_t *portedir;
+uint8_t portedirmask;
+
+thermistor therm1(0,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
+thermistor therm2(0,buffer3.THERMISTOR_TYPE_BED);  // bed
 
 double temp1,temp2,nozzpwm,nozztemp,p_nozz,i_nozz,d_nozz,bedpwm,bedtemp,p_bed,i_bed,d_bed;
-volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,bed_block=true,once=false,PRINTING=false,GM_command=false,GM_end=false,print_history=false;
+volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,bed_block=true,once=false,PRINTING=false,GM_command=false,GM_end=false;
 volatile unsigned int i=0,j=0,cc,step_counter=0;
-volatile byte buf[USB_SETTING_BYTES],PRINT_STATE,MG_buf[MG_BYTES];
+volatile byte buf[sizeof(buffer3)],PRINT_STATE,MG_buf[sizeof(buffer5)];
 volatile float time_duration;
 volatile unsigned long terminate_counter=0,currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0;
 volatile int XMIN_READ,YMIN_READ,ZMIN_READ,set_counter=0;
@@ -210,6 +267,94 @@ LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
 
 PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
 PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
+
+void configure_idle_pin_modes(){
+   pinMode(buffer5.X_ENABLE_PIN,OUTPUT);
+   pinMode(buffer5.Y_ENABLE_PIN,OUTPUT);
+   pinMode(buffer5.Z_ENABLE_PIN,OUTPUT);
+   pinMode(buffer5.E_ENABLE_PIN,OUTPUT); 
+   pinMode(buffer5.X_STEP_PIN,OUTPUT);
+   pinMode(buffer5.Y_STEP_PIN,OUTPUT);
+   pinMode(buffer5.Z_STEP_PIN,OUTPUT);
+   pinMode(buffer5.E_STEP_PIN,OUTPUT);
+   pinMode(buffer5.X_DIR_PIN,OUTPUT);
+   pinMode(buffer5.Y_DIR_PIN,OUTPUT);
+   pinMode(buffer5.Z_DIR_PIN,OUTPUT);
+   pinMode(buffer5.E_DIR_PIN,OUTPUT);
+   pinMode(buffer5.N_SENSOR_PIN,INPUT);
+   pinMode(buffer5.B_SENSOR_PIN,INPUT);
+   pinMode(buffer5.N_HEATER_PIN,OUTPUT);
+   pinMode(buffer5.B_HEATER_PIN,OUTPUT);
+   pinMode(buffer5.N_FAN_PIN,OUTPUT);
+   pinMode(buffer5.FAN_PIN,OUTPUT);   
+   pinMode(buffer5.X_ENDSTOP_PIN,INPUT);
+   pinMode(buffer5.Y_ENDSTOP_PIN,INPUT);
+   pinMode(buffer5.Z_ENDSTOP_PIN,INPUT);
+   pinMode(SD_ENABLE,OUTPUT);
+   digitalWrite(SD_ENABLE,HIGH);
+   digitalWrite(SD_ENABLE,HIGH);
+   digitalWrite(buffer5.N_HEATER_PIN,LOW);
+   digitalWrite(buffer5.B_HEATER_PIN,LOW);
+   therm1._pin=buffer5.N_SENSOR_PIN;
+   therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
+   therm2._pin=buffer5.B_SENSOR_PIN;
+   therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
+}
+
+void configure_pin_modes(){
+   pinMode(buffer3.X_ENABLE_PIN,OUTPUT);
+   pinMode(buffer3.Y_ENABLE_PIN,OUTPUT);
+   pinMode(buffer3.Z_ENABLE_PIN,OUTPUT);
+   pinMode(buffer3.E_ENABLE_PIN,OUTPUT); 
+   pinMode(buffer3.X_STEP_PIN,OUTPUT);
+   pinMode(buffer3.Y_STEP_PIN,OUTPUT);
+   pinMode(buffer3.Z_STEP_PIN,OUTPUT);
+   pinMode(buffer3.E_STEP_PIN,OUTPUT);
+   pinMode(buffer3.X_DIR_PIN,OUTPUT);
+   pinMode(buffer3.Y_DIR_PIN,OUTPUT);
+   pinMode(buffer3.Z_DIR_PIN,OUTPUT);
+   pinMode(buffer3.E_DIR_PIN,OUTPUT);
+   pinMode(buffer3.N_SENSOR_PIN,INPUT);
+   pinMode(buffer3.B_SENSOR_PIN,INPUT);
+   pinMode(buffer3.N_HEATER_PIN,OUTPUT);
+   pinMode(buffer3.B_HEATER_PIN,OUTPUT);
+   pinMode(buffer3.N_FAN_PIN,OUTPUT);
+   pinMode(buffer3.FAN_PIN,OUTPUT);   
+   pinMode(buffer3.X_ENDSTOP_PIN,INPUT);
+   pinMode(buffer3.Y_ENDSTOP_PIN,INPUT);
+   pinMode(buffer3.Z_ENDSTOP_PIN,INPUT);
+   pinMode(SD_ENABLE,OUTPUT);
+   digitalWrite(SD_ENABLE,HIGH);
+   digitalWrite(SD_ENABLE,HIGH);
+   digitalWrite(buffer3.N_HEATER_PIN,LOW);
+   digitalWrite(buffer3.B_HEATER_PIN,LOW);
+   therm1._pin=buffer3.N_SENSOR_PIN;
+   therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
+   therm2._pin=buffer3.B_SENSOR_PIN;
+   therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
+}
+
+void configure_pin_ports(){
+   portxstep = portOutputRegister(digitalPinToPort(buffer3.X_STEP_PIN));
+   portxstepmask = digitalPinToBitMask(buffer3.X_STEP_PIN);
+   portxdir = portOutputRegister(digitalPinToPort(buffer3.X_DIR_PIN));
+   portxdirmask = digitalPinToBitMask(buffer3.X_DIR_PIN);
+   
+   portystep = portOutputRegister(digitalPinToPort(buffer3.Y_STEP_PIN));
+   portystepmask = digitalPinToBitMask(buffer3.Y_STEP_PIN);
+   portydir = portOutputRegister(digitalPinToPort(buffer3.Y_DIR_PIN));
+   portydirmask = digitalPinToBitMask(buffer3.Y_DIR_PIN);
+   
+   portzstep = portOutputRegister(digitalPinToPort(buffer3.Z_STEP_PIN));
+   portzstepmask = digitalPinToBitMask(buffer3.Z_STEP_PIN);
+   portzdir = portOutputRegister(digitalPinToPort(buffer3.Z_DIR_PIN));
+   portzdirmask = digitalPinToBitMask(buffer3.Z_DIR_PIN);
+
+   portestep = portOutputRegister(digitalPinToPort(buffer3.E_STEP_PIN));
+   portestepmask = digitalPinToBitMask(buffer3.E_STEP_PIN);
+   portedir = portOutputRegister(digitalPinToPort(buffer3.E_DIR_PIN));
+   portedirmask = digitalPinToBitMask(buffer3.E_DIR_PIN);
+}
 
 void initialization_var(){
    buffer3.X_ENABLE=1;
@@ -231,35 +376,6 @@ void setup() {
    bltouch.attach(BLTOUCH_PIN);
    pinMode(ENCODER_PIN,INPUT_PULLUP);
    pinMode(SD_ENABLE,OUTPUT);
-   if(print_history==false){
-   pinMode(X_EN,OUTPUT);
-   pinMode(Y_EN,OUTPUT);
-   pinMode(Z_EN,OUTPUT);
-   pinMode(E_EN,OUTPUT); 
-   }
-   pinMode(X_STEP,OUTPUT);
-   pinMode(Y_STEP,OUTPUT);
-   pinMode(Z_STEP,OUTPUT);
-   pinMode(E_STEP,OUTPUT);
-   pinMode(X_DIR,OUTPUT);
-   pinMode(Y_DIR,OUTPUT);
-   pinMode(Z_DIR,OUTPUT);
-   pinMode(E_DIR,OUTPUT);
-   pinMode(NOZZ_THRMSTR,INPUT);
-   pinMode(BED_THRMSTR,INPUT);
-   pinMode(NOZZ_HEATER,OUTPUT);
-   pinMode(BED_HEATER,OUTPUT);
-   pinMode(FAN,OUTPUT);
-   pinMode(HOME_XMIN_PIN,INPUT);
-   pinMode(HOME_YMIN_PIN,INPUT);
-   pinMode(HOME_ZMIN_PIN,INPUT);
-   pinMode(SD_ENABLE,OUTPUT);
-   digitalWrite(SD_ENABLE,HIGH);
-   digitalWrite(SD_ENABLE,HIGH);
-   digitalWrite(BED_HEATER,LOW);
-   digitalWrite(NOZZ_HEATER,LOW);
-   //digitalWrite(FAN,HIGH);
-   print_history=true;
    Serial.begin(SERIAL_BAUD_RATE);
    pinMode(LED_BUILTIN,OUTPUT);
    pidbed.SetMode(AUTOMATIC);
@@ -277,12 +393,9 @@ void setup() {
    if(PRINT_STATE==0){get_USB_settings();}else{get_SD_settings();}
    if(LCD_16x4==true){lcd.noBlink();}
    check_steppers();
-   //homing_routine();
    
-   portxstep = portOutputRegister(digitalPinToPort(buffer3.X_STEP_PIN));
-   portxstepmask = digitalPinToBitMask(buffer3.X_STEP_PIN);
-   portxdir = portOutputRegister(digitalPinToPort(buffer3.X_DIR_PIN));
-   portxdirmask = digitalPinToBitMask(buffer3.X_DIR_PIN);
+   configure_pin_modes();
+   configure_pin_ports();   
    
    if((buffer3.Wait_nozz==1 && buffer3.HEATED_NOZZLE==1) || (buffer3.Wait_bed==1 && buffer3.HEATED_BED==1)){
       if(LCD_16x4==true && setoff==false){lcd.setCursor(0, 2);lcd.print("HEAT UP");lcd.blink();delay(1200);}
@@ -327,6 +440,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    i++;
    if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
       j++;
+      
       if (bitRead(buffer1.byte_1[j],0)){
         *portxdir |= portxdirmask;
       }else{
@@ -337,15 +451,40 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       }else{
         *portxstep &= ~portxstepmask;
       } 
-      /*digitalWrite(buffer3.X_DIR_PIN, bitRead(buffer1.byte_1[j],0));
-      digitalWriteFast(Y_DIR, bitRead(buffer1.byte_1[j],2));
-      digitalWriteFast(Z_DIR, bitRead(buffer1.byte_1[j],4));
-      digitalWriteFast(E_DIR, bitRead(buffer1.byte_1[j],6));
-      digitalWrite(buffer3.X_STEP_PIN, bitRead(buffer1.byte_1[j],1));
-      digitalWriteFast(Y_STEP, bitRead(buffer1.byte_1[j],3));
-      digitalWriteFast(Z_STEP, bitRead(buffer1.byte_1[j],5));
-      digitalWriteFast(E_STEP, bitRead(buffer1.byte_1[j],7));
-      */
+
+      if (bitRead(buffer1.byte_1[j],2)){
+        *portydir |= portydirmask;
+      }else{
+        *portydir &= ~portydirmask;
+      } 
+      if (bitRead(buffer1.byte_1[j],3)){
+        *portystep |= portystepmask;
+      }else{
+        *portystep &= ~portystepmask;
+      } 
+
+      if (bitRead(buffer1.byte_1[j],4)){
+        *portzdir |= portzdirmask;
+      }else{
+        *portzdir &= ~portzdirmask;
+      } 
+      if (bitRead(buffer1.byte_1[j],5)){
+        *portzstep |= portzstepmask;
+      }else{
+        *portzstep &= ~portzstepmask;
+      } 
+
+      if (bitRead(buffer1.byte_1[j],6)){
+        *portedir |= portedirmask;
+      }else{
+        *portedir &= ~portedirmask;
+      } 
+      if (bitRead(buffer1.byte_1[j],7)){
+        *portestep |= portestepmask;
+      }else{
+        *portestep &= ~portestepmask;
+      } 
+      
       j++;
       i=0;
       if (bitRead(buffer1.byte_1[j-1],1)){
@@ -370,9 +509,9 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
         }
       }
       terminate_counter=0;
-      //check_command(0);
    }else if(bufferstate==false && i==buffer2.byte_2[j] && buffer2.byte_2[j]!=0){
       j++;
+      
       if (bitRead(buffer2.byte_2[j],0)){
         *portxdir |= portxdirmask;
       }else{
@@ -383,15 +522,40 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       }else{
         *portxstep &= ~portxstepmask;
       } 
-      /*
-      digitalWrite(buffer3.X_DIR_PIN, bitRead(buffer2.byte_2[j],0));
-      digitalWriteFast(Y_DIR, bitRead(buffer2.byte_2[j],2));
-      digitalWriteFast(Z_DIR, bitRead(buffer2.byte_2[j],4));
-      digitalWriteFast(E_DIR, bitRead(buffer2.byte_2[j],6));
-      digitalWrite(buffer3.X_STEP_PIN, bitRead(buffer2.byte_2[j],1));
-      digitalWriteFast(Y_STEP, bitRead(buffer2.byte_2[j],3));
-      digitalWriteFast(Z_STEP, bitRead(buffer2.byte_2[j],5));
-      digitalWriteFast(E_STEP, bitRead(buffer2.byte_2[j],7));*/
+
+      if (bitRead(buffer2.byte_2[j],2)){
+        *portydir |= portydirmask;
+      }else{
+        *portydir &= ~portydirmask;
+      } 
+      if (bitRead(buffer2.byte_2[j],3)){
+        *portystep |= portystepmask;
+      }else{
+        *portystep &= ~portystepmask;
+      } 
+
+      if (bitRead(buffer2.byte_2[j],4)){
+        *portzdir |= portzdirmask;
+      }else{
+        *portzdir &= ~portzdirmask;
+      } 
+      if (bitRead(buffer2.byte_2[j],5)){
+        *portzstep |= portzstepmask;
+      }else{
+        *portzstep &= ~portzstepmask;
+      } 
+
+      if (bitRead(buffer2.byte_2[j],6)){
+        *portedir |= portedirmask;
+      }else{
+        *portedir &= ~portedirmask;
+      } 
+      if (bitRead(buffer2.byte_2[j],7)){
+        *portestep |= portestepmask;
+      }else{
+        *portestep &= ~portestepmask;
+      }
+       
       j++;
       i=0;
       if (bitRead(buffer2.byte_2[j-1],1)){
@@ -418,11 +582,9 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
       terminate_counter=0;
    }else{
     *portxstep &= ~portxstepmask;
-    /*
-      digitalWrite(buffer3.X_STEP_PIN, LOW);
-      digitalWriteFast(Y_STEP, LOW);
-      digitalWriteFast(Z_STEP, LOW);
-      digitalWriteFast(E_STEP, LOW);*/
+    *portystep &= ~portystepmask;
+    *portzstep &= ~portzstepmask;
+    *portestep &= ~portxstepmask;
    }
    check_buffer();
    sei();
@@ -485,7 +647,7 @@ void read_GM_data(){
       }
     }
     if(temp_counter>2){if(state_r==0){state_r=1;}else{state_r=0;}}//that state means that the data is at the other buffer
-    for(cc=0;cc<MG_BYTES;cc++){//total bytes of data
+    for(cc=0;cc<sizeof(buffer5);cc++){//total bytes of data
       if(state_r==0){
         while(buffer1.byte_1[j]==command_value){ //clear command_values
             j++;
@@ -542,7 +704,7 @@ void execute_command(){
        homing_routine();
     break;
     case 4: //fan control
-       analogWrite(FAN,buffer5.J);
+       analogWrite(buffer5.FAN_PIN,buffer5.J);
     break;
     case 5: //pause for time
        if(buffer5.J!=0){
@@ -728,7 +890,7 @@ void get_USB_settings(){
    Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
    Serial.write((char*)&buffer4,sizeof(buffer4));  
    Serial.readBytes((uint8_t *)&buffer2, sizeof(buffer2));
-   for(cc=0;cc<USB_SETTING_BYTES;cc++){//total 52 bytes
+   for(cc=0;cc<sizeof(buffer3);cc++){
       buf[cc]=buffer1.byte_1[cc];
       j++;
    }
@@ -746,13 +908,14 @@ void get_USB_settings(){
    pidnozz.SetTunings(p_nozz,i_nozz,d_nozz);
    if(buffer3.Wait_nozz){nozz_block=true;}else{ nozz_block=false;}
    if(buffer3.Wait_bed){bed_block=true;}else{bed_block=false;}
+
 }
 
 void check_steppers(){
-   if(buffer3.X_ENABLE==0){pinMode(X_EN,INPUT);}else{pinMode(X_EN,OUTPUT);}
-   if(buffer3.Y_ENABLE==0){pinMode(Y_EN,INPUT);}else{pinMode(Y_EN,OUTPUT);}
-   if(buffer3.Z_ENABLE==0){pinMode(Z_EN,INPUT);}else{pinMode(Z_EN,OUTPUT);}
-   if(buffer3.E_ENABLE==0){pinMode(E_EN,INPUT);}else{pinMode(E_EN,OUTPUT);}
+   if(buffer3.X_ENABLE==0){pinMode(buffer5.X_ENABLE_PIN,INPUT);}else{pinMode(buffer5.X_ENABLE_PIN,OUTPUT);}
+   if(buffer3.Y_ENABLE==0){pinMode(buffer5.Y_ENABLE_PIN,INPUT);}else{pinMode(buffer5.Y_ENABLE_PIN,OUTPUT);}
+   if(buffer3.Z_ENABLE==0){pinMode(buffer5.Z_ENABLE_PIN,INPUT);}else{pinMode(buffer5.Z_ENABLE_PIN,OUTPUT);}
+   if(buffer3.E_ENABLE==0){pinMode(buffer5.E_ENABLE_PIN,INPUT);}else{pinMode(buffer5.E_ENABLE_PIN,OUTPUT);}
 }
 
 void temperature_control(){
@@ -769,11 +932,11 @@ void temperature_control(){
              if(currentMillis - previousMillis_Bed >= buffer3.CYCLE_BED){
                  previousMillis_Bed = currentMillis;
                  temp2 = therm2.analog2temp(); // bed
-                 if((temp2<MIN_TEMP_SAFETY || temp2>MAX_TEMP_BED) && buffer3.HEATED_BED==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
+                 if((temp2<MIN_TEMP_SAFETY || temp2>MAX_TEMP_BED) && buffer3.HEATED_BED==1){digitalWrite(buffer5.B_HEATER_PIN,LOW);digitalWrite(buffer5.N_HEATER_PIN,LOW);setoff=true;}
                  if(temp2<=buffer3.BED_TEMP && buffer3.HEATED_BED==1){
-                     digitalWrite(BED_HEATER,HIGH);
+                     digitalWrite(buffer5.B_HEATER_PIN,HIGH);
                  }else{
-                     digitalWrite(BED_HEATER,LOW);
+                     digitalWrite(buffer5.B_HEATER_PIN,LOW);
                      bed_block=false;
                  }
              }
@@ -782,13 +945,13 @@ void temperature_control(){
                  previousMillis_Bed = currentMillis;
                  temp2 = therm2.analog2temp();
                  pidbed.Compute();
-                 digitalWrite(BED_HEATER,bedpwm);
+                 digitalWrite(buffer5.B_HEATER_PIN,bedpwm);
                  if(temp2>buffer3.BED_TEMP){
                    bed_block=false;
                  }
              }else if(buffer3.HEATED_BED==0){
                   //digitalWrite(LED_BUILTIN,LOW);
-                  digitalWrite(BED_HEATER,LOW);
+                  digitalWrite(buffer5.B_HEATER_PIN,LOW);
                   bed_block=false;
               }
          }
@@ -796,15 +959,15 @@ void temperature_control(){
            if (currentMillis - previousMillis_Nozz >= buffer3.CYCLE_NOZZ){
               previousMillis_Nozz = currentMillis;
               temp1 = therm1.analog2temp(); // nozzle
-              if((temp1<MIN_TEMP_SAFETY || temp1>MAX_TEMP_NOZZLE) && buffer3.HEATED_NOZZLE==1){digitalWrite(BED_HEATER,LOW);digitalWrite(NOZZ_HEATER,LOW);setoff=true;}
+              if((temp1<MIN_TEMP_SAFETY || temp1>MAX_TEMP_NOZZLE) && buffer3.HEATED_NOZZLE==1){digitalWrite(buffer5.B_HEATER_PIN,LOW);digitalWrite(buffer5.B_HEATER_PIN,LOW);setoff=true;}
               if(temp1<=buffer3.NOZZLE_TEMP && buffer3.HEATED_NOZZLE==1){
                if(bed_block==false){
-                 digitalWrite(NOZZ_HEATER,HIGH);
+                 digitalWrite(buffer5.N_HEATER_PIN,HIGH);
                  }else{
-                   digitalWrite(NOZZ_HEATER,LOW);
+                   digitalWrite(buffer5.N_HEATER_PIN,LOW);
                    }
               }else{
-                digitalWrite(NOZZ_HEATER,LOW); 
+                digitalWrite(buffer5.N_HEATER_PIN,LOW); 
                 nozz_block=false;}
            }
          }else if(buffer3.THERMOSTAT_nozz==0){
@@ -814,15 +977,15 @@ void temperature_control(){
                  if(bed_block==false){
                     temp1 = therm1.analog2temp(); // nozzle
                     pidnozz.Compute();
-                    digitalWrite(NOZZ_HEATER,nozzpwm);
+                    digitalWrite(buffer5.N_HEATER_PIN,nozzpwm);
                  }else{
-                    digitalWrite(NOZZ_HEATER,LOW);
+                    digitalWrite(buffer5.N_HEATER_PIN,LOW);
                  }
                  if(temp1>buffer3.NOZZLE_TEMP){
                    nozz_block=false;
                  }
              }else if(buffer3.HEATED_NOZZLE==0 && (bed_block==false && buffer3.HEATED_BED==1 || buffer3.HEATED_BED==0)){
-                digitalWrite(NOZZ_HEATER,LOW); 
+                digitalWrite(buffer5.N_HEATER_PIN,LOW); 
                 nozz_block=false;
              }
          }
@@ -844,6 +1007,8 @@ void temperature_USB_update(){
 
 int check_inputs(){
   int ii=0;
+  
+  ////////////////////**************SD****************////////////////////
    while(signal_duration < BUTTON_TIME_DURATION && !Serial.available()){
       if(digitalRead(ENCODER_PIN)==LOW){
          off=millis();
@@ -857,11 +1022,18 @@ int check_inputs(){
       signal_duration=0;
       return SD_setup();
    }
-///////////////////////////**************************///////////////////
+   
+////////////////////////////***********USB***************/////////////////////////////
    if(Serial.available() && signal_duration < BUTTON_TIME_DURATION){
+       Serial.readBytes((uint8_t *)&buffer6, sizeof(buffer6));
+       while(buffer6.test !=5){
+        Serial.readBytes((uint8_t *)&buffer6, sizeof(buffer6));
+       }
+       Serial.write((uint8_t*)&pass,sizeof(pass));
        Serial.readBytes((uint8_t *)&buffer5, sizeof(buffer5));
        Serial.write((uint8_t*)&pass,sizeof(pass));
        if(buffer5.A==0){                             ///A=0 => idle mode
+           configure_idle_pin_modes();
            if(buffer5.B == 0){                       ///B=0 => temp command
               if(buffer5.C == 0){                    ///C=0 => set noz temp
                 bed_block=false;
@@ -938,11 +1110,9 @@ int check_inputs(){
             }else if(buffer5.B == 3){              //B=3 => Rapid potision 
                     rapid_position();
             }else if(buffer5.B == 4){
-                   analogWrite(FAN,buffer5.J);
+                   analogWrite(buffer5.FAN_PIN,buffer5.J);
             }else if(buffer5.B == 5){
-                   //digitalWrite(LED_BUILTIN,HIGH);
                    Atune_loop(buffer5.C);
-                   //digitalWrite(LED_BUILTIN,LOW);
             }else if(buffer5.B == 7){ //BLtouch
               if(buffer5.C==0){ //test
                  bltouch.write(160);
@@ -977,10 +1147,10 @@ void Atune_loop(uint8_t tune_case){
   AUTOTUNE=true;
   if(tune_case==1){ //Nozzle Autotune
       target_tune_temp = NOZZLE_TUNE_TEMP;
-      heater = NOZZ_HEATER;
+      heater = buffer5.N_HEATER_PIN;
   }else{  //Bed Autotune
       target_tune_temp = BED_TUNE_TEMP;
-      heater = BED_HEATER;
+      heater = buffer5.B_HEATER_PIN;
   }
   while(repeat==true){
     if(tune_case==1){tune_temp = therm1.analog2temp();}else{tune_temp = therm2.analog2temp();}
@@ -1057,14 +1227,14 @@ void Atune_loop(uint8_t tune_case){
 }
 
 void rapid_position(){
-   digitalWrite(BED_HEATER,LOW);    //Disable Heaters while rapid positioning for safety
-   digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while rapid positioning for safety
+   digitalWrite(buffer5.B_HEATER_PIN,LOW);    //Disable Heaters while rapid positioning for safety
+   digitalWrite(buffer5.N_HEATER_PIN,LOW);   //Disable Heaters while rapid positioning for safety
    while(step_counter<buffer5.J && buffer5.C==0 && buffer5.D==1 && setoff==false && Serial.available()==0){
-      PORTF = (buffer5.E<<PF1);
-      PORTF = (buffer5.E<<PF1)|(1<<PF0);
+      digitalWrite(buffer5.X_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.X_STEP_PIN,HIGH);
       delayMicroseconds(buffer5.I);
-      PORTF = (buffer5.E<<PF1);
-      PORTF = (buffer5.E<<PF1)|(0<<PF0);
+      digitalWrite(buffer5.X_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.X_STEP_PIN,LOW);
       delayMicroseconds(buffer5.I);
       if(buffer5.E){
         XPOS=XPOS+1;
@@ -1075,11 +1245,11 @@ void rapid_position(){
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
    while(step_counter<buffer5.J && buffer5.C==1 && buffer5.D==1 && setoff==false && Serial.available()==0){
-      PORTF = (buffer5.E<<PF7);
-      PORTF = (buffer5.E<<PF7)|(1<<PF6);
+      digitalWrite(buffer5.Y_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.Y_STEP_PIN,HIGH);
       delayMicroseconds(buffer5.I);
-      PORTF = (buffer5.E<<PF7);
-      PORTF = (buffer5.E<<PF7)|(0<<PF6);
+      digitalWrite(buffer5.Y_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.Y_STEP_PIN,LOW);
       delayMicroseconds(buffer5.I);
       if(buffer5.E){
         YPOS=YPOS+1;
@@ -1090,11 +1260,11 @@ void rapid_position(){
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
    while(step_counter<buffer5.J && buffer5.C==2 && buffer5.D==1 && setoff==false && Serial.available()==0){
-      PORTL = (buffer5.E<<PL1);
-      PORTL = (buffer5.E<<PL1)|(1<<PL3);
+      digitalWrite(buffer5.Z_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.Z_STEP_PIN,HIGH);
       delayMicroseconds(buffer5.I);
-      PORTL = (buffer5.E<<PL1);
-      PORTL = (buffer5.E<<PL1)|(0<<PL3);
+      digitalWrite(buffer5.Z_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.Z_STEP_PIN,LOW);
       delayMicroseconds(buffer5.I);
       step_counter++;
       if(buffer5.E){
@@ -1105,11 +1275,11 @@ void rapid_position(){
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
    while(step_counter<buffer5.J && buffer5.C==3 && buffer5.D==1 && setoff==false && Serial.available()==0){
-      PORTA = (buffer5.E<<PA6);
-      PORTA = (buffer5.E<<PA6)|(1<<PA4);
+      digitalWrite(buffer5.E_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.E_STEP_PIN,HIGH);
       delayMicroseconds(buffer5.I);
-      PORTA = (buffer5.E<<PA6);
-      PORTA = (buffer5.E<<PA6)|(0<<PA4);
+      digitalWrite(buffer5.E_DIR_PIN,buffer5.E);
+      digitalWrite(buffer5.E_STEP_PIN,LOW);
       delayMicroseconds(buffer5.I);
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
@@ -1126,27 +1296,26 @@ void homing_routine(){
   long  ABL_Height=500, rev=0;
   float ABL_Z=0;
   int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
-    
-  digitalWrite(BED_HEATER,LOW);    //Disable Heaters while homing for safety
-  digitalWrite(NOZZ_HEATER,LOW);   //Disable Heaters while homing for safety
-  XMIN_READ=digitalRead(HOME_XMIN_PIN);
+  digitalWrite(buffer5.B_HEATER_PIN,LOW);    //Disable Heaters while homing for safety
+  digitalWrite(buffer5.N_HEATER_PIN,LOW);   //Disable Heaters while homing for safety
+  XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
   while(buffer3.HOME_X_ENABLE==true && buffer5.R==1 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
-    PORTF = (buffer3.HOME_X_DIR<<PF1);
-    PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
+    digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+    digitalWrite(buffer5.X_STEP_PIN,HIGH);
     delayMicroseconds(buffer3.HOME_X_DURATION);
-    PORTF = (buffer3.HOME_X_DIR<<PF1);
-    PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
+    digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+    digitalWrite(buffer5.X_STEP_PIN,LOW);
     delayMicroseconds(buffer3.HOME_X_DURATION);
-    XMIN_READ=digitalRead(HOME_XMIN_PIN);
+    XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
     if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
   }
   YMIN_READ=digitalRead(HOME_YMIN_PIN);
   while(buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
-    PORTF = (buffer3.HOME_Y_DIR<<PF7);
-    PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
+    digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+    digitalWrite(buffer5.Y_STEP_PIN,HIGH);
     delayMicroseconds(buffer3.HOME_Y_DURATION);
-    PORTF = (buffer3.HOME_Y_DIR<<PF7);
-    PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
+    digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+    digitalWrite(buffer5.Y_STEP_PIN,LOW);
     delayMicroseconds(buffer3.HOME_Y_DURATION);
     YMIN_READ=digitalRead(HOME_YMIN_PIN);
     if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
@@ -1154,11 +1323,11 @@ void homing_routine(){
   if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
   step_counter=0;
    while(step_counter<buffer5.U){
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(1<<PF0);
+      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+      digitalWrite(buffer5.X_STEP_PIN,HIGH);
       delayMicroseconds(buffer3.HOME_X_DURATION);
-      PORTF = (buffer3.HOME_X_DIR<<PF1);
-      PORTF = (buffer3.HOME_X_DIR<<PF1)|(0<<PF0);
+      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+      digitalWrite(buffer5.X_STEP_PIN,LOW);
       delayMicroseconds(buffer3.HOME_X_DURATION);
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
@@ -1166,11 +1335,11 @@ void homing_routine(){
    if(buffer5.V>0){buffer3.HOME_Y_DIR=!buffer3.HOME_Y_DIR;}else{buffer5.V=-buffer5.V;}
    step_counter=0;
    while(step_counter<buffer5.V){
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(1<<PF6);
+      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+      digitalWrite(buffer5.Y_STEP_PIN,HIGH);
       delayMicroseconds(buffer3.HOME_Y_DURATION);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7);
-      PORTF = (buffer3.HOME_Y_DIR<<PF7)|(0<<PF6);
+      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+      digitalWrite(buffer5.Y_STEP_PIN,LOW);
       delayMicroseconds(buffer3.HOME_Y_DURATION);
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
@@ -1186,11 +1355,11 @@ void homing_routine(){
           ABL_Z=ABL_Z+1;
           prev = micros();
           if (signalstate){
-            PORTL = (buffer3.HOME_Z_DIR<<PL1);
-            PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+              digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+              digitalWrite(buffer5.Z_STEP_PIN,HIGH);
           }else{
-            PORTL = (buffer3.HOME_Z_DIR<<PL1);
-            PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+              digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+              digitalWrite(buffer5.Z_STEP_PIN,HIGH);
           }
           signalstate=!signalstate;
         }
@@ -1210,11 +1379,11 @@ void homing_routine(){
               ABL_Z=ABL_Z-1;
               prev = micros();
               if (signalstate){
-                PORTL = (Z_revdir<<PL1);
-                PORTL = (Z_revdir<<PL1)|(1<<PL3);
+                  digitalWrite(buffer5.Z_DIR_PIN,Z_revdir);
+                  digitalWrite(buffer5.Z_STEP_PIN,HIGH);
               }else{
-                PORTL = (Z_revdir<<PL1);
-                PORTL = (Z_revdir<<PL1)|(0<<PL3);
+                  digitalWrite(buffer5.Z_DIR_PIN,Z_revdir);
+                  digitalWrite(buffer5.Z_STEP_PIN,LOW);
               }
               signalstate=!signalstate;
             }            
@@ -1237,18 +1406,18 @@ void homing_routine(){
     iter=0;
   }else{              
     bltouch.write(10);
-    delay(300);
+    delay(400);
     ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
     while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
       ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
       if (micros()-prev >= buffer3.HOME_Z_DURATION){
         prev = micros();
         if (signalstate){
-        PORTL = (buffer3.HOME_Z_DIR<<PL1);
-        PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+            digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+            digitalWrite(buffer5.Z_STEP_PIN,HIGH);
         }else{
-        PORTL = (buffer3.HOME_Z_DIR<<PL1);
-        PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+            digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+            digitalWrite(buffer5.Z_STEP_PIN,LOW);
         ABL_Z=ABL_Z+1;
         }
         signalstate=!signalstate;
@@ -1263,11 +1432,11 @@ void homing_routine(){
   if(buffer5.W<0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
   step_counter=0;
   while(step_counter<buffer5.W){
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(1<<PL3);
+      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+      digitalWrite(buffer5.Z_STEP_PIN,HIGH);
       delayMicroseconds(buffer3.HOME_Y_DURATION);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1);
-      PORTL = (buffer3.HOME_Z_DIR<<PL1)|(0<<PL3);
+      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+      digitalWrite(buffer5.Z_STEP_PIN,LOW);
       delayMicroseconds(buffer3.HOME_Y_DURATION);
       step_counter++;
    }
