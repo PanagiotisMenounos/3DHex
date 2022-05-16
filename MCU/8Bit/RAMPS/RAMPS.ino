@@ -39,9 +39,6 @@ Servo bltouch;
 #define MIN_TEMP_SAFETY 5
 #define MAX_TEMP_NOZZLE 250
 #define MAX_TEMP_BED 80
-//#define HOME_XMIN_PIN 3
-#define HOME_YMIN_PIN 14
-#define HOME_ZMIN_PIN 18
 #define BLTOUCH_PIN 4
 #define BUFFERSIZE 3000
 #define IDLE_USB_TEMP_UPDATE_INTERVAL 1000
@@ -85,7 +82,7 @@ struct data2 {
 struct data6{ 
    volatile uint8_t test;
 };
-struct data3{ 
+struct data3{
    volatile int16_t X_ENABLE_PIN;
    volatile int16_t X_STEP_PIN;
    volatile int16_t X_DIR_PIN;
@@ -166,6 +163,8 @@ struct data4{
 };
 
 struct data5{
+   volatile int8_t test1;
+   volatile int8_t test2;
    volatile int16_t X_ENABLE_PIN;
    volatile int16_t X_STEP_PIN;
    volatile int16_t X_DIR_PIN;
@@ -640,10 +639,12 @@ void read_GM_data(){
     }
     while(buffer2.byte_2[j]==command_value){ //clear command_values
       temp_counter++;
+      
       j++;
       if (j>=BUFFERSIZE){ //just reset to zero so the buffer locate again at the start point (first object e.g a[0])
          check_buffer();
          temp_counter++;
+         
       }
     }
     if(temp_counter>2){if(state_r==0){state_r=1;}else{state_r=0;}}//that state means that the data is at the other buffer
@@ -655,6 +656,7 @@ void read_GM_data(){
         MG_buf[cc]=buffer1.byte_1[j];
         j++;
       }else{
+      
         while(buffer2.byte_2[j]==command_value){ //clear command_values
           j++;
         }
@@ -1136,7 +1138,6 @@ int check_inputs(){
    }
     return 1;
 }
-
 void Atune_loop(uint8_t tune_case){
   boolean repeat=true,last_power=false,power=true,get_extreme=false,firsttime=true;
   double iterations=0,last_tune_temp=0,max_tune_temp=0,min_tune_temp=0;
@@ -1309,7 +1310,7 @@ void homing_routine(){
     XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
     if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
   }
-  YMIN_READ=digitalRead(HOME_YMIN_PIN);
+  YMIN_READ=digitalRead(buffer5.Y_ENDSTOP_PIN);
   while(buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
     digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
     digitalWrite(buffer5.Y_STEP_PIN,HIGH);
@@ -1317,12 +1318,13 @@ void homing_routine(){
     digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
     digitalWrite(buffer5.Y_STEP_PIN,LOW);
     delayMicroseconds(buffer3.HOME_Y_DURATION);
-    YMIN_READ=digitalRead(HOME_YMIN_PIN);
+    YMIN_READ=digitalRead(buffer5.Y_ENDSTOP_PIN);
     if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
   }
   if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
   step_counter=0;
    while(step_counter<buffer5.U){
+      //digitalWrite(LED_BUILTIN,HIGH);
       digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
       digitalWrite(buffer5.X_STEP_PIN,HIGH);
       delayMicroseconds(buffer3.HOME_X_DURATION);
@@ -1335,6 +1337,7 @@ void homing_routine(){
    if(buffer5.V>0){buffer3.HOME_Y_DIR=!buffer3.HOME_Y_DIR;}else{buffer5.V=-buffer5.V;}
    step_counter=0;
    while(step_counter<buffer5.V){
+      //digitalWrite(LED_BUILTIN,HIGH);
       digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
       digitalWrite(buffer5.Y_STEP_PIN,HIGH);
       delayMicroseconds(buffer3.HOME_Y_DURATION);
@@ -1344,14 +1347,19 @@ void homing_routine(){
       step_counter++;
       //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
    }
+   
     step_counter=0;
   if(ABL){
     bltouch.write(10);
     delay(300);
     while(iter<ABL_ITERATIONS){
-      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+
+      ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
       while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
         if (micros()-prev >= buffer3.HOME_Z_DURATION){
+          //if (ABL_ITERATIONS==2){
+          //digitalWrite(LED_BUILTIN,HIGH);
+          //}
           ABL_Z=ABL_Z+1;
           prev = micros();
           if (signalstate){
@@ -1359,14 +1367,14 @@ void homing_routine(){
               digitalWrite(buffer5.Z_STEP_PIN,HIGH);
           }else{
               digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-              digitalWrite(buffer5.Z_STEP_PIN,HIGH);
+              digitalWrite(buffer5.Z_STEP_PIN,LOW);
           }
           signalstate=!signalstate;
         }
         if(digitalRead(ENCODER_PIN)==LOW){
           setoff=true;
         }
-        ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+        ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
         if(ZMIN_READ!=buffer3.HOME_Z_STATE){
           bltouch.write(90);
           delay(200);
@@ -1404,12 +1412,12 @@ void homing_routine(){
     Serial.write((char*)&buffer4,sizeof(buffer4));
     GM_command=false;
     iter=0;
-  }else{              
+  }else{             
     bltouch.write(10);
     delay(400);
-    ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+    ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
     while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-      ZMIN_READ=digitalRead(HOME_ZMIN_PIN);
+      ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
       if (micros()-prev >= buffer3.HOME_Z_DURATION){
         prev = micros();
         if (signalstate){
@@ -1429,7 +1437,7 @@ void homing_routine(){
       }
     }
   }
-  if(buffer5.W<0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
+  if(buffer5.W>0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
   step_counter=0;
   while(step_counter<buffer5.W){
       digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);

@@ -265,6 +265,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             window.USB_CONNECTED=0
 
     def send_buffer(self):
+        go = 3
         pin = window.Pin_Button_0.text()
         if pin == 'N':
            X_ENABLE_PIN=255
@@ -402,7 +403,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
            FAN_PIN=int(pin)
         window.ser.write(struct.pack("4B",0,0,0,5))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
-        window.ser.write(struct.pack("26h8B4H2B9H",X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
+        window.ser.write(struct.pack("2b26h8B4H2B9H",go,go,X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         #if pass_fail==1: #pass_fail should be 1, else communication has failed
            #print("PASS")
@@ -1838,8 +1839,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             pin = getattr(self, "Pin_Button_{}".format(i))
             value = pin.text()
             if value == 'N':
-                pinsfile.write("255\n")
-                pins_file.write("255\n")
+                pinsfile.write("100\n")
+                pins_file.write("100\n")
             else:
                 pinsfile.write(str(value)+"\n")
                 pins_file.write(str(value)+"\n")
@@ -1902,7 +1903,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (0,48): #c0-cmax
             pin = getattr(self, "Pin_Button_{}".format(i))
             val = int(pins[i].strip())
-            if val == 255:
+            if val == 100:
                 pin.setText('N')
             else:
                 pin.setText(str(val))

@@ -195,6 +195,8 @@ float *ABL_YCOORD;
 float *ABL_ZCOORD;
 
 struct data{
+   volatile int8_t test1;
+   volatile int8_t test2;
    volatile int16_t X_ENABLE_PIN;
    volatile int16_t X_STEP_PIN;
    volatile int16_t X_DIR_PIN;
@@ -221,6 +223,8 @@ struct data{
    volatile int16_t B_HEATER_PIN;
    volatile int16_t B_SENSOR_PIN;
    volatile int16_t FAN_PIN;
+   //volatile int16_t SERVO1_PIN;
+   //volatile int16_t SERVO2_PIN;
    volatile uint8_t A;
    volatile uint8_t B;
    volatile uint8_t C;
@@ -269,6 +273,8 @@ int main(){
     	struct stat fly_buffer;
         int   on_the_fly=0;
     	
+    	MG_data.test1=4;
+    	MG_data.test2=4;
         double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,Gt,Mt,St,TEMP_PERC=0;
         unsigned long total_lines,j;
         bool first_line=true,GM_command=false,fly_command=false;
@@ -380,33 +386,6 @@ int main(){
 		    			clockwise=false; //counterclockwise
 		    		}
 		    		ARC(clockwise,Il,Jl,Xf,Yf,Ef,Xl,Yl,El,Fl);                	
-				}else{
-				MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
-                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
-				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
-				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
-				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
-				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
-				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
-				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
-				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
-				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
-				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
-				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
-				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
-				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
-				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
-				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
-				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
-				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
-				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
-				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
-				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
-				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
-				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
-				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
-				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
-				MG_data.FAN_PIN       =FAN_PIN       ;
 				}
 				if(Gl==28){ // G28 homing
 				    if(ABL_Process){
@@ -418,9 +397,9 @@ int main(){
 					MG_data.I=HOME_X_DIR;
 					MG_data.J=HOME_Y_DIR;
 					MG_data.K=HOME_Z_DIR;
-					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.C=1;MG_data.R=1;}else{MG_data.C=0;MG_data.R=0;}
-					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.D=1;MG_data.S=1;}else{MG_data.D=0;MG_data.S=0;}
-					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.E=1;MG_data.T=1;}else{MG_data.E=0;MG_data.T=0;}
+					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.C=1;MG_data.R=1;Xl=T0_X_OFFSET;}else{MG_data.C=0;MG_data.R=0;}
+					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.D=1;MG_data.S=1;Yl=T0_Y_OFFSET;}else{MG_data.D=0;MG_data.S=0;}
+					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.E=1;MG_data.T=1;Zl=T0_Z_OFFSET;}else{MG_data.E=0;MG_data.T=0;}
 					MG_data.F=HOME_X_STATE;
 					MG_data.G=HOME_Y_STATE;
 					MG_data.H=HOME_Z_STATE;
@@ -430,9 +409,9 @@ int main(){
 					MG_data.U=T0_X_OFFSET*STPU_X;
 					MG_data.V=T0_Y_OFFSET*STPU_Y;
 					MG_data.W=T0_Z_OFFSET*STPU_Z;
-					Xl=T0_X_OFFSET;
-               	    Yl=T0_Y_OFFSET;
-               	    Zl=0;
+					
+               	    
+               	    
 					HOME_ALL=true;
 				}
 				if(Gl==4){ // G4 pause
@@ -477,8 +456,8 @@ int main(){
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
                     e_space=max_bufferfile_size-(file_buffer_size); 
-                    if(e_space<=sizeof(MG_data) && e_space!=0){
-                    	e_space=30;//fix a bug arduino side
+                    if(e_space<sizeof(MG_data) && e_space!=0){
+                    	//e_space=30;//fix a bug arduino side
                         for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
             	           write_hex2file(GP);
     	               }
@@ -493,32 +472,6 @@ int main(){
 	            }
 			}
 			if(Ml!=flag_num){
-				MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
-                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
-				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
-				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
-				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
-				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
-				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
-				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
-				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
-				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
-				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
-				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
-				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
-				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
-				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
-				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
-				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
-				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
-				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
-				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
-				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
-				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
-				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
-				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
-				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
-				MG_data.FAN_PIN       =FAN_PIN       ;
                 if(Ml==104){ // M104 set hotend temp no wait
 			        MG_data.A=1;
 			        MG_data.B=0;
@@ -584,7 +537,7 @@ int main(){
 				write_hex2file(GP);
 				write_hex2file(GP);
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
-                if(e_space<=sizeof(MG_data) && e_space!=0){
+                if(e_space<sizeof(MG_data) && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
         	          write_hex2file(GP);
     	           }
@@ -1283,7 +1236,7 @@ void curve_detection(unsigned long total_lines)
 		ABSOLUTE_POSITIONING=0;
 		E_ABSOLUTE_POSITIONING=0;
 	}
-	if(Gl==90){// G91 Relative
+	if(Gl==90){// G90 Absolute
 		ABSOLUTE_POSITIONING=1;
 		E_ABSOLUTE_POSITIONING=1;
 	}
@@ -1371,8 +1324,7 @@ void curve_detection(unsigned long total_lines)
 		    	theta1=theta_temp;
 			}
             Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
-    	}
-		if((Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
+    	}else if((Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
         	printing_move=0;
         	new_curve=0;
     		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
@@ -1383,8 +1335,7 @@ void curve_detection(unsigned long total_lines)
     		    theta1=theta_temp;
     		}
             Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle    		
-		}
-		if(((Gf!=1 && Gf!=0 && Gf!=2 && Gf!=3) || (Gf!=01 && Gf!=00 && Gf!=02 && Gf!=03)) && (Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03)){
+		}else if(((Gf!=1 && Gf!=0 && Gf!=2 && Gf!=3) || (Gf!=01 && Gf!=00 && Gf!=02 && Gf!=03)) && (Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03)){
 			if(Gl==0 || Gl==00 || Gl==1 || Gl==01){
             	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
             		printing_move=1;
@@ -1411,6 +1362,17 @@ void curve_detection(unsigned long total_lines)
 		    theta1=theta_temp;
 		}
         Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle		
+		}else if((Gl!=1 && Gl!=01 && Gl!=0 && Gl!=00 && Gl!=02 && Gl!=03 && Gl!=02 && Gl!=03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
+	        printing_move=0;
+        	new_curve=0;
+    		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
+    		last_printing_move=printing_move;
+    		last_curve=new_curve;
+    		theta1=theta2;
+    		if(Gl==2 || Gl==3 || Gl==02 || Gl==03){
+    		    theta1=theta_temp;
+    		}
+            Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle   
 		}
     	
     }
@@ -1433,7 +1395,6 @@ void curve_length(unsigned long total_lines)
 	
     fcoord=_wfopen(fcoordinates_path,L"r");
     gen=_wfopen(gen_path,L"w");
-    
     while(j<total_lines){
     	if(first_time_tcoord){
     		first_time_tcoord=false;
@@ -1762,7 +1723,6 @@ void read_settings()
     EXP2_6_PIN=atoi(pins[45]);
     EXP2_8_PIN=atoi(pins[46]);
     EXP2_10_PIN=atoi(pins[47]);
-    
 	//FOR THE MOMMENT
 	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
 	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
@@ -1798,6 +1758,34 @@ void read_settings()
 	fclose(box_sett);
     fclose(cbox_sett);
     fclose(pins_sett);
+    			MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
+                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
+				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
+				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
+				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
+				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
+				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
+				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
+				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
+				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
+				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
+				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
+				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
+				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
+				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
+				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
+				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
+				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
+				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
+				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
+				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
+				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
+				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
+				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
+				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
+				MG_data.FAN_PIN       =FAN_PIN       ;
+			    //MG_data.SERVO1_PIN    =SERVO1_PIN    ;
+   				//MG_data.SERVO2_PIN    =SERVO2_PIN    ;
 }
 
 void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide-console-cursor-in-c
@@ -1815,7 +1803,7 @@ unsigned long gc2info(double flag_num)
     char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'},buf[10]; 
 	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0,temp_pos=0;
     double line1[arrays_size],line2[arrays_size],trash=0;
-    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false;
+    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false,abl_proc=false;
     int threshold_pos=7,cur=0,emb=1;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
@@ -1903,7 +1891,10 @@ unsigned long gc2info(double flag_num)
 					}else{
 							fprintf(g1,"%lf",flag_num);
 					}			        
-			    }	
+			    }
+				if(string[0]=='G' && string[1]=='2'&& string[2]=='9' && string[3]=='2'&& string[4]=='9'){
+					   abl_proc=true;	
+		    	}
 	            j=0;
 		        i=0;
 		        notfound=true;
@@ -1911,16 +1902,21 @@ unsigned long gc2info(double flag_num)
 		        fprintf(g1,"%c",' ');
  	        }
  	        if (home==true){
-				  emb=2;
-				  home=false;
-				  strcpy(string,"G92 X"); 
-				  gcvt(T0_X_OFFSET, 7, buf);
-				  strcat(string, buf);
-				  strcat(string, " Y");
-				  gcvt(T0_Y_OFFSET, 7, buf);
-				  strcat(string, buf);
-				  strcat(string, " Z0\n");
-				  total_lines++;
+ 	        	  //if(abl_proc==false){
+ 	        	 	 fprintf(g1, "%c\n",' ' );
+				 	 emb=2;
+				 	 home=false;
+				 	 strcpy(string,"G92 Z0\n"); 
+				 	 //gcvt(T0_X_OFFSET, 7, buf);
+				 	 //strcat(string, buf);
+				 	 //strcat(string, " Y");
+				 	 //gcvt(T0_Y_OFFSET, 7, buf);
+				 	 //strcat(string, buf);
+				 	 //strcat(string, " Z0\n");
+				 	 total_lines++;
+		          //}else{
+		        	//home=false;
+				//}
 			    }else{
 			    	emb=1;
 			}
