@@ -1805,6 +1805,7 @@ unsigned long gc2info(double flag_num)
     double line1[arrays_size],line2[arrays_size],trash=0;
     bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false,abl_proc=false;
     int threshold_pos=7,cur=0,emb=1;
+    bool home_x=false,home_y=false,home_z=false;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
 	FILE *g1;
@@ -1839,11 +1840,18 @@ unsigned long gc2info(double flag_num)
 			        i++;
 				}
 				if(notfound==true){ //if letter not found
-		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
+		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //this is valid when G28 X || Y || Z
 		                home=true;
 		            	temp_pos=0;
 		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
 		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            		 	if(string[temp_pos]=='X'){ //This only for G92 to know which axis to zero
+		            		 		home_x =true;
+								 }else if(string[temp_pos]=='Y'){ //This only for G92 to know which axis to zero
+								 	home_y =true;
+								 }else if(string[temp_pos]=='Z'){ //This only for G92 to know which axis to zero
+								 	home_z =true;
+								 }
 		            		 	write_axis_num=false;
 							 }
 							 temp_pos++;
@@ -1901,24 +1909,81 @@ unsigned long gc2info(double flag_num)
 		        found_axis=false;
 		        fprintf(g1,"%c",' ');
  	        }
+ 	        if(string[0]=='G' && string[1]=='2' && string[2]=='8' && home==false){ //this is valid when G28 X && Y && Z
+		        home=true;
+		        temp_pos=0;
+		        while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            	if(string[temp_pos]=='X'){ //This only for G92 to know which axis to zero
+		            		home_x =true;
+						}else if(string[temp_pos]=='Y'){ //This only for G92 to know which axis to zero
+							home_y =true;
+						}else if(string[temp_pos]=='Z'){ //This only for G92 to know which axis to zero
+							home_z =true;
+						}
+		            	write_axis_num=false;
+					}
+					temp_pos++;
+		        }
+		        if(write_axis_num==true){
+		            fprintf(g1,"%lf",axis_num);
+		            write_axis_num=true;
+				}else{
+					fprintf(g1,"%lf",flag_num);
+				}
+			}
  	        if (home==true){
- 	        	  //if(abl_proc==false){
- 	        	 	 fprintf(g1, "%c\n",' ' );
-				 	 emb=2;
-				 	 home=false;
-				 	 strcpy(string,"G92 Z0\n"); 
-				 	 //gcvt(T0_X_OFFSET, 7, buf);
-				 	 //strcat(string, buf);
-				 	 //strcat(string, " Y");
-				 	 //gcvt(T0_Y_OFFSET, 7, buf);
-				 	 //strcat(string, buf);
-				 	 //strcat(string, " Z0\n");
-				 	 total_lines++;
-		          //}else{
-		        	//home=false;
-				//}
-			    }else{
-			    	emb=1;
+ 	        	total_lines++;
+				emb=2;
+				home=false;				
+				if(home_x==false && home_y==false && home_z==false){
+			        fprintf(g1, "%c\n",' ' );
+				  	strcpy(string,"G92 X"); 
+				  	gcvt(T0_X_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				  	strcat(string, " Y");
+				  	gcvt(T0_Y_OFFSET, 7, buf);
+				  	strcat(string, buf);
+				  	strcat(string, " Z");
+				  	gcvt(T0_Z_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				  	home_x =false;
+					home_y =false;
+					home_z =false;
+                }
+                if(home_x==true){
+                	fprintf(g1, "%c\n",' ' );
+				  	strcpy(string,"G92 X"); 
+				  	gcvt(T0_X_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				}
+				if(home_y==true){
+					if (home_x==false){
+						fprintf(g1, "%c\n",' ' );
+				  	    strcpy(string,"G92 Y"); 
+					}else{
+						strcat(string," Y");
+					}
+				  	gcvt(T0_Y_OFFSET, 7, buf);
+				 	strcat(string, buf);	
+				}
+				if(home_z==true){
+					if(home_x==false && home_y==false){
+					    fprintf(g1, "%c\n",' ' );
+				  	    strcpy(string,"G92 Z"); 
+					}else{
+						strcat(string," Z");	
+					}
+				  	gcvt(T0_Z_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				 							
+				}
+				strcat(string, " \n");
+				home_x =false;
+				home_y =false;
+				home_z =false;
+			}else{
+			    emb=1;
 			}
  	        }
  	        first_line1=false;
