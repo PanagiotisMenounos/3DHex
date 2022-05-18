@@ -20,6 +20,7 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <SPI.h>
 #include "SdFat.h"
 #include <TimerThree.h>
+//#include <TimerFour.h>
 #include <thermistor.h>
 #include <PID_v1.h>
 #include <LiquidCrystal.h>
@@ -70,6 +71,7 @@ void configure_pin_modes();
 void configure_pin_ports();
 void configure_idle_pin_modes();
 void configure_idle_pin_ports();
+void push_bits();
 
 struct data1 { 
    volatile byte byte_1[BUFFERSIZE];
@@ -247,19 +249,20 @@ thermistor therm1(0,buffer3.THERMISTOR_TYPE_NOZZLE);// nozzle
 thermistor therm2(0,buffer3.THERMISTOR_TYPE_BED);  // bed
 
 double temp1,temp2,nozzpwm,nozztemp,p_nozz,i_nozz,d_nozz,bedpwm,bedtemp,p_bed,i_bed,d_bed;
-volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,bed_block=true,once=false,PRINTING=false,GM_command=false,GM_end=false;
+volatile boolean bufferstate=true,readstate=false,setoff=false,nozz_block=true,bed_block=true,once=false,PRINTING=false,GM_command=false,GM_init=false;
 volatile unsigned int i=0,j=0,cc,step_counter=0;
 volatile byte buf[sizeof(buffer3)],PRINT_STATE,MG_buf[sizeof(buffer5)];
 volatile float time_duration;
-volatile unsigned long terminate_counter=0,currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0;
+volatile unsigned long terminate_counter=0,currentMillis=0,previousMillis_Nozz = 0,previousMillis_Bed = 0,signal_duration=0,off=0,on=0,previousMillis_USBupdate=0,usboff=0,usb_duration=0,usbon=0,last_usb_wait=0,usb_wait=0,time_counter=0;
 volatile int XMIN_READ,YMIN_READ,ZMIN_READ,set_counter=0;
 volatile uint8_t pass=1,fail=0,command_value=255;
 volatile int8_t p;
 double input, output, setpoint=0;
 int state_r,ABL_ITERATIONS;
-volatile boolean AUTOTUNE=false,ABL=false;
+volatile boolean AUTOTUNE=false,ABL=false,homing=false,init_homing=true;
 volatile unsigned int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
+volatile boolean signalstate=true;
 
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
@@ -367,7 +370,7 @@ void initialization_var(){
    PRINTING=0;
    i=0;j=0;signal_duration=0;off=0;on=0;bufferstate=true;readstate=false;
    setoff=false;
-   nozz_block=false;bed_block=false;once=false;GM_command=false;GM_end=false;
+   nozz_block=false;bed_block=false;once=false;GM_command=false;GM_init=false;
    terminate_counter=0;
 }
 
@@ -385,6 +388,8 @@ void setup() {
    if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
    delay(100); 
    bltouch.write(90);
+   //Timer4.initialize(400000);
+   //Timer4.attachInterrupt(temperature_control); // blinkLED to run every 0.15 seconds
    do{// blocking if no input
       if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");lcd.blink();}    
    }while(check_inputs());
@@ -416,8 +421,19 @@ void setup() {
 
 void loop(){
   if(setoff==false){
-     if(PRINT_STATE==0){read_serial();}else{read_sd();}
-     if(GM_command==true){read_GM_data();temperature_control();position_report();GM_command=false;}
+     if(PRINT_STATE==0){
+        read_serial();
+     }else{
+        read_sd();
+     }
+     if(GM_init==true){
+        bltouch.write(10);
+        delay(400);
+        read_GM_data();
+        temperature_control();
+        position_report();
+        GM_init=false;
+     }
      temperature_control();
      position_report();
      check_BUTTON_terminate();
@@ -435,6 +451,14 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
      check_command(1);
    }
    if(GM_command==false){
+      push_bits();
+   }else{
+      
+      homing_routine();
+   }
+}
+
+void push_bits(){
    cli();
    i++;
    if(bufferstate==true && i==buffer1.byte_1[j] && buffer1.byte_1[j]!=0){
@@ -586,8 +610,7 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
     *portestep &= ~portxstepmask;
    }
    check_buffer();
-   sei();
-   }
+   sei(); 
 }
 
 void position_report(){
@@ -615,13 +638,13 @@ void check_buffer(){
 void check_command(int state_c){
   if(buffer1.byte_1[j]==command_value && state_c==0){
        GM_command=true;
-       GM_end=false;
+       GM_init=true;
        state_r=0;
        i=0;
   }
   if(buffer2.byte_2[j]==command_value && state_c==1){
     GM_command=true;
-    GM_end=false;
+    GM_init=true;
     state_r=1;
     i=0;
   }
@@ -703,7 +726,8 @@ void execute_command(){
        buffer3.HOME_X_DURATION=buffer5.O;
        buffer3.HOME_Y_DURATION=buffer5.P;
        buffer3.HOME_Z_DURATION=buffer5.Q;
-       homing_routine();
+       homing=true;
+       //homing_routine();
     break;
     case 4: //fan control
        analogWrite(buffer5.FAN_PIN,buffer5.J);
@@ -992,7 +1016,7 @@ void temperature_control(){
              }
          }
       }
-      if((digitalRead(ENCODER_PIN)==LOW) && (GM_command==false) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
+      if((digitalRead(ENCODER_PIN)==LOW) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
    }while(((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1)) && setoff==false);
 }
 
@@ -1292,13 +1316,14 @@ void rapid_position(){
 }
 
 void homing_routine(){ 
-  boolean signalstate=true;
-  unsigned long prev=0;
-  long  ABL_Height=500, rev=0;
+  if(homing==true){
+  
+  long rev=0;
   float ABL_Z=0;
   int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
-  digitalWrite(buffer5.B_HEATER_PIN,LOW);    //Disable Heaters while homing for safety
-  digitalWrite(buffer5.N_HEATER_PIN,LOW);   //Disable Heaters while homing for safety
+  /*
+  //digitalWrite(buffer5.B_HEATER_PIN,LOW);    //Disable Heaters while homing for safety
+  //digitalWrite(buffer5.N_HEATER_PIN,LOW);   //Disable Heaters while homing for safety
   XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
   while(buffer3.HOME_X_ENABLE==true && buffer5.R==1 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
     digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
@@ -1412,14 +1437,13 @@ void homing_routine(){
     Serial.write((char*)&buffer4,sizeof(buffer4));
     GM_command=false;
     iter=0;
-  }else{             
-    bltouch.write(10);
-    delay(400);
-    ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
-    while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-      ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
-      if (micros()-prev >= buffer3.HOME_Z_DURATION){
-        prev = micros();
+  }else{   */          
+
+    time_counter++;
+    if(setoff==false){
+      if (time_counter>=15){
+        ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
+        time_counter=0;
         if (signalstate){
             digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
             digitalWrite(buffer5.Z_STEP_PIN,HIGH);
@@ -1432,11 +1456,12 @@ void homing_routine(){
       }
       if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
       if(ZMIN_READ!=buffer3.HOME_Z_STATE){
-          bltouch.write(90);
-          delay(300);
+          GM_command=false;
+          ZMIN_READ=buffer3.HOME_Z_STATE;
+          homing=false;
       }
     }
-  }
+  /*
   if(buffer5.W>0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
   step_counter=0;
   while(step_counter<buffer5.W){
@@ -1449,4 +1474,6 @@ void homing_routine(){
       step_counter++;
    }
    step_counter=0;
+   */
+  }
 }
