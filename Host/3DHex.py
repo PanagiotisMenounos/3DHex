@@ -415,7 +415,9 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
             if int(self.serial_command)==-300: #300-> start of ABL
                 self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt',"w")
+                print("YYYYYYYYYYYYEEEE")
             if int(self.serial_command)==-301: #-301-> TRACK_Z
+                print("YpyhbghubohubYYYYYEEEE")
                 self.trackZ=self.trackZ+window.nozz_temp
                 if window.ABL_Sample==0:
                     if window.min==0:
@@ -433,6 +435,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                     self.message.emit(">>> AVG:"+str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"mm") #emit the signal  
                     self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"\n")
             if int(self.serial_command)==-302: #302-> end of ABL
+                print("EEEEEENDDDDDD")
                 window.ABL_Sample=0
                 self.AVG_traxkZ=0
                 self.trackZ=0
@@ -546,7 +549,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 flag_file.close()
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         self.child_buffer_size=1 #catch last packet after C terminates, if MCU does ot send -260 this will stuck in loop
-        self.packet_decode()
+        self.packet_decodepacket_decode()
         child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
         child_file.close()
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w') #reset path

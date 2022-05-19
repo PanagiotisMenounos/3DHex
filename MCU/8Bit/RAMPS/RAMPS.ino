@@ -262,7 +262,9 @@ int state_r,ABL_ITERATIONS;
 volatile boolean AUTOTUNE=false,ABL=false,homing=false,init_homing=true;
 volatile unsigned int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
-volatile boolean signalstate=true;
+volatile boolean signalstate=true,probe_up=false,elevation=false,deploy_probe=false,wait_homing=true,save_probe=false;
+volatile float ABL_Z=0,z_tracking;
+volatile int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
 
 
 LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
@@ -427,12 +429,40 @@ void loop(){
         read_sd();
      }
      if(GM_init==true){
-        bltouch.write(10);
-        delay(400);
         read_GM_data();
+        if(homing == true){
+           wait_homing=true;
+           bltouch.write(10);
+           delay(300);
+           wait_homing=false;
+        }
         temperature_control();
         position_report();
         GM_init=false;
+     }
+     if(deploy_probe==true){
+        wait_homing=true;
+        bltouch.write(10);
+        delay(300);
+        deploy_probe=false;
+        wait_homing=false;
+     }
+     if(probe_up==true){
+        if(ABL && save_probe==false){
+          digitalWrite(LED_BUILTIN,HIGH);
+          buffer4.command =-301; //ABL_ZTrack_Packet
+          buffer4.nozz_temp = z_tracking;
+          Serial.write((char*)&buffer4,sizeof(buffer4));
+        }
+        if(save_probe==true && ABL){
+           buffer4.command =-303; //ABL_ZTrack_Packet
+           buffer4.nozz_temp = z_tracking;
+           Serial.write((char*)&buffer4,sizeof(buffer4));
+           save_probe=false;
+           GM_command=false;
+        }
+        bltouch.write(90);
+        probe_up=false;
      }
      temperature_control();
      position_report();
@@ -453,7 +483,6 @@ void service_routine(){ //Timer interrupted service routine for pushing out the 
    if(GM_command==false){
       push_bits();
    }else{
-      
       homing_routine();
    }
 }
@@ -714,6 +743,7 @@ void execute_command(){
        check_steppers();
     break;
     case 3: //homing
+       
        buffer3.HOME_X_ENABLE=buffer5.C;
        buffer3.HOME_Y_ENABLE=buffer5.D;
        buffer3.HOME_Z_ENABLE=buffer5.E;
@@ -727,6 +757,7 @@ void execute_command(){
        buffer3.HOME_Y_DURATION=buffer5.P;
        buffer3.HOME_Z_DURATION=buffer5.Q;
        homing=true;
+       wait_homing=true;
        //homing_routine();
     break;
     case 4: //fan control
@@ -767,6 +798,7 @@ void execute_command(){
           buffer4.command =-300; //ABL start
         }
         Serial.write((char*)&buffer4,sizeof(buffer4));
+        GM_command=false;
     break;
   }
 }
@@ -1316,164 +1348,84 @@ void rapid_position(){
 }
 
 void homing_routine(){ 
-  if(homing==true){
-  
-  long rev=0;
-  float ABL_Z=0;
-  int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
-  /*
-  //digitalWrite(buffer5.B_HEATER_PIN,LOW);    //Disable Heaters while homing for safety
-  //digitalWrite(buffer5.N_HEATER_PIN,LOW);   //Disable Heaters while homing for safety
-  XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
-  while(buffer3.HOME_X_ENABLE==true && buffer5.R==1 && XMIN_READ==buffer3.HOME_X_STATE && setoff==false){
-    digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
-    digitalWrite(buffer5.X_STEP_PIN,HIGH);
-    delayMicroseconds(buffer3.HOME_X_DURATION);
-    digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
-    digitalWrite(buffer5.X_STEP_PIN,LOW);
-    delayMicroseconds(buffer3.HOME_X_DURATION);
-    XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
-    if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-  }
-  YMIN_READ=digitalRead(buffer5.Y_ENDSTOP_PIN);
-  while(buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && YMIN_READ==buffer3.HOME_Y_STATE && setoff==false){
-    digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
-    digitalWrite(buffer5.Y_STEP_PIN,HIGH);
-    delayMicroseconds(buffer3.HOME_Y_DURATION);
-    digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
-    digitalWrite(buffer5.Y_STEP_PIN,LOW);
-    delayMicroseconds(buffer3.HOME_Y_DURATION);
-    YMIN_READ=digitalRead(buffer5.Y_ENDSTOP_PIN);
-    if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-  }
-  if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
-  step_counter=0;
-   while(step_counter<buffer5.U){
-      //digitalWrite(LED_BUILTIN,HIGH);
-      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
-      digitalWrite(buffer5.X_STEP_PIN,HIGH);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
-      digitalWrite(buffer5.X_STEP_PIN,LOW);
-      delayMicroseconds(buffer3.HOME_X_DURATION);
-      step_counter++;
-      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-   if(buffer5.V>0){buffer3.HOME_Y_DIR=!buffer3.HOME_Y_DIR;}else{buffer5.V=-buffer5.V;}
-   step_counter=0;
-   while(step_counter<buffer5.V){
-      //digitalWrite(LED_BUILTIN,HIGH);
-      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
-      digitalWrite(buffer5.Y_STEP_PIN,HIGH);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
-      digitalWrite(buffer5.Y_STEP_PIN,LOW);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      step_counter++;
-      //if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-   }
-   
-    step_counter=0;
-  if(ABL){
-    bltouch.write(10);
-    delay(300);
-    while(iter<ABL_ITERATIONS){
-
-      ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
-      while(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && ZMIN_READ==buffer3.HOME_Z_STATE && setoff==false){
-        if (micros()-prev >= buffer3.HOME_Z_DURATION){
-          //if (ABL_ITERATIONS==2){
-          //digitalWrite(LED_BUILTIN,HIGH);
-          //}
-          ABL_Z=ABL_Z+1;
-          prev = micros();
-          if (signalstate){
-              digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-              digitalWrite(buffer5.Z_STEP_PIN,HIGH);
-          }else{
-              digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-              digitalWrite(buffer5.Z_STEP_PIN,LOW);
-          }
-          signalstate=!signalstate;
-        }
-        if(digitalRead(ENCODER_PIN)==LOW){
-          setoff=true;
-        }
-        ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
-        if(ZMIN_READ!=buffer3.HOME_Z_STATE){
-          bltouch.write(90);
-          delay(200);
-          buffer4.command =-301; //ABL_ZTrack_Packet
-          buffer4.nozz_temp = ABL_Z;
-          Serial.write((char*)&buffer4,sizeof(buffer4));
-          if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
-          while(ABL_Z>0){
-            if (micros()-prev >= buffer3.HOME_Z_DURATION){
-              ABL_Z=ABL_Z-1;
-              prev = micros();
-              if (signalstate){
+    if(homing==true && wait_homing==false){
+        step_counter=0;
+        if(ABL){
+            time_counter++;
+            
+            if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && elevation==false){
+                ABL_Z=ABL_Z+1;
+                time_counter=0;
+                if (signalstate){
+                  digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                  digitalWrite(buffer5.Z_STEP_PIN,HIGH);
+                }else{
+                  digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                  digitalWrite(buffer5.Z_STEP_PIN,LOW);
+                }
+                signalstate=!signalstate;
+                
+                ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
+                
+                if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+                  iter++;
+                  elevation=true;
+                  probe_up=true;
+                  time_counter=0;
+                  z_tracking = ABL_Z;
+                  if(buffer3.HOME_Z_DIR==0){Z_revdir=1;}else{Z_revdir=0;}
+                }
+            }
+            
+            if(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && elevation==true){
+                ABL_Z=ABL_Z-1;
+                time_counter=0;
+                if (signalstate){
                   digitalWrite(buffer5.Z_DIR_PIN,Z_revdir);
                   digitalWrite(buffer5.Z_STEP_PIN,HIGH);
-              }else{
+                }else{
                   digitalWrite(buffer5.Z_DIR_PIN,Z_revdir);
                   digitalWrite(buffer5.Z_STEP_PIN,LOW);
-              }
-              signalstate=!signalstate;
-            }            
-          }
-          if(iter<ABL_ITERATIONS-1){
-            bltouch.write(10);
-            delay(300);
-          }
-          ABL_Z=0;
-          rev=0;
-        }            
-      }
-      iter++;
-    }
-    bltouch.write(90);
-    delay(300);
-    buffer4.command =-303; //ABL_ZTrack_Packet
-    Serial.write((char*)&buffer4,sizeof(buffer4));
-    GM_command=false;
-    iter=0;
-  }else{   */          
-
-    time_counter++;
-    if(setoff==false){
-      if (time_counter>=15){
-        ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
-        time_counter=0;
-        if (signalstate){
-            digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-            digitalWrite(buffer5.Z_STEP_PIN,HIGH);
-        }else{
-            digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-            digitalWrite(buffer5.Z_STEP_PIN,LOW);
-        ABL_Z=ABL_Z+1;
+                }
+                signalstate=!signalstate;          
+                if(ABL_Z==0){
+                  elevation=false;
+                  ABL_Z=0;
+                    if(iter<ABL_ITERATIONS){
+                        deploy_probe=true;
+                    }else{
+                        save_probe=true;
+                        homing=false;
+                        probe_up=true;
+                        iter=0;
+                    }
+                }
+            } 
+            
+        }else{           
+        time_counter++;
+            if(setoff==false){
+                if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15){
+                  ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
+                  time_counter=0;
+                  if (signalstate){
+                    digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                    digitalWrite(buffer5.Z_STEP_PIN,HIGH);
+                  }else{
+                    digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                    digitalWrite(buffer5.Z_STEP_PIN,LOW);
+                  ABL_Z=ABL_Z+1;
+                  }
+                  signalstate=!signalstate;
+                }
+                if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+                if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+                  probe_up=true;
+                  GM_command=false;
+                  ZMIN_READ=buffer3.HOME_Z_STATE;
+                  homing=false;
+                }
+            }
         }
-        signalstate=!signalstate;
-      }
-      if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
-      if(ZMIN_READ!=buffer3.HOME_Z_STATE){
-          GM_command=false;
-          ZMIN_READ=buffer3.HOME_Z_STATE;
-          homing=false;
-      }
     }
-  /*
-  if(buffer5.W>0){buffer3.HOME_Z_DIR=!buffer3.HOME_Z_DIR;buffer5.W=-buffer5.W;}
-  step_counter=0;
-  while(step_counter<buffer5.W){
-      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-      digitalWrite(buffer5.Z_STEP_PIN,HIGH);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-      digitalWrite(buffer5.Z_STEP_PIN,LOW);
-      delayMicroseconds(buffer3.HOME_Y_DURATION);
-      step_counter++;
-   }
-   step_counter=0;
-   */
-  }
 }
