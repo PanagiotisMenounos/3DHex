@@ -47,6 +47,7 @@ Servo bltouch;
 #define BED_TUNE_TEMP 50
 #define pi 3.14159265358979323846
 
+
 void service_routine();
 void temperature_control();
 void temperature_USB_update();
@@ -262,12 +263,14 @@ int state_r,ABL_ITERATIONS;
 volatile boolean AUTOTUNE=false,ABL=false,homing=false,init_homing=true;
 volatile unsigned int XPOS=0,YPOS=0,ZPOS=0;
 volatile unsigned long currentMillis_pos=0,previousMillis_USBupdate_pos=0;
-volatile boolean signalstate=true,probe_up=false,elevation=false,deploy_probe=false,wait_homing=true,save_probe=false;
+volatile boolean signalstate=true,probe_up=false,elevation=false,deploy_probe=false,delay_homing=true,save_probe=false,set_temp=false,dwell=false,homeX_done=false,homeY_done=false;
+volatile boolean execute_offsetX=false,execute_offsetY=false;
 volatile float ABL_Z=0,z_tracking;
 volatile int Z_revdir=buffer3.HOME_Z_DIR,iter=0;
 
 
-LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
+//LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
+LiquidCrystal lcd(0, 0, 0, 0, 0, 0);
 
 PID pidnozz(&temp1, &nozzpwm, &nozztemp,p_nozz,i_nozz,d_nozz, DIRECT);
 PID pidbed(&temp2, &bedpwm, &bedtemp,p_bed,i_bed,d_bed, DIRECT);
@@ -303,6 +306,15 @@ void configure_idle_pin_modes(){
    therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
    therm2._pin=buffer5.B_SENSOR_PIN;
    therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
+   //lcd._rs_pin=16;
+   //lcd._enable_pin=17;
+   //lcd._data_pins[4]=23;
+   //lcd._data_pins[5]=25;
+   //lcd._data_pins[6]=27;
+   //lcd._data_pins[7]=29;
+   //LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
+   
+   //lcd(16, 17, 23, 25, 27, 29);
 }
 
 void configure_pin_modes(){
@@ -390,8 +402,6 @@ void setup() {
    if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
    delay(100); 
    bltouch.write(90);
-   //Timer4.initialize(400000);
-   //Timer4.attachInterrupt(temperature_control); // blinkLED to run every 0.15 seconds
    do{// blocking if no input
       if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");lcd.blink();}    
    }while(check_inputs());
@@ -429,33 +439,33 @@ void loop(){
         read_sd();
      }
      if(GM_init==true){
+        //digitalWrite(LED_BUILTIN,HIGH);
         read_GM_data();
         if(homing == true){
-           wait_homing=true;
+           delay_homing=true;
            bltouch.write(10);
            delay(300);
-           wait_homing=false;
+           delay_homing=false;
         }
         temperature_control();
         position_report();
         GM_init=false;
      }
      if(deploy_probe==true){
-        wait_homing=true;
+        delay_homing=true;
         bltouch.write(10);
         delay(300);
         deploy_probe=false;
-        wait_homing=false;
+        delay_homing=false;
      }
      if(probe_up==true){
         if(ABL && save_probe==false){
-          digitalWrite(LED_BUILTIN,HIGH);
           buffer4.command =-301; //ABL_ZTrack_Packet
           buffer4.nozz_temp = z_tracking;
           Serial.write((char*)&buffer4,sizeof(buffer4));
         }
         if(save_probe==true && ABL){
-           buffer4.command =-303; //ABL_ZTrack_Packet
+           buffer4.command =-303; //ABL_end iteration
            buffer4.nozz_temp = z_tracking;
            Serial.write((char*)&buffer4,sizeof(buffer4));
            save_probe=false;
@@ -471,14 +481,18 @@ void loop(){
   }else{
      position_report(); 
      terminate_process();
+     digitalWrite(buffer5.N_HEATER_PIN,LOW);
+     digitalWrite(buffer5.B_HEATER_PIN,LOW);
   }
 }
 
 void service_routine(){ //Timer interrupted service routine for pushing out the bytes
-   if(bufferstate==true && buffer1.byte_1[j]==255){
-     check_command(0);
-   }else if(bufferstate==false && buffer2.byte_2[j]==255){
-     check_command(1);
+   if(set_temp==false && dwell==false){
+      if(bufferstate==true && buffer1.byte_1[j]==255){
+        check_command(0);
+      }else if(bufferstate==false && buffer2.byte_2[j]==255){
+        check_command(1);
+      }
    }
    if(GM_command==false){
       push_bits();
@@ -724,16 +738,19 @@ void execute_command(){
   unsigned long timestamp=0;
   switch (buffer5.A){
     case 0: //set bed temp
+       //digitalWrite(LED_BUILTIN,HIGH);
        bed_block=true;
        buffer3.BED_TEMP=buffer5.J;
        bedtemp = buffer3.BED_TEMP;
        buffer3.Wait_bed=buffer5.B;
+       set_temp=true;
     break;
     case 1: //set hotend temp
        nozz_block=true;
        buffer3.NOZZLE_TEMP=buffer5.J;
        nozztemp = buffer3.NOZZLE_TEMP;
        buffer3.Wait_nozz=buffer5.B;
+       set_temp=true;
     break;
     case 2: //enable/disable stepper
        buffer3.X_ENABLE=buffer5.B;
@@ -743,7 +760,6 @@ void execute_command(){
        check_steppers();
     break;
     case 3: //homing
-       
        buffer3.HOME_X_ENABLE=buffer5.C;
        buffer3.HOME_Y_ENABLE=buffer5.D;
        buffer3.HOME_Z_ENABLE=buffer5.E;
@@ -757,13 +773,14 @@ void execute_command(){
        buffer3.HOME_Y_DURATION=buffer5.P;
        buffer3.HOME_Z_DURATION=buffer5.Q;
        homing=true;
-       wait_homing=true;
-       //homing_routine();
+       delay_homing=true;
     break;
     case 4: //fan control
        analogWrite(buffer5.FAN_PIN,buffer5.J);
+       GM_command=false;
     break;
     case 5: //pause for time
+       dwell=true;
        if(buffer5.J!=0){
           timestamp = millis();
           while(millis()-timestamp<buffer5.J){
@@ -778,8 +795,10 @@ void execute_command(){
             on=millis(); //prevent termination from check_Button_terminate()
           }
        }
+       dwell=false;
     break;
     case 6: //pause until interaction
+       dwell=true;
        while(digitalRead(ENCODER_PIN)==HIGH && Serial.available()==0){
            temperature_control();
            on=millis(); //prevent termination from check_Button_terminate()
@@ -787,6 +806,7 @@ void execute_command(){
        if(Serial.available()!=0){
            Serial.read();
        }
+       dwell=false;
     break;
     case 7: //ABL start/stop
         ABL_ITERATIONS=buffer5.B;
@@ -808,6 +828,7 @@ void terminate_process(){
        initialization_var();
        Timer3.stop();
        if(PRINT_STATE==0){
+          //digitalWrite(LED_BUILTIN,HIGH);
           buffer4.command = -260; //-260 terminate
           Serial.write((char*)&buffer4,sizeof(buffer4)); 
           Serial.readBytes((uint8_t *)&buffer1, sizeof(buffer1));
@@ -1050,6 +1071,15 @@ void temperature_control(){
       }
       if((digitalRead(ENCODER_PIN)==LOW) && ((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1))){setoff=true;}
    }while(((nozz_block==1 && buffer3.Wait_nozz==1) || (bed_block==1 && buffer3.Wait_bed==1)) && setoff==false);
+   if(setoff==true){
+    digitalWrite(buffer5.N_HEATER_PIN,LOW);
+    digitalWrite(buffer5.B_HEATER_PIN,LOW);
+   }
+   if(set_temp==true){
+      GM_command=false;
+      set_temp=false;
+      //digitalWrite(LED_BUILTIN,LOW);
+   }
 }
 
 void temperature_USB_update(){
@@ -1348,11 +1378,10 @@ void rapid_position(){
 }
 
 void homing_routine(){ 
-    if(homing==true && wait_homing==false){
-        step_counter=0;
+    if(homing==true && delay_homing==false){
+        //step_counter=0;
         if(ABL){
             time_counter++;
-            
             if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && elevation==false){
                 ABL_Z=ABL_Z+1;
                 time_counter=0;
@@ -1377,7 +1406,7 @@ void homing_routine(){
                 }
             }
             
-            if(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && elevation==true){
+            if(buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && elevation==true && ABL==true){
                 ABL_Z=ABL_Z-1;
                 time_counter=0;
                 if (signalstate){
@@ -1402,30 +1431,123 @@ void homing_routine(){
                 }
             } 
             
-        }else{           
-        time_counter++;
+        }else{
+            time_counter++;
             if(setoff==false){
-                if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15){
-                  ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
+                
+                if (buffer3.HOME_X_ENABLE==true && buffer5.R==1 && time_counter>=15 && homeX_done==false && execute_offsetX==false){
                   time_counter=0;
+                  //digitalWrite(LED_BUILTIN,HIGH);
                   if (signalstate){
-                    digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-                    digitalWrite(buffer5.Z_STEP_PIN,HIGH);
-                  }else{
-                    digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
-                    digitalWrite(buffer5.Z_STEP_PIN,LOW);
-                  ABL_Z=ABL_Z+1;
+                      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+                      digitalWrite(buffer5.X_STEP_PIN,HIGH);
+                    }else{
+                      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+                      digitalWrite(buffer5.X_STEP_PIN,LOW);
                   }
                   signalstate=!signalstate;
+                  XMIN_READ=digitalRead(buffer5.X_ENDSTOP_PIN);
+                  if(XMIN_READ!=buffer3.HOME_X_STATE){
+                     XMIN_READ=buffer3.HOME_X_STATE;
+                     execute_offsetX=true;
+                     step_counter=0;
+                     if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
+                  }
+                }else if(buffer5.R==0){
+                  
+                  homeX_done=true;
                 }
-                if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
+                
+              if (execute_offsetX==true){
+                    if(time_counter>=15){
+                      time_counter=0;
+                    if (signalstate){
+                      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+                      digitalWrite(buffer5.X_STEP_PIN,HIGH);
+                    }else{
+                      digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
+                      digitalWrite(buffer5.X_STEP_PIN,LOW);
+                    }
+                    signalstate=!signalstate;
+                    step_counter++;
+                    }
+                  if(step_counter>=buffer5.U){
+                      execute_offsetX=false;
+                      homeX_done=true;
+                      step_counter=0;
+                      time_counter=0;
+                  }
+                  
+              }
+               
+                if (buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && time_counter>=15 && homeY_done==false && execute_offsetY==false && homeX_done==true){
+                  time_counter=0;
+                  if (signalstate){
+                      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+                      digitalWrite(buffer5.Y_STEP_PIN,HIGH);
+                    }else{
+                      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+                      digitalWrite(buffer5.Y_STEP_PIN,LOW);
+                    }
+                    signalstate=!signalstate;
+                  YMIN_READ=digitalRead(buffer5.Y_ENDSTOP_PIN);
+                  if(YMIN_READ!=buffer3.HOME_Y_STATE){
+                     YMIN_READ=buffer3.HOME_Y_STATE;
+                     execute_offsetY=true;
+                     step_counter=0;
+                     if(buffer5.V>0){buffer3.HOME_Y_DIR=!buffer3.HOME_Y_DIR;}else{buffer5.V=-buffer5.V;}
+                  }
+                }else if(buffer5.S==0){
+                  //digitalWrite(LED_BUILTIN,HIGH);
+                  homeY_done=true;
+                }
+          
+              if (execute_offsetY==true){
+                    if(time_counter>=15){
+                      time_counter=0;
+                    if (signalstate){
+                      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+                      digitalWrite(buffer5.Y_STEP_PIN,HIGH);
+                    }else{
+                      digitalWrite(buffer5.Y_DIR_PIN,buffer3.HOME_Y_DIR);
+                      digitalWrite(buffer5.Y_STEP_PIN,LOW);
+                    }
+                    signalstate=!signalstate;
+                    step_counter++;
+                    }
+                  if(step_counter>=buffer5.V){
+                      execute_offsetY=false;
+                      homeY_done=true;
+                      step_counter=0;
+                      time_counter=0;
+                  }
+                  
+              }
+              
+              if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && homeX_done==true && homeY_done==true){
+                  
+                  time_counter=0;
+                  if (signalstate){
+                      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                      digitalWrite(buffer5.Z_STEP_PIN,HIGH);
+                    }else{
+                      digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
+                      digitalWrite(buffer5.Z_STEP_PIN,LOW);
+                      ABL_Z=ABL_Z+1;
+                    }
+                    signalstate=!signalstate;
+                }
+                ZMIN_READ=digitalRead(buffer5.Z_ENDSTOP_PIN);
+               // if(digitalRead(ENCODER_PIN)==LOW){setoff=true;}
                 if(ZMIN_READ!=buffer3.HOME_Z_STATE){
+                  digitalWrite(LED_BUILTIN,HIGH);
                   probe_up=true;
                   GM_command=false;
                   ZMIN_READ=buffer3.HOME_Z_STATE;
                   homing=false;
                 }
             }
+            
         }
     }
 }

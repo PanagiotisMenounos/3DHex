@@ -409,9 +409,6 @@ int main(){
 					MG_data.U=T0_X_OFFSET*STPU_X;
 					MG_data.V=T0_Y_OFFSET*STPU_Y;
 					MG_data.W=T0_Z_OFFSET*STPU_Z;
-					
-               	    
-               	    
 					HOME_ALL=true;
 				}
 				if(Gl==4){ // G4 pause
@@ -527,7 +524,7 @@ int main(){
 				if(Ml==82){// M82 E Absolute
 					E_ABSOLUTE_POSITIONING=1;
 				}
-				if(Ml==83){// M83 E Absolute
+				if(Ml==83){// M83 E Relative
 					E_ABSOLUTE_POSITIONING=0;
 				}
 				if(Ml==226){// M226 pause until iteraction
@@ -632,7 +629,7 @@ int check_print_state(){
 
 void mcu_settings_send()
 {
-    file_buffer_size=file_buffer_size+108;
+    file_buffer_size=file_buffer_size+sizeof(MG_data);
     buffer1_file=_wfopen(buffer1_path,L"wb");
     fwrite(&X_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
     fwrite(&X_STEP_PIN, sizeof(int16_t),1,buffer1_file);
@@ -1243,7 +1240,7 @@ void curve_detection(unsigned long total_lines)
 	if(Ml==82){// M82 E Absolute
 		E_ABSOLUTE_POSITIONING=1;
 	}
-	if(Ml==83){// M83 E Absolute
+	if(Ml==83){// M83 E Relative
 		E_ABSOLUTE_POSITIONING=0;
 	}
 	Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
@@ -1273,17 +1270,17 @@ void curve_detection(unsigned long total_lines)
             Yl=Yl-Yf;
             Zl=Zl-Zf;
 		}
-		if(Gl==92 && E_ABSOLUTE_POSITIONING==0){
-			El=El-Ef;
-		}
+		//if(Gl==92 && E_ABSOLUTE_POSITIONING==0){
+			//El=El-Ef;
+		//}
         if(ABSOLUTE_POSITIONING==0){
             Xl=Xf+Xl;
             Yl=Yf+Yl;
             Zl=Zf+Zl;
 		}
-	    if(E_ABSOLUTE_POSITIONING==0){
-            El=Ef+El;
-		}		
+	    //if(E_ABSOLUTE_POSITIONING==0){
+            //El=Ef+El;
+		//}		
 		if((Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03) && (Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03)){
 			if(Gl==1){
             	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
@@ -1845,11 +1842,11 @@ unsigned long gc2info(double flag_num)
 		            	temp_pos=0;
 		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
 		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
-		            		 	if(string[temp_pos]=='X'){ //This only for G92 to know which axis to zero
+		            		 	if(string[temp_pos]=='X'){ //This is true only for G92 to know which axis to zero
 		            		 		home_x =true;
-								 }else if(string[temp_pos]=='Y'){ //This only for G92 to know which axis to zero
+								 }else if(string[temp_pos]=='Y'){ //This is true only for G92 to know which axis to zero
 								 	home_y =true;
-								 }else if(string[temp_pos]=='Z'){ //This only for G92 to know which axis to zero
+								 }else if(string[temp_pos]=='Z'){ //This is true only for G92 to know which axis to zero
 								 	home_z =true;
 								 }
 		            		 	write_axis_num=false;
@@ -2092,6 +2089,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     dy=yl-yf;
     dz=zl-zf;
     de=el-ef;
+    
     if(CURVE_DETECTION==0){
     	FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE); //Only working when CURVE_DETECTION is disabled
 	}else{
@@ -2112,6 +2110,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     dy = abs(y2 - y1); 
     dz = abs(z2 - z1); 
     de = abs(e2 - e1);
+    printf("%s %i\n","EEE=",de);
     period=1000/CORE_FREQ;
 	tmin=period*pow(10,-6);
     LINE_DIST=sqrt((pow(dx*xmin,2))+(pow(dy*ymin,2))+(pow(dz*zmin,2)));

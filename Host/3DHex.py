@@ -401,6 +401,76 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
            FAN_PIN=255
         else:
            FAN_PIN=int(pin)
+        pin = window.Pin_Button_26.text()
+        if pin == 'N':
+           BL_PIN=255
+        else:
+           BL_PIN=int(pin)
+        pin = window.Pin_Button_27.text()
+        if pin == 'N':
+           SERVO1_PIN=255
+        else:
+           SERVO1_PIN=int(pin)
+        pin = window.Pin_Button_28.text()
+        if pin == 'N':
+           SERVO2_PIN=255
+        else:
+           SERVO2_PIN=int(pin)
+        pin = window.Pin_Button_29.text()
+        if pin == 'N':
+           RS_PIN=255
+        else:
+           RS_PIN=int(pin)
+        pin = window.Pin_Button_30.text()
+        if pin == 'N':
+           LCD_ENABLE_PIN=255
+        else:
+           LCD_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_31.text()
+        if pin == 'N':
+           D4_PIN=255
+        else:
+           D4_PIN=int(pin)
+        pin = window.Pin_Button_32.text()
+        if pin == 'N':
+           D5_PIN=255
+        else:
+           D5_PIN=int(pin)
+        pin = window.Pin_Button_33.text()
+        if pin == 'N':
+           D6_PIN=255
+        else:
+           D6_PIN=int(pin)
+        pin = window.Pin_Button_34.text()
+        if pin == 'N':
+           D7_PIN=255
+        else:
+           D7_PIN=int(pin)
+        pin = window.Pin_Button_35.text()
+        if pin == 'N':
+           BTEN1_PIN=255
+        else:
+           BTEN1=int(pin)
+        pin = window.Pin_Button_36.text()
+        if pin == 'N':
+           BTEN2_PIN=255
+        else:
+           BTEN2_PIN=int(pin)
+        pin = window.Pin_Button_37.text()
+        if pin == 'N':
+           BTENC_PIN=255
+        else:
+           BTENC_PIN=int(pin)
+        pin = window.Pin_Button_38.text()
+        if pin == 'N':
+           SD_CS_PIN=255
+        else:
+           SD_CS_PIN=int(pin)
+        pin = window.Pin_Button_39.text()
+        if pin == 'N':
+           SD_DET_PIN=255
+        else:
+           SD_DET_PIN=int(pin)
         window.ser.write(struct.pack("4B",0,0,0,5))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         window.ser.write(struct.pack("2b26h8B4H2B9H",go,go,X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
@@ -415,9 +485,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
             if int(self.serial_command)==-300: #300-> start of ABL
                 self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt',"w")
-                print("YYYYYYYYYYYYEEEE")
             if int(self.serial_command)==-301: #-301-> TRACK_Z
-                print("YpyhbghubohubYYYYYEEEE")
                 self.trackZ=self.trackZ+window.nozz_temp
                 if window.ABL_Sample==0:
                     if window.min==0:
@@ -435,7 +503,6 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                     self.message.emit(">>> AVG:"+str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"mm") #emit the signal  
                     self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"\n")
             if int(self.serial_command)==-302: #302-> end of ABL
-                print("EEEEEENDDDDDD")
                 window.ABL_Sample=0
                 self.AVG_traxkZ=0
                 self.trackZ=0
@@ -459,8 +526,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
                 self.x_pos_report.emit(window.X_POS)
                 self.y_pos_report.emit(window.Y_POS)
-                self.z_pos_report.emit(window.Z_POS)
-                ##print("XPOS="+str(window.X_POS))               
+                self.z_pos_report.emit(window.Z_POS)          
             (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
 
@@ -1377,8 +1443,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     x_iter=0
                     gpsy = gpsy + stepy
                     y_iter=y_iter+1
-                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
                 ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
@@ -1395,8 +1461,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 ABL_f.write('G28 Z'+'\n')
                 ABL_f.write('G1 X'+str((self.Xend+self.Xstart)/2.0)+' Y'+str(self.Yend)+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G28 Z'+'\n')
-                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
                 ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
