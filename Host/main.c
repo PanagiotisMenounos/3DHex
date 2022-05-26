@@ -254,9 +254,6 @@ int main(){
 	ABL_XCOORD = (float*)malloc(sizeof(float));
 	ABL_YCOORD = (float*)malloc(sizeof(float));
 	ABL_ZCOORD = (float*)malloc(sizeof(float));
-	//HWND hWnd = GetConsoleWindow();
-    //ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
-    //ShowWindow( hWnd, SW_HIDE );
     int *ABL_XCOORD;
     
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);

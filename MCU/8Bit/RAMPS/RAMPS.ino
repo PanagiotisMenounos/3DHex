@@ -306,15 +306,19 @@ void configure_idle_pin_modes(){
    therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
    therm2._pin=buffer5.B_SENSOR_PIN;
    therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
-   //lcd._rs_pin=16;
-   //lcd._enable_pin=17;
-   //lcd._data_pins[4]=23;
-   //lcd._data_pins[5]=25;
-   //lcd._data_pins[6]=27;
-   //lcd._data_pins[7]=29;
-   //LiquidCrystal lcd(16, 17, 23, 25, 27, 29);
-   
-   //lcd(16, 17, 23, 25, 27, 29);
+   lcd._rs_pin=16;
+   lcd._enable_pin=17;
+   lcd._rw_pin = 255;
+   lcd._data_pins[4]=0;
+   lcd._data_pins[5]=0;
+   lcd._data_pins[6]=0;
+   lcd._data_pins[7]=0;
+   lcd._data_pins[0]=23;
+   lcd._data_pins[1]=25;
+   lcd._data_pins[2]=27;
+   lcd._data_pins[3]=29;
+   lcd.begin(20,4);delay(300);
+   lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");
 }
 
 void configure_pin_modes(){
@@ -399,11 +403,11 @@ void setup() {
    pidnozz.SetMode(AUTOMATIC);
    pidnozz.SetSampleTime(0);
    initialization_var();
-   if(LCD_16x4==true){lcd.begin(20,4);delay(100);}
+   
    delay(100); 
    bltouch.write(90);
    do{// blocking if no input
-      if(LCD_16x4==true){lcd.setCursor(0, 0);lcd.print("MODE: CHECK INPUT");lcd.blink();}    
+          
    }while(check_inputs());
    PRINTING=true;
    if(PRINT_STATE==0){get_USB_settings();}else{get_SD_settings();}
