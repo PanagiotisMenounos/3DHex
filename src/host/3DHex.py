@@ -31,8 +31,11 @@ import time
 import os
 import easygui
 from mainwindow_design import Ui_MainWindow
+
 from printer_name import Ui_New_Printer
 from autotune import Ui_AutoTune
+from pinswindow import Ui_pinswindow
+
 from multiprocessing import Process #for multiprocessing
 import threading
 import subprocess
@@ -41,11 +44,18 @@ import struct
 import win32pipe, win32file, pywintypes
 import numpy as np
 from scipy import interpolate
+import random
+
 from matplotlib import pyplot
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.interpolate import Rbf
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+
+
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import Rbf
+
 from numpy import loadtxt
 from PyQt5 import QtGui
 import pyqtgraph as pg
@@ -255,7 +265,215 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             window.USB_CONNECTED=0
 
     def send_buffer(self):
-        window.ser.write(struct.pack("8B4H2B9H",window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
+        go = 3
+        pin = window.Pin_Button_0.text()
+        if pin == 'N':
+           X_ENABLE_PIN=255
+        else:
+           X_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_1.text()
+        if pin == 'N':
+           X_STEP_PIN=255
+        else:
+           X_STEP_PIN=int(pin)
+        pin = window.Pin_Button_2.text()
+        if pin == 'N':
+           X_DIR_PIN=255
+        else:
+           X_DIR_PIN=int(pin)
+        pin = window.Pin_Button_3.text()
+        if pin == 'N':
+           X_HOME_PIN=255
+        else:
+           X_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_4.text()
+        if pin == 'N':
+           Y_ENABLE_PIN=255
+        else:
+           Y_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_5.text()
+        if pin == 'N':
+           Y_STEP_PIN=255
+        else:
+           Y_STEP_PIN=int(pin)
+        pin = window.Pin_Button_6.text()
+        if pin == 'N':
+           Y_DIR_PIN=255
+        else:
+           Y_DIR_PIN=int(pin)
+        pin = window.Pin_Button_7.text()
+        if pin == 'N':
+           Y_HOME_PIN=255
+        else:
+           Y_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_8.text()
+        if pin == 'N':
+           Z_ENABLE_PIN=255
+        else:
+           Z_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_9.text()
+        if pin == 'N':
+           Z_STEP_PIN=255
+        else:
+           Z_STEP_PIN=int(pin)
+        pin = window.Pin_Button_10.text()
+        if pin == 'N':
+           Z_DIR_PIN=255
+        else:
+           Z_DIR_PIN=int(pin)
+        pin = window.Pin_Button_11.text()
+        if pin == 'N':
+           Z_HOME_PIN=255
+        else:
+           Z_HOME_PIN=int(pin)
+           
+        pin = window.Pin_Button_12.text()
+        if pin == 'N':
+           Z1_ENABLE_PIN=255
+        else:
+           Z1_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_13.text()
+        if pin == 'N':
+           Z1_STEP_PIN=255
+        else:
+           Z1_STEP_PIN=int(pin)
+        pin = window.Pin_Button_14.text()
+        if pin == 'N':
+           Z1_DIR_PIN=255
+        else:
+           Z1_DIR_PIN=int(pin)
+        pin = window.Pin_Button_15.text()
+        if pin == 'N':
+           Z1_HOME_PIN=255
+        else:
+           Z1_HOME_PIN=int(pin)
+
+        pin = window.Pin_Button_16.text()
+        if pin == 'N':
+           E_ENABLE_PIN=255
+        else:
+           E_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_17.text()
+        if pin == 'N':
+           E_STEP_PIN=255
+        else:
+           E_STEP_PIN=int(pin)
+        pin = window.Pin_Button_18.text()
+        if pin == 'N':
+           E_DIR_PIN=255
+        else:
+           E_DIR_PIN=int(pin)
+        pin = window.Pin_Button_19.text()
+        if pin == 'N':
+           E_HOME_PIN=255
+        else:
+           E_HOME_PIN=int(pin)
+       
+        pin = window.Pin_Button_20.text()
+        if pin == 'N':
+           N_HEATER_PIN=255
+        else:
+           N_HEATER_PIN=int(pin)
+        pin = window.Pin_Button_21.text()
+        if pin == 'N':
+           N_SENSOR_PIN=255
+        else:
+           N_SENSOR_PIN=int(pin)
+        pin = window.Pin_Button_22.text()
+        if pin == 'N':
+           N_FAN_PIN=255
+        else:
+           N_FAN_PIN=int(pin)
+        pin = window.Pin_Button_23.text()
+        if pin == 'N':
+           B_HEATER_PIN=255
+        else:
+           B_HEATER_PIN=int(pin)
+        pin = window.Pin_Button_24.text()
+        if pin == 'N':
+           B_SENSOR_PIN=255
+        else:
+           B_SENSOR_PIN=int(pin)
+        pin = window.Pin_Button_25.text()
+        if pin == 'N':
+           FAN_PIN=255
+        else:
+           FAN_PIN=int(pin)
+        pin = window.Pin_Button_26.text()
+        if pin == 'N':
+           BL_PIN=255
+        else:
+           BL_PIN=int(pin)
+        pin = window.Pin_Button_27.text()
+        if pin == 'N':
+           SERVO1_PIN=255
+        else:
+           SERVO1_PIN=int(pin)
+        pin = window.Pin_Button_28.text()
+        if pin == 'N':
+           SERVO2_PIN=255
+        else:
+           SERVO2_PIN=int(pin)
+        pin = window.Pin_Button_29.text()
+        if pin == 'N':
+           RS_PIN=255
+        else:
+           RS_PIN=int(pin)
+        pin = window.Pin_Button_30.text()
+        if pin == 'N':
+           LCD_ENABLE_PIN=255
+        else:
+           LCD_ENABLE_PIN=int(pin)
+        pin = window.Pin_Button_31.text()
+        if pin == 'N':
+           D4_PIN=255
+        else:
+           D4_PIN=int(pin)
+        pin = window.Pin_Button_32.text()
+        if pin == 'N':
+           D5_PIN=255
+        else:
+           D5_PIN=int(pin)
+        pin = window.Pin_Button_33.text()
+        if pin == 'N':
+           D6_PIN=255
+        else:
+           D6_PIN=int(pin)
+        pin = window.Pin_Button_34.text()
+        if pin == 'N':
+           D7_PIN=255
+        else:
+           D7_PIN=int(pin)
+        pin = window.Pin_Button_35.text()
+        if pin == 'N':
+           BTEN1_PIN=255
+        else:
+           BTEN1=int(pin)
+        pin = window.Pin_Button_36.text()
+        if pin == 'N':
+           BTEN2_PIN=255
+        else:
+           BTEN2_PIN=int(pin)
+        pin = window.Pin_Button_37.text()
+        if pin == 'N':
+           BTENC_PIN=255
+        else:
+           BTENC_PIN=int(pin)
+        pin = window.Pin_Button_38.text()
+        if pin == 'N':
+           SD_CS_PIN=255
+        else:
+           SD_CS_PIN=int(pin)
+        pin = window.Pin_Button_39.text()
+        if pin == 'N':
+           SD_DET_PIN=255
+        else:
+           SD_DET_PIN=int(pin)
+        window.ser.write(struct.pack("4B",0,0,0,5))
+        (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
+        window.ser.write(struct.pack("2b26h8B4H2B9H",go,go,X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
         (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
         #if pass_fail==1: #pass_fail should be 1, else communication has failed
            #print("PASS")
@@ -308,8 +526,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 self.new_bed_temp.emit(window.bed_temp) #emit the signal
                 self.x_pos_report.emit(window.X_POS)
                 self.y_pos_report.emit(window.Y_POS)
-                self.z_pos_report.emit(window.Z_POS)
-                ##print("XPOS="+str(window.X_POS))               
+                self.z_pos_report.emit(window.Z_POS)          
             (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
 
@@ -331,7 +548,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess 
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
-        buffer_file_size=3100 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
+        buffer_file_size=3000 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
         self.child_buffer_size=1 #Means 3DHex.C is still running
         while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
             (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
@@ -346,12 +563,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         self.send_buffer() #Command Printer to go into printig mode window.A=1
         self.message.emit(">>> Post processing successfully completed") #emit the signal
         self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
+        if buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
             if filecase==1: #Read from buffer1 binary file
                 filecase=2  #Note to read buffer2 next time
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer1_file.read(3100)) #Send binary data to Printer
+                window.ser.write(buffer1_file.read(3000)) #Send binary data to Printer
                 buffer1_file.close() 
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
@@ -361,7 +578,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3100))
+                window.ser.write(buffer2_file.read(3000))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
@@ -375,12 +592,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
             self.x_pos_report.emit(window.X_POS)
             self.y_pos_report.emit(window.Y_POS)
             self.z_pos_report.emit(window.Z_POS)
-        while buffer_file_size==3100 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
+        while buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
             if filecase==1:
                 filecase=2
                 buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
                 self.packet_decode()                      
-                window.ser.write(buffer1_file.read(3100))
+                window.ser.write(buffer1_file.read(3000))
                 buffer1_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -390,7 +607,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 filecase=1
                 buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
                 self.packet_decode()
-                window.ser.write(buffer2_file.read(3100))
+                window.ser.write(buffer2_file.read(3000))
                 buffer2_file.close()
                 flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
                 flag_file.write(struct.pack('2i', 5, 5))
@@ -398,7 +615,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 flag_file.close()
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         self.child_buffer_size=1 #catch last packet after C terminates, if MCU does ot send -260 this will stuck in loop
-        self.packet_decode()
+        self.packet_decodepacket_decode()
         child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
         child_file.close()
         savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w') #reset path
@@ -493,18 +710,12 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 if window.home_axis==1:
                       if window.L==1:
                           window.p5.setEnabled(True)
-                      else:
-                          window.p6.setEnabled(True)
                 if window.home_axis==2:
                       if window.L==1:
                           window.p9.setEnabled(True)
-                      else:
-                          window.p10.setEnabled(True)
                 if window.home_axis==3:
                       if window.L==1:
                           window.p13.setEnabled(True)
-                      else:
-                          window.p14.setEnabled(True)
                 window.enable_idle_buttons()
                 window.home_axis=0
 
@@ -549,7 +760,113 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
                 window.bl_toggle=0
                 self.message.emit(">>> BL_TOUCH TOGGLE")
                 self.send_buffer()
-                                
+
+class PinsWindow(QtWidgets.QMainWindow, Ui_pinswindow):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(PinsWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self) #import Qtdesigner
+        getattr(self, "pin{}".format(window.pin_conf)).setStyleSheet("QPushButton {\n"
+                "background-color:rgb(47, 47, 47);\n"
+                "color: rgb(255, 255, 255);\n"
+                "border-style: solid;\n"
+                "border-radius:5px;\n"
+                "border-width:2px; \n"
+                "border-color:rgb(0,255,0)\n"
+                "}\n"
+                "QPushButton:hover {\n"
+                "border-width:3px; \n"
+                "border-color:rgb(255, 115, 30);\n"
+                "}\n"
+                "QPushButton:pressed {\n"
+                "background-color:rgb(255, 115, 30);\n"
+                "border-color: rgb(255, 195, 110);\n"
+                "border-width: 4px;     \n"
+                "}\n"
+                "QPushButton:disabled{\n"
+                "background-color: rgb(255, 149, 62);\n"
+                "color: rgb(83, 83, 83);\n"
+                "border-color:rgb(83, 83, 83);\n"
+                "}\n"
+                "\n"
+                "")
+        self.pin0.clicked.connect(lambda:self.select_pin(0))
+        self.pin1.clicked.connect(lambda:self.select_pin(1))
+        self.pin2.clicked.connect(lambda:self.select_pin(2))
+        self.pin3.clicked.connect(lambda:self.select_pin(3))
+        self.pin4.clicked.connect(lambda:self.select_pin(4))
+        self.pin5.clicked.connect(lambda:self.select_pin(5))
+        self.pin6.clicked.connect(lambda:self.select_pin(6))
+        self.pin7.clicked.connect(lambda:self.select_pin(7))
+        self.pin8.clicked.connect(lambda:self.select_pin(8))
+        self.pin9.clicked.connect(lambda:self.select_pin(9))
+        self.pin10.clicked.connect(lambda:self.select_pin(10))
+        self.pin11.clicked.connect(lambda:self.select_pin(11))
+        self.pin12.clicked.connect(lambda:self.select_pin(12))
+        self.pin13.clicked.connect(lambda:self.select_pin(13))
+        self.pin14.clicked.connect(lambda:self.select_pin(14))
+        self.pin15.clicked.connect(lambda:self.select_pin(15))
+        self.pin16.clicked.connect(lambda:self.select_pin(16))
+        self.pin17.clicked.connect(lambda:self.select_pin(17))
+        self.pin18.clicked.connect(lambda:self.select_pin(18))
+        self.pin19.clicked.connect(lambda:self.select_pin(19))
+        self.pin20.clicked.connect(lambda:self.select_pin(20))
+        self.pin21.clicked.connect(lambda:self.select_pin(21))
+        self.pin22.clicked.connect(lambda:self.select_pin(22))
+        self.pin23.clicked.connect(lambda:self.select_pin(23))
+        self.pin24.clicked.connect(lambda:self.select_pin(24))
+        self.pin25.clicked.connect(lambda:self.select_pin(25))
+        self.pin26.clicked.connect(lambda:self.select_pin(26))
+        self.pin27.clicked.connect(lambda:self.select_pin(27))
+        self.pin28.clicked.connect(lambda:self.select_pin(28))
+        self.pin29.clicked.connect(lambda:self.select_pin(29))
+        self.pin30.clicked.connect(lambda:self.select_pin(30))
+        self.pin31.clicked.connect(lambda:self.select_pin(31))
+        self.pin32.clicked.connect(lambda:self.select_pin(32))
+        self.pin33.clicked.connect(lambda:self.select_pin(33))
+        self.pin34.clicked.connect(lambda:self.select_pin(34))
+        self.pin35.clicked.connect(lambda:self.select_pin(35))
+        self.pin36.clicked.connect(lambda:self.select_pin(36))
+        self.pin37.clicked.connect(lambda:self.select_pin(37))
+        self.pin38.clicked.connect(lambda:self.select_pin(38))
+        self.pin39.clicked.connect(lambda:self.select_pin(39))
+        self.pin40.clicked.connect(lambda:self.select_pin(40))
+        self.pin41.clicked.connect(lambda:self.select_pin(41))
+        self.pin42.clicked.connect(lambda:self.select_pin(42))
+        self.pin43.clicked.connect(lambda:self.select_pin(43))
+        self.pin44.clicked.connect(lambda:self.select_pin(44))
+        self.pin45.clicked.connect(lambda:self.select_pin(45))
+        self.pin46.clicked.connect(lambda:self.select_pin(46))
+        self.pin47.clicked.connect(lambda:self.select_pin(47))
+        self.pin48.clicked.connect(lambda:self.select_pin(48))
+        self.pin49.clicked.connect(lambda:self.select_pin(49))
+        self.pin50.clicked.connect(lambda:self.select_pin(50))
+        self.pin51.clicked.connect(lambda:self.select_pin(51))
+        self.pin52.clicked.connect(lambda:self.select_pin(52))
+        self.pin53.clicked.connect(lambda:self.select_pin(53))
+        self.pin54.clicked.connect(lambda:self.select_pin(54))
+        self.pin55.clicked.connect(lambda:self.select_pin(55))
+        self.pin56.clicked.connect(lambda:self.select_pin(56))
+        self.pin57.clicked.connect(lambda:self.select_pin(57))
+        self.pin58.clicked.connect(lambda:self.select_pin(58))
+        self.pin59.clicked.connect(lambda:self.select_pin(59))
+        self.pin60.clicked.connect(lambda:self.select_pin(60))
+        self.pin61.clicked.connect(lambda:self.select_pin(61))
+        self.pin62.clicked.connect(lambda:self.select_pin(62))
+        self.pin63.clicked.connect(lambda:self.select_pin(63))
+        self.pin64.clicked.connect(lambda:self.select_pin(64))
+        self.pin65.clicked.connect(lambda:self.select_pin(65))
+        self.pin66.clicked.connect(lambda:self.select_pin(66))
+        self.pin67.clicked.connect(lambda:self.select_pin(67))
+        self.pin68.clicked.connect(lambda:self.select_pin(68))
+        self.pin69.clicked.connect(lambda:self.select_pin(69))
+        self.pin70.clicked.connect(lambda:self.select_pin(70))
+    def select_pin(self,pin):
+        if pin==70:
+            getattr(window, "Pin_Button_{}".format(window.pin_button)).setText('N')
+        else:
+            getattr(window, "Pin_Button_{}".format(window.pin_button)).setText(str(pin))
+        self.close()
+                
 
 class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
     def __init__(self, *args, obj=None, **kwargs):
@@ -646,7 +963,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Message_panel.append(">>> 3DHex")
         self.declare_vars()
         self.load_printers()
-        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(63, 63, 63);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
+        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
         self.ABL_include()
@@ -657,6 +974,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ZPOSITION.setFont(QFont("Digital-7", 20))
         self.NOZZ_TEMP.setFont(QFont("Digital-7", 20))
         self.BED_TEMP.setFont(QFont("Digital-7", 20))
+        self.setup_temp_monitor()
+
+    def setup_temp_monitor(self):
+        length_of_signal = 50
+        self.t = np.linspace(0,1,length_of_signal)
+        
+        self.cosinus_signal = np.zeros(length_of_signal)
+        self.sinus_signal = np.zeros(length_of_signal)
+
+        self.MplWidget.canvas.axes.clear()
+        self.MplWidget.canvas.axes.plot(self.t, self.cosinus_signal, color="#ff5500")
+        self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
+        self.MplWidget.canvas.draw()
 
     def declare_vars(self):
         self.MM = 0
@@ -746,6 +1076,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for p in self.ports:
             self.comboBox.addItem(p.device)
 
+    def select_HW_pin(self,button):
+        self.pin_button=button
+        try:
+            self.pin_conf = int(getattr(self, "Pin_Button_{}".format(button)).text())
+        except:
+            self.pin_conf = 70
+        self.pins_window = PinsWindow(self)
+        self.pins_window.show()
+        
+
     def new_printer(self):
         self.window2 = PrinterWindow(self)
         self.window2.show()
@@ -827,11 +1167,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p1.clicked.connect(self.CONNECT)
         self.p3.clicked.connect(self.USB)
         self.p5.clicked.connect(self.HOME_X_MIN)
-        self.p6.clicked.connect(self.HOME_X_MAX)
         self.p9.clicked.connect(self.HOME_Y_MIN)
-        self.p10.clicked.connect(self.HOME_Y_MAX)
         self.p13.clicked.connect(self.HOME_Z_MIN)
-        self.p14.clicked.connect(self.HOME_Z_MAX)
         self.p7.clicked.connect(lambda:self.rapid_idle_position(0,1))
         self.p8.clicked.connect(lambda:self.rapid_idle_position(0,0))
         self.p11.clicked.connect(lambda:self.rapid_idle_position(1,1))
@@ -894,6 +1231,54 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionPrinter22.triggered.connect(lambda:self.select_printer(22))
         self.actionPrinter23.triggered.connect(lambda:self.select_printer(23))
         self.actionPrinter24.triggered.connect(lambda:self.select_printer(24))
+        self.Pin_Button_0.clicked.connect(lambda:self.select_HW_pin(0))
+        self.Pin_Button_1.clicked.connect(lambda:self.select_HW_pin(1))
+        self.Pin_Button_2.clicked.connect(lambda:self.select_HW_pin(2))
+        self.Pin_Button_3.clicked.connect(lambda:self.select_HW_pin(3))
+        self.Pin_Button_4.clicked.connect(lambda:self.select_HW_pin(4))
+        self.Pin_Button_5.clicked.connect(lambda:self.select_HW_pin(5))
+        self.Pin_Button_6.clicked.connect(lambda:self.select_HW_pin(6))
+        self.Pin_Button_7.clicked.connect(lambda:self.select_HW_pin(7))
+        self.Pin_Button_8.clicked.connect(lambda:self.select_HW_pin(8))
+        self.Pin_Button_9.clicked.connect(lambda:self.select_HW_pin(9))
+        self.Pin_Button_10.clicked.connect(lambda:self.select_HW_pin(10))
+        self.Pin_Button_11.clicked.connect(lambda:self.select_HW_pin(11))
+        self.Pin_Button_12.clicked.connect(lambda:self.select_HW_pin(12))
+        self.Pin_Button_13.clicked.connect(lambda:self.select_HW_pin(13))
+        self.Pin_Button_14.clicked.connect(lambda:self.select_HW_pin(14))
+        self.Pin_Button_15.clicked.connect(lambda:self.select_HW_pin(15))
+        self.Pin_Button_16.clicked.connect(lambda:self.select_HW_pin(16))
+        self.Pin_Button_17.clicked.connect(lambda:self.select_HW_pin(17))
+        self.Pin_Button_18.clicked.connect(lambda:self.select_HW_pin(18))
+        self.Pin_Button_19.clicked.connect(lambda:self.select_HW_pin(19))
+        self.Pin_Button_20.clicked.connect(lambda:self.select_HW_pin(20))
+        self.Pin_Button_21.clicked.connect(lambda:self.select_HW_pin(21))
+        self.Pin_Button_22.clicked.connect(lambda:self.select_HW_pin(22))
+        self.Pin_Button_23.clicked.connect(lambda:self.select_HW_pin(23))
+        self.Pin_Button_24.clicked.connect(lambda:self.select_HW_pin(24))
+        self.Pin_Button_25.clicked.connect(lambda:self.select_HW_pin(25))
+        self.Pin_Button_26.clicked.connect(lambda:self.select_HW_pin(26))
+        self.Pin_Button_27.clicked.connect(lambda:self.select_HW_pin(27))
+        self.Pin_Button_28.clicked.connect(lambda:self.select_HW_pin(28))
+        self.Pin_Button_29.clicked.connect(lambda:self.select_HW_pin(29))
+        self.Pin_Button_30.clicked.connect(lambda:self.select_HW_pin(30))
+        self.Pin_Button_31.clicked.connect(lambda:self.select_HW_pin(31))
+        self.Pin_Button_32.clicked.connect(lambda:self.select_HW_pin(32))
+        self.Pin_Button_33.clicked.connect(lambda:self.select_HW_pin(33))
+        self.Pin_Button_34.clicked.connect(lambda:self.select_HW_pin(34))
+        self.Pin_Button_35.clicked.connect(lambda:self.select_HW_pin(35))
+        self.Pin_Button_36.clicked.connect(lambda:self.select_HW_pin(36))
+        self.Pin_Button_37.clicked.connect(lambda:self.select_HW_pin(37))
+        self.Pin_Button_38.clicked.connect(lambda:self.select_HW_pin(38))
+        self.Pin_Button_39.clicked.connect(lambda:self.select_HW_pin(39))
+        self.Pin_Button_40.clicked.connect(lambda:self.select_HW_pin(40))
+        self.Pin_Button_41.clicked.connect(lambda:self.select_HW_pin(41))
+        self.Pin_Button_42.clicked.connect(lambda:self.select_HW_pin(42))
+        self.Pin_Button_43.clicked.connect(lambda:self.select_HW_pin(43))
+        self.Pin_Button_44.clicked.connect(lambda:self.select_HW_pin(44))
+        self.Pin_Button_45.clicked.connect(lambda:self.select_HW_pin(45))
+        self.Pin_Button_46.clicked.connect(lambda:self.select_HW_pin(46))
+        self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
 
@@ -922,7 +1307,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ser.flushInput() 
                 self.A=0 #A=0 => Idle mode
                 self.B=0 #B=0 => Temperature command
-                self.C=0 #C=0 => Report only temperature		
+                self.C=0 #C=0 => Report only temperature
+                self.stepx_pos=0
+                self.x_pos_last=0
+                self.sum_Xpos =0
+                self.x_overflow=0    
+                self.stepy_pos=0
+                self.y_pos_last=0
+                self.sum_Ypos =0
+                self.y_overflow=0   
+                self.stepz_pos=0
+                self.z_pos_last=0
+                self.sum_Zpos =0
+                self.z_overflow=0                 
                 self.usb_thread = USBWorker() 
                 self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
                 self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
@@ -1046,8 +1443,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     x_iter=0
                     gpsy = gpsy + stepy
                     y_iter=y_iter+1
-                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
                 ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
@@ -1064,8 +1461,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 ABL_f.write('G28 Z'+'\n')
                 ABL_f.write('G1 X'+str((self.Xend+self.Xstart)/2.0)+' Y'+str(self.Yend)+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G28 Z'+'\n')
-                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G1 X'+str(self.width/2.0)+' Y'+str(self.length/2.0)+' F'+str(int(self.XY_Feed))+'\n')
+                ABL_f.write('G2929'+'\n')
                 ABL_f.write('G92 X'+str(centerX)+' Y'+str(centerY)+'\n')
                 ABL_f.write('G1 X0 Y0'+' F'+str(int(self.XY_Feed))+'\n')
                 ABL_f.write('G1 Z0'+' F'+str(int(self.Z_Feed))+'\n')
@@ -1152,13 +1549,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def enable_rapid_buttons(self):
         if self.c12.isChecked():
             self.p5.setEnabled(True)
-            self.p6.setEnabled(True)
         if self.c13.isChecked():   
             self.p9.setEnabled(True)
-            self.p10.setEnabled(True)
         if self.c14.isChecked():  
             self.p13.setEnabled(True)
-            self.p14.setEnabled(True)
         self.p7.setEnabled(True)
         self.p8.setEnabled(True)
         self.p11.setEnabled(True)
@@ -1169,12 +1563,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p20.setEnabled(True)
 
     def disable_rapid_buttons(self):
-        self.p5.setEnabled(False)
-        self.p6.setEnabled(False)  
+        self.p5.setEnabled(False) 
         self.p9.setEnabled(False)
-        self.p10.setEnabled(False)
         self.p13.setEnabled(False)
-        self.p14.setEnabled(False)
         self.p7.setEnabled(False)
         self.p8.setEnabled(False)
         self.p11.setEnabled(False)
@@ -1187,24 +1578,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def setHOME_Xbuttons(self,state):
         if state == Qt.Checked and self.c2.isChecked() and self.USB_CONNECTED==1:
             self.p5.setEnabled(True)
-            self.p6.setEnabled(True)
         else:
-            self.p5.setEnabled(False)
-            self.p6.setEnabled(False) 
+            self.p5.setEnabled(False) 
     def setHOME_Ybuttons(self,state):
         if state == Qt.Checked and self.USB_CONNECTED==1:
             self.p9.setEnabled(True)
-            self.p10.setEnabled(True)
         else:
             self.p9.setEnabled(False)
-            self.p10.setEnabled(False)
     def setHOME_Zbuttons(self,state):
         if state == Qt.Checked and self.USB_CONNECTED==1:
             self.p13.setEnabled(True)
-            self.p14.setEnabled(True)
         else:
             self.p13.setEnabled(False)
-            self.p14.setEnabled(False)
 
     def setXmotor(self,state):
         self.C=0
@@ -1213,14 +1598,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c12.isChecked():
                     self.p5.setEnabled(True)
-                    self.p6.setEnabled(True)
                 self.p7.setEnabled(True)
                 self.p8.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p5.setEnabled(False)
-                self.p6.setEnabled(False)
                 self.p7.setEnabled(False)
                 self.p8.setEnabled(False)
         self.disable_idle_buttons()
@@ -1233,14 +1616,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c13.isChecked():
                     self.p9.setEnabled(True)
-                    self.p10.setEnabled(True)
                 self.p11.setEnabled(True)
                 self.p12.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p9.setEnabled(False)
-                self.p10.setEnabled(False)
                 self.p11.setEnabled(False)
                 self.p12.setEnabled(False)
         self.disable_idle_buttons()
@@ -1253,14 +1634,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.USB_CONNECTED==1:
                 if self.c14.isChecked():
                     self.p13.setEnabled(True)
-                    self.p14.setEnabled(True)
                 self.p15.setEnabled(True)
                 self.p16.setEnabled(True)
         else:
             self.D=0
             if self.USB_CONNECTED==1:
                 self.p13.setEnabled(False)
-                self.p14.setEnabled(False)
                 self.p15.setEnabled(False)
                 self.p16.setEnabled(False)
         self.disable_idle_buttons()
@@ -1298,14 +1677,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p5.setEnabled(False)
             self.home_axis=1
 
-    def HOME_X_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.G = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
-            self.p6.setEnabled(False)
-            self.home_axis=1
-
     def HOME_Y_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.L=1
@@ -1318,14 +1689,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p9.setEnabled(False)
             self.home_axis=2
 
-    def HOME_Y_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.G = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
-            self.p10.setEnabled(False)
-            self.home_axis=2
-
     def HOME_Z_MIN(self):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.L=1
@@ -1336,14 +1699,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                self.K=1 
             self.p13.setEnabled(False)
-            self.home_axis=3
-
-    def HOME_Z_MAX(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=0
-            self.disable_idle_buttons()
-            self.p14.setEnabled(False)
-            self.G = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
             self.home_axis=3
 
     def BL_TOUCH_TOGGLE(self,case):
@@ -1510,10 +1865,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','w')
         dfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','w')
         cbfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','w')
+        pinsfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt','w')
         b_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\boxes settings.txt','w')
         c_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cboxes settings.txt','w')
         d_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\dboxes settings.txt','w')
         cb_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\cbboxes settings.txt','w')
+        pins_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\pins settings.txt','w')
         i=0
         for i in range (0,71):
           b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
@@ -1546,14 +1903,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             value = cb.currentIndex()
             cbfile.write(str(value)+"\n")
             cb_file.write(str(value)+"\n")
+        i=0
+        for i in range (0,48):
+            pin = getattr(self, "Pin_Button_{}".format(i))
+            value = pin.text()
+            if value == 'N':
+                pinsfile.write("100\n")
+                pins_file.write("100\n")
+            else:
+                pinsfile.write(str(value)+"\n")
+                pins_file.write(str(value)+"\n")
         bfile.close()
         cfile.close()
         dfile.close()
         cbfile.close()
+        pinsfile.close()
         b_file.close()
         c_file.close()
         d_file.close()
         cb_file.close()
+        pins_file.close()
                     
 
     def load_settings(self):
@@ -1568,6 +1937,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         file.close()
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
         cbboxes = file.readlines()
+        file.close()
+        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt','r') #read general setting file and set them
+        pins = file.readlines()
         file.close()
         try:
             file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
@@ -1597,9 +1969,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (1,4): #c0-cmax
            cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            cb.setCurrentIndex(int(cbboxes[i-1].strip()))
-           
-
-        
+        for i in range (0,48): #c0-cmax
+            pin = getattr(self, "Pin_Button_{}".format(i))
+            val = int(pins[i].strip())
+            if val == 100:
+                pin.setText('N')
+            else:
+                pin.setText(str(val))
 
     def clear_GCODE(self):
         self.data=''
@@ -1659,9 +2035,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_nozz_temp(self, new_nozz_temp):
         self.NOZZ_TEMP.setText("{:.2f}".format(round(new_nozz_temp, 2)))
+        self.cosinus_signal[49]= float("{:.2f}".format(round(new_nozz_temp, 2)))
  
     def update_bed_temp(self, new_bed_temp):
         self.BED_TEMP.setText("{:.2f}".format(round(new_bed_temp, 2)))
+        self.sinus_signal[49]= float("{:.2f}".format(round(new_bed_temp, 2)))
+        self.MplWidget.canvas.axes.clear()
+        self.MplWidget.canvas.axes.plot(self.t, self.cosinus_signal,color="#ff5500")
+        self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
+        self.MplWidget.canvas.axes.set_ylim(bottom=0)
+        self.MplWidget.canvas.draw()
+        self.cosinus_signal= np.roll(self.cosinus_signal, -1)
+        self.sinus_signal = np.roll(self.sinus_signal, -1)
 
     def update_xpos(self, x_pos_report):
         self.stepx_pos = x_pos_report - self.x_pos_last    
