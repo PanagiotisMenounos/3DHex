@@ -38,9 +38,8 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 #define pi 3.14159265358979323846
-#define max_bufferfile_size 3100
+#define max_bufferfile_size 3000
 #define pipename "\\\\.\\pipe\\Foo"
-#define MG_DATA_SIZE 36
 
 union{
     int progress;
@@ -89,6 +88,13 @@ double BED_XSIZE, BED_YSIZE,ABL_Z_last=0,GRID_RESOLUTION=1;
 bool ABL_Process=false,ABL_Data=false,HOME_ALL=false;
 int ABL_COORD_SIZE=0,ABL_resolution=1,ABL_Include;
 
+int16_t X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_ENDSTOP_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_ENDSTOP_PIN,\
+    	Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_ENDSTOP_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_ENDSTOP_PIN,\
+		E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_ENDSTOP_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,\
+    	FAN_PIN,SERVO1_PIN,SERVO2_PIN,EXP1_1_PIN,EXP1_3_PIN,EXP1_5_PIN,EXP1_7_PIN,EXP1_9_PIN,EXP1_2_PIN,EXP1_4_PIN,\
+		EXP1_6_PIN,EXP1_8_PIN,EXP1_10_PIN,EXP2_1_PIN,EXP2_3_PIN,EXP2_5_PIN,EXP2_7_PIN,EXP2_9_PIN,EXP2_2_PIN,\
+		EXP2_4_PIN, EXP2_6_PIN, EXP2_8_PIN,EXP2_10_PIN;
+
 
 //float *ABL_YCOORD=(float*)malloc(sizeof(float));
 //float *ABL_ZCOORD=(float*)malloc(sizeof(float));
@@ -101,7 +107,7 @@ bool first=false,flag_file_state=false,first_time_executed=true,f_adj=true,clock
 double tmin,u1_t1,u2_t2,x1_t1,x2_t2,x3_t3,x4_t4,x5_t5,x6_t6,x7_t7,t1,t2,t3,t4,t5,t6,t7,cu,ca,time=0,last_time=0;
 double LOC_CASE=1,new_CURVE,gen_DISTANCE,gen_FEED,trajectory_POINT=0;
 double X_GLOB=0,Y_GLOB=0,X_GLOB_STEP,Y_GLOB_STEP,Z_GLOB=0;
-wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
+wchar_t savepath[19][100]={L"//3DHex2//support files//coordinates.txt\0"  \
                           ,L"//3DHex2//support files//fcoordinates.txt\0" \
 						  ,L"//3DHex2//support files//gc2info.txt\0"      \
 						  ,L"//3DHex2//support files//savepath.txt\0"     \
@@ -118,7 +124,8 @@ wchar_t savepath[18][100]={L"//3DHex2//support files//coordinates.txt\0"  \
 						  ,L"//3DHex2//binary files//fly.bin\0"           \
 						  ,L"//3DHex2//settings//abl_x.txt\0"             \
 						  ,L"//3DHex2//settings//abl_y.txt\0"             \
-						  ,L"//3DHex2//settings//XYZ.txt\0"};                      		  
+						  ,L"//3DHex2//settings//XYZ.txt\0"				  \
+						  ,L"//3DHex2//settings//pins settings.txt\0"};                      		  
 
 wchar_t coordinates_path[150]  \
        ,fcoordinates_path[150] \
@@ -137,7 +144,8 @@ wchar_t coordinates_path[150]  \
 	   ,fly_path[150]          \
 	   ,abl_x_path[150]        \
 	   ,abl_y_path[150]        \
-	   ,abl_xyz_path[150];
+	   ,abl_xyz_path[150]      \
+	   ,pins_path[150];
  /////////////////////////*******//////////////////////
 
 FILE *SD_binary_file;
@@ -187,38 +195,65 @@ float *ABL_YCOORD;
 float *ABL_ZCOORD;
 
 struct data{
-  volatile uint8_t A;
-  volatile uint8_t B;
-  volatile uint8_t C;
-  volatile uint8_t D;
-  volatile uint8_t E;
-  volatile uint8_t F;
-  volatile uint8_t G;
-  volatile uint8_t H;
-  volatile uint16_t I;
-  volatile uint16_t J;
-  volatile uint16_t K;
-  volatile uint16_t L;
-  volatile uint8_t M;
-  volatile uint8_t N;
-  volatile uint16_t O;
-  volatile uint16_t P;
-  volatile uint16_t Q;
-  volatile uint16_t R;
-  volatile uint16_t S;
-  volatile uint16_t T;
-  volatile int16_t U;
-  volatile int16_t V;
-  volatile int16_t W;
+   volatile int8_t test1;
+   volatile int8_t test2;
+   volatile int16_t X_ENABLE_PIN;
+   volatile int16_t X_STEP_PIN;
+   volatile int16_t X_DIR_PIN;
+   volatile int16_t X_ENDSTOP_PIN;
+   volatile int16_t Y_ENABLE_PIN;
+   volatile int16_t Y_STEP_PIN;
+   volatile int16_t Y_DIR_PIN;
+   volatile int16_t Y_ENDSTOP_PIN;
+   volatile int16_t Z_ENABLE_PIN;
+   volatile int16_t Z_STEP_PIN;
+   volatile int16_t Z_DIR_PIN;
+   volatile int16_t Z_ENDSTOP_PIN;
+   volatile int16_t Z1_ENABLE_PIN;
+   volatile int16_t Z1_STEP_PIN;
+   volatile int16_t Z1_DIR_PIN;
+   volatile int16_t Z1_ENDSTOP_PIN;
+   volatile int16_t E_ENABLE_PIN;
+   volatile int16_t E_STEP_PIN;
+   volatile int16_t E_DIR_PIN;
+   volatile int16_t E_ENDSTOP_PIN;
+   volatile int16_t N_HEATER_PIN;
+   volatile int16_t N_SENSOR_PIN;
+   volatile int16_t N_FAN_PIN;
+   volatile int16_t B_HEATER_PIN;
+   volatile int16_t B_SENSOR_PIN;
+   volatile int16_t FAN_PIN;
+   //volatile int16_t SERVO1_PIN;
+   //volatile int16_t SERVO2_PIN;
+   volatile uint8_t A;
+   volatile uint8_t B;
+   volatile uint8_t C;
+   volatile uint8_t D;
+   volatile uint8_t E;
+   volatile uint8_t F;
+   volatile uint8_t G;
+   volatile uint8_t H;
+   volatile uint16_t I;
+   volatile uint16_t J;
+   volatile uint16_t K;
+   volatile uint16_t L;
+   volatile uint8_t M;
+   volatile uint8_t N;
+   volatile uint16_t O;
+   volatile uint16_t P;
+   volatile uint16_t Q;
+   volatile uint16_t R;
+   volatile uint16_t S;
+   volatile uint16_t T;
+   volatile int16_t U;
+   volatile int16_t V;
+   volatile int16_t W;
 }MG_data;
 
 int main(){
 	ABL_XCOORD = (float*)malloc(sizeof(float));
 	ABL_YCOORD = (float*)malloc(sizeof(float));
 	ABL_ZCOORD = (float*)malloc(sizeof(float));
-	//HWND hWnd = GetConsoleWindow();
-    //ShowWindow( hWnd, SW_MINIMIZE );  //won't hide the window without SW_MINIMIZE
-    //ShowWindow( hWnd, SW_HIDE );
     int *ABL_XCOORD;
     
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
@@ -235,6 +270,8 @@ int main(){
     	struct stat fly_buffer;
         int   on_the_fly=0;
     	
+    	MG_data.test1=4;
+    	MG_data.test2=4;
         double Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,Gl,Ml,Xl,Yl,Zl,Il,Jl,El,Fl,Sl,Pl,Rl,Tl,Gt,Mt,St,TEMP_PERC=0;
         unsigned long total_lines,j;
         bool first_line=true,GM_command=false,fly_command=false;
@@ -306,7 +343,7 @@ int main(){
             		fclose(fly_file);										
 				}
 			}
-			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3 || Gl==01 || Gl==02 || Gl==03)){
+			if(CURVE_DETECTION==1 && fly_command==false && new_CURVE==1 && (Gl==1 || Gl==2 || Gl==3 || Gl==01 || Gl==02 || Gl==03 || Gl==0 || Gl==00)){
 			   last_time=0; //FIX time BUG at the begining of new command
                fscanf(gen1,"%lf" "%lf",&gen_DISTANCE,&gen_FEED); //read curvedistance and feedrate
                gen_FEED=FD_PRC*gen_FEED; 
@@ -357,9 +394,9 @@ int main(){
 					MG_data.I=HOME_X_DIR;
 					MG_data.J=HOME_Y_DIR;
 					MG_data.K=HOME_Z_DIR;
-					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.C=1;MG_data.R=1;}else{MG_data.C=0;MG_data.R=0;}
-					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.D=1;MG_data.S=1;}else{MG_data.D=0;MG_data.S=0;}
-					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.E=1;MG_data.T=1;}else{MG_data.E=0;MG_data.T=0;}
+					if(HOME_X_ENABLE==1 && Xl==axis_num){MG_data.C=1;MG_data.R=1;Xl=T0_X_OFFSET;}else{MG_data.C=0;MG_data.R=0;}
+					if(HOME_Y_ENABLE==1 && Yl==axis_num){MG_data.D=1;MG_data.S=1;Yl=T0_Y_OFFSET;}else{MG_data.D=0;MG_data.S=0;}
+					if(HOME_Z_ENABLE==1 && Zl==axis_num){MG_data.E=1;MG_data.T=1;Zl=T0_Z_OFFSET;}else{MG_data.E=0;MG_data.T=0;}
 					MG_data.F=HOME_X_STATE;
 					MG_data.G=HOME_Y_STATE;
 					MG_data.H=HOME_Z_STATE;
@@ -369,9 +406,6 @@ int main(){
 					MG_data.U=T0_X_OFFSET*STPU_X;
 					MG_data.V=T0_Y_OFFSET*STPU_Y;
 					MG_data.W=T0_Z_OFFSET*STPU_Z;
-					Xl=T0_X_OFFSET;
-               	    Yl=T0_Y_OFFSET;
-               	    Zl=0;
 					HOME_ALL=true;
 				}
 				if(Gl==4){ // G4 pause
@@ -416,8 +450,8 @@ int main(){
 		     		write_hex2file(GP);
 			    	write_hex2file(GP);
                     e_space=max_bufferfile_size-(file_buffer_size); 
-                    if(e_space<=MG_DATA_SIZE&& e_space!=0){
-                    	e_space=30;//fix a bug arduino side
+                    if(e_space<sizeof(MG_data) && e_space!=0){
+                    	//e_space=30;//fix a bug arduino side
                         for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
             	           write_hex2file(GP);
     	               }
@@ -487,7 +521,7 @@ int main(){
 				if(Ml==82){// M82 E Absolute
 					E_ABSOLUTE_POSITIONING=1;
 				}
-				if(Ml==83){// M83 E Absolute
+				if(Ml==83){// M83 E Relative
 					E_ABSOLUTE_POSITIONING=0;
 				}
 				if(Ml==226){// M226 pause until iteraction
@@ -497,7 +531,7 @@ int main(){
 				write_hex2file(GP);
 				write_hex2file(GP);
                 e_space=max_bufferfile_size-(file_buffer_size-1); ///-1 fix a bug arduino side
-                if(e_space<=MG_DATA_SIZE && e_space!=0){
+                if(e_space<sizeof(MG_data) && e_space!=0){
                    for(ii=0;ii<e_space;ii++){ //fill with stopbyte until 2times file size;
         	          write_hex2file(GP);
     	           }
@@ -592,9 +626,39 @@ int check_print_state(){
 
 void mcu_settings_send()
 {
+    file_buffer_size=file_buffer_size+sizeof(MG_data);
     buffer1_file=_wfopen(buffer1_path,L"wb");
-    fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file);
-    fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&X_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO1_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO2_PIN, sizeof(int16_t),1,buffer1_file);
+    
+    fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file); 
+    fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&Y_ENABLE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&Z_ENABLE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&E_ENABLE, sizeof(uint8_t),1,buffer1_file);
@@ -629,9 +693,29 @@ void mcu_settings_send()
     fwrite(&HOME_Z_DIR, sizeof(uint8_t),1,buffer1_file);
     fwrite(&HOME_X_STATE, sizeof(uint8_t),1,buffer1_file);
     fwrite(&HOME_Y_STATE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file); 
     fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);
-    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);//MUST BE WRITTEN TWICE
-    file_buffer_size=file_buffer_size+52;
+    /*
+    fwrite(&EXP1_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_5_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_7_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_9_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_2_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_4_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_6_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_8_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_10_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_5_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_7_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_2_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_4_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_6_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_8_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_10_PIN, sizeof(uint8_t),1,buffer1_file);*/
+	
 }
 
 void crt_file()
@@ -743,10 +827,11 @@ void path_files()
 		abl_x_path[j]=appdata_path[i];
 		abl_y_path[j]=appdata_path[i];
 		abl_xyz_path[j]=appdata_path[i];
+		pins_path[j]=appdata_path[i];
    		j++;
 		i++;	   
     }
-    for(f=0;f<18;f++){
+    for(f=0;f<19;f++){
     	p=j;
     	i=0;
     	if(f==0){
@@ -871,6 +956,13 @@ void path_files()
 		if(f==17){
 		    while(savepath[f][i]!=L'\0'){
              	abl_xyz_path[p]=savepath[f][i];
+            	p++;
+             	i++;
+            }        		
+		}
+		if(f==18){
+		    while(savepath[f][i]!=L'\0'){
+             	pins_path[p]=savepath[f][i];
             	p++;
              	i++;
             }        		
@@ -1138,14 +1230,14 @@ void curve_detection(unsigned long total_lines)
 		ABSOLUTE_POSITIONING=0;
 		E_ABSOLUTE_POSITIONING=0;
 	}
-	if(Gl==90){// G91 Relative
+	if(Gl==90){// G90 Absolute
 		ABSOLUTE_POSITIONING=1;
 		E_ABSOLUTE_POSITIONING=1;
 	}
 	if(Ml==82){// M82 E Absolute
 		E_ABSOLUTE_POSITIONING=1;
 	}
-	if(Ml==83){// M83 E Absolute
+	if(Ml==83){// M83 E Relative
 		E_ABSOLUTE_POSITIONING=0;
 	}
 	Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl;
@@ -1175,17 +1267,17 @@ void curve_detection(unsigned long total_lines)
             Yl=Yl-Yf;
             Zl=Zl-Zf;
 		}
-		if(Gl==92 && E_ABSOLUTE_POSITIONING==0){
-			El=El-Ef;
-		}
+		//if(Gl==92 && E_ABSOLUTE_POSITIONING==0){
+			//El=El-Ef;
+		//}
         if(ABSOLUTE_POSITIONING==0){
             Xl=Xf+Xl;
             Yl=Yf+Yl;
             Zl=Zf+Zl;
 		}
-	    if(E_ABSOLUTE_POSITIONING==0){
-            El=Ef+El;
-		}		
+	    //if(E_ABSOLUTE_POSITIONING==0){
+            //El=Ef+El;
+		//}		
 		if((Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03) && (Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03)){
 			if(Gl==1){
             	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
@@ -1226,8 +1318,7 @@ void curve_detection(unsigned long total_lines)
 		    	theta1=theta_temp;
 			}
             Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle
-    	}
-		if((Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
+    	}else if((Gf==0 || Gf==1 || Gf==2 || Gf==3 || Gf==00 || Gf==01 || Gf==02 || Gf==03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
         	printing_move=0;
         	new_curve=0;
     		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
@@ -1238,8 +1329,7 @@ void curve_detection(unsigned long total_lines)
     		    theta1=theta_temp;
     		}
             Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle    		
-		}
-		if(((Gf!=1 && Gf!=0 && Gf!=2 && Gf!=3) || (Gf!=01 && Gf!=00 && Gf!=02 && Gf!=03)) && (Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03)){
+		}else if(((Gf!=1 && Gf!=0 && Gf!=2 && Gf!=3) || (Gf!=01 && Gf!=00 && Gf!=02 && Gf!=03)) && (Gl==0 || Gl==1 || Gl==2 || Gl==3 || Gl==00 || Gl==01 || Gl==02 || Gl==03)){
 			if(Gl==0 || Gl==00 || Gl==1 || Gl==01){
             	if((Xf!=Xl || Yf!=Yl) && Ef!=El && Zf==Zl){
             		printing_move=1;
@@ -1266,6 +1356,17 @@ void curve_detection(unsigned long total_lines)
 		    theta1=theta_temp;
 		}
         Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle		
+		}else if((Gl!=1 && Gl!=01 && Gl!=0 && Gl!=00 && Gl!=02 && Gl!=03 && Gl!=02 && Gl!=03) && ((Gl!=1 && Gl!=0 && Gl!=2 && Gl!=3) || (Gl!=01 && Gl!=00 && Gl!=02 && Gl!=03))){
+	        printing_move=0;
+        	new_curve=0;
+    		fprintf(final,"%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf " "%lf\n",Gf,Mf,Xf,Yf,Zf,If,Jf,Ef,Ff,Sf,Pf,Rf,Tf,last_curve);
+    		last_printing_move=printing_move;
+    		last_curve=new_curve;
+    		theta1=theta2;
+    		if(Gl==2 || Gl==3 || Gl==02 || Gl==03){
+    		    theta1=theta_temp;
+    		}
+            Gf=Gl;Mf=Ml;Xf=Xl;Yf=Yl;Zf=Zl;If=Il;Jf=Jl;Ef=El;Ff=Fl;Sf=Sl;Pf=Pl;Rf=Rl;Tf=Tl; //the new line becomes the old one each read circle   
 		}
     	
     }
@@ -1288,7 +1389,6 @@ void curve_length(unsigned long total_lines)
 	
     fcoord=_wfopen(fcoordinates_path,L"r");
     gen=_wfopen(gen_path,L"w");
-    
     while(j<total_lines){
     	if(first_time_tcoord){
     		first_time_tcoord=false;
@@ -1472,12 +1572,16 @@ double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl)
   
 void read_settings()
 {
+	#define total_pins 48
+	
     FILE *box_sett;
     FILE *cbox_sett;
-    char b[70][30],c[29][30],temp_str[30];  
+    FILE *pins_sett;
+    char b[70][30],c[29][30],temp_str[30],pins[total_pins][30];  
     int i;
     box_sett=_wfopen(boxes_path,L"r");
 	cbox_sett=_wfopen(cboxes_path,L"r");
+	pins_sett=_wfopen(pins_path,L"r");
     
     for (i=0;i<71;i++){
         fgets (temp_str, 30, box_sett);
@@ -1560,6 +1664,59 @@ void read_settings()
 	PID_bed=atoi(c[26]);
     CURVE_DETECTION=atoi(c[27]);
 	ABL_Include	= atoi(c[28]);
+	
+    for (i=0;i<total_pins;i++){
+        fgets (temp_str, 30, pins_sett);
+        strcpy(pins[i],temp_str);
+    }
+    X_ENABLE_PIN=atoi(pins[0]);
+    X_STEP_PIN=atoi(pins[1]);
+    X_DIR_PIN=atoi(pins[2]);
+    X_ENDSTOP_PIN=atoi(pins[3]);
+    Y_ENABLE_PIN=atoi(pins[4]);
+    Y_STEP_PIN=atoi(pins[5]);
+    Y_DIR_PIN=atoi(pins[6]);
+    Y_ENDSTOP_PIN=atoi(pins[7]);
+    Z_ENABLE_PIN=atoi(pins[8]);
+    Z_STEP_PIN=atoi(pins[9]);
+    Z_DIR_PIN=atoi(pins[10]);
+    Z_ENDSTOP_PIN=atoi(pins[11]);
+    Z1_ENABLE_PIN=atoi(pins[12]);
+    Z1_STEP_PIN=atoi(pins[13]);
+    Z1_DIR_PIN=atoi(pins[14]);
+    Z1_ENDSTOP_PIN=atoi(pins[15]);
+    E_ENABLE_PIN=atoi(pins[16]);
+    E_STEP_PIN=atoi(pins[17]);
+    E_DIR_PIN=atoi(pins[18]);
+    E_ENDSTOP_PIN=atoi(pins[19]);
+    N_HEATER_PIN=atoi(pins[20]);
+    N_SENSOR_PIN=atoi(pins[21]);
+    N_FAN_PIN=atoi(pins[22]);
+    B_HEATER_PIN=atoi(pins[23]);
+    B_SENSOR_PIN=atoi(pins[24]);
+    FAN_PIN=atoi(pins[25]);
+    SERVO1_PIN=atoi(pins[26]);
+    SERVO2_PIN=atoi(pins[27]);
+    EXP1_1_PIN=atoi(pins[28]);
+    EXP1_3_PIN=atoi(pins[29]);
+    EXP1_5_PIN=atoi(pins[30]);
+    EXP1_7_PIN=atoi(pins[31]);
+    EXP1_9_PIN=atoi(pins[32]);
+    EXP1_2_PIN=atoi(pins[33]);
+    EXP1_4_PIN=atoi(pins[34]);
+    EXP1_6_PIN=atoi(pins[35]);
+    EXP1_8_PIN=atoi(pins[36]);
+    EXP1_10_PIN=atoi(pins[37]);
+    EXP2_1_PIN=atoi(pins[38]);
+    EXP2_3_PIN=atoi(pins[39]);
+    EXP2_5_PIN=atoi(pins[40]);
+    EXP2_7_PIN=atoi(pins[41]);
+    EXP2_9_PIN=atoi(pins[42]);
+    EXP2_2_PIN=atoi(pins[43]);
+    EXP2_4_PIN=atoi(pins[44]);
+    EXP2_6_PIN=atoi(pins[45]);
+    EXP2_8_PIN=atoi(pins[46]);
+    EXP2_10_PIN=atoi(pins[47]);
 	//FOR THE MOMMENT
 	if(Invrt_X==0){HOME_X_DIR=1;}else{HOME_X_DIR=0;}	
 	if(Invrt_Y==0){HOME_Y_DIR=1;}else{HOME_Y_DIR=0;}
@@ -1594,6 +1751,35 @@ void read_settings()
 	Y_GLOB_STEP=1.0/STPU_Y;
 	fclose(box_sett);
     fclose(cbox_sett);
+    fclose(pins_sett);
+    			MG_data.X_ENABLE_PIN  =X_ENABLE_PIN  ;
+                MG_data.X_STEP_PIN    =X_STEP_PIN    ;
+				MG_data.X_DIR_PIN     =X_DIR_PIN     ;
+				MG_data.X_ENDSTOP_PIN =X_ENDSTOP_PIN ;
+				MG_data.Y_ENABLE_PIN  =Y_ENABLE_PIN  ;
+				MG_data.Y_STEP_PIN    =Y_STEP_PIN    ;
+				MG_data.Y_DIR_PIN     =Y_DIR_PIN     ;
+				MG_data.Y_ENDSTOP_PIN =Y_ENDSTOP_PIN ;
+				MG_data.Z_ENABLE_PIN  =Z_ENABLE_PIN  ;
+				MG_data.Z_STEP_PIN    =Z_STEP_PIN    ;
+				MG_data.Z_DIR_PIN     =Z_DIR_PIN     ;
+				MG_data.Z_ENDSTOP_PIN =Z_ENDSTOP_PIN ;
+				MG_data.Z1_ENABLE_PIN =Z1_ENABLE_PIN ;
+				MG_data.Z1_STEP_PIN   =Z1_STEP_PIN   ;
+				MG_data.Z1_DIR_PIN    =Z1_DIR_PIN    ;
+				MG_data.Z1_ENDSTOP_PIN=Z1_ENDSTOP_PIN;
+				MG_data.E_ENABLE_PIN  =E_ENABLE_PIN  ;
+				MG_data.E_STEP_PIN    =E_STEP_PIN    ;
+				MG_data.E_DIR_PIN     =E_DIR_PIN     ;
+				MG_data.E_ENDSTOP_PIN =E_ENDSTOP_PIN ;
+				MG_data.N_HEATER_PIN  =N_HEATER_PIN  ;
+				MG_data.N_SENSOR_PIN  =N_SENSOR_PIN  ;
+				MG_data.N_FAN_PIN     =N_FAN_PIN     ;
+				MG_data.B_HEATER_PIN  =B_HEATER_PIN  ;
+				MG_data.B_SENSOR_PIN  =B_SENSOR_PIN  ;
+				MG_data.FAN_PIN       =FAN_PIN       ;
+			    //MG_data.SERVO1_PIN    =SERVO1_PIN    ;
+   				//MG_data.SERVO2_PIN    =SERVO2_PIN    ;
 }
 
 void hidecursor() //    https://stackoverflow.com/questions/30126490/how-to-hide-console-cursor-in-c
@@ -1611,8 +1797,9 @@ unsigned long gc2info(double flag_num)
     char string [200],letters[arrays_size]={'G','M','X','Y','Z','I','J','E','F','S','P','R','T'},buf[10]; 
 	unsigned long i=0,j,g,poslet=0,total_lines=0,n=0,dex=0,temp_pos=0;
     double line1[arrays_size],line2[arrays_size],trash=0;
-    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false;
+    bool first_line1=true,first_line2=true,notfound=true,found_axis=false,write_value=false,write_axis_num=true,home=false,abl_proc=false;
     int threshold_pos=7,cur=0,emb=1;
+    bool home_x=false,home_y=false,home_z=false;
 	FILE *fp;
 	fp=_wfopen(gcode_path,L"r");
 	FILE *g1;
@@ -1647,11 +1834,18 @@ unsigned long gc2info(double flag_num)
 			        i++;
 				}
 				if(notfound==true){ //if letter not found
-		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //G28
+		            if(string[0]=='G' && string[1]=='2' && string[2]=='8' && (letters[poslet]=='X' || letters[poslet]=='Y' || letters[poslet]=='Z')){ //this is valid when G28 X || Y || Z
 		                home=true;
 		            	temp_pos=0;
 		            	while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
 		            		 if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            		 	if(string[temp_pos]=='X'){ //This is true only for G92 to know which axis to zero
+		            		 		home_x =true;
+								 }else if(string[temp_pos]=='Y'){ //This is true only for G92 to know which axis to zero
+								 	home_y =true;
+								 }else if(string[temp_pos]=='Z'){ //This is true only for G92 to know which axis to zero
+								 	home_z =true;
+								 }
 		            		 	write_axis_num=false;
 							 }
 							 temp_pos++;
@@ -1699,26 +1893,91 @@ unsigned long gc2info(double flag_num)
 					}else{
 							fprintf(g1,"%lf",flag_num);
 					}			        
-			    }	
+			    }
+				if(string[0]=='G' && string[1]=='2'&& string[2]=='9' && string[3]=='2'&& string[4]=='9'){
+					   abl_proc=true;	
+		    	}
 	            j=0;
 		        i=0;
 		        notfound=true;
 		        found_axis=false;
 		        fprintf(g1,"%c",' ');
  	        }
+ 	        if(string[0]=='G' && string[1]=='2' && string[2]=='8' && home==false){ //this is valid when G28 X && Y && Z
+		        home=true;
+		        temp_pos=0;
+		        while(string[temp_pos] != '\0' && string[temp_pos] != ';' && string[temp_pos] != '\n'){
+		            if(string[temp_pos]=='X' || string[temp_pos]=='Y' || string[temp_pos]=='Z'){
+		            	if(string[temp_pos]=='X'){ //This only for G92 to know which axis to zero
+		            		home_x =true;
+						}else if(string[temp_pos]=='Y'){ //This only for G92 to know which axis to zero
+							home_y =true;
+						}else if(string[temp_pos]=='Z'){ //This only for G92 to know which axis to zero
+							home_z =true;
+						}
+		            	write_axis_num=false;
+					}
+					temp_pos++;
+		        }
+		        if(write_axis_num==true){
+		            fprintf(g1,"%lf",axis_num);
+		            write_axis_num=true;
+				}else{
+					fprintf(g1,"%lf",flag_num);
+				}
+			}
  	        if (home==true){
-				  emb=2;
-				  home=false;
-				  strcpy(string,"G92 X"); 
-				  gcvt(T0_X_OFFSET, 7, buf);
-				  strcat(string, buf);
-				  strcat(string, " Y");
-				  gcvt(T0_Y_OFFSET, 7, buf);
-				  strcat(string, buf);
-				  strcat(string, " Z0\n");
-				  total_lines++;
-			    }else{
-			    	emb=1;
+ 	        	total_lines++;
+				emb=2;
+				home=false;				
+				if(home_x==false && home_y==false && home_z==false){
+			        fprintf(g1, "%c\n",' ' );
+				  	strcpy(string,"G92 X"); 
+				  	gcvt(T0_X_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				  	strcat(string, " Y");
+				  	gcvt(T0_Y_OFFSET, 7, buf);
+				  	strcat(string, buf);
+				  	strcat(string, " Z");
+				  	gcvt(T0_Z_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				  	home_x =false;
+					home_y =false;
+					home_z =false;
+                }
+                if(home_x==true){
+                	fprintf(g1, "%c\n",' ' );
+				  	strcpy(string,"G92 X"); 
+				  	gcvt(T0_X_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				}
+				if(home_y==true){
+					if (home_x==false){
+						fprintf(g1, "%c\n",' ' );
+				  	    strcpy(string,"G92 Y"); 
+					}else{
+						strcat(string," Y");
+					}
+				  	gcvt(T0_Y_OFFSET, 7, buf);
+				 	strcat(string, buf);	
+				}
+				if(home_z==true){
+					if(home_x==false && home_y==false){
+					    fprintf(g1, "%c\n",' ' );
+				  	    strcpy(string,"G92 Z"); 
+					}else{
+						strcat(string," Z");	
+					}
+				  	gcvt(T0_Z_OFFSET, 7, buf);
+				 	strcat(string, buf);
+				 							
+				}
+				strcat(string, " \n");
+				home_x =false;
+				home_y =false;
+				home_z =false;
+			}else{
+			    emb=1;
 			}
  	        }
  	        first_line1=false;
@@ -1827,6 +2086,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     dy=yl-yf;
     dz=zl-zf;
     de=el-ef;
+    
     if(CURVE_DETECTION==0){
     	FEEDRATE=line_accel_feed_limits(dx,dy,dz,de,FEEDRATE); //Only working when CURVE_DETECTION is disabled
 	}else{
@@ -1847,6 +2107,7 @@ void LINE(double xf, double yf, double zf, double ef, double xl, double yl, doub
     dy = abs(y2 - y1); 
     dz = abs(z2 - z1); 
     de = abs(e2 - e1);
+    printf("%s %i\n","EEE=",de);
     period=1000/CORE_FREQ;
 	tmin=period*pow(10,-6);
     LINE_DIST=sqrt((pow(dx*xmin,2))+(pow(dy*ymin,2))+(pow(dz*zmin,2)));
