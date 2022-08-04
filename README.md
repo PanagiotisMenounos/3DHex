@@ -1,7 +1,7 @@
 # 3DHex
 
 3DHex is a windows host controller 3D printer firmware.
-Αll kinematics calculations are executed by the computer while the MCU accepts raw 0s & 1s. 
+All kinematics calculations are executed by the computer while the MCU accepts raw 0s & 1s. 
 
 ## Downloads
 								
@@ -40,22 +40,22 @@ Still in development, first BETA release soon
 * Update manuals  
 
 ## User interface
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Main.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Heaters.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Adv.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_ABL.PNG" />
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Icons/GUI_Mesh.PNG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Main.PNG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Heaters.PNG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Adv.PNG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_ABL.PNG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Mesh.PNG" />
 
 ## Theory 
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/3D%20Printer.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/3D%20Printer.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Host.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/Host.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/MCU.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/MCU.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/S-Curve.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/S-Curve.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Jerk.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/Jerk.JPG" />
 
-<img align="center" src="https://github.com/3DHexfw/3DHex/blob/develop/Docs/Presentation/Curve%20detection.JPG" />
+<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/theory/Curve%20detection.JPG" />
