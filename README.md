@@ -5,7 +5,7 @@ All kinematics calculations are executed by the computer while the MCU accepts r
 
 ## Downloads
 								
-Still in development, first BETA release soon
+Still in development
 
 ## Features
 
