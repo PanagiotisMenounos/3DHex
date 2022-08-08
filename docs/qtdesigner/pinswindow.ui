@@ -1,0 +1,3829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>pinswindow</class>
+ <widget class="QWidget" name="pinswindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>680</width>
+    <height>410</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>680</width>
+    <height>410</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>680</width>
+    <height>410</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(47, 47, 47);</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>65</x>
+     <y>30</y>
+     <width>541</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>550</width>
+     <height>350</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QGroupBox  {
+	color: white;
+	border-style: solid;	
+	border-width:2px; 
+	border-color:	rgb(82,82,82);
+	border-radius:5px;
+}
+</string>
+   </property>
+   <property name="title">
+    <string>Select Pin</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pin0">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="pin1">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="pin2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="pin3">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>3</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QPushButton" name="pin4">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>4</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QPushButton" name="pin5">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="6">
+     <widget class="QPushButton" name="pin6">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>6</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="7">
+     <widget class="QPushButton" name="pin7">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>7</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="8">
+     <widget class="QPushButton" name="pin8">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>8</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pin9">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>9</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pin10">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>10</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="pin11">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>11</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QPushButton" name="pin12">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>12</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
+     <widget class="QPushButton" name="pin13">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>13</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5">
+     <widget class="QPushButton" name="pin14">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>14</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="6">
+     <widget class="QPushButton" name="pin15">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>15</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="7">
+     <widget class="QPushButton" name="pin16">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>16</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="8">
+     <widget class="QPushButton" name="pin17">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>17</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pin18">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>18</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pin19">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>19</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pin20">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>20</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pin21">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>21</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QPushButton" name="pin22">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>22</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QPushButton" name="pin23">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>23</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="6">
+     <widget class="QPushButton" name="pin24">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>24</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="7">
+     <widget class="QPushButton" name="pin25">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>25</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="8">
+     <widget class="QPushButton" name="pin26">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>26</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="pin27">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>27</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pin28">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>28</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="pin29">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>29</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QPushButton" name="pin30">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>30</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="4">
+     <widget class="QPushButton" name="pin31">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>31</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QPushButton" name="pin32">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>32</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QPushButton" name="pin33">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>33</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="7">
+     <widget class="QPushButton" name="pin34">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>34</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="8">
+     <widget class="QPushButton" name="pin35">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>35</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="pin36">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>36</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pin37">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>37</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QPushButton" name="pin38">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>38</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="3">
+     <widget class="QPushButton" name="pin39">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>39</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="4">
+     <widget class="QPushButton" name="pin40">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>40</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QPushButton" name="pin41">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>41</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="6">
+     <widget class="QPushButton" name="pin42">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>42</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="7">
+     <widget class="QPushButton" name="pin43">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>43</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="8">
+     <widget class="QPushButton" name="pin44">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>44</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QPushButton" name="pin45">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>45</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QPushButton" name="pin46">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>46</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QPushButton" name="pin47">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>47</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QPushButton" name="pin48">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>48</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="4">
+     <widget class="QPushButton" name="pin49">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>49</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="5">
+     <widget class="QPushButton" name="pin50">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="6">
+     <widget class="QPushButton" name="pin51">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>51</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="7">
+     <widget class="QPushButton" name="pin52">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>52</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="8">
+     <widget class="QPushButton" name="pin53">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>53</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QPushButton" name="pin54">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>54</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QPushButton" name="pin55">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>55</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QPushButton" name="pin56">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>56</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QPushButton" name="pin57">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>57</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="4">
+     <widget class="QPushButton" name="pin58">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>58</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QPushButton" name="pin59">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>59</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="6">
+     <widget class="QPushButton" name="pin60">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>60</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="7">
+     <widget class="QPushButton" name="pin61">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>61</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="8">
+     <widget class="QPushButton" name="pin62">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>62</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="pin63">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>63</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPushButton" name="pin64">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>64</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QPushButton" name="pin65">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>65</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="3">
+     <widget class="QPushButton" name="pin66">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>66</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="4">
+     <widget class="QPushButton" name="pin67">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>67</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="5">
+     <widget class="QPushButton" name="pin68">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>68</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="6">
+     <widget class="QPushButton" name="pin69">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>69</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="8">
+     <widget class="QPushButton" name="pin70">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color:rgb(47, 47, 47);
+color: rgb(255, 255, 255);
+border-style: solid;
+border-radius:5px;
+border-width:2px; 
+border-color:rgb(255, 85, 0);
+}
+QPushButton:hover {
+border-width:3px; 
+border-color:rgb(255, 115, 30);
+}
+QPushButton:pressed {
+background-color:rgb(255, 115, 30);
+border-color: rgb(255, 195, 110);
+border-width: 4px;     
+}
+QPushButton:disabled{
+background-color: rgb(255, 149, 62);
+color: rgb(83, 83, 83);
+border-color:rgb(83, 83, 83);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>N</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
