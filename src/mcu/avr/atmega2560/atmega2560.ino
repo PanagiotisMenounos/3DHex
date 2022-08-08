@@ -302,17 +302,17 @@ void configure_idle_pin_modes(){
    digitalWrite(SD_ENABLE,HIGH);
    digitalWrite(buffer5.N_HEATER_PIN,LOW);
    digitalWrite(buffer5.B_HEATER_PIN,LOW);
+
+   ///////////////***********THERMAL PINS*****************////////////////////
    therm1._pin=buffer5.N_SENSOR_PIN;
    therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
    therm2._pin=buffer5.B_SENSOR_PIN;
    therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
+
+   ///////////////***********LCD LIQUID CRYSTAL***********////////////////////
    lcd._rs_pin=16;
    lcd._enable_pin=17;
    lcd._rw_pin = 255;
-   lcd._data_pins[4]=0;
-   lcd._data_pins[5]=0;
-   lcd._data_pins[6]=0;
-   lcd._data_pins[7]=0;
    lcd._data_pins[0]=23;
    lcd._data_pins[1]=25;
    lcd._data_pins[2]=27;
