@@ -41,10 +41,6 @@ Still in development
 
 ## User interface
 <img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Main.PNG" />
-<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Heaters.PNG" />
-<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Adv.PNG" />
-<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_ABL.PNG" />
-<img align="center" src="https://github.com/PanagiotisMenounos/3DHex/blob/develop/docs/img/gui/GUI_Mesh.PNG" />
 
 ## Theory 
 
