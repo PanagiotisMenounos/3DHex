@@ -1,0 +1,8 @@
+digitalPinFast	KEYWORD1
+
+//////////////////////// 
+
+setNewFastPin	KEYWORD2
+pinModeFast	KEYWORD2
+digitalReadFast	KEYWORD2
+digitalWriteFast	KEYWORD2
