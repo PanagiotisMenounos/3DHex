@@ -84,7 +84,8 @@ void configure_pin_modes(){
    pinMode(buffer3.N_HEATER_PIN,OUTPUT);
    pinMode(buffer3.B_HEATER_PIN,OUTPUT);
    pinMode(buffer3.N_FAN_PIN,OUTPUT);
-   pinMode(buffer3.FAN_PIN,OUTPUT);   
+   pinMode(buffer3.FAN_PIN,OUTPUT);  
+   pinMode(13,OUTPUT);   
    pinMode(buffer3.X_ENDSTOP_PIN,INPUT);
    pinMode(buffer3.Y_ENDSTOP_PIN,INPUT);
    pinMode(buffer3.Z_ENDSTOP_PIN,INPUT);
@@ -97,6 +98,7 @@ void configure_pin_modes(){
    therm1._sensorNumber=buffer3.THERMISTOR_TYPE_NOZZLE;
    therm2._pin=buffer3.B_SENSOR_PIN;
    therm2._sensorNumber=buffer3.THERMISTOR_TYPE_BED;
+   digitalWrite(13,HIGH);
 }
 
 void configure_pin_ports(){
@@ -188,7 +190,6 @@ void loop(){
         read_sd();
      }
      if(GM_init==true){
-        //digitalWrite(LED_BUILTIN,HIGH);
         read_GM_data();
         if(homing == true){
            delay_homing=true;
@@ -1178,14 +1179,12 @@ void homing_routine(){
                     }
                 }
             } 
-            
         }else{
             time_counter++;
             if(setoff==false){
-                
                 if (buffer3.HOME_X_ENABLE==true && buffer5.R==1 && time_counter>=15 && homeX_done==false && execute_offsetX==false){
                   time_counter=0;
-                  //digitalWrite(LED_BUILTIN,HIGH);
+                  
                   if (signalstate){
                       digitalWrite(buffer5.X_DIR_PIN,buffer3.HOME_X_DIR);
                       digitalWrite(buffer5.X_STEP_PIN,HIGH);
@@ -1202,10 +1201,9 @@ void homing_routine(){
                      if(buffer5.U>0){buffer3.HOME_X_DIR=!buffer3.HOME_X_DIR;}else{buffer5.U=-buffer5.U;}
                   }
                 }else if(buffer5.R==0){
-                  
                   homeX_done=true;
                 }
-                
+              /*
               if (execute_offsetX==true){
                     if(time_counter>=15){
                       time_counter=0;
@@ -1227,7 +1225,6 @@ void homing_routine(){
                   }
                   
               }
-               
                 if (buffer3.HOME_Y_ENABLE==true && buffer5.S==1 && time_counter>=15 && homeY_done==false && execute_offsetY==false && homeX_done==true){
                   time_counter=0;
                   if (signalstate){
@@ -1249,7 +1246,6 @@ void homing_routine(){
                   //digitalWrite(LED_BUILTIN,HIGH);
                   homeY_done=true;
                 }
-          
               if (execute_offsetY==true){
                     if(time_counter>=15){
                       time_counter=0;
@@ -1269,11 +1265,8 @@ void homing_routine(){
                       step_counter=0;
                       time_counter=0;
                   }
-                  
               }
-              
               if (buffer3.HOME_Z_ENABLE==true && buffer5.T==1 && time_counter>=15 && homeX_done==true && homeY_done==true){
-                  
                   time_counter=0;
                   if (signalstate){
                       digitalWrite(buffer5.Z_DIR_PIN,buffer3.HOME_Z_DIR);
@@ -1294,8 +1287,8 @@ void homing_routine(){
                   ZMIN_READ=buffer3.HOME_Z_STATE;
                   homing=false;
                 }
+                */
             }
-            
         }
     }
 }
