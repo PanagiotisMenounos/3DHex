@@ -1,0 +1,2 @@
+pyinstaller.exe --icon=3DHex.ico --onefile --windowed 3DHex.py
+pyinstaller.exe --onefile --windowed --icon=3DHex.ico 3DHex.py
