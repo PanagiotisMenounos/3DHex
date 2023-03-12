@@ -1,0 +1,6 @@
+easygui
+numpy
+PyQt5
+scipy
+matplotlib
+pyqtgraph

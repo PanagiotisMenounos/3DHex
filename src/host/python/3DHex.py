@@ -21,45 +21,31 @@
 #You should have received a copy of the GNU General Public License
 #along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 
+#*******************EXTERNAL IMPORTS************************
 import shutil
 import sys
 import serial.tools.list_ports
-from PyQt5 import QtWidgets, uic, QtCore
-from PyQt5.QtWidgets import QInputDialog, QLineEdit
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5 import QtGui
+from PyQt5.QtGui import *
 import time
 import os
 import easygui
-from mainwindow_design import Ui_MainWindow
-
-from printer_name import Ui_New_Printer
-from autotune import Ui_AutoTune
-from pinswindow import Ui_pinswindow
-
-from multiprocessing import Process #for multiprocessing
-import threading
 import subprocess
-import multiprocessing
 import struct
-import win32pipe, win32file, pywintypes
+import win32pipe, win32file
 import numpy as np
-from scipy import interpolate
-import random
-
 from matplotlib import pyplot
-import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
-
-
-from mpl_toolkits.mplot3d import Axes3D
 from scipy.interpolate import Rbf
-
 from numpy import loadtxt
-from PyQt5 import QtGui
-import pyqtgraph as pg
-from PyQt5.QtGui import *
+
+#********************LOCAL IMPORTS**************************
+from userinterface.windows.printer_name import Ui_New_Printer
+from userinterface.windows.autotune import Ui_AutoTune
+from userinterface.windows.pinswindow import Ui_pinswindow
+from userinterface.windows.mainwindow_design import Ui_MainWindow
 
 class ProgressBarWorker(QThread):
   message = pyqtSignal(str) #define signal
@@ -545,7 +531,7 @@ class USBWorker(QThread): #This thread starts when 3DHEX connects successfully t
         buffer1_file.close()
         buffer2_file.close()
         self.message.emit(">>> GCODE Post processing..this may take a while..") #emit the signal
-        p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess 
+        p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess
         flag_py_buffer=0 #Reset flag_py_buffer
         filecase=1 #Read from buffer1 file
         buffer_file_size=3000 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
@@ -963,7 +949,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Message_panel.append(">>> 3DHex")
         self.declare_vars()
         self.load_printers()
-        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}");
+        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}")
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
         self.ABL_include()
@@ -1271,14 +1257,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Pin_Button_37.clicked.connect(lambda:self.select_HW_pin(37))
         self.Pin_Button_38.clicked.connect(lambda:self.select_HW_pin(38))
         self.Pin_Button_39.clicked.connect(lambda:self.select_HW_pin(39))
-        self.Pin_Button_40.clicked.connect(lambda:self.select_HW_pin(40))
-        self.Pin_Button_41.clicked.connect(lambda:self.select_HW_pin(41))
-        self.Pin_Button_42.clicked.connect(lambda:self.select_HW_pin(42))
-        self.Pin_Button_43.clicked.connect(lambda:self.select_HW_pin(43))
-        self.Pin_Button_44.clicked.connect(lambda:self.select_HW_pin(44))
-        self.Pin_Button_45.clicked.connect(lambda:self.select_HW_pin(45))
-        self.Pin_Button_46.clicked.connect(lambda:self.select_HW_pin(46))
-        self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
+        # self.Pin_Button_40.clicked.connect(lambda:self.select_HW_pin(40))
+        # self.Pin_Button_41.clicked.connect(lambda:self.select_HW_pin(41))
+        # self.Pin_Button_42.clicked.connect(lambda:self.select_HW_pin(42))
+        # self.Pin_Button_43.clicked.connect(lambda:self.select_HW_pin(43))
+        # self.Pin_Button_44.clicked.connect(lambda:self.select_HW_pin(44))
+        # self.Pin_Button_45.clicked.connect(lambda:self.select_HW_pin(45))
+        # self.Pin_Button_46.clicked.connect(lambda:self.select_HW_pin(46))
+        # self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
 
@@ -1873,46 +1859,61 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pins_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\pins settings.txt','w')
         i=0
         for i in range (0,71):
-          b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-          text = b.toPlainText().strip() #strip() removes'/n'
-          if (text==''): #check if it is aan empty string
-              bfile.write("\n")
-              b_file.write("\n")
-          else:
-              bfile.write(text+"\n")
-              b_file.write(text+"\n")
+            try:
+                b = getattr(self, "b{}".format(i)) #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+                text = b.toPlainText().strip() #strip() removes'/n'
+                if (text==''): #check if it is aan empty string
+                  bfile.write("\n")
+                  b_file.write("\n")
+                else:
+                  bfile.write(text+"\n")
+                  b_file.write(text+"\n")
+            except:
+                print("b")
         i=1
         for i in range (1,30): #c0-cmax
-            c = getattr(self, "c{}".format(i))#self.c[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-            check = c.isChecked()
-            if check==0:
-                cfile.write("0\n")
-                c_file.write("0\n")
-            else:
-               	cfile.write("1\n")
-                c_file.write("1\n")                
+            try:
+                c = getattr(self, "c{}".format(i))#self.c[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+                check = c.isChecked()
+                if check==0:
+                    cfile.write("0\n")
+                    c_file.write("0\n")
+                else:
+                    cfile.write("1\n")
+                    c_file.write("1\n")
+            except:
+                print("c")
         i=1
         for i in range (1,9): #c0-cmax
-            d = getattr(self, "d{}".format(i))
-            value = d.value()
-            dfile.write(str(value)+"\n")
-            d_file.write(str(value)+"\n")
+            try:
+                d = getattr(self, "d{}".format(i))
+                value = d.value()
+                dfile.write(str(value)+"\n")
+                d_file.write(str(value)+"\n")
+            except:
+                print("d")
         i=1
         for i in range (1,4): #c0-cmax
-            cb = getattr(self, "comboBox{}".format(i))
-            value = cb.currentIndex()
-            cbfile.write(str(value)+"\n")
-            cb_file.write(str(value)+"\n")
+            try:
+                cb = getattr(self, "comboBox{}".format(i))
+                value = cb.currentIndex()
+                cbfile.write(str(value)+"\n")
+                cb_file.write(str(value)+"\n")
+            except:
+                print("cb")
         i=0
-        for i in range (0,48):
-            pin = getattr(self, "Pin_Button_{}".format(i))
-            value = pin.text()
-            if value == 'N':
-                pinsfile.write("100\n")
-                pins_file.write("100\n")
-            else:
-                pinsfile.write(str(value)+"\n")
-                pins_file.write(str(value)+"\n")
+        for i in range (0,40):
+            try:
+                pin = getattr(self, "Pin_Button_{}".format(i))
+                value = pin.text()
+                if value == 'N':
+                    pinsfile.write("100\n")
+                    pins_file.write("100\n")
+                else:
+                    pinsfile.write(str(value)+"\n")
+                    pins_file.write(str(value)+"\n")
+            except:
+                print("pin")
         bfile.close()
         cfile.close()
         dfile.close()
@@ -1969,7 +1970,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range (1,4): #c0-cmax
            cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
            cb.setCurrentIndex(int(cbboxes[i-1].strip()))
-        for i in range (0,48): #c0-cmax
+        for i in range (0,40): #c0-cmax
             pin = getattr(self, "Pin_Button_{}".format(i))
             val = int(pins[i].strip())
             if val == 100:
