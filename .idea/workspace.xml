@@ -5,24 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/abl/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/plots/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/autotune.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/mainwindow_design.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/pinswindow.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/printer_name.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/qt2py.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/3DHex.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/3DHex.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/controls/actuators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/controls/autoPID.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/controls/temperature.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/tuning/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/tuning/bedmesh.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/comport.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/onthefly.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/usbhandler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/usb/usbprint.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/plots/progressbar.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/autoPIDpanel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/newprinter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/pinspanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyvenv.cfg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/3DHex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/3DHex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/autotune.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/autotune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_design.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/mainwindow_design.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/mplwidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/plots/mplwidget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/pinswindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/pinswindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/printer_name.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/windows/printer_name.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/abl/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/controls/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/units/README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,15 +45,19 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2ImQTFunG3GsCVOzDrBYjdWq9jB" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Panagiotis/Desktop/RealEstator",
+    "last_opened_file_path": "C:/Users/Panagiotis/Desktop/3DHex/src/host/python/usb",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -61,11 +67,11 @@
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\userinterface" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\usb" />
+      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\onthefly" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\userinterface\windows" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\userinterface\plots" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\userinterface" />
-      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python" />
-      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\c" />
     </key>
   </component>
   <component name="RunManager">
@@ -117,5 +123,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

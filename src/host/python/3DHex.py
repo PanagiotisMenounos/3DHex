@@ -44,815 +44,16 @@ from numpy import loadtxt
 #********************LOCAL IMPORTS**************************
 from userinterface.windows.printer_name import Ui_New_Printer
 from userinterface.windows.autotune import Ui_AutoTune
-from userinterface.windows.pinswindow import Ui_pinswindow
+from userinterface.setupwindows.pinspanel import PinsWindow
 from userinterface.windows.mainwindow_design import Ui_MainWindow
+from userinterface.plots.progressbar import ProgressBarWorker
+from usb.comport import COMPortScanner
+from usb.usbhandler import USBWorker
+from usb.connection import CONNECT
+from usb.usbprint import USBPrintingHandler
+from usb.onthefly import FLYWorker
+from tuning.bedmesh import ABL_Interpolation
 
-class ProgressBarWorker(QThread):
-  message = pyqtSignal(str) #define signal
-  progress_value = pyqtSignal(int) #define signal
-  def run(self):
-        try:
-            received_progress=0
-            win32pipe.ConnectNamedPipe(window.pipe, None)
-            resp = win32file.ReadFile(window.pipe,4)	
-            (received_progress,)=struct.unpack("i",resp[1])
-            while received_progress <=100:
-                self.progress_value.emit(received_progress) #emit the signal
-                resp = win32file.ReadFile(window.pipe,4)	
-                (received_progress,)=struct.unpack("i",resp[1])
-                if received_progress==100:
-                   self.progress_value.emit(received_progress) #emit the signal
-                   received_progress=101
-        except:
-             self.progress_value.emit(0)
-             win32file.CloseHandle(window.pipe)
-        finally:
-              win32file.CloseHandle(window.pipe)
-              #print("closed pipe")
-              self.message.emit(">>> Completed") #emit the signal
-
-class COMPortWorker(QThread):
-    def run(self):
-        while True:
-            prtsNow = serial.tools.list_ports.comports()
-            if len(window.ports) < len(prtsNow):
-                for i  in prtsNow:
-                    if i not in window.ports:
-                        window.comboBox.addItem(i.device)
-                window.ports = serial.tools.list_ports.comports()
-            elif len(window.ports) > len(prtsNow):
-                for i  in window.ports:
-                    if i not in prtsNow:
-                        if i.device == window.chosenPort:
-                            window.con_state = 0
-                            #self.p0.setText("Connect")
-                            window.comboBox.setCurrentIndex(0)
-                        window.comboBox.removeItem(window.comboBox.findText(i.device))
-                window.ports = serial.tools.list_ports.comports()
-            time.sleep(0.5)
-            
-class FLYWorker(QThread):
-    message = pyqtSignal(str) #define signal
-    def run(self):
-        if window.MM!=0: #M command
-           win32file.WriteFile(window.pipe,(struct.pack("if",window.MM,window.SS))) #send command to C via pipe
-        else: # % command
-           win32file.WriteFile(window.pipe,(struct.pack("i",window.MM)))
-           window.SS=float(window.d100.value())
-           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
-           window.SS=float(window.d101.value())
-           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
-           window.SS=float(window.d102.value())
-           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))
-           window.SS=float(window.d103.value())
-           win32file.WriteFile(window.pipe,(struct.pack("f",window.SS)))       
-        window.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\fly.bin','wb')
-        window.child_file.write(struct.pack("i",window.mirror))
-        window.child_file.close()   
-        time.sleep(3)
-        window.froze=0        
-
-class ABL_Interpolation(QThread):
-    message = pyqtSignal(str) 
-    def run(self):
-        method = str(window.comboBox1.currentText())
-        view_percentage = int(window.comboBox2.currentText().replace("%", ""))
-        width=float(window.b53.toPlainText().strip())
-        length=float(window.b54.toPlainText().strip())
-        grid=float(window.b66.toPlainText().strip())
-       
-        x = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
-        y = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
-        z = loadtxt(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt')
-        
-        xx = np.arange(0, width+1, grid)
-        yy = np.arange(0, length+1, grid)
-        xx, yy = np.meshgrid(xx, yy)
-               
-        if window.ABL_INTERPOLATION_TYPE==1: #https://www.geeksforgeeks.org/program-to-find-equation-of-a-plane-passing-through-3-points/
-            a1 = x[2] - x[1]
-            b1 = y[2] - y[1]
-            c1 = z[2] - z[1]
-            a2 = x[3] - x[1]
-            b2 = y[3] - y[1]
-            c2 = z[3] - z[1]
-            a = b1 * c2 - b2 * c1
-            b = a2 * c1 - a1 * c2
-            c = a1 * b2 - b1 * a2
-            d = (- a * x[1] - b * y[1] - c * z[1])
-            #print ("equation of plane is "+str(a)+ "x +"+str(b)+ "y +"+str(c)+ "z +"+str(d)+ "= 0.")
-        elif window.ABL_INTERPOLATION_TYPE==2:
-            rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
-            znew = rbfi(xx, yy)   # interpolated values              
-
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ.txt','w')
-        size = xx.ravel().size
-        view_step = int((100/view_percentage)*grid)
-        
-        
-        if window.ABL_INTERPOLATION_TYPE==1:
-            i=1 # remove center point
-            while i < size:
-                z = (-d - (a*xx.ravel()[i])-(b*yy.ravel()[i]))/c
-                file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(z*int(window.b3.toPlainText().strip())))+'\n')
-                i=i+1
-            file.close()        
-        elif window.ABL_INTERPOLATION_TYPE==2:
-            i=0
-            while i < size:
-                file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(round(znew.ravel()[i]*int(window.b3.toPlainText().strip())))+'\n')
-                i=i+1
-            file.close()
-        
-        view_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\XYZ_view.txt','w')
-        
-        xx = np.arange(0, width, view_step)
-        yy = np.arange(0, length, view_step)
-        xx, yy = np.meshgrid(xx, yy)
-        size = xx.ravel().size
- 
-        if window.ABL_INTERPOLATION_TYPE==1:
-            i=1
-            while i < size:
-                z = (-d - (a*xx.ravel()[i])-(b*yy.ravel()[i]))/c
-                view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(z)+'\n')
-                if(i%view_step==0):
-                    view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(z)+'\n')
-                i=i+1
-            view_file.close()
-            self.message.emit("Plot BED plane") 
-        elif window.ABL_INTERPOLATION_TYPE==2:
-            i=0
-            rbfi = Rbf(x, y, z,function=method)  # radial basis function interpolator instance
-            znew = rbfi(xx, yy)
-            while i < size:
-                view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
-                if(i%view_step==0):
-                    view_file.write(str(xx.ravel()[i])+' '+str(yy.ravel()[i])+' '+str(znew.ravel()[i])+'\n')
-                i=i+1
-            view_file.close()
-            self.message.emit("Plot BED mesh")      
-
-class USBWorker(QThread): #This thread starts when 3DHEX connects successfully to the Printer
-    message = pyqtSignal(str) #define signal
-    new_nozz_temp = pyqtSignal(float)
-    new_bed_temp = pyqtSignal(float)
-    autotune_p = pyqtSignal(float)
-    x_pos_report = pyqtSignal(float)
-    y_pos_report = pyqtSignal(float)
-    z_pos_report = pyqtSignal(float)
-    
-    def run(self):
-        time.sleep(2)
-        self.send_buffer() #Set printer to idle mode temp only report
-        self.message.emit(">>> Mode: Idle") #emit the signal
-        try:
-            while window.USB_CONNECTED==1:
-                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read temperature
-                #print("XPOS="+str(window.X_POS))
-                if window.A==0: #if in idle mode
-                    if self.serial_command==-200: #-200 autotune read settings
-                      window.Auto_P = round(window.nozz_temp,2)
-                      window.Auto_I = round(window.bed_temp,2)
-                      (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read temperature
-                      window.Auto_D = round(window.nozz_temp,2)
-                      self.message.emit(">>> AUTOTUNE RESULTS") #emit the signal
-                      self.message.emit(">>> P=" +str(window.Auto_P))
-                      self.message.emit(">>> I=" +str(window.Auto_I))
-                      self.message.emit(">>> D=" +str(window.Auto_D))
-                      self.autotune_p.emit(window.Auto_I)
-                      self.serial_command=-243
-                    elif self.serial_command==-301: #temporary
-                        self.message.emit(">>> ZTRACK=" +str(int(window.nozz_temp)))
-                        self.serial_command=-243
-                    else: #just update temp
-                      self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                      self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                      window.X_POS=window.InvertX*window.X_POS
-                      self.x_pos_report.emit(window.X_POS)
-                      self.y_pos_report.emit(window.Y_POS)
-                      self.z_pos_report.emit(window.Z_POS)
-                    time.sleep(0.5)
-                    self.check_idle_commands() #Check if any idle command has triggered
-                else:
-                   self.message.emit(">>> Mode: USB printing") #emit the signal
-                   #window.Message_panel.append(">>> Start usb printing")
-                   time.sleep(0.5)
-                   self.usb_printing() #Go into USB Print function
-                   time.sleep(5)
-                   window.A=0 #After USB printing has completed declare idle mode
-                   window.B=0
-                   window.C=0
-                   window.ser.flushInput() #very important without delay to fix a bug
-                   window.ser.flushOutput()#very important without delay to fix a bug
-                   self.send_buffer() #Then send idle mode temp only report to printer
-                   window.enable_idle_buttons()
-        except:
-            window.USB_CONNECTED=0
-
-    def send_buffer(self):
-        go = 3
-        pin = window.Pin_Button_0.text()
-        if pin == 'N':
-           X_ENABLE_PIN=255
-        else:
-           X_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_1.text()
-        if pin == 'N':
-           X_STEP_PIN=255
-        else:
-           X_STEP_PIN=int(pin)
-        pin = window.Pin_Button_2.text()
-        if pin == 'N':
-           X_DIR_PIN=255
-        else:
-           X_DIR_PIN=int(pin)
-        pin = window.Pin_Button_3.text()
-        if pin == 'N':
-           X_HOME_PIN=255
-        else:
-           X_HOME_PIN=int(pin)
-
-        pin = window.Pin_Button_4.text()
-        if pin == 'N':
-           Y_ENABLE_PIN=255
-        else:
-           Y_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_5.text()
-        if pin == 'N':
-           Y_STEP_PIN=255
-        else:
-           Y_STEP_PIN=int(pin)
-        pin = window.Pin_Button_6.text()
-        if pin == 'N':
-           Y_DIR_PIN=255
-        else:
-           Y_DIR_PIN=int(pin)
-        pin = window.Pin_Button_7.text()
-        if pin == 'N':
-           Y_HOME_PIN=255
-        else:
-           Y_HOME_PIN=int(pin)
-
-        pin = window.Pin_Button_8.text()
-        if pin == 'N':
-           Z_ENABLE_PIN=255
-        else:
-           Z_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_9.text()
-        if pin == 'N':
-           Z_STEP_PIN=255
-        else:
-           Z_STEP_PIN=int(pin)
-        pin = window.Pin_Button_10.text()
-        if pin == 'N':
-           Z_DIR_PIN=255
-        else:
-           Z_DIR_PIN=int(pin)
-        pin = window.Pin_Button_11.text()
-        if pin == 'N':
-           Z_HOME_PIN=255
-        else:
-           Z_HOME_PIN=int(pin)
-           
-        pin = window.Pin_Button_12.text()
-        if pin == 'N':
-           Z1_ENABLE_PIN=255
-        else:
-           Z1_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_13.text()
-        if pin == 'N':
-           Z1_STEP_PIN=255
-        else:
-           Z1_STEP_PIN=int(pin)
-        pin = window.Pin_Button_14.text()
-        if pin == 'N':
-           Z1_DIR_PIN=255
-        else:
-           Z1_DIR_PIN=int(pin)
-        pin = window.Pin_Button_15.text()
-        if pin == 'N':
-           Z1_HOME_PIN=255
-        else:
-           Z1_HOME_PIN=int(pin)
-
-        pin = window.Pin_Button_16.text()
-        if pin == 'N':
-           E_ENABLE_PIN=255
-        else:
-           E_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_17.text()
-        if pin == 'N':
-           E_STEP_PIN=255
-        else:
-           E_STEP_PIN=int(pin)
-        pin = window.Pin_Button_18.text()
-        if pin == 'N':
-           E_DIR_PIN=255
-        else:
-           E_DIR_PIN=int(pin)
-        pin = window.Pin_Button_19.text()
-        if pin == 'N':
-           E_HOME_PIN=255
-        else:
-           E_HOME_PIN=int(pin)
-       
-        pin = window.Pin_Button_20.text()
-        if pin == 'N':
-           N_HEATER_PIN=255
-        else:
-           N_HEATER_PIN=int(pin)
-        pin = window.Pin_Button_21.text()
-        if pin == 'N':
-           N_SENSOR_PIN=255
-        else:
-           N_SENSOR_PIN=int(pin)
-        pin = window.Pin_Button_22.text()
-        if pin == 'N':
-           N_FAN_PIN=255
-        else:
-           N_FAN_PIN=int(pin)
-        pin = window.Pin_Button_23.text()
-        if pin == 'N':
-           B_HEATER_PIN=255
-        else:
-           B_HEATER_PIN=int(pin)
-        pin = window.Pin_Button_24.text()
-        if pin == 'N':
-           B_SENSOR_PIN=255
-        else:
-           B_SENSOR_PIN=int(pin)
-        pin = window.Pin_Button_25.text()
-        if pin == 'N':
-           FAN_PIN=255
-        else:
-           FAN_PIN=int(pin)
-        pin = window.Pin_Button_26.text()
-        if pin == 'N':
-           BL_PIN=255
-        else:
-           BL_PIN=int(pin)
-        pin = window.Pin_Button_27.text()
-        if pin == 'N':
-           SERVO1_PIN=255
-        else:
-           SERVO1_PIN=int(pin)
-        pin = window.Pin_Button_28.text()
-        if pin == 'N':
-           SERVO2_PIN=255
-        else:
-           SERVO2_PIN=int(pin)
-        pin = window.Pin_Button_29.text()
-        if pin == 'N':
-           RS_PIN=255
-        else:
-           RS_PIN=int(pin)
-        pin = window.Pin_Button_30.text()
-        if pin == 'N':
-           LCD_ENABLE_PIN=255
-        else:
-           LCD_ENABLE_PIN=int(pin)
-        pin = window.Pin_Button_31.text()
-        if pin == 'N':
-           D4_PIN=255
-        else:
-           D4_PIN=int(pin)
-        pin = window.Pin_Button_32.text()
-        if pin == 'N':
-           D5_PIN=255
-        else:
-           D5_PIN=int(pin)
-        pin = window.Pin_Button_33.text()
-        if pin == 'N':
-           D6_PIN=255
-        else:
-           D6_PIN=int(pin)
-        pin = window.Pin_Button_34.text()
-        if pin == 'N':
-           D7_PIN=255
-        else:
-           D7_PIN=int(pin)
-        pin = window.Pin_Button_35.text()
-        if pin == 'N':
-           BTEN1_PIN=255
-        else:
-           BTEN1=int(pin)
-        pin = window.Pin_Button_36.text()
-        if pin == 'N':
-           BTEN2_PIN=255
-        else:
-           BTEN2_PIN=int(pin)
-        pin = window.Pin_Button_37.text()
-        if pin == 'N':
-           BTENC_PIN=255
-        else:
-           BTENC_PIN=int(pin)
-        pin = window.Pin_Button_38.text()
-        if pin == 'N':
-           SD_CS_PIN=255
-        else:
-           SD_CS_PIN=int(pin)
-        pin = window.Pin_Button_39.text()
-        if pin == 'N':
-           SD_DET_PIN=255
-        else:
-           SD_DET_PIN=int(pin)
-        window.ser.write(struct.pack("4B",0,0,0,5))
-        (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
-        window.ser.write(struct.pack("2b26h8B4H2B9H",go,go,X_ENABLE_PIN,X_STEP_PIN,X_DIR_PIN,X_HOME_PIN,Y_ENABLE_PIN,Y_STEP_PIN,Y_DIR_PIN,Y_HOME_PIN,Z_ENABLE_PIN,Z_STEP_PIN,Z_DIR_PIN,Z_HOME_PIN,Z1_ENABLE_PIN,Z1_STEP_PIN,Z1_DIR_PIN,Z1_HOME_PIN,E_ENABLE_PIN,E_STEP_PIN,E_DIR_PIN,E_HOME_PIN,N_HEATER_PIN,N_SENSOR_PIN,N_FAN_PIN,B_HEATER_PIN,B_SENSOR_PIN,FAN_PIN,window.A,window.B,window.C,window.D,window.E,window.F,window.G,window.H,window.I,window.J,window.K,window.L,window.M,window.N,window.O,window.P,window.Q,window.R,window.S,window.T,window.U,window.V,window.W))
-        (pass_fail,)=struct.unpack("B",window.ser.read(1)) #Wait for arduino to confirm everything is ok
-        #if pass_fail==1: #pass_fail should be 1, else communication has failed
-           #print("PASS")
-        #else:
-           #print("FAILED")
-
-    def packet_decode(self):
-        (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
-        while int(self.serial_command)!=-253 and self.child_buffer_size!=0 and window.usb_printing==1 and self.serial_command!=-260:
-            if int(self.serial_command)==-300: #300-> start of ABL
-                self.abl_z_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_z.txt',"w")
-            if int(self.serial_command)==-301: #-301-> TRACK_Z
-                self.trackZ=self.trackZ+window.nozz_temp
-                if window.ABL_Sample==0:
-                    if window.min==0:
-                        window.min = window.nozz_temp
-                    if window.nozz_temp < window.min:
-                        window.min = window.nozz_temp
-            if int(self.serial_command)==-303: #-303-> end of iterations
-                    self.AVG_traxkZ=self.trackZ/2
-                    self.trackZ=0
-                    if window.ABL_Sample==0:
-                        window.ABL_Z_CENTER=window.min
-                        self.AVG_traxkZ=window.min
-                        window.ABL_Sample=1
-                    self.AVG_traxkZ=(window.ABL_Z_CENTER-self.AVG_traxkZ)/window.STPZ
-                    self.message.emit(">>> AVG:"+str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"mm") #emit the signal  
-                    self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4)))+"\n")
-            if int(self.serial_command)==-302: #302-> end of ABL
-                window.ABL_Sample=0
-                self.AVG_traxkZ=0
-                self.trackZ=0
-                self.abl_z_file.close()
-                window.ABL=0
-                shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_x.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_x.txt')
-                shutil.copy(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\abl_y.txt',os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_y.txt')
-                self.abl_type_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer'+ str(window.printer) +'\\abl_type.txt',"w")
-                self.abl_type_file.write(str(window.abl_type)+"\n")
-                self.abl_type_file.close()
-                if window.abl_type==1:
-                    window.ABL_INTERPOLATION_TYPE=window.abl_type
-                elif window.abl_type==2:
-                    window.ABL_INTERPOLATION_TYPE=window.abl_type
-                elif window.abl_type==0:
-                    window.ABL_INTERPOLATION_TYPE=window.abl_type
-                #self.ABL_interpolation_thread=ABL_Interpolation()
-                #self.ABL_interpolation_thread.start()
-            if int(self.serial_command)==-243: #temp report + xyz pos
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                self.x_pos_report.emit(window.X_POS)
-                self.y_pos_report.emit(window.Y_POS)
-                self.z_pos_report.emit(window.Z_POS)          
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #This first time read buffer1 contains all the necessary settings for Printer
-            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-
-    def usb_printing(self): #USB Printing function 
-        window.usb_printing=1
-        self.trackZ=0
-        window.A=1 #printing mode
-        self.serial_command=0 #reset serial command from arduino
-        flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-        flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data in order for 3DHex.C to know Python is in printing function
-        flag_file.close()
-        flag_py_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag_py.bin',"wb") #Clear flag file
-        flag_py_file.close()
-        buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "wb") #Reset buffer1 binary file
-        buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "wb") #Reset buffer2 binary file
-        buffer1_file.close()
-        buffer2_file.close()
-        self.message.emit(">>> GCODE Post processing..this may take a while..") #emit the signal
-        p1 = subprocess.Popen("3DBrain.exe") #Start 3DHex.C Proccess
-        flag_py_buffer=0 #Reset flag_py_buffer
-        filecase=1 #Read from buffer1 file
-        buffer_file_size=3000 #Declare buffer file size (This is max arduino buffer array size until all RAM is full)
-        self.child_buffer_size=1 #Means 3DHex.C is still running
-        while flag_py_buffer==0 and window.usb_printing==1:#wait for C to fill binary data to buffer1+buffer2 binary files
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
-            self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-            self.new_bed_temp.emit(window.bed_temp) #emit the signal
-            self.x_pos_report.emit(window.X_POS)
-            self.y_pos_report.emit(window.Y_POS)
-            self.z_pos_report.emit(window.Z_POS)
-            flag_py_buffer=os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag_py.bin') #Get size of flag_py_file, if 1 then C has fill binary files
-        window.ser.flushInput() #very important without delay to fix a bug
-        window.ser.flushOutput()#very important without delay to fix a bug
-        self.send_buffer() #Command Printer to go into printig mode window.A=1
-        self.message.emit(">>> Post processing successfully completed") #emit the signal
-        self.message.emit(">>> Printing...") #emit the signal        
-        if buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260: #Firt time send binary data to Printer
-            if filecase==1: #Read from buffer1 binary file
-                filecase=2  #Note to read buffer2 next time
-                buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
-                self.packet_decode()
-                window.ser.write(buffer1_file.read(3000)) #Send binary data to Printer
-                buffer1_file.close() 
-                flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-                flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer1 file is free to fill with new data
-                buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin')
-                flag_file.close()
-            if filecase==2:
-                filecase=1
-                buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
-                self.packet_decode()
-                window.ser.write(buffer2_file.read(3000))
-                buffer2_file.close()
-                flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-                flag_file.write(struct.pack('2i', 5, 5)) #Write some trash data to tell C that buffer2 file is free to fill with new data
-                buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
-                flag_file.close()
-            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        while self.serial_command!=-10 and self.child_buffer_size!=0 and window.usb_printing==1: #Wait for printer to read commanded temp
-            (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #Read arduino temp report
-            self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-            self.new_bed_temp.emit(window.bed_temp) #emit the signal
-            self.x_pos_report.emit(window.X_POS)
-            self.y_pos_report.emit(window.Y_POS)
-            self.z_pos_report.emit(window.Z_POS)
-        while buffer_file_size==3000 and self.child_buffer_size!=0 and self.serial_command!=-260 and window.usb_printing==1: #Start binary data streaming to Printer 
-            if filecase==1:
-                filecase=2
-                buffer1_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin', "rb")
-                self.packet_decode()                      
-                window.ser.write(buffer1_file.read(3000))
-                buffer1_file.close()
-                flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-                flag_file.write(struct.pack('2i', 5, 5))
-                buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_1.bin')
-                flag_file.close()
-            elif filecase==2:
-                filecase=1
-                buffer2_file=open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin', "rb")
-                self.packet_decode()
-                window.ser.write(buffer2_file.read(3000))
-                buffer2_file.close()
-                flag_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\flag.bin',"wb")
-                flag_file.write(struct.pack('2i', 5, 5))
-                buffer_file_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\buffer_2.bin')
-                flag_file.close()
-            self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
-        self.child_buffer_size=1 #catch last packet after C terminates, if MCU does ot send -260 this will stuck in loop
-        self.packet_decodepacket_decode()
-        child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w') #reset child so 3DHex.C to terminate
-        child_file.close()
-        savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w') #reset path
-        savepathfile.close()
-        buffer1_file.close()
-        buffer2_file.close()
-        window.usb_printing=0
-
-    def check_idle_commands(self): #idle mode commands func
-            if window.set_temp==1: #1 Set NOZZLE temp
-                window.set_temp=0
-                window.B=0
-                window.C=0
-                window.D=0
-                window.E=int(window.c26.isChecked())
-                window.G=int(window.c22.isChecked())
-                window.I=int(window.b35.toPlainText().strip())
-                window.K=int(window.b39.toPlainText().strip())
-                window.M=int(window.b37.toPlainText().strip())
-                window.O=int(float(window.b41.toPlainText().strip())*10.0)
-                window.P=int(float(window.b43.toPlainText().strip())*10.0)
-                window.Q=int(float(window.b45.toPlainText().strip())*10.0)
-                print(window.O)
-                time.sleep(0.2)
-                self.send_buffer()
-                window.enable_idle_buttons()
-            if window.set_temp==2: #2 SET bed temp
-                window.set_temp=0
-                window.B=0
-                window.C=1
-                window.D=0
-                window.E=int(window.c27.isChecked())
-                window.G=int(window.c23.isChecked())
-                window.I=int(window.b36.toPlainText().strip())
-                window.K=int(window.b40.toPlainText().strip())
-                window.M=int(window.b38.toPlainText().strip())
-                window.O=int(float(window.b42.toPlainText().strip())*10.0)
-                window.P=int(float(window.b44.toPlainText().strip())*10.0)
-                window.Q=int(float(window.b46.toPlainText().strip())*10.0)
-                time.sleep(0.2)
-                self.send_buffer()            			   
-                window.enable_idle_buttons()
-            if window.set_fan==1:
-               window.set_fan=0
-               window.B=4
-               window.J=int(window.d104.value())
-               #print(window.J)
-               self.send_buffer()
-            if window.set_motor==1: #Enable/Disable motor
-                window.set_motor=0
-                window.B=1
-                window.E=0
-                window.F=0
-                window.G=0
-                window.H=0
-                window.I=0
-                window.J=0
-                window.K=0
-                window.L=0
-                window.M=0
-                window.N=0
-                time.sleep(0.2)
-                self.send_buffer()
-                window.enable_idle_buttons()
-
-            if window.home_axis!=0: #Homing
-                window.A=0
-                window.B=2
-                if window.home_axis==1:            
-                    window.C = int(window.c12.isChecked())                                            #HOME_X_ENABLE
-                    window.F = int(window.c17.isChecked())                                            #HOME_X_STATE
-                    window.O=int(1000000/(int(window.b1.toPlainText().strip())*window.d5.value()*2))  #DURATION
-                    window.R=1
-                    window.S=0
-                    window.T=0
-                if window.home_axis==2:
-                    window.D = int(window.c13.isChecked())                                            #HOME_Y_ENABLE
-                    window.G = int(window.c18.isChecked())                                            #HOME_Y_STATE
-                    window.P=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #DURATION
-                    window.S=1
-                    window.R=0
-                    window.T=0
-                if window.home_axis==3:
-                    window.E = int(window.c14.isChecked())                                            #HOME_Z_ENABLE
-                    window.K = int(window.c19.isChecked())                                            #HOME_Z_STATE
-                    window.Q=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #DURATION
-                    window.T=1
-                    window.R=0
-                    window.S=0
-                time.sleep(0.2)
-                self.send_buffer()
-                if window.home_axis==1:
-                      if window.L==1:
-                          window.p5.setEnabled(True)
-                if window.home_axis==2:
-                      if window.L==1:
-                          window.p9.setEnabled(True)
-                if window.home_axis==3:
-                      if window.L==1:
-                          window.p13.setEnabled(True)
-                window.enable_idle_buttons()
-                window.home_axis=0
-
-            if window.rapid_pos==1: #Rapid positioning command
-                self.send_buffer()
-                (self.serial_command,window.nozz_temp,window.bed_temp,window.X_POS,window.Y_POS,window.Z_POS,)=struct.unpack("3f3H",window.ser.read(18)) #wait for arduino to end process
-                self.new_nozz_temp.emit(window.nozz_temp) #emit the signal
-                self.new_bed_temp.emit(window.bed_temp) #emit the signal
-                if window.C==0:
-                   if window.F==1:
-                      window.p7.setEnabled(True)
-                   else:
-                      window.p8.setEnabled(True)
-                if window.C==1:
-                   if window.F==1:
-                      window.p11.setEnabled(True)
-                   else:
-                      window.p12.setEnabled(True)
-                if window.C==2:
-                   if window.F==1:
-                      window.p15.setEnabled(True)
-                   else:
-                      window.p16.setEnabled(True)
-                if window.C==3:
-                   if window.F==1:
-                      window.p19.setEnabled(True)
-                   else:
-                      window.p20.setEnabled(True)
-                window.enable_idle_buttons()
-                window.rapid_pos=0
-            
-            if window.nozz_auto_tune==1: 
-                window.nozz_auto_tune=0
-                if window.C==1:
-                     self.message.emit(">>> NOZZLE AUTOTUNE") #emit the signal 
-                     print(window.B)                     
-                else:          
-                     self.message.emit(">>> BED AUTOTUNE")                
-                self.send_buffer()          
-
-            if window.bl_toggle==1: #Rapid positioning command
-                window.bl_toggle=0
-                self.message.emit(">>> BL_TOUCH TOGGLE")
-                self.send_buffer()
-
-class PinsWindow(QtWidgets.QMainWindow, Ui_pinswindow):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(PinsWindow, self).__init__(*args, **kwargs)
-        self.setupUi(self) #import Qtdesigner
-        getattr(self, "pin{}".format(window.pin_conf)).setStyleSheet("QPushButton {\n"
-                "background-color:rgb(47, 47, 47);\n"
-                "color: rgb(255, 255, 255);\n"
-                "border-style: solid;\n"
-                "border-radius:5px;\n"
-                "border-width:2px; \n"
-                "border-color:rgb(0,255,0)\n"
-                "}\n"
-                "QPushButton:hover {\n"
-                "border-width:3px; \n"
-                "border-color:rgb(255, 115, 30);\n"
-                "}\n"
-                "QPushButton:pressed {\n"
-                "background-color:rgb(255, 115, 30);\n"
-                "border-color: rgb(255, 195, 110);\n"
-                "border-width: 4px;     \n"
-                "}\n"
-                "QPushButton:disabled{\n"
-                "background-color: rgb(255, 149, 62);\n"
-                "color: rgb(83, 83, 83);\n"
-                "border-color:rgb(83, 83, 83);\n"
-                "}\n"
-                "\n"
-                "")
-        self.pin0.clicked.connect(lambda:self.select_pin(0))
-        self.pin1.clicked.connect(lambda:self.select_pin(1))
-        self.pin2.clicked.connect(lambda:self.select_pin(2))
-        self.pin3.clicked.connect(lambda:self.select_pin(3))
-        self.pin4.clicked.connect(lambda:self.select_pin(4))
-        self.pin5.clicked.connect(lambda:self.select_pin(5))
-        self.pin6.clicked.connect(lambda:self.select_pin(6))
-        self.pin7.clicked.connect(lambda:self.select_pin(7))
-        self.pin8.clicked.connect(lambda:self.select_pin(8))
-        self.pin9.clicked.connect(lambda:self.select_pin(9))
-        self.pin10.clicked.connect(lambda:self.select_pin(10))
-        self.pin11.clicked.connect(lambda:self.select_pin(11))
-        self.pin12.clicked.connect(lambda:self.select_pin(12))
-        self.pin13.clicked.connect(lambda:self.select_pin(13))
-        self.pin14.clicked.connect(lambda:self.select_pin(14))
-        self.pin15.clicked.connect(lambda:self.select_pin(15))
-        self.pin16.clicked.connect(lambda:self.select_pin(16))
-        self.pin17.clicked.connect(lambda:self.select_pin(17))
-        self.pin18.clicked.connect(lambda:self.select_pin(18))
-        self.pin19.clicked.connect(lambda:self.select_pin(19))
-        self.pin20.clicked.connect(lambda:self.select_pin(20))
-        self.pin21.clicked.connect(lambda:self.select_pin(21))
-        self.pin22.clicked.connect(lambda:self.select_pin(22))
-        self.pin23.clicked.connect(lambda:self.select_pin(23))
-        self.pin24.clicked.connect(lambda:self.select_pin(24))
-        self.pin25.clicked.connect(lambda:self.select_pin(25))
-        self.pin26.clicked.connect(lambda:self.select_pin(26))
-        self.pin27.clicked.connect(lambda:self.select_pin(27))
-        self.pin28.clicked.connect(lambda:self.select_pin(28))
-        self.pin29.clicked.connect(lambda:self.select_pin(29))
-        self.pin30.clicked.connect(lambda:self.select_pin(30))
-        self.pin31.clicked.connect(lambda:self.select_pin(31))
-        self.pin32.clicked.connect(lambda:self.select_pin(32))
-        self.pin33.clicked.connect(lambda:self.select_pin(33))
-        self.pin34.clicked.connect(lambda:self.select_pin(34))
-        self.pin35.clicked.connect(lambda:self.select_pin(35))
-        self.pin36.clicked.connect(lambda:self.select_pin(36))
-        self.pin37.clicked.connect(lambda:self.select_pin(37))
-        self.pin38.clicked.connect(lambda:self.select_pin(38))
-        self.pin39.clicked.connect(lambda:self.select_pin(39))
-        self.pin40.clicked.connect(lambda:self.select_pin(40))
-        self.pin41.clicked.connect(lambda:self.select_pin(41))
-        self.pin42.clicked.connect(lambda:self.select_pin(42))
-        self.pin43.clicked.connect(lambda:self.select_pin(43))
-        self.pin44.clicked.connect(lambda:self.select_pin(44))
-        self.pin45.clicked.connect(lambda:self.select_pin(45))
-        self.pin46.clicked.connect(lambda:self.select_pin(46))
-        self.pin47.clicked.connect(lambda:self.select_pin(47))
-        self.pin48.clicked.connect(lambda:self.select_pin(48))
-        self.pin49.clicked.connect(lambda:self.select_pin(49))
-        self.pin50.clicked.connect(lambda:self.select_pin(50))
-        self.pin51.clicked.connect(lambda:self.select_pin(51))
-        self.pin52.clicked.connect(lambda:self.select_pin(52))
-        self.pin53.clicked.connect(lambda:self.select_pin(53))
-        self.pin54.clicked.connect(lambda:self.select_pin(54))
-        self.pin55.clicked.connect(lambda:self.select_pin(55))
-        self.pin56.clicked.connect(lambda:self.select_pin(56))
-        self.pin57.clicked.connect(lambda:self.select_pin(57))
-        self.pin58.clicked.connect(lambda:self.select_pin(58))
-        self.pin59.clicked.connect(lambda:self.select_pin(59))
-        self.pin60.clicked.connect(lambda:self.select_pin(60))
-        self.pin61.clicked.connect(lambda:self.select_pin(61))
-        self.pin62.clicked.connect(lambda:self.select_pin(62))
-        self.pin63.clicked.connect(lambda:self.select_pin(63))
-        self.pin64.clicked.connect(lambda:self.select_pin(64))
-        self.pin65.clicked.connect(lambda:self.select_pin(65))
-        self.pin66.clicked.connect(lambda:self.select_pin(66))
-        self.pin67.clicked.connect(lambda:self.select_pin(67))
-        self.pin68.clicked.connect(lambda:self.select_pin(68))
-        self.pin69.clicked.connect(lambda:self.select_pin(69))
-        self.pin70.clicked.connect(lambda:self.select_pin(70))
-    def select_pin(self,pin):
-        if pin==70:
-            getattr(window, "Pin_Button_{}".format(window.pin_button)).setText('N')
-        else:
-            getattr(window, "Pin_Button_{}".format(window.pin_button)).setText(str(pin))
-        self.close()
-                
 
 class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
     def __init__(self, *args, obj=None, **kwargs):
@@ -953,6 +154,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
         self.ABL_include()
+        self.fly_thread = FLYWorker()
+        self.fly_thread.instance_main(self)
         font_id =QtGui.QFontDatabase.addApplicationFont("digital-7.ttf")
         #self.l19_5.setFont(QFont("LCD", 16))
         self.XPOSITION.setFont(QFont("Digital-7", 20))
@@ -1069,6 +272,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except:
             self.pin_conf = 70
         self.pins_window = PinsWindow(self)
+        self.pins_window.instance_main(self)
+        self.pins_window.initiate(self)
         self.pins_window.show()
         
 
@@ -1150,8 +355,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_settings()
        
     def assign_buttons(self):
-        self.p1.clicked.connect(self.CONNECT)
-        self.p3.clicked.connect(self.USB)
+        self.p1.clicked.connect(lambda:CONNECT(self))
+        self.p3.clicked.connect(lambda:USBPrintingHandler(self))
         self.p5.clicked.connect(self.HOME_X_MIN)
         self.p9.clicked.connect(self.HOME_Y_MIN)
         self.p13.clicked.connect(self.HOME_Z_MIN)
@@ -1257,17 +462,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Pin_Button_37.clicked.connect(lambda:self.select_HW_pin(37))
         self.Pin_Button_38.clicked.connect(lambda:self.select_HW_pin(38))
         self.Pin_Button_39.clicked.connect(lambda:self.select_HW_pin(39))
-        # self.Pin_Button_40.clicked.connect(lambda:self.select_HW_pin(40))
-        # self.Pin_Button_41.clicked.connect(lambda:self.select_HW_pin(41))
-        # self.Pin_Button_42.clicked.connect(lambda:self.select_HW_pin(42))
-        # self.Pin_Button_43.clicked.connect(lambda:self.select_HW_pin(43))
-        # self.Pin_Button_44.clicked.connect(lambda:self.select_HW_pin(44))
-        # self.Pin_Button_45.clicked.connect(lambda:self.select_HW_pin(45))
-        # self.Pin_Button_46.clicked.connect(lambda:self.select_HW_pin(46))
-        # self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
-
 
     def UNITS(self):
         if self.c21.isChecked() == True:
@@ -1280,98 +476,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p27.setEnabled(False)
         else:
             self.p27.setEnabled(True)
-  
-  
-    def CONNECT(self):
-        try:
-            if self.USB_CONNECTED==0:            
-                self.save_settings()
-                COM_PORT = self.chosenPort
-                BAUD_RATE = int(self.b48.toPlainText().strip())
-                self.ser=serial.Serial(COM_PORT,BAUD_RATE) #first time communicate with Printer
-                self.ser.flushOutput()
-                self.ser.flushInput() 
-                self.A=0 #A=0 => Idle mode
-                self.B=0 #B=0 => Temperature command
-                self.C=0 #C=0 => Report only temperature
-                self.stepx_pos=0
-                self.x_pos_last=0
-                self.sum_Xpos =0
-                self.x_overflow=0    
-                self.stepy_pos=0
-                self.y_pos_last=0
-                self.sum_Ypos =0
-                self.y_overflow=0   
-                self.stepz_pos=0
-                self.z_pos_last=0
-                self.sum_Zpos =0
-                self.z_overflow=0                 
-                self.usb_thread = USBWorker() 
-                self.usb_thread.message.connect(self.print2user_usb) #connect thread to message window
-                self.usb_thread.new_nozz_temp.connect(self.update_nozz_temp) #connect thread to message window
-                self.usb_thread.new_bed_temp.connect(self.update_bed_temp) #connect thread to message window
-                self.usb_thread.x_pos_report.connect(self.update_xpos) 
-                self.usb_thread.y_pos_report.connect(self.update_ypos) 
-                self.usb_thread.z_pos_report.connect(self.update_zpos) 
-                self.usb_thread.autotune_p.connect(self.test) #connect thread to autotune window
-                self.usb_thread.start()       #Start usb communication handling thread
-                self.enable_rapid_buttons()    #Enable home buttons
-                for i in range (2,6): #c0-cmax
-                     c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-                     c.setChecked(1) 
-                self.USB_CONNECTED=1
-                self.Message_panel.append(">>> Successfully connected to: " + str(COM_PORT))
-                self.p1.setStyleSheet('QPushButton {background-color:rgb(47, 47, 47);color: rgb(0,255,0);border-style: solid;border-radius:5px;border-width:2px; border-color:rgb(0,255,0);}\
-                QPushButton:hover {border-width:3px; border-color:rgb(255, 115, 30);}\
-                QPushButton:pressed {background-color:rgb(255, 115, 30);border-color: rgb(255, 195, 110);border-width: 4px;}\
-                QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
-            else:
-                if self.usb_printing==0: #disconnect only allowed when on idle
-                    self.p1.setStyleSheet('QPushButton {background-color:rgb(47, 47, 47);color: rgb(255,255,255);border-style: solid;border-radius:5px;border-width:2px; border-color:rgb(255,85,0);}\
-                    QPushButton:hover {border-width:3px; border-color:rgb(255, 115, 30);}\
-                    QPushButton:pressed {background-color:rgb(255, 115, 30);border-color: rgb(255, 195, 110);border-width: 4px;}\
-                    QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
-                    self.USB_CONNECTED=0
-                    self.ser.close()
-                    self.disable_rapid_buttons()
-                    self.Message_panel.append(">>> Printer disconnected")
-                    self.XPOSITION.setText("{:.3f}".format(round(0, 3)))
-                    self.YPOSITION.setText("{:.3f}".format(round(0, 3)))
-                    self.ZPOSITION.setText("{:.3f}".format(round(0, 3)))
-                    self.NOZZ_TEMP.setText("{:.2f}".format(round(0, 2)))
-                    self.BED_TEMP.setText("{:.2f}".format(round(0, 2)))
-        except:
-            self.Message_panel.append(">>> Failed to connect")		
-
-    def USB(self): #call this func whenever USB_calculate button is pressed
-        if self.USB_CONNECTED==1 and self.A==0:
-            self.pipe = win32pipe.CreateNamedPipe(
-            r'\\.\pipe\Foo',
-            win32pipe.PIPE_ACCESS_DUPLEX,
-            win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
-            1, 65536, 65536,
-            0,
-            None)
-            self.pause_state=0
-            self.A=1 #printing mode
-            self.usb_printing=1
-            self.start_bar()
-            if self.ABL==0:
-                gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
-                gcode = self.GCODE_Panel.toPlainText()
-                gcode_file.write(gcode)
-                gcode_file.close()
-                self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
-                self.data = self.GCODE_Panel.toPlainText()
-                self.file1.write(self.data)
-                self.file1.close()
-            self.save_settings()
-            self.savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w')
-            self.savepathfile.close()
-            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
-            self.child_file.write(str(struct.pack("i",self.mirror)))
-            self.child_file.close()
-            self.disable_idle_buttons()
 
     def CANCEL(self):
         self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
@@ -1479,6 +583,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Message_panel.append(">>> Invalid grid value: bed y_size modulus grid ")
             if interpolation == 1:
                 self.ABL_interpolation_thread=ABL_Interpolation()
+                self.ABL_interpolation_thread.instance_main(self) #pass main instance to class
                 self.ABL_interpolation_thread.message.connect(self.Plot)
                 self.ABL_interpolation_thread.start()
 
@@ -1783,7 +888,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.MM=104
             self.SS=float(window.b35.toPlainText().strip())
             self.Message_panel.append(">>> M104 S"+str(self.SS)+": Set NOZZLE temp ")
-            self.fly_thread = FLYWorker()
             self.fly_thread.start()            
 
     def setBEDTEMP(self):
@@ -1795,7 +899,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.MM=140
             self.SS=float(window.b36.toPlainText().strip())
             self.Message_panel.append(">>> M140 S"+str(self.SS)+": Set BED temp ")
-            self.fly_thread = FLYWorker()
             self.fly_thread.start()
     
     def setFAN1(self):
@@ -1806,7 +909,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.MM=106
             self.SS=float(window.d104.value())
             self.Message_panel.append(">>> M106: Set FAN1 ")
-            self.fly_thread = FLYWorker()
             self.fly_thread.start()
        
     def setJFAJ(self):
@@ -1814,7 +916,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.froze=1
             self.MM=0
             self.Message_panel.append(">>> Set JFAJ")
-            self.fly_thread = FLYWorker()
             self.fly_thread.start()
  
     def nozz_AUTOTUNE(self):
@@ -2024,8 +1125,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.pause_state=1 #paused
               self.froze=1
               self.froze_loop=1
-              self.Message_panel.append(">>> M226: Pause request")  
-              self.fly_thread = FLYWorker()
+              self.Message_panel.append(">>> M226: Pause request")
               self.fly_thread.start()	
            else:
              self.ser.write(struct.pack("B",self.A)) #trash, to resume printing
@@ -2135,7 +1235,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def start_bar(self):
         self.bar_thread = ProgressBarWorker()
-        #self.bar_thread.setDaemon(True) #Terminate at the end,only threading.Thread
+        self.bar_thread.instance_main(self) #send the instance of mainwindow pipe to class in order to access
         self.bar_thread.message.connect(self.print2user_bar) #connect thread to message window
         self.bar_thread.progress_value.connect(self.setProgressVal) #connect thread to bar
         self.bar_thread.start()
@@ -2157,7 +1257,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chosenPort = COM
 
     def start_COMPort_worker(self):
-        self.comport_thread = COMPortWorker()
+        self.comport_thread = COMPortScanner()
+        self.comport_thread.instance_main(self)
         #self.comport_thread.setDaemon(True) #Terminate at the end,only threading.Thread
         self.comport_thread.start()
 
