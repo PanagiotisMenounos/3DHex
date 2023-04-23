@@ -1,7 +1,7 @@
 import serial.tools.list_ports
 
 #********************LOCAL IMPORTS**************************
-from usb.usbhandler import USBWorker
+from usb.realtimehandler import USBWorker
 
 def CONNECT(self):
     try:

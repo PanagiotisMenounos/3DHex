@@ -42,77 +42,18 @@ from scipy.interpolate import Rbf
 from numpy import loadtxt
 
 #********************LOCAL IMPORTS**************************
-from userinterface.windows.printer_name import Ui_New_Printer
+
 from userinterface.windows.autotune import Ui_AutoTune
 from userinterface.setupwindows.pinspanel import PinsWindow
+from userinterface.setupwindows.newprinter import PrinterWindow
 from userinterface.windows.mainwindow_design import Ui_MainWindow
 from userinterface.plots.progressbar import ProgressBarWorker
-from usb.comport import COMPortScanner
-from usb.usbhandler import USBWorker
+from usb.portscanner import COMPortScanner
 from usb.connection import CONNECT
-from usb.usbprint import USBPrintingHandler
 from usb.onthefly import FLYWorker
 from tuning.bedmesh import ABL_Interpolation
 
 
-class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(PrinterWindow, self).__init__(*args, **kwargs)
-        self.setupUi(self) #import Qtdesigner
-        self.ok_printer.clicked.connect(self.OK_Printer)
-        self.cancel_printer.clicked.connect(self.CANCEL_Printer)
-        window.Message_panel.append(">>> Add new settings")
-     
-    def OK_Printer(self):
-        text = self.input_name.toPlainText().replace("\n","")
-        if text== '':
-            window.Message_panel.append(">>> Aborted")
-            self.close()
-        else:
-            #print(text)
-            window.freeroom=0
-            window.added=0
-            printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
-            printers = printer_file.readlines()
-            printer_file.close()
-            printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
-            window.printers = len(printers)
-            #print(window.printer)
-            for temp in printers:
-                printer = temp.split(',')
-                printer[2]=printer[2].replace("\n","")
-                if int(printer[2])==0:
-                    window.freeroom=1
-            if window.freeroom==1:
-                for temp in printers:
-                    printer = temp.split(',')
-                    printer[2]=printer[2].replace("\n","")
-                    if int(printer[2])==0 and window.added==0:
-                        printer_file.write("1,"+text+",1\n")
-                        window.Message_panel.append(">>> Added: " + text)
-                        window.added=1
-                    else:
-                        printer_file.write("0,"+printer[1]+","+printer[2]+"\n")
-            else:
-                window.Message_panel.append(">>> Cannot add more than " + str(window.printers) + " configurations")
-                for temp in printers:
-                    printer = temp.split(',')
-                    printer[2]=printer[2].replace("\n","")
-                    if window.added==0:
-                        printer_file.write("1,Default,1\n")
-                        window.added=1
-                    else:
-                        printer_file.write("0,"+printer[1]+","+printer[2]+"\n")
-            window.freeroom=0
-            window.added=0
-            printer_file.close()
-            window.save_settings()
-            window.load_printers()
-            self.close()
-        
-    def CANCEL_Printer(self):
-        self.close()
-        window.Message_panel.append(">>> Aborted")
 
 class AutoTuneWindow(QtWidgets.QMainWindow, Ui_AutoTune):
     def __init__(self, *args, obj=None, **kwargs):
@@ -147,7 +88,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self) #import Qtdesigner
-        self.Message_panel.append(">>> 3DHex")
         self.declare_vars()
         self.load_printers()
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}")
@@ -156,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ABL_include()
         self.fly_thread = FLYWorker()
         self.fly_thread.instance_main(self)
-        font_id =QtGui.QFontDatabase.addApplicationFont("digital-7.ttf")
+        font_id = QtGui.QFontDatabase.addApplicationFont("digital-7.ttf")
         #self.l19_5.setFont(QFont("LCD", 16))
         self.XPOSITION.setFont(QFont("Digital-7", 20))
         self.YPOSITION.setFont(QFont("Digital-7", 20))
@@ -164,6 +104,190 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.NOZZ_TEMP.setFont(QFont("Digital-7", 20))
         self.BED_TEMP.setFont(QFont("Digital-7", 20))
         self.setup_temp_monitor()
+
+    def declare_vars(self):
+        self.MM = 0
+        self.SS = 0
+        self.froze_loop = 0  # prevent fly command when paused
+        self.froze = 0  # prevent pause to be pressed multiple times
+        self.pause_state = 0  # not at pause state
+        self.mirror = 5  # used as flag in C-Python
+        self.printer = 0
+        self.set_motor = 0
+        self.USB_CONNECTED = 0
+        self.usb_connected = 1
+        self.set_temp = 0
+        self.set_fan = 0
+        self.home_axis = 0
+        self.usb_printing = 0
+        self.rapid_pos = 0
+        self.rapid_X = 0
+        self.rapid_Y = 0
+        self.rapid_Z = 0
+        self.nozz_auto_tune = 0
+        self.InvertX_tongle = 1
+        self.InvertY_tongle = 1
+        self.InvertZ_tongle = 1
+        self.bl_toggle = 0
+        self.BL_TOUCH_STATE = 0
+        self.ABL_INTERPOLATION_TYPE = 0
+        self.A = 0
+        self.B = 0
+        self.C = 0
+        self.D = 0
+        self.E = 0
+        self.F = 0
+        self.G = 0
+        self.H = 0
+        self.I = 0
+        self.J = 0
+        self.K = 0
+        self.L = 0
+        self.M = 0
+        self.N = 0
+        self.O = 0
+        self.P = 0
+        self.Q = 0
+        self.R = 0
+        self.S = 0
+        self.T = 0
+        self.U = 0
+        self.V = 0
+        self.W = 0
+        self.Auto_P = 0
+        self.Auto_I = 0
+        self.Auto_D = 0
+        self.update_temp = 0
+        self.ABL = 0
+        self.iterations = 1.0
+        self.STPZ = 100
+        self.ABL_Z_CENTER = 0
+        self.ABL_Sample = 0
+        self.plot_num = 0
+        self.min = 0
+        self.x_pos_last = 0
+        self.stepx_direction = 1
+        self.stepy_direction = 1
+        self.stepz_direction = 1
+        self.stepx_pos = 0
+        self.stepy_pos = 0
+        self.stepz_pos = 0
+        self.x_overflow = 0
+        self.sum_Xpos = 0
+        self.sum_Ypos = 0
+        self.sum_Zpos = 0
+        self.x_overflow_last = 0
+        self.y_pos_last = 0
+        self.y_overflow = 0
+        self.y_overflow_last = 0
+        self.z_pos_last = 0
+        self.z_overflow = 0
+        self.z_overflow_last = 0
+        self.int16_base = 0
+        self.chosenPort = ""
+        self.InvertX = 1
+        self.InvertY = 1
+        self.InvertZ = 1
+        self.ports = serial.tools.list_ports.comports()
+        self.comboBox.addItem("")
+        for p in self.ports:
+            self.comboBox.addItem(p.device)
+
+    def load_printers(self):
+        printer_file = open(os.getenv('LOCALAPPDATA') + '\\3DHex2\\printers\\printers.txt', 'r')
+        printers = printer_file.readlines()
+        total_printers = len(printers)
+        p = 0
+        for temp in printers:
+            printer = temp.split(',')
+            if p < total_printers:
+                if int(printer[0]) == 1:
+                    self.printer = p
+                    self.selected_printer = p
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    self.Message_panel.append(">>> Loaded: " + str(printer[1].replace("\n", "")))
+                    action_printer.setText(str("● " + printer[1].replace("\n", "")))
+                else:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setText(str("   " + printer[1].replace("\n", "")))
+                if int(printer[2]) == 1:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setVisible(True)
+                else:
+                    action_printer = getattr(self, "actionPrinter{}".format(p))
+                    action_printer.setVisible(False)
+            p = p + 1
+        printer_file.close()
+        self.load_settings()
+
+    def load_settings(self):
+        file = open(
+            os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt',
+            'r')  # read general setting file and set them
+        boxes = file.readlines()
+        file.close()
+        file = open(
+            os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt',
+            'r')  # read general setting file and set them
+        cboxes = file.readlines()
+        file.close()
+        file = open(
+            os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt',
+            'r')  # read general setting file and set them
+        dboxes = file.readlines()
+        file.close()
+        file = open(
+            os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt',
+            'r')  # read general setting file and set them
+        cbboxes = file.readlines()
+        file.close()
+        file = open(
+            os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt',
+            'r')  # read general setting file and set them
+        pins = file.readlines()
+        file.close()
+        try:
+            file = open(
+                os.getenv('LOCALAPPDATA') + '\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt',
+                'r')  # read general setting file and set them
+            abldata = file.readlines()
+            self.ABL_INTERPOLATION_TYPE = int(abldata[0].strip())
+            if self.ABL_INTERPOLATION_TYPE == 1:
+                self.m1.setPlainText('PLANE')
+            elif self.ABL_INTERPOLATION_TYPE == 2:
+                self.m1.setPlainText('MESH')
+            elif self.ABL_INTERPOLATION_TYPE == 0:
+                self.m1.setPlainText('NO DATA')
+        except:
+            self.m1.setPlainText('NO DATA')
+        for i in range(0, 71):  # b0-bmax
+            b = getattr(self, "b{}".format(
+                i))  # self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+            b.setPlainText('')
+            b.insertPlainText(boxes[i].strip())  # strip() removes'/n'
+        for i in range(2, 6):  # c0-cmax
+            c = getattr(self, "c{}".format(
+                i))  # self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+            c.setChecked(1)  # set Enable/Disable cboxes always on at start
+        for i in range(7, 30):  # c0-cmax
+            c = getattr(self, "c{}".format(
+                i))  # self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+            c.setChecked(int(cboxes[i - 1].strip()))  # strip() removes'/n'
+        for i in range(1, 9):  # c0-cmax
+            d = getattr(self, "d{}".format(
+                i))  # self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+            d.setValue(float(dboxes[i - 1].strip()))  # strip() removes'/n'
+        for i in range(1, 4):  # c0-cmax
+            cb = getattr(self, "comboBox{}".format(
+                i))  # self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
+            cb.setCurrentIndex(int(cbboxes[i - 1].strip()))
+        for i in range(0, 40):  # c0-cmax
+            pin = getattr(self, "Pin_Button_{}".format(i))
+            val = int(pins[i].strip())
+            if val == 100:
+                pin.setText('N')
+            else:
+                pin.setText(str(val))
 
     def setup_temp_monitor(self):
         length_of_signal = 50
@@ -177,93 +301,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
         self.MplWidget.canvas.draw()
 
-    def declare_vars(self):
-        self.MM = 0
-        self.SS = 0
-        self.froze_loop=0 #prevent fly command when paused
-        self.froze=0 #prevent pause to be pressed multiple times
-        self.pause_state=0 #not at pause state
-        self.mirror=5 #used as flag in C-Python
-        self.printer=0
-        self.set_motor=0
-        self.USB_CONNECTED=0
-        self.usb_connected = 1
-        self.set_temp = 0	
-        self.set_fan = 0
-        self.home_axis=0
-        self.usb_printing=0
-        self.rapid_pos=0
-        self.rapid_X=0
-        self.rapid_Y=0
-        self.rapid_Z=0
-        self.nozz_auto_tune=0
-        self.InvertX_tongle=1
-        self.InvertY_tongle=1
-        self.InvertZ_tongle=1
-        self.bl_toggle=0
-        self.BL_TOUCH_STATE=0
-        self.ABL_INTERPOLATION_TYPE=0
-        self.A=0
-        self.B=0
-        self.C=0
-        self.D=0
-        self.E=0
-        self.F=0
-        self.G=0
-        self.H=0
-        self.I=0
-        self.J=0
-        self.K=0
-        self.L=0
-        self.M=0
-        self.N=0
-        self.O=0
-        self.P=0
-        self.Q=0
-        self.R=0
-        self.S=0
-        self.T=0
-        self.U=0
-        self.V=0
-        self.W=0
-        self.Auto_P=0
-        self.Auto_I=0
-        self.Auto_D=0
-        self.update_temp=0
-        self.ABL=0
-        self.iterations=1.0
-        self.STPZ=100
-        self.ABL_Z_CENTER=0
-        self.ABL_Sample=0
-        self.plot_num=0
-        self.min=0
-        self.x_pos_last=0
-        self.stepx_direction=1
-        self.stepy_direction=1
-        self.stepz_direction=1
-        self.stepx_pos=0
-        self.stepy_pos=0
-        self.stepz_pos=0
-        self.x_overflow=0
-        self.sum_Xpos=0
-        self.sum_Ypos=0
-        self.sum_Zpos=0
-        self.x_overflow_last=0
-        self.y_pos_last=0
-        self.y_overflow=0
-        self.y_overflow_last=0
-        self.z_pos_last=0
-        self.z_overflow=0
-        self.z_overflow_last=0
-        self.int16_base=0
-        self.chosenPort = ""
-        self.InvertX=1
-        self.InvertY=1
-        self.InvertZ=1
-        self.ports = serial.tools.list_ports.comports()
-        self.comboBox.addItem("")
-        for p in self.ports:
-            self.comboBox.addItem(p.device)
+
 
     def select_HW_pin(self,button):
         self.pin_button=button
@@ -279,6 +317,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def new_printer(self):
         self.window2 = PrinterWindow(self)
+        self.window2.instance_main(self)
+        self.window2.initiate(self)
         self.window2.show()
 
     def test(self):
@@ -303,7 +343,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     printer_file.write("0,"+printer[1]+","+printer[2])
             p=p+1
         printer_file.close()
-        self.load_printers()
+        load_printers(self)
 
     def remove_printer(self):
         printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
@@ -325,38 +365,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             p=p+1
         
         printer_file.close()
-        self.load_printers()
+        load_printers(self)
         
-    def load_printers(self):
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
-        printers = printer_file.readlines()
-        total_printers=len(printers)
-        p=0
-        for temp in printers:
-            printer = temp.split(',')
-            if p < total_printers:
-                if int(printer[0]) == 1:
-                    self.printer = p
-                    self.selected_printer=p
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    self.Message_panel.append(">>> Loaded: " + str(printer[1].replace("\n","")))
-                    action_printer.setText(str("● "+printer[1].replace("\n","")))
-                else:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setText(str("   "+printer[1].replace("\n","")))
-                if int(printer[2])==1:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setVisible(True)
-                else:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setVisible(False)
-            p=p+1
-        printer_file.close()
-        self.load_settings()
+
        
     def assign_buttons(self):
         self.p1.clicked.connect(lambda:CONNECT(self))
-        self.p3.clicked.connect(lambda:USBPrintingHandler(self))
+        self.p3.clicked.connect(self.USB)
         self.p5.clicked.connect(self.HOME_X_MIN)
         self.p9.clicked.connect(self.HOME_Y_MIN)
         self.p13.clicked.connect(self.HOME_Z_MIN)
@@ -476,6 +491,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.p27.setEnabled(False)
         else:
             self.p27.setEnabled(True)
+
+    def USB(self): #call this func whenever USB_calculate button is pressed
+        if self.USB_CONNECTED==1 and self.A==0:
+            self.pipe = win32pipe.CreateNamedPipe(
+            r'\\.\pipe\Foo',
+            win32pipe.PIPE_ACCESS_DUPLEX,
+            win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
+            1, 65536, 65536,
+            0,
+            None)
+            self.pause_state=0
+            self.A=1 #printing mode
+            self.usb_printing=1
+            self.start_bar()
+            if self.ABL==0:
+                gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+                gcode = self.GCODE_Panel.toPlainText()
+                gcode_file.write(gcode)
+                gcode_file.close()
+                self.file1 = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
+                self.data = self.GCODE_Panel.toPlainText()
+                self.file1.write(self.data)
+                self.file1.close()
+            self.save_settings()
+            self.savepathfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\savepath.txt','w')
+            self.savepathfile.close()
+            self.child_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin','w')
+            self.child_file.write(str(struct.pack("i",self.mirror)))
+            self.child_file.close()
+            self.disable_idle_buttons()
 
     def CANCEL(self):
         self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
@@ -1025,59 +1070,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         d_file.close()
         cb_file.close()
         pins_file.close()
-                    
-
-    def load_settings(self):
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','r') #read general setting file and set them
-        boxes = file.readlines()
-        file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','r') #read general setting file and set them
-        cboxes = file.readlines()
-        file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\dboxes settings.txt','r') #read general setting file and set them
-        dboxes = file.readlines()
-        file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cbboxes settings.txt','r') #read general setting file and set them
-        cbboxes = file.readlines()
-        file.close()
-        file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\pins settings.txt','r') #read general setting file and set them
-        pins = file.readlines()
-        file.close()
-        try:
-            file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\abl_type.txt','r') #read general setting file and set them
-            abldata = file.readlines()
-            self.ABL_INTERPOLATION_TYPE = int(abldata[0].strip())
-            if self.ABL_INTERPOLATION_TYPE==1:
-                self.m1.setPlainText('PLANE')
-            elif self.ABL_INTERPOLATION_TYPE==2:
-                self.m1.setPlainText('MESH')
-            elif self.ABL_INTERPOLATION_TYPE==0:
-                self.m1.setPlainText('NO DATA')
-        except:
-            self.m1.setPlainText('NO DATA')
-        for i in range (0,71): #b0-bmax
-           b = getattr(self, "b{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-           b.setPlainText('')
-           b.insertPlainText(boxes[i].strip()) #strip() removes'/n'
-        for i in range (2,6): #c0-cmax
-           c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-           c.setChecked(1)                       #set Enable/Disable cboxes always on at start
-        for i in range (7,30): #c0-cmax
-           c = getattr(self, "c{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-           c.setChecked(int(cboxes[i-1].strip())) #strip() removes'/n'
-        for i in range (1,9): #c0-cmax
-           d = getattr(self, "d{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-           d.setValue(float(dboxes[i-1].strip())) #strip() removes'/n'
-        for i in range (1,4): #c0-cmax
-           cb = getattr(self, "comboBox{}".format(i))    #self.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
-           cb.setCurrentIndex(int(cbboxes[i-1].strip()))
-        for i in range (0,40): #c0-cmax
-            pin = getattr(self, "Pin_Button_{}".format(i))
-            val = int(pins[i].strip())
-            if val == 100:
-                pin.setText('N')
-            else:
-                pin.setText(str(val))
 
     def clear_GCODE(self):
         self.data=''
@@ -1259,13 +1251,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def start_COMPort_worker(self):
         self.comport_thread = COMPortScanner()
         self.comport_thread.instance_main(self)
-        #self.comport_thread.setDaemon(True) #Terminate at the end,only threading.Thread
         self.comport_thread.start()
-
-    def start_USB_worker(self):
-        self.usb_thread = USBWorker()
-        #self.usb_thread.setDaemon(True) #Terminate at the end,only threading.Thread
-        self.usb_thread.start()	
 
 if __name__ == "__main__":
     QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling) #https://vicrucann.github.io/tutorials/osg-qt-high-dpi/?fbclid=IwAR3lhrM1zYX615yAGoyoJdAYGdKY5W-l5NsQiWu7gEVoQfzsqWML2iPOWBg

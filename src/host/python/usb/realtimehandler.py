@@ -6,7 +6,6 @@ import subprocess
 import struct
 
 class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully to the Printer
-
     message = pyqtSignal(str)  # define signal
     new_nozz_temp = pyqtSignal(float)
     new_bed_temp = pyqtSignal(float)
@@ -15,7 +14,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
     y_pos_report = pyqtSignal(float)
     z_pos_report = pyqtSignal(float)
 
-    def instance_main(self, mainwindow): #receive main window instance in order to acces mainwindow
+    def instance_main(self, mainwindow):
         self.window = mainwindow
 
     def run(self):
@@ -291,7 +290,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
         # else:
         # print("FAILED")
 
-    def packet_decode(self):  # this function decodes the incoming data from the serial interface with the MCU
+    def packet_decode(self):
         (self.serial_command, self.window.nozz_temp, self.window.bed_temp, self.window.X_POS, self.window.Y_POS,
          self.window.Z_POS,) = struct.unpack("3f3H", self.window.ser.read(
             18))  # This first time read buffer1 contains all the necessary settings for Printer
@@ -317,7 +316,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
                     self.window.ABL_Sample = 1
                 self.AVG_traxkZ = (self.window.ABL_Z_CENTER - self.AVG_traxkZ) / self.window.STPZ
                 self.message.emit(
-                    ">>> AVG:" + str("{:.4f}".format(round(float(self.AVG_traxkZ), 4))) + "mm")  # emit the signal  
+                    ">>> AVG:" + str("{:.4f}".format(round(float(self.AVG_traxkZ), 4))) + "mm")  # emit the signal
                 self.abl_z_file.write(str("{:.4f}".format(round(float(self.AVG_traxkZ), 4))) + "\n")
             if int(self.serial_command) == -302:  # 302-> end of ABL
                 self.window.ABL_Sample = 0
@@ -355,8 +354,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
                 18))  # This first time read buffer1 contains all the necessary settings for Printer
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA') + '\\3DHex2\\binary files\\child.bin')
 
-    def usb_printing(
-            self):  # USB Printing function_This is where the magic in realtime communication happens_Duplex data handling from C binary generation and the MCU
+    def usb_printing(self):  # USB Printing function
         self.window.usb_printing = 1
         self.trackZ = 0
         self.window.A = 1  # printing mode
@@ -393,7 +391,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
         self.window.ser.flushOutput()  # very important without delay to fix a bug
         self.send_buffer()  # Command Printer to go into printig mode self.window.A=1
         self.message.emit(">>> Post processing successfully completed")  # emit the signal
-        self.message.emit(">>> Printing...")  # emit the signal        
+        self.message.emit(">>> Printing...")  # emit the signal
         if buffer_file_size == 3000 and self.child_buffer_size != 0 and self.serial_command != -260:  # Firt time send binary data to Printer
             if filecase == 1:  # Read from buffer1 binary file
                 filecase = 2  # Note to read buffer2 next time
@@ -426,7 +424,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
             self.x_pos_report.emit(self.window.X_POS)
             self.y_pos_report.emit(self.window.Y_POS)
             self.z_pos_report.emit(self.window.Z_POS)
-        while buffer_file_size == 3000 and self.child_buffer_size != 0 and self.serial_command != -260 and self.window.usb_printing == 1:  # Start binary data streaming to Printer 
+        while buffer_file_size == 3000 and self.child_buffer_size != 0 and self.serial_command != -260 and self.window.usb_printing == 1:  # Start binary data streaming to Printer
             if filecase == 1:
                 filecase = 2
                 buffer1_file = open(os.getenv('LOCALAPPDATA') + '\\3DHex2\\binary files\\buffer_1.bin', "rb")
@@ -449,7 +447,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
                 flag_file.close()
             self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA') + '\\3DHex2\\binary files\\child.bin')
         self.child_buffer_size = 1  # catch last packet after C terminates, if MCU does ot send -260 this will stuck in loop
-        self.packet_decodepacket_decode()
+        self.packet_decode()
         child_file = open(os.getenv('LOCALAPPDATA') + '\\3DHex2\\binary files\\child.bin',
                           'w')  # reset child so 3DHex.C to terminate
         child_file.close()
@@ -586,7 +584,7 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
         if self.window.nozz_auto_tune == 1:
             self.window.nozz_auto_tune = 0
             if self.window.C == 1:
-                self.message.emit(">>> NOZZLE AUTOTUNE")  # emit the signal 
+                self.message.emit(">>> NOZZLE AUTOTUNE")  # emit the signal
                 print(self.window.B)
             else:
                 self.message.emit(">>> BED AUTOTUNE")
