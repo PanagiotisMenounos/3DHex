@@ -4,7 +4,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 
     
-class MplWidget(QWidget):
+class TempPlot(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
         self.canvas = FigureCanvas(Figure(facecolor='#2F2F2F',tight_layout=True))

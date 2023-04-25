@@ -1,0 +1,4 @@
+pyuic5 mainwindow_ui.ui -o mainwindow_ui.py
+pyuic5 new_printer_ui.ui -o new_printer_ui.py
+pyuic5 auto_pid_ui.ui -o auto_pid_ui.py
+pyuic5 pinswindow_ui.ui -o pinswindow_ui.py

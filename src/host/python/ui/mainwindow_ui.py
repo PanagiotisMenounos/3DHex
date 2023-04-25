@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow_design.ui'
+# Form implementation generated from reading ui file 'mainwindow_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -1150,7 +1150,7 @@ class Ui_MainWindow(object):
         self.groupBox_10.setObjectName("groupBox_10")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.groupBox_10)
         self.gridLayout_10.setObjectName("gridLayout_10")
-        self.MplWidget = MplWidget(self.groupBox_10)
+        self.MplWidget = TempPlot(self.groupBox_10)
         self.MplWidget.setStyleSheet("background-color: rgb(47, 47, 47);")
         self.MplWidget.setObjectName("MplWidget")
         self.gridLayout_10.addWidget(self.MplWidget, 0, 0, 1, 1)
@@ -8061,4 +8061,4 @@ class Ui_MainWindow(object):
         self.actionPrinter22.setText(_translate("MainWindow", "Printer22"))
         self.actionPrinter23.setText(_translate("MainWindow", "Printer23"))
         self.actionPrinter24.setText(_translate("MainWindow", "Printer24"))
-from userinterface.plots.mplwidget import MplWidget
+from graphics.temp_plot import TempPlot

@@ -2083,7 +2083,7 @@ border-color:rgb(83, 83, 83);
              </property>
              <layout class="QGridLayout" name="gridLayout_10">
               <item row="0" column="0">
-               <widget class="MplWidget" name="MplWidget" native="true">
+               <widget class="TempPlot" name="MplWidget" native="true">
                 <property name="styleSheet">
                  <string notr="true">background-color: rgb(47, 47, 47);</string>
                 </property>
@@ -15111,9 +15111,9 @@ border-color:rgb(120, 120, 120)
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MplWidget</class>
+   <class>TempPlot</class>
    <extends>QWidget</extends>
-   <header location="global">userinterface.plots.mplwidget.h</header>
+   <header location="global">graphics.temp_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
