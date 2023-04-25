@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/host/python/maininterface/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/maininterface/initialization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/3DHex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/3DHex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/usb/comport.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/usb/portscanner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/usb/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/usb/connection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/usb/usbhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/usb/realtimehandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/usb/usbprint.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/newprinter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/userinterface/setupwindows/newprinter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
