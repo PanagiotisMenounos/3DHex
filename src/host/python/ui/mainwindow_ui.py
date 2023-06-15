@@ -8061,4 +8061,4 @@ class Ui_MainWindow(object):
         self.actionPrinter22.setText(_translate("MainWindow", "Printer22"))
         self.actionPrinter23.setText(_translate("MainWindow", "Printer23"))
         self.actionPrinter24.setText(_translate("MainWindow", "Printer24"))
-from graphics.temp_plot import TempPlot
+from mainwindow_controller.graphics.temp_plot import TempPlot

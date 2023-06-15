@@ -46,11 +46,13 @@ from popup.pins_library import PinsWindow
 from popup.new_printer import PrinterWindow
 from popup.autopid_update import AutoTuneWindow
 from ui.mainwindow_ui import Ui_MainWindow
-from graphics.progress_bar import ProgressBarWorker
+from mainwindow_controller.graphics.progress_bar import ProgressBarWorker
 from serial_controller.comport_scanner import COMPortScanner
 from printer_controller.fly_commander import FLYWorker
 from calibration.auto_bed_leveling import ABL_Interpolation
 from serial_controller.usb_connect_printer import UsbConnect
+from printer_controller.rapid_controls.axes_controls import RapidAxesController
+from printer_controller.rapid_controls.heat_controls import TempConctrols
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
@@ -72,6 +74,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.BED_TEMP.setFont(QFont("Digital-7", 20))
         self.setup_temp_monitor()
         self.usbconnect = UsbConnect(self) #import usb connect
+        self.rapidmovecontrol = RapidAxesController(self)
+        self.tempidlecontrol = TempConctrols(self)
 
     def setup_temp_monitor(self):
         length_of_signal = 50
@@ -84,7 +88,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MplWidget.canvas.axes.plot(self.t, self.cosinus_signal, color="#ff5500")
         self.MplWidget.canvas.axes.plot(self.t, self.sinus_signal, color="#0095ff")
         self.MplWidget.canvas.draw()
-
     def declare_vars(self):
         self.MM = 0
         self.SS = 0
@@ -172,7 +175,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBox.addItem("")
         for p in self.ports:
             self.comboBox.addItem(p.device)
-
     def select_HW_pin(self,button):
         self.pin_button=button
         try:
@@ -181,17 +183,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pin_conf = 70
         self.pins_window = PinsWindow(self)
         self.pins_window.show()
-        
-
     def new_printer(self):
         self.window2 = PrinterWindow(self)
         self.window2.show()
-
     def test(self):
         self.window3 = AutoTuneWindow(self)
         self.window3.show()
         print(self.Auto_P)
-
     def select_printer(self,printer_selection):
         window.save_settings()
         printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
@@ -210,7 +208,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             p=p+1
         printer_file.close()
         self.load_printers()
-
     def remove_printer(self):
         printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
         printers = printer_file.readlines()
@@ -232,7 +229,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         printer_file.close()
         self.load_printers()
-        
     def load_printers(self):
         printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
         printers = printer_file.readlines()
@@ -259,29 +255,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             p=p+1
         printer_file.close()
         self.load_settings()
-       
     def assign_buttons(self):
         self.p1.clicked.connect(self.usbconnect.CONNECT)
         self.p3.clicked.connect(self.USB)
-        self.p5.clicked.connect(self.HOME_X_MIN)
-        self.p9.clicked.connect(self.HOME_Y_MIN)
-        self.p13.clicked.connect(self.HOME_Z_MIN)
-        self.p7.clicked.connect(lambda:self.rapid_idle_position(0,1))
-        self.p8.clicked.connect(lambda:self.rapid_idle_position(0,0))
-        self.p11.clicked.connect(lambda:self.rapid_idle_position(1,1))
-        self.p12.clicked.connect(lambda:self.rapid_idle_position(1,0))
-        self.p15.clicked.connect(lambda:self.rapid_idle_position(2,1))
-        self.p16.clicked.connect(lambda:self.rapid_idle_position(2,0))
-        self.p19.clicked.connect(lambda:self.rapid_idle_position(3,1))
-        self.p20.clicked.connect(lambda:self.rapid_idle_position(3,0))
+        self.p5.clicked.connect(self.rapidmovecontrol.HOME_X_MIN)
+        self.p9.clicked.connect(self.rapidmovecontrol.HOME_Y_MIN)
+        self.p13.clicked.connect(self.rapidmovecontrol.HOME_Z_MIN)
+        self.p7.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(0,1))
+        self.p8.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(0,0))
+        self.p11.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(1,1))
+        self.p12.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(1,0))
+        self.p15.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(2,1))
+        self.p16.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(2,0))
+        self.p19.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(3,1))
+        self.p20.clicked.connect(lambda:self.rapidmovecontrol.rapid_idle_position(3,0))
         self.p21.clicked.connect(self.PAUSE)
         self.p4.clicked.connect(self.SD_CARD)
-        self.p88.clicked.connect(self.setNOZZTEMP)
-        self.p89.clicked.connect(self.setBEDTEMP)
+        self.p88.clicked.connect(self.tempidlecontrol.setNOZZTEMP)
+        self.p89.clicked.connect(self.tempidlecontrol.setBEDTEMP)
         self.p22.clicked.connect(self.clear_GCODE)
         self.p23.clicked.connect(self.CANCEL)
         self.p24.clicked.connect(self.setJFAJ)
-        self.p25.clicked.connect(self.setFAN1)
+        self.p25.clicked.connect(self.tempidlecontrol.setFAN1)
         self.p90.clicked.connect(self.nozz_AUTOTUNE)
         self.p91.clicked.connect(self.bed_AUTOTUNE)
         self.p29.clicked.connect(self.View)
@@ -289,12 +284,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p31.clicked.connect(lambda:self.BL_TOUCH_TOGGLE(1))
         self.p27.clicked.connect(self.execute_ABL)
         self.action_Open.triggered.connect(self.openfile)
-        #self.p2.clicked.connect(self.start_USB_worker)
         self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
-        self.c2.stateChanged.connect(self.setXmotor)                                                               
-        self.c3.stateChanged.connect(self.setYmotor)                                                             
-        self.c4.stateChanged.connect(self.setZmotor)                                                             
-        self.c5.stateChanged.connect(self.setEmotor)
+        self.c2.stateChanged.connect(self.rapidmovecontrol.setXmotor)
+        self.c3.stateChanged.connect(self.rapidmovecontrol.setYmotor)
+        self.c4.stateChanged.connect(self.rapidmovecontrol.setZmotor)
+        self.c5.stateChanged.connect(self.rapidmovecontrol.setEmotor)
         self.c7.stateChanged.connect(self.readInvertX)
         self.c8.stateChanged.connect(self.readInvertY)
         self.c9.stateChanged.connect(self.readInvertZ)
@@ -378,21 +372,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
         self.actionNew.triggered.connect(self.new_printer)
         self.actionRemove.triggered.connect(self.remove_printer)
-
-
     def UNITS(self):
         if self.c21.isChecked() == True:
             self.c21.setText("[mm/min]")
         else:
             self.c21.setText("[mm/sec]")
-
     def ABL_include(self):
         if self.c29.isChecked() == True:
             self.p27.setEnabled(False)
         else:
             self.p27.setEnabled(True)
-
-
     def USB(self): #call this func whenever USB_calculate button is pressed
         if self.USB_CONNECTED==1 and self.A==0:
             self.pipe = win32pipe.CreateNamedPipe(
@@ -422,7 +411,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.child_file.write(str(struct.pack("i",self.mirror)))
             self.child_file.close()
             self.disable_idle_buttons()
-
     def CANCEL(self):
         self.child_buffer_size = os.path.getsize(os.getenv('LOCALAPPDATA')+'\\3DHex2\\binary files\\child.bin')
         if self.child_buffer_size!=0:
@@ -434,7 +422,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.USB_CONNECTED==1 and self.rapid_pos==1:
             self.Message_panel.append(">>> Aborted")
             self.ser.write(struct.pack("B",self.A))
-
     def execute_ABL(self): 
         self.width=float(self.b53.toPlainText().strip())
         self.length=float(self.b54.toPlainText().strip())
@@ -508,7 +495,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ABL_f.close()
         self.ABL=1
         self.USB()
-        
     def View(self):         
         if pyplot.fignum_exists(self.plot_num)==False:
             bedx = float(window.b53.toPlainText().strip())
@@ -531,7 +517,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ABL_interpolation_thread=ABL_Interpolation(self)
                 self.ABL_interpolation_thread.message.connect(self.Plot)
                 self.ABL_interpolation_thread.start()
-
     def Plot(self,message):    
         plt.style.use('dark_background')
         fig = pyplot.figure()
@@ -548,16 +533,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         fig.tight_layout()
         pyplot.ion()
         pyplot.show()
-
     def readInvertX(self):
         self.InvertX_tongle=1
-
     def readInvertY(self):
         self.InvertY_tongle=1
-
     def readInvertZ(self):
         self.InvertZ_tongle=1
-
     def enable_idle_buttons(self): #Enable after idle command
         window.c2.setEnabled(True)  
         window.c3.setEnabled(True) 
@@ -568,8 +549,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         window.c5.setEnabled(True)
         window.p88.setEnabled(True)
         window.p89.setEnabled(True)
-        
-
     def disable_idle_buttons(self): #Disable while in idle command
        if self.USB_CONNECTED==1:
           self.c2.setEnabled(False)  
@@ -581,7 +560,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.c5.setEnabled(False)
           #self.p88.setEnabled(False)
           #self.p89.setEnabled(False)
-
     def enable_rapid_buttons(self):
         if self.c12.isChecked():
             self.p5.setEnabled(True)
@@ -597,7 +575,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p16.setEnabled(True)
         self.p19.setEnabled(True)
         self.p20.setEnabled(True)
-
     def disable_rapid_buttons(self):
         self.p5.setEnabled(False) 
         self.p9.setEnabled(False)
@@ -609,8 +586,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p15.setEnabled(False)
         self.p16.setEnabled(False)
         self.p19.setEnabled(False)
-        self.p20.setEnabled(False)    
-
+        self.p20.setEnabled(False)
     def setHOME_Xbuttons(self,state):
         if state == Qt.Checked and self.c2.isChecked() and self.USB_CONNECTED==1:
             self.p5.setEnabled(True)
@@ -627,116 +603,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.p13.setEnabled(False)
 
-    def setXmotor(self,state):
-        self.C=0
-        if state == Qt.Checked:
-            self.D=1
-            if self.USB_CONNECTED==1:
-                if self.c12.isChecked():
-                    self.p5.setEnabled(True)
-                self.p7.setEnabled(True)
-                self.p8.setEnabled(True)
-        else:
-            self.D=0
-            if self.USB_CONNECTED==1:
-                self.p5.setEnabled(False)
-                self.p7.setEnabled(False)
-                self.p8.setEnabled(False)
-        self.disable_idle_buttons()
-        self.set_motor=1
-
-    def setYmotor(self,state):
-        self.C=1
-        if state == Qt.Checked:
-            self.D=1
-            if self.USB_CONNECTED==1:
-                if self.c13.isChecked():
-                    self.p9.setEnabled(True)
-                self.p11.setEnabled(True)
-                self.p12.setEnabled(True)
-        else:
-            self.D=0
-            if self.USB_CONNECTED==1:
-                self.p9.setEnabled(False)
-                self.p11.setEnabled(False)
-                self.p12.setEnabled(False)
-        self.disable_idle_buttons()
-        self.set_motor=1
-
-    def setZmotor(self,state):
-        self.C=2
-        if state == Qt.Checked:
-            self.D=1
-            if self.USB_CONNECTED==1:
-                if self.c14.isChecked():
-                    self.p13.setEnabled(True)
-                self.p15.setEnabled(True)
-                self.p16.setEnabled(True)
-        else:
-            self.D=0
-            if self.USB_CONNECTED==1:
-                self.p13.setEnabled(False)
-                self.p15.setEnabled(False)
-                self.p16.setEnabled(False)
-        self.disable_idle_buttons()
-        self.set_motor=1
-
-    def setEmotor(self,state):
-        self.C=3
-        if state == Qt.Checked:
-            self.D=1
-            if self.USB_CONNECTED==1:
-                if self.c15.isChecked():
-                    self.p17.setEnabled(True)
-                    self.p18.setEnabled(True)
-                self.p19.setEnabled(True)
-                self.p20.setEnabled(True)
-        else:
-            self.D=0
-            if self.USB_CONNECTED==1:
-                self.p17.setEnabled(False)
-                self.p18.setEnabled(False)
-                self.p19.setEnabled(False)
-                self.p20.setEnabled(False)
-        self.disable_idle_buttons()
-        self.set_motor=1
-
-    def HOME_X_MIN(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=1
-            self.disable_idle_buttons()
-            self.I = int(self.c7.isChecked())                                      #HOME_X_DIRECTION
-            if self.I==1:
-               self.I=0
-            else:
-               self.I=1 
-            self.p5.setEnabled(False)
-            self.home_axis=1
-
-    def HOME_Y_MIN(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=1
-            self.disable_idle_buttons()
-            self.J = int(self.c8.isChecked())                                      #HOME_X_DIRECTION
-            if self.J==1:
-               self.J=0
-            else:
-               self.J=1 
-            self.p9.setEnabled(False)
-            self.home_axis=2
-
-    def HOME_Z_MIN(self):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.L=1
-            self.disable_idle_buttons()
-            self.K = int(self.c9.isChecked())                                      #HOME_X_DIRECTION
-            if self.K==1:
-               self.K=0
-            else:
-               self.K=1 
-            self.p13.setEnabled(False)
-            self.home_axis=3
-
     def BL_TOUCH_TOGGLE(self,case):
         if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
             self.bl_toggle=1
@@ -751,114 +617,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.BL_TOUCH_STATE=0
             else: #test button
                 self.C=0
-            
-    def rapid_idle_position(self,axis,dir):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.disable_idle_buttons()
-            self.A=0
-            self.B=3
-            self.C=axis
-            self.F=dir #only for python
-            if axis == 0:
-               self.I=int(1000000/(int(window.b1.toPlainText().strip())*window.d5.value()*2))  #delay time
-               self.J=int(window.d1.value()*int(window.b1.toPlainText().strip()))
-               self.D=int(self.c2.isChecked()) #Enabled/Disabled
-               self.E=int(self.c7.isChecked()) #Direction
-               if dir == 1:                    #-X command
-                   self.p7.setEnabled(False)
-                   if self.E==1:               
-                       self.E=0                #Direction
-                       self.InvertX = -1
-                       self.rapid_X=-1
-                   else:
-                       self.E=1
-                       self.InvertX = 1
-                       self.rapid_X=-1
-               else:
-                   self.p8.setEnabled(False)
-                   self.rapid_X=1
-            if axis == 1:
-               self.I=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #delay time
-               self.J=int(window.d2.value()*int(window.b2.toPlainText().strip()))
-               self.D=int(self.c3.isChecked()) #Enabled/Disabled
-               self.E=int(self.c8.isChecked()) #Direction
-               if dir == 1:                    #-Y command
-                   self.p11.setEnabled(False)
-                   if self.E==1:               
-                       self.E=0                #Direction
-                       self.rapid_Y=-1
-                   else:
-                       self.E=1
-                       self.rapid_Y=-1
-               else:
-                   self.p12.setEnabled(False)
-                   self.rapid_Y=1
-            if axis == 2:
-               self.I=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #delay time
-               self.J=int(window.d3.value()*int(window.b3.toPlainText().strip()))
-               self.D=int(self.c4.isChecked()) #Enabled/Disabled
-               self.E=int(self.c9.isChecked()) #Direction
-               if dir == 1:                    #-Z command
-                   self.p15.setEnabled(False)
-                   if self.E==1:               
-                       self.E=0                #Direction
-                       self.rapid_Z=-1
-                   else:
-                       self.E=1
-                       self.rapid_Z=-1
-               else:
-                   self.p16.setEnabled(False)
-                   self.rapid_Z=1
-            if axis == 3:
-               self.I=int(1000000/(int(window.b4.toPlainText().strip())*window.d8.value()*2))  #delay time
-               self.J=int(window.d4.value()*int(window.b4.toPlainText().strip()))
-               self.D=int(self.c5.isChecked()) #Enabled/Disabled
-               self.E=int(self.c10.isChecked()) #Direction
-               if dir == 1:                    #-E command
-                   self.p19.setEnabled(False)
-                   if self.E==1:               
-                       self.E=0                #Direction
-                   else:
-                       self.E=1
-               else:
-                   self.p20.setEnabled(False)
-            self.rapid_pos=1
 
-    def setNOZZTEMP(self):
-        if self.A==0:
-           self.disable_idle_buttons()
-           self.set_temp=1
-        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
-            self.froze=1
-            self.MM=104
-            self.SS=float(window.b35.toPlainText().strip())
-            self.Message_panel.append(">>> M104 S"+str(self.SS)+": Set NOZZLE temp ")
-            self.fly_thread = FLYWorker(self)
-            self.fly_thread.start()            
 
-    def setBEDTEMP(self):
-        if self.A==0:
-            self.disable_idle_buttons()
-            self.set_temp=2
-        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
-            self.froze=1
-            self.MM=140
-            self.SS=float(window.b36.toPlainText().strip())
-            self.Message_panel.append(">>> M140 S"+str(self.SS)+": Set BED temp ")
-            self.fly_thread = FLYWorker(self)
-            self.fly_thread.start()
-    
-    def setFAN1(self):
-        if self.A==0:
-            self.set_fan=1
-        if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
-            self.froze=1
-            self.MM=106
-            self.SS=float(window.d104.value())
-            self.Message_panel.append(">>> M106: Set FAN1 ")
-            self.fly_thread = FLYWorker(self)
-            self.fly_thread.start()
-       
     def setJFAJ(self):
         if self.usb_printing==1 and self.USB_CONNECTED==1 and self.froze==0 and self.froze_loop==0:
             self.froze=1
@@ -866,19 +626,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Message_panel.append(">>> Set JFAJ")
             self.fly_thread = FLYWorker(self)
             self.fly_thread.start()
- 
     def nozz_AUTOTUNE(self):
         self.nozz_auto_tune=1
         self.A=0
         self.B=5
         self.C=1
-
     def bed_AUTOTUNE(self):
         self.nozz_auto_tune=1
         self.A=0
         self.B=5
         self.C=0
-
     def openfile(self):#call this function whenever file->open is pressed
         self.Message_panel.append(">>> select GCODE...loading...")
         path = easygui.fileopenbox() #open window to select file and save path
@@ -895,7 +652,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            
         else:
            self.Message_panel.append(">>> Aborted")
-
     def save_settings(self):
         bfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','w')
         cfile = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\cboxes settings.txt','w')
@@ -974,8 +730,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         d_file.close()
         cb_file.close()
         pins_file.close()
-                    
-
     def load_settings(self):
         file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\settings\\Printer' + str(self.printer) + '\\boxes settings.txt','r') #read general setting file and set them
         boxes = file.readlines()
@@ -1027,13 +781,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 pin.setText('N')
             else:
                 pin.setText(str(val))
-
     def clear_GCODE(self):
         self.data=''
         self.GCODE_Panel.setPlainText('')
         self.Message_panel.append(">>> GCODE cleared")
         #self.import_GCODE(self.data)
-
     def SD_CARD(self):
         gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
         gcode = self.GCODE_Panel.toPlainText()
@@ -1065,7 +817,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
            p2 = subprocess.Popen("3DBrain.exe")
         else:
            self.Message_panel.append(">>> Aborted ")
-
     def PAUSE(self):
         if self.usb_printing==1 and self.froze==0:
            if self.pause_state==0: #pass M226 command to C
@@ -1083,11 +834,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
              self.froze=1
              self.froze_loop=0 
              self.Message_panel.append(">>> Resume printing... ")
-
     def update_nozz_temp(self, new_nozz_temp):
         self.NOZZ_TEMP.setText("{:.2f}".format(round(new_nozz_temp, 2)))
         self.cosinus_signal[49]= float("{:.2f}".format(round(new_nozz_temp, 2)))
- 
     def update_bed_temp(self, new_bed_temp):
         self.BED_TEMP.setText("{:.2f}".format(round(new_bed_temp, 2)))
         self.sinus_signal[49]= float("{:.2f}".format(round(new_bed_temp, 2)))
@@ -1098,7 +847,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MplWidget.canvas.draw()
         self.cosinus_signal= np.roll(self.cosinus_signal, -1)
         self.sinus_signal = np.roll(self.sinus_signal, -1)
-
     def update_xpos(self, x_pos_report):
         self.stepx_pos = x_pos_report - self.x_pos_last    
         if abs(self.stepx_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
@@ -1126,7 +874,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sum_Xpos = self.sum_Xpos + self.stepx_pos
         self.x_overflow=self.sum_Xpos/100 #pulses to mm
         self.XPOSITION.setText("{:.3f}".format(round(self.x_overflow, 3)))
-        
     def update_ypos(self, y_pos_report):
         self.stepy_pos = y_pos_report - self.y_pos_last
         if abs(self.stepy_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
@@ -1154,7 +901,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sum_Ypos = self.sum_Ypos + self.stepy_pos
         self.y_overflow=self.sum_Ypos/100 #pulses to mm
         self.YPOSITION.setText("{:.3f}".format(round(self.y_overflow, 3)))
-
     def update_zpos(self, z_pos_report):
         self.stepz_pos = z_pos_report - self.z_pos_last
         if abs(self.stepz_pos) > 15000: #Below algorithm handles 16bit overflow arduino position
@@ -1182,39 +928,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sum_Zpos = self.sum_Zpos + self.stepz_pos
         self.z_overflow=self.sum_Zpos/100 #pulses to mm
         self.ZPOSITION.setText("{:.3f}".format(round(self.z_overflow, 3)))
-
     def start_bar(self):
         self.bar_thread = ProgressBarWorker(self)
         #self.bar_thread.setDaemon(True) #Terminate at the end,only threading.Thread
         self.bar_thread.message.connect(self.print2user_bar) #connect thread to message window
         self.bar_thread.progress_value.connect(self.setProgressVal) #connect thread to bar
         self.bar_thread.start()
-       
     def print2user_usb(self,message):
         self.Message_panel.append(message)
-
     def print2user_bar(self,message):
         self.Message_panel.append(message)
-
     def setProgressVal(self,progress_value):
         self.progressBar.setValue(progress_value)
-
     def closeEvent(self, event): #trigger on closing
         self.save_settings() #save settings
         #self.clear_GCODE()
-
     def selectPort(self,COM):
         self.chosenPort = COM
-
     def start_COMPort_worker(self):
         self.comport_thread = COMPortScanner(self)
         #self.comport_thread.setDaemon(True) #Terminate at the end,only threading.Thread
         self.comport_thread.start()
-
-    # def start_USB_worker(self):
-    #
-    #     #self.usb_thread.setDaemon(True) #Terminate at the end,only threading.Thread
-    #     self.usb_thread.start()
 
 if __name__ == "__main__":
     QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling) #https://vicrucann.github.io/tutorials/osg-qt-high-dpi/?fbclid=IwAR3lhrM1zYX615yAGoyoJdAYGdKY5W-l5NsQiWu7gEVoQfzsqWML2iPOWBg
