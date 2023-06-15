@@ -117,73 +117,73 @@ class RapidAxesController:
             self.main_window.home_axis=3
 
     def rapid_idle_position(self,axis,dir):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.disable_idle_buttons()
-            self.A=0
-            self.B=3
-            self.C=axis
-            self.F=dir #only for python
+        if self.main_window.home_axis==0 and self.main_window.rapid_pos==0 and self.main_window.A==0:
+            self.main_window.disable_idle_buttons()
+            self.main_window.A=0
+            self.main_window.B=3
+            self.main_window.C=axis
+            self.main_window.F=dir #only for python
             if axis == 0:
-               self.I=int(1000000/(int(window.b1.toPlainText().strip())*window.d5.value()*2))  #delay time
-               self.J=int(window.d1.value()*int(window.b1.toPlainText().strip()))
-               self.D=int(self.c2.isChecked()) #Enabled/Disabled
-               self.E=int(self.c7.isChecked()) #Direction
+               self.main_window.I=int(1000000/(int(self.main_window.b1.toPlainText().strip())*self.main_window.d5.value()*2))  #delay time
+               self.main_window.J=int(self.main_window.d1.value()*int(self.main_window.b1.toPlainText().strip()))
+               self.main_window.D=int(self.main_window.c2.isChecked()) #Enabled/Disabled
+               self.main_window.E=int(self.main_window.c7.isChecked()) #Direction
                if dir == 1:                    #-X command
-                   self.p7.setEnabled(False)
-                   if self.E==1:
-                       self.E=0                #Direction
-                       self.InvertX = -1
-                       self.rapid_X=-1
+                   self.main_window.p7.setEnabled(False)
+                   if self.main_window.E==1:
+                       self.main_window.E=0                #Direction
+                       self.main_window.InvertX = -1
+                       self.main_window.rapid_X=-1
                    else:
-                       self.E=1
-                       self.InvertX = 1
-                       self.rapid_X=-1
+                       self.main_window.E=1
+                       self.main_window.InvertX = 1
+                       self.main_window.rapid_X=-1
                else:
-                   self.p8.setEnabled(False)
-                   self.rapid_X=1
+                   self.main_window.p8.setEnabled(False)
+                   self.main_window.rapid_X=1
             if axis == 1:
-               self.I=int(1000000/(int(window.b2.toPlainText().strip())*window.d6.value()*2))  #delay time
-               self.J=int(window.d2.value()*int(window.b2.toPlainText().strip()))
-               self.D=int(self.c3.isChecked()) #Enabled/Disabled
-               self.E=int(self.c8.isChecked()) #Direction
+               self.main_window.I=int(1000000/(int(self.main_window.b2.toPlainText().strip())*self.main_window.d6.value()*2))  #delay time
+               self.main_window.J=int(self.main_window.d2.value()*int(self.main_window.b2.toPlainText().strip()))
+               self.main_window.D=int(self.main_window.c3.isChecked()) #Enabled/Disabled
+               self.main_window.E=int(self.main_window.c8.isChecked()) #Direction
                if dir == 1:                    #-Y command
-                   self.p11.setEnabled(False)
-                   if self.E==1:
-                       self.E=0                #Direction
-                       self.rapid_Y=-1
+                   self.main_window.p11.setEnabled(False)
+                   if self.main_window.E==1:
+                       self.main_window.E=0                #Direction
+                       self.main_window.rapid_Y=-1
                    else:
-                       self.E=1
-                       self.rapid_Y=-1
+                       self.main_window.E=1
+                       self.main_window.rapid_Y=-1
                else:
-                   self.p12.setEnabled(False)
-                   self.rapid_Y=1
+                   self.main_window.p12.setEnabled(False)
+                   self.main_window.rapid_Y=1
             if axis == 2:
-               self.I=int(1000000/(int(window.b3.toPlainText().strip())*window.d7.value()*2))  #delay time
-               self.J=int(window.d3.value()*int(window.b3.toPlainText().strip()))
-               self.D=int(self.c4.isChecked()) #Enabled/Disabled
-               self.E=int(self.c9.isChecked()) #Direction
+               self.main_window.I=int(1000000/(int(self.main_window.b3.toPlainText().strip())*self.main_window.d7.value()*2))  #delay time
+               self.main_window.J=int(self.main_window.d3.value()*int(self.main_window.b3.toPlainText().strip()))
+               self.main_window.D=int(self.main_window.c4.isChecked()) #Enabled/Disabled
+               self.main_window.E=int(self.main_window.c9.isChecked()) #Direction
                if dir == 1:                    #-Z command
-                   self.p15.setEnabled(False)
-                   if self.E==1:
-                       self.E=0                #Direction
-                       self.rapid_Z=-1
+                   self.main_window.p15.setEnabled(False)
+                   if self.main_window.E==1:
+                       self.main_window.E=0                #Direction
+                       self.main_window.rapid_Z=-1
                    else:
-                       self.E=1
-                       self.rapid_Z=-1
+                       self.main_window.E=1
+                       self.main_window.rapid_Z=-1
                else:
-                   self.p16.setEnabled(False)
-                   self.rapid_Z=1
+                   self.main_window.p16.setEnabled(False)
+                   self.main_window.rapid_Z=1
             if axis == 3:
-               self.I=int(1000000/(int(window.b4.toPlainText().strip())*window.d8.value()*2))  #delay time
-               self.J=int(window.d4.value()*int(window.b4.toPlainText().strip()))
-               self.D=int(self.c5.isChecked()) #Enabled/Disabled
-               self.E=int(self.c10.isChecked()) #Direction
+               self.main_window.I=int(1000000/(int(self.main_window.b4.toPlainText().strip())*self.main_window.d8.value()*2))  #delay time
+               self.main_window.J=int(self.main_window.d4.value()*int(self.main_window.b4.toPlainText().strip()))
+               self.main_window.D=int(self.main_window.c5.isChecked()) #Enabled/Disabled
+               self.main_window.E=int(self.main_window.c10.isChecked()) #Direction
                if dir == 1:                    #-E command
-                   self.p19.setEnabled(False)
-                   if self.E==1:
-                       self.E=0                #Direction
+                   self.main_window.p19.setEnabled(False)
+                   if self.main_window.E==1:
+                       self.main_window.E=0                #Direction
                    else:
-                       self.E=1
+                       self.main_window.E=1
                else:
-                   self.p20.setEnabled(False)
-            self.rapid_pos=1
+                   self.main_window.p20.setEnabled(False)
+            self.main_window.rapid_pos=1

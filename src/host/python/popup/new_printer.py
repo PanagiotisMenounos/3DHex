@@ -5,10 +5,11 @@ from ui.new_printer_ui import Ui_New_Printer
 
 class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
 
-    def __init__(self, mainwindow, *args, obj=None, **kwargs):
+    def __init__(self ,mainwindow, *args, obj=None, **kwargs):
         super(PrinterWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)  # import Qtdesigner
         self.main_window = mainwindow
+        #self.printers_window = printers
         self.ok_printer.clicked.connect(self.OK_Printer)
         self.cancel_printer.clicked.connect(self.CANCEL_Printer)
         self.main_window.Message_panel.append(">>> Add new settings")
@@ -57,7 +58,7 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
             self.main_window.added = 0
             printer_file.close()
             self.main_window.save_settings()
-            self.main_window.load_printers()
+            self.main_window.printconfigurations.load_printers()
             self.close()
 
     def CANCEL_Printer(self):

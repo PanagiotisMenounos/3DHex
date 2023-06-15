@@ -43,7 +43,7 @@ from numpy import loadtxt
 
 #********************LOCAL IMPORTS**************************
 from popup.pins_library import PinsWindow
-from popup.new_printer import PrinterWindow
+
 from popup.autopid_update import AutoTuneWindow
 from ui.mainwindow_ui import Ui_MainWindow
 from mainwindow_controller.graphics.progress_bar import ProgressBarWorker
@@ -53,14 +53,16 @@ from calibration.auto_bed_leveling import ABL_Interpolation
 from serial_controller.usb_connect_printer import UsbConnect
 from printer_controller.rapid_controls.axes_controls import RapidAxesController
 from printer_controller.rapid_controls.heat_controls import TempConctrols
+from mainwindow_controller.printers_config import PrintersConfig
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self) #import Qtdesigner
         self.Message_panel.append(">>> 3DHex")
+        self.printconfigurations = PrintersConfig(self)
         self.declare_vars()
-        self.load_printers()
+        self.printconfigurations.load_printers()
         self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}")
         #self.actionPrinter2_2.setVisible(False) #test only
         self.UNITS()
@@ -76,6 +78,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.usbconnect = UsbConnect(self) #import usb connect
         self.rapidmovecontrol = RapidAxesController(self)
         self.tempidlecontrol = TempConctrols(self)
+
 
     def setup_temp_monitor(self):
         length_of_signal = 50
@@ -183,78 +186,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pin_conf = 70
         self.pins_window = PinsWindow(self)
         self.pins_window.show()
-    def new_printer(self):
-        self.window2 = PrinterWindow(self)
-        self.window2.show()
+
     def test(self):
         self.window3 = AutoTuneWindow(self)
         self.window3.show()
         print(self.Auto_P)
-    def select_printer(self,printer_selection):
-        window.save_settings()
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
-        printers = printer_file.readlines()
-        printer_file.close()
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
-        total_printers=len(printers)
-        p=0
-        for temp in printers:
-            printer = temp.split(',')
-            if p < total_printers:
-                if p == printer_selection:
-                    printer_file.write("1,"+printer[1]+","+printer[2])
-                else:
-                    printer_file.write("0,"+printer[1]+","+printer[2])
-            p=p+1
-        printer_file.close()
-        self.load_printers()
-    def remove_printer(self):
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
-        printers = printer_file.readlines()
-        printer_file.close()
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','w')
-        total_printers=len(printers)
-        p=0
-        for temp in printers:
-            printer = temp.split(',')
-            if p==0:
-                printer_file.write("1,"+printer[1].replace("\n","")+",1\n")
-            else:
-                if p == self.printer:
-                    printer_file.write("0,"+printer[1].replace("\n","")+",0\n")
-                    self.Message_panel.append(">>> Removed: " + str(printer[1].replace("\n","")))
-                else:
-                    printer_file.write("0,"+printer[1].replace("\n","")+","+printer[2])
-            p=p+1
-        
-        printer_file.close()
-        self.load_printers()
-    def load_printers(self):
-        printer_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\printers\\printers.txt','r')
-        printers = printer_file.readlines()
-        total_printers=len(printers)
-        p=0
-        for temp in printers:
-            printer = temp.split(',')
-            if p < total_printers:
-                if int(printer[0]) == 1:
-                    self.printer = p
-                    self.selected_printer=p
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    self.Message_panel.append(">>> Loaded: " + str(printer[1].replace("\n","")))
-                    action_printer.setText(str("● "+printer[1].replace("\n","")))
-                else:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setText(str("   "+printer[1].replace("\n","")))
-                if int(printer[2])==1:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setVisible(True)
-                else:
-                    action_printer = getattr(self, "actionPrinter{}".format(p))
-                    action_printer.setVisible(False)
-            p=p+1
-        printer_file.close()
-        self.load_settings()
+
     def assign_buttons(self):
         self.p1.clicked.connect(self.usbconnect.CONNECT)
         self.p3.clicked.connect(self.USB)
@@ -297,31 +234,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.c14.stateChanged.connect(self.setHOME_Zbuttons)
         self.c21.stateChanged.connect(self.UNITS)
         self.c29.stateChanged.connect(self.ABL_include)
-        self.actionPrinter0.triggered.connect(lambda:self.select_printer(0))
-        self.actionPrinter1.triggered.connect(lambda:self.select_printer(1))
-        self.actionPrinter2.triggered.connect(lambda:self.select_printer(2))
-        self.actionPrinter3.triggered.connect(lambda:self.select_printer(3))
-        self.actionPrinter4.triggered.connect(lambda:self.select_printer(4))
-        self.actionPrinter5.triggered.connect(lambda:self.select_printer(5))
-        self.actionPrinter6.triggered.connect(lambda:self.select_printer(6))
-        self.actionPrinter7.triggered.connect(lambda:self.select_printer(7))
-        self.actionPrinter8.triggered.connect(lambda:self.select_printer(8))
-        self.actionPrinter9.triggered.connect(lambda:self.select_printer(9))
-        self.actionPrinter10.triggered.connect(lambda:self.select_printer(10))
-        self.actionPrinter11.triggered.connect(lambda:self.select_printer(11))
-        self.actionPrinter12.triggered.connect(lambda:self.select_printer(12))
-        self.actionPrinter13.triggered.connect(lambda:self.select_printer(13))
-        self.actionPrinter14.triggered.connect(lambda:self.select_printer(14))
-        self.actionPrinter15.triggered.connect(lambda:self.select_printer(15))
-        self.actionPrinter16.triggered.connect(lambda:self.select_printer(16))
-        self.actionPrinter17.triggered.connect(lambda:self.select_printer(17))
-        self.actionPrinter18.triggered.connect(lambda:self.select_printer(18))
-        self.actionPrinter19.triggered.connect(lambda:self.select_printer(19))
-        self.actionPrinter20.triggered.connect(lambda:self.select_printer(20))
-        self.actionPrinter21.triggered.connect(lambda:self.select_printer(21))
-        self.actionPrinter22.triggered.connect(lambda:self.select_printer(22))
-        self.actionPrinter23.triggered.connect(lambda:self.select_printer(23))
-        self.actionPrinter24.triggered.connect(lambda:self.select_printer(24))
+        self.actionPrinter0.triggered.connect(lambda:self.printconfigurations.select_printer(0))
+        self.actionPrinter1.triggered.connect(lambda:self.printconfigurations.select_printer(1))
+        self.actionPrinter2.triggered.connect(lambda:self.printconfigurations.select_printer(2))
+        self.actionPrinter3.triggered.connect(lambda:self.printconfigurations.select_printer(3))
+        self.actionPrinter4.triggered.connect(lambda:self.printconfigurations.select_printer(4))
+        self.actionPrinter5.triggered.connect(lambda:self.printconfigurations.select_printer(5))
+        self.actionPrinter6.triggered.connect(lambda:self.printconfigurations.select_printer(6))
+        self.actionPrinter7.triggered.connect(lambda:self.printconfigurations.select_printer(7))
+        self.actionPrinter8.triggered.connect(lambda:self.printconfigurations.select_printer(8))
+        self.actionPrinter9.triggered.connect(lambda:self.printconfigurations.select_printer(9))
+        self.actionPrinter10.triggered.connect(lambda:self.printconfigurations.select_printer(10))
+        self.actionPrinter11.triggered.connect(lambda:self.printconfigurations.select_printer(11))
+        self.actionPrinter12.triggered.connect(lambda:self.printconfigurations.select_printer(12))
+        self.actionPrinter13.triggered.connect(lambda:self.printconfigurations.select_printer(13))
+        self.actionPrinter14.triggered.connect(lambda:self.printconfigurations.select_printer(14))
+        self.actionPrinter15.triggered.connect(lambda:self.printconfigurations.select_printer(15))
+        self.actionPrinter16.triggered.connect(lambda:self.printconfigurations.select_printer(16))
+        self.actionPrinter17.triggered.connect(lambda:self.printconfigurations.select_printer(17))
+        self.actionPrinter18.triggered.connect(lambda:self.printconfigurations.select_printer(18))
+        self.actionPrinter19.triggered.connect(lambda:self.printconfigurations.select_printer(19))
+        self.actionPrinter20.triggered.connect(lambda:self.printconfigurations.select_printer(20))
+        self.actionPrinter21.triggered.connect(lambda:self.printconfigurations.select_printer(21))
+        self.actionPrinter22.triggered.connect(lambda:self.printconfigurations.select_printer(22))
+        self.actionPrinter23.triggered.connect(lambda:self.printconfigurations.select_printer(23))
+        self.actionPrinter24.triggered.connect(lambda:self.printconfigurations.select_printer(24))
         self.Pin_Button_0.clicked.connect(lambda:self.select_HW_pin(0))
         self.Pin_Button_1.clicked.connect(lambda:self.select_HW_pin(1))
         self.Pin_Button_2.clicked.connect(lambda:self.select_HW_pin(2))
@@ -370,8 +307,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.Pin_Button_45.clicked.connect(lambda:self.select_HW_pin(45))
         # self.Pin_Button_46.clicked.connect(lambda:self.select_HW_pin(46))
         # self.Pin_Button_47.clicked.connect(lambda:self.select_HW_pin(47))
-        self.actionNew.triggered.connect(self.new_printer)
-        self.actionRemove.triggered.connect(self.remove_printer)
+        self.actionNew.triggered.connect(self.printconfigurations.new_printer)
+        self.actionRemove.triggered.connect(self.printconfigurations.remove_printer)
     def UNITS(self):
         if self.c21.isChecked() == True:
             self.c21.setText("[mm/min]")
