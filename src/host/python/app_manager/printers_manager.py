@@ -12,7 +12,7 @@ class PrintersConfig:
         self.window2.show()
 
     def select_printer(self, printer_selection):
-        self.main_window.save_settings()
+        self.main_window.filehandler.save_settings()
         printer_file = open(os.getenv('LOCALAPPDATA') + '\\3DHex2\\printers\\printers.txt', 'r')
         printers = printer_file.readlines()
         printer_file.close()
@@ -77,4 +77,4 @@ class PrintersConfig:
                     action_printer.setVisible(False)
             p = p + 1
         printer_file.close()
-        self.main_window.load_settings()
+        self.main_window.filehandler.load_settings()

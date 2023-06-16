@@ -28,4 +28,4 @@ class FLYWorker(QThread):
         self.main_window.child_file.write(struct.pack("i",self.main_window.mirror))
         self.main_window.child_file.close()   
         time.sleep(3)
-        self.main_window.froze=0  
+        self.main_window.froze=0

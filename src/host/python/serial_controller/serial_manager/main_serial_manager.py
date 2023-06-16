@@ -70,6 +70,6 @@ class USBWorker(QThread):  # This thread starts when 3DHEX connects successfully
                     self.main_window.ser.flushInput()  # very important without delay to fix a bug
                     self.main_window.ser.flushOutput()  # very important without delay to fix a bug
                     self.serialsender.send_buffer()  # Then send idle mode temp only report to printer
-                    self.main_window.enable_idle_buttons()
+                    self.main_window.widgethandler.enable_idle_buttons()
         except:
             self.main_window.USB_CONNECTED = 0

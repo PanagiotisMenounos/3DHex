@@ -7,12 +7,13 @@ class UsbConnect:
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
+
         self.usb_thread = USBWorker(self.main_window)
 
     def CONNECT(self):
         try:
             if self.main_window.USB_CONNECTED==0:            
-                self.main_window.save_settings()
+                self.main_window.filehandler.save_settings()
                 COM_PORT = self.main_window.chosenPort
                 BAUD_RATE = int(self.main_window.b48.toPlainText().strip())
                 self.main_window.ser=serial.Serial(COM_PORT,BAUD_RATE) #first time communicate with Printer
@@ -35,14 +36,14 @@ class UsbConnect:
                 self.main_window.z_overflow=0                 
                 self.main_window.usb_thread = USBWorker(self.main_window)
                 self.main_window.usb_thread.message.connect(self.main_window.print2user_usb) #connect thread to message window
-                self.main_window.usb_thread.new_nozz_temp.connect(self.main_window.update_nozz_temp) #connect thread to message window
-                self.main_window.usb_thread.new_bed_temp.connect(self.main_window.update_bed_temp) #connect thread to message window
-                self.main_window.usb_thread.x_pos_report.connect(self.main_window.update_xpos) 
-                self.main_window.usb_thread.y_pos_report.connect(self.main_window.update_ypos) 
-                self.main_window.usb_thread.z_pos_report.connect(self.main_window.update_zpos) 
-                self.main_window.usb_thread.autotune_p.connect(self.main_window.test) #connect thread to autotune window
+                self.main_window.usb_thread.new_nozz_temp.connect(self.main_window.widgethandler.update_nozz_temp) #connect thread to message window
+                self.main_window.usb_thread.new_bed_temp.connect(self.main_window.widgethandler.update_bed_temp) #connect thread to message window
+                self.main_window.usb_thread.x_pos_report.connect(self.main_window.widgethandler.update_xpos)
+                self.main_window.usb_thread.y_pos_report.connect(self.main_window.widgethandler.update_ypos)
+                self.main_window.usb_thread.z_pos_report.connect(self.main_window.widgethandler.update_zpos)
+                self.main_window.usb_thread.autotune_p.connect(self.main_window.popuphandler.test) #connect thread to autotune window
                 self.main_window.usb_thread.start()       #Start usb communication handling thread
-                self.main_window.enable_rapid_buttons()    #Enable home buttons
+                self.main_window.widgethandler.enable_rapid_buttons()    #Enable home buttons
                 for i in range (2,6): #c0-cmax
                      c = getattr(self.main_window, "c{}".format(i))    #self.main_window.b[i], https://stackoverflow.com/questions/47666922/set-properties-of-multiple-qlineedit-using-a-loop
                      c.setChecked(1) 
@@ -60,7 +61,7 @@ class UsbConnect:
                     QPushButton:disabled{background-color: rgb(255, 149, 62);color: rgb(83, 83, 83);border-color:rgb(83, 83, 83);}')
                     self.main_window.USB_CONNECTED=0
                     self.main_window.ser.close()
-                    self.main_window.disable_rapid_buttons()
+                    self.main_window.widgethandler.disable_rapid_buttons()
                     self.main_window.Message_panel.append(">>> Printer disconnected")
                     self.main_window.XPOSITION.setText("{:.3f}".format(round(0, 3)))
                     self.main_window.YPOSITION.setText("{:.3f}".format(round(0, 3)))

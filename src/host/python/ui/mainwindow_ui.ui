@@ -15113,7 +15113,7 @@ border-color:rgb(120, 120, 120)
   <customwidget>
    <class>TempPlot</class>
    <extends>QWidget</extends>
-   <header location="global">widget_controller.graphics.temp_plot.h</header>
+   <header location="global">app_manager.app_graphics.temp_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

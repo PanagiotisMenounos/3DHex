@@ -8,7 +8,7 @@ class TempConctrols:
 
     def setNOZZTEMP(self):
         if self.main_window.A==0:
-           self.main_window.disable_idle_buttons()
+           self.main_window.widgethandler.disable_idle_buttons()
            self.main_window.set_temp=1
         if self.main_window.usb_printing==1 and self.main_window.USB_CONNECTED==1 and self.main_window.froze==0 and self.main_window.froze_loop==0:
             self.main_window.froze=1
@@ -20,7 +20,7 @@ class TempConctrols:
 
     def setBEDTEMP(self):
         if self.main_window.A==0:
-            self.main_window.disable_idle_buttons()
+            self.main_window.widgethandler.disable_idle_buttons()
             self.main_window.set_temp=2
         if self.main_window.usb_printing==1 and self.main_window.USB_CONNECTED==1 and self.main_window.froze==0 and self.main_window.froze_loop==0:
             self.main_window.froze=1

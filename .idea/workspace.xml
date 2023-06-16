@@ -5,11 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/host/python/mainwindow_controller/printers_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/app_manager/widget_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/3DHex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/3DHex.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/file_manager/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/file_manager/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/file_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/graphics/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/popup_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/graphics/bed_surface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/bed_surface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/graphics/progress_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/progress_bar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/graphics/temp_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/temp_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/graphics/xyx_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/xyx_tracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/mainwindow_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/processes_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/mainwindow_controller/printers_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/printers_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/popup/new_printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/popup/new_printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/printer_controller/fly_commander.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/printer_controller/fly_commander.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/printer_controller/idle_commander.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/printer_controller/idle_commander.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/printer_controller/rapid_controls/axes_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/printer_controller/rapid_controls/axes_controls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/printer_controller/rapid_controls/heat_controls.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/printer_controller/rapid_controls/heat_controls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/serial_controller/serial_manager/main_serial_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/serial_controller/serial_manager/main_serial_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/ui/mainwindow_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/ui/mainwindow_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/host/python/ui/mainwindow_ui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/ui/mainwindow_ui.ui" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,15 +54,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Panagiotis/Desktop/biolattice-master&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/Panagiotis/Desktop/3DHex",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python" />

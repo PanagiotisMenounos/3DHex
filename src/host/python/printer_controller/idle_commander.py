@@ -28,7 +28,7 @@ class IdleCommando: #This class is imported from serial_manager package-thread
             print(self.main_window.O)
             time.sleep(0.2)
             self.serialsender.send_buffer()
-            self.main_window.enable_idle_buttons()
+            self.main_window.widgethandler.enable_idle_buttons()
         if self.main_window.set_temp == 2:  # 2 SET bed temp
             self.main_window.set_temp = 0
             self.main_window.B = 0
@@ -44,7 +44,7 @@ class IdleCommando: #This class is imported from serial_manager package-thread
             self.main_window.Q = int(float(self.main_window.b46.toPlainText().strip()) * 10.0)
             time.sleep(0.2)
             self.serialsender.send_buffer()
-            self.main_window.enable_idle_buttons()
+            self.main_window.widgethandler.enable_idle_buttons()
         if self.main_window.set_fan == 1:
             self.main_window.set_fan = 0
             self.main_window.B = 4
@@ -66,7 +66,7 @@ class IdleCommando: #This class is imported from serial_manager package-thread
             self.main_window.N = 0
             time.sleep(0.2)
             self.serialsender.send_buffer()
-            self.main_window.enable_idle_buttons()
+            self.main_window.widgethandler.enable_idle_buttons()
 
         if self.main_window.home_axis != 0:  # Homing
             self.main_window.A = 0
@@ -103,7 +103,7 @@ class IdleCommando: #This class is imported from serial_manager package-thread
             if self.main_window.home_axis == 3:
                 if self.main_window.L == 1:
                     self.main_window.p13.setEnabled(True)
-            self.main_window.enable_idle_buttons()
+            self.main_window.widgethandler.enable_idle_buttons()
             self.main_window.home_axis = 0
 
         if self.main_window.rapid_pos == 1:  # Rapid positioning command
@@ -132,7 +132,7 @@ class IdleCommando: #This class is imported from serial_manager package-thread
                     self.main_window.p19.setEnabled(True)
                 else:
                     self.main_window.p20.setEnabled(True)
-            self.main_window.enable_idle_buttons()
+            self.main_window.widgethandler.enable_idle_buttons()
             self.main_window.rapid_pos = 0
 
         if self.main_window.nozz_auto_tune == 1:

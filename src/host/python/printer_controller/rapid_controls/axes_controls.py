@@ -21,7 +21,7 @@ class RapidAxesController:
                 self.main_window.p5.setEnabled(False)
                 self.main_window.p7.setEnabled(False)
                 self.main_window.p8.setEnabled(False)
-        self.main_window.disable_idle_buttons()
+        self.main_window.widgethandler.disable_idle_buttons()
         self.main_window.set_motor=1
 
     def setYmotor(self,state):
@@ -39,7 +39,7 @@ class RapidAxesController:
                 self.main_window.p9.setEnabled(False)
                 self.main_window.p11.setEnabled(False)
                 self.main_window.p12.setEnabled(False)
-        self.main_window.disable_idle_buttons()
+        self.main_window.widgethandler.disable_idle_buttons()
         self.main_window.set_motor=1
 
     def setZmotor(self,state):
@@ -57,7 +57,7 @@ class RapidAxesController:
                 self.main_window.p13.setEnabled(False)
                 self.main_window.p15.setEnabled(False)
                 self.main_window.p16.setEnabled(False)
-        self.main_window.disable_idle_buttons()
+        self.main_window.widgethandler.disable_idle_buttons()
         self.main_window.set_motor=1
         
     def setEmotor(self,state):
@@ -77,13 +77,13 @@ class RapidAxesController:
                 self.main_window.p18.setEnabled(False)
                 self.main_window.p19.setEnabled(False)
                 self.main_window.p20.setEnabled(False)
-        self.main_window.disable_idle_buttons()
+        self.main_window.widgethandler.disable_idle_buttons()
         self.main_window.set_motor=1
         
     def HOME_X_MIN(self):
         if self.main_window.home_axis==0 and self.main_window.rapid_pos==0 and self.main_window.A==0:
             self.main_window.L=1
-            self.main_window.disable_idle_buttons()
+            self.main_window.widgethandler.disable_idle_buttons()
             self.main_window.I = int(self.main_window.c7.isChecked())                                      #HOME_X_DIRECTION
             if self.main_window.I==1:
                self.main_window.I=0
@@ -95,7 +95,7 @@ class RapidAxesController:
     def HOME_Y_MIN(self):
         if self.main_window.home_axis==0 and self.main_window.rapid_pos==0 and self.main_window.A==0:
             self.main_window.L=1
-            self.main_window.disable_idle_buttons()
+            self.main_window.widgethandler.disable_idle_buttons()
             self.main_window.J = int(self.main_window.c8.isChecked())                                      #HOME_X_DIRECTION
             if self.main_window.J==1:
                self.main_window.J=0
@@ -107,7 +107,7 @@ class RapidAxesController:
     def HOME_Z_MIN(self):
         if self.main_window.home_axis==0 and self.main_window.rapid_pos==0 and self.main_window.A==0:
             self.main_window.L=1
-            self.main_window.disable_idle_buttons()
+            self.main_window.widgethandler.disable_idle_buttons()
             self.main_window.K = int(self.main_window.c9.isChecked())                                      #HOME_X_DIRECTION
             if self.main_window.K==1:
                self.main_window.K=0
@@ -118,7 +118,7 @@ class RapidAxesController:
 
     def rapid_idle_position(self,axis,dir):
         if self.main_window.home_axis==0 and self.main_window.rapid_pos==0 and self.main_window.A==0:
-            self.main_window.disable_idle_buttons()
+            self.main_window.widgethandler.disable_idle_buttons()
             self.main_window.A=0
             self.main_window.B=3
             self.main_window.C=axis

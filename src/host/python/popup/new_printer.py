@@ -57,7 +57,7 @@ class PrinterWindow(QtWidgets.QMainWindow, Ui_New_Printer):
             self.main_window.freeroom = 0
             self.main_window.added = 0
             printer_file.close()
-            self.main_window.save_settings()
+            self.main_window.filehandler.save_settings()
             self.main_window.printconfigurations.load_printers()
             self.close()
 
