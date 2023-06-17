@@ -35,27 +35,49 @@ from PyQt5.QtGui import *
 from ui.mainwindow_ui import Ui_MainWindow
 from app_manager.app_graphics.progress_bar import ProgressBarWorker
 from serial_controller.comport_scanner import COMPortScanner
-from printer_controller.fly_commander import FLYWorker
-
 from serial_controller.usb_connect_printer import UsbConnect
 from printer_controller.rapid_controls.axes_controls import RapidAxesController
 from printer_controller.rapid_controls.heat_controls import TempConctrols
+from printer_controller.rapid_controls.bltouch_controls import BlTouch
 from app_manager.printers_manager import PrintersConfig
 from app_manager.processes_manager import ProcessesManager
 from app_manager.popup_manager import PopupManager
 from app_manager.widget_manager import WidgetManager
 from app_manager.file_manager import FileManager
+from app_manager.selection_manager import EventConfig
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self) #import Qtdesigner
         self.Message_panel.append(">>> 3DHex")
+        self.bar_thread = ProgressBarWorker(self)
+        self.comport_thread = COMPortScanner(self)
         self.filehandler = FileManager(self)
+        self.selectionhandler = EventConfig(self)
         self.printconfigurations = PrintersConfig(self)
         self.declare_vars()
         self.printconfigurations.load_printers()
-        self.setStyleSheet("QMenu{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenuBar{color: rgb(255, 255, 255);background-color: rgb(47, 47, 47);} QMenu::item:selected{background-color: rgb(83, 83, 83);} QMenuBar::item:selected{background-color: rgb(83, 83, 83);}")
+        style_sheet = """
+            QMenu {
+                color: rgb(255, 255, 255);
+                background-color: rgb(47, 47, 47);
+            }
+
+            QMenuBar {
+                color: rgb(255, 255, 255);
+                background-color: rgb(47, 47, 47);
+            }
+
+            QMenu::item:selected {
+                background-color: rgb(83, 83, 83);
+            }
+
+            QMenuBar::item:selected {
+                background-color: rgb(83, 83, 83);
+            }
+        """
+        self.setStyleSheet(style_sheet)
         #self.actionPrinter2_2.setVisible(False) #test only
         self.usbconnect = UsbConnect(self) #import usb connect
         self.rapidmovecontrol = RapidAxesController(self)
@@ -63,6 +85,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.processesmanager = ProcessesManager(self)
         self.popuphandler = PopupManager(self)
         self.widgethandler = WidgetManager(self)
+        self.bltouch = BlTouch(self)
         self.widgethandler.setup_temp_monitor()
         self.widgethandler.UNITS()
         self.widgethandler.ABL_include()
@@ -193,18 +216,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.p90.clicked.connect(self.processesmanager.nozz_AUTOTUNE)
         self.p91.clicked.connect(self.processesmanager.bed_AUTOTUNE)
         self.p29.clicked.connect(self.processesmanager.View)
-        self.p30.clicked.connect(lambda:self.BL_TOUCH_TOGGLE(0))
-        self.p31.clicked.connect(lambda:self.BL_TOUCH_TOGGLE(1))
+        self.p30.clicked.connect(lambda:self.bltouch.BL_TOUCH_TOGGLE(0))
+        self.p31.clicked.connect(lambda:self.bltouch.BL_TOUCH_TOGGLE(1))
         self.p27.clicked.connect(self.processesmanager.execute_ABL)
         self.action_Open.triggered.connect(self.filehandler.openfile)
-        self.comboBox.currentTextChanged.connect(self.selectPort)#https://zetcode.com/pyqt/qcheckbox/
+        self.comboBox.currentTextChanged.connect(self.selectionhandler.selectPort)#https://zetcode.com/pyqt/qcheckbox/
         self.c2.stateChanged.connect(self.rapidmovecontrol.setXmotor)
         self.c3.stateChanged.connect(self.rapidmovecontrol.setYmotor)
         self.c4.stateChanged.connect(self.rapidmovecontrol.setZmotor)
         self.c5.stateChanged.connect(self.rapidmovecontrol.setEmotor)
-        self.c7.stateChanged.connect(self.readInvertX)
-        self.c8.stateChanged.connect(self.readInvertY)
-        self.c9.stateChanged.connect(self.readInvertZ)
+        self.c7.stateChanged.connect(self.selectionhandler.readInvertX)
+        self.c8.stateChanged.connect(self.selectionhandler.readInvertY)
+        self.c9.stateChanged.connect(self.selectionhandler.readInvertZ)
         self.c12.stateChanged.connect(self.widgethandler.setHOME_Xbuttons)
         self.c13.stateChanged.connect(self.widgethandler.setHOME_Ybuttons)
         self.c14.stateChanged.connect(self.widgethandler.setHOME_Zbuttons)
@@ -221,60 +244,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionNew.triggered.connect(self.printconfigurations.new_printer)
         self.actionRemove.triggered.connect(self.printconfigurations.remove_printer)
 
-    def readInvertX(self):
-        self.InvertX_tongle=1
-    def readInvertY(self):
-        self.InvertY_tongle=1
-    def readInvertZ(self):
-        self.InvertZ_tongle=1
-
-
-    def BL_TOUCH_TOGGLE(self,case):
-        if self.home_axis==0 and self.rapid_pos==0 and self.A==0:
-            self.bl_toggle=1
-            self.A=0
-            self.B=7
-            if case==0: #toggle button
-                if self.BL_TOUCH_STATE==0: #UP
-                    self.C=1
-                    self.BL_TOUCH_STATE=1
-                else:
-                    self.C=2
-                    self.BL_TOUCH_STATE=0
-            else: #test button
-                self.C=0
-        else:
-           self.Message_panel.append(">>> Aborted")
-
-    def start_bar(self):
-        self.bar_thread = ProgressBarWorker(self)
-        #self.bar_thread.setDaemon(True) #Terminate at the end,only threading.Thread
-        self.bar_thread.message.connect(self.print2user_bar) #connect thread to message window
-        self.bar_thread.progress_value.connect(self.setProgressVal) #connect thread to bar
-        self.bar_thread.start()
-
-    def print2user_usb(self,message):
-        self.Message_panel.append(message)
-    def print2user_bar(self,message):
-        self.Message_panel.append(message)
-    def setProgressVal(self,progress_value):
-        self.progressBar.setValue(progress_value)
     def closeEvent(self, event): #trigger on closing
         self.filehandler.save_settings() #save settings
-        #self.clear_GCODE()
-    def selectPort(self,COM):
-        self.chosenPort = COM
-    def start_COMPort_worker(self):
-        self.comport_thread = COMPortScanner(self)
-        #self.comport_thread.setDaemon(True) #Terminate at the end,only threading.Thread
-        self.comport_thread.start()
+
+
 
 if __name__ == "__main__":
     QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling) #https://vicrucann.github.io/tutorials/osg-qt-high-dpi/?fbclid=IwAR3lhrM1zYX615yAGoyoJdAYGdKY5W-l5NsQiWu7gEVoQfzsqWML2iPOWBg
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.assign_buttons()
-    window.start_COMPort_worker()
+    window.processesmanager.start_COMPort_worker()
     window.show()
     sys.exit(app.exec_())
-    #app.exec()

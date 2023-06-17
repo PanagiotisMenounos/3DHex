@@ -148,3 +148,4 @@ class IdleCommando: #This class is imported from serial_manager package-thread
             self.main_window.bl_toggle = 0
             self.serial_manager.message.emit(">>> BL_TOUCH TOGGLE")
             self.serialsender.send_buffer()
+

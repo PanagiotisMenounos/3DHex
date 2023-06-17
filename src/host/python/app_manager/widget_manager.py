@@ -237,3 +237,10 @@ class WidgetManager:
         self.main_window.z_overflow=self.main_window.sum_Zpos/100 #pulses to mm
         self.main_window.ZPOSITION.setText("{:.3f}".format(round(self.main_window.z_overflow, 3)))
 
+    def print2user_usb(self,message):
+        self.main_window.Message_panel.append(message)
+    def print2user_bar(self,message):
+        self.main_window.Message_panel.append(message)
+    def setProgressVal(self,progress_value):
+        self.main_window.progressBar.setValue(progress_value)
+

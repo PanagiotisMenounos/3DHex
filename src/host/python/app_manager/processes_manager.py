@@ -40,7 +40,7 @@ class ProcessesManager:
             self.main_window.pause_state=0
             self.main_window.A=1 #printing mode
             self.main_window.usb_printing=1
-            self.main_window.start_bar()
+            self.main_window.processesmanager.start_bar()
             if self.main_window.ABL==0:
                 gcode_file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
                 gcode = self.main_window.GCODE_Panel.toPlainText()
@@ -78,7 +78,7 @@ class ProcessesManager:
            0,
            None)
            self.main_window.Message_panel.append(">>> path: " + path)
-           self.main_window.start_bar()
+           self.main_window.processesmanager.start_bar()
            self.main_window.file = open(os.getenv('LOCALAPPDATA')+'\\3DHex2\\support files\\GCODE.txt','w')
            self.main_window.data = self.main_window.GCODE_Panel.toPlainText()
            self.main_window.file.write(self.main_window.data)
@@ -239,3 +239,11 @@ class ProcessesManager:
         self.main_window.A=0
         self.main_window.B=5
         self.main_window.C=0
+
+    def start_bar(self):
+        self.main_window.bar_thread.message.connect(self.main_window.widgethandler.print2user_bar) #connect thread to message window
+        self.main_window.bar_thread.progress_value.connect(self.main_window.widgethandler.setProgressVal) #connect thread to bar
+        self.main_window.bar_thread.start()
+
+    def start_COMPort_worker(self):
+        self.main_window.comport_thread.start()

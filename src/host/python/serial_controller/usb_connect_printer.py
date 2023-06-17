@@ -35,7 +35,7 @@ class UsbConnect:
                 self.main_window.sum_Zpos =0
                 self.main_window.z_overflow=0                 
                 self.main_window.usb_thread = USBWorker(self.main_window)
-                self.main_window.usb_thread.message.connect(self.main_window.print2user_usb) #connect thread to message window
+                self.main_window.usb_thread.message.connect(self.main_window.widgethandler.print2user_usb) #connect thread to message window
                 self.main_window.usb_thread.new_nozz_temp.connect(self.main_window.widgethandler.update_nozz_temp) #connect thread to message window
                 self.main_window.usb_thread.new_bed_temp.connect(self.main_window.widgethandler.update_bed_temp) #connect thread to message window
                 self.main_window.usb_thread.x_pos_report.connect(self.main_window.widgethandler.update_xpos)
