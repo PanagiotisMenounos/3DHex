@@ -247,3 +247,4 @@ class ProcessesManager:
 
     def start_COMPort_worker(self):
         self.main_window.comport_thread.start()
+

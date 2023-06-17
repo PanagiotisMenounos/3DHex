@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/host/python/app_manager/selection_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/host/python/printer_controller/rapid_controls/bltouch_controls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/app_manager/setup/assign_buttons.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/app_manager/setup/declare_vars.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/host/python/app_manager/setup/setup_style.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/3DHex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/3DHex.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/processes_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/processes_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/widget_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/widget_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/printer_controller/idle_commander.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/printer_controller/idle_commander.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,11 +53,11 @@
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\userinterface" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\app_manager\setup" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\app_manager" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\widget_controllers" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex" />
       <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python" />
-      <recent name="C:\Users\Panagiotis\Desktop\3DHex\src\host\python\ui" />
     </key>
   </component>
   <component name="RunManager">
