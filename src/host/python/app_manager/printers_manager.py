@@ -1,5 +1,4 @@
 import os
-
 from popup.new_printer import PrinterWindow
 
 class PrintersConfig:

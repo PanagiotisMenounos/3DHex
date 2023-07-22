@@ -1,5 +1,4 @@
 import serial.tools.list_ports
-
 from serial_controller.serial_manager.main_serial_manager import USBWorker
 
 class UsbConnect:

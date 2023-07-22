@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o
-LINKOBJ  = main.o
+OBJ      = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o post_processing/curve.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o post_processing/gcode_parser.o file_manager/path_maker.o
+LINKOBJ  = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o post_processing/curve.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o post_processing/gcode_parser.o file_manager/path_maker.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -mwindows
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -26,3 +26,42 @@ $(BIN): $(OBJ)
 
 main.o: main.c
 	$(CC) -c main.c -o main.o $(CFLAGS)
+
+kinematics/line.o: kinematics/line.c
+	$(CC) -c kinematics/line.c -o kinematics/line.o $(CFLAGS)
+
+global_vars/globals.o: global_vars/globals.c
+	$(CC) -c global_vars/globals.c -o global_vars/globals.o $(CFLAGS)
+
+kinematics/arc.o: kinematics/arc.c
+	$(CC) -c kinematics/arc.c -o kinematics/arc.o $(CFLAGS)
+
+post_processing/curve.o: post_processing/curve.c
+	$(CC) -c post_processing/curve.c -o post_processing/curve.o $(CFLAGS)
+
+utils/angle_calc.o: utils/angle_calc.c
+	$(CC) -c utils/angle_calc.c -o utils/angle_calc.o $(CFLAGS)
+
+kinematics/velocity_profile.o: kinematics/velocity_profile.c
+	$(CC) -c kinematics/velocity_profile.c -o kinematics/velocity_profile.o $(CFLAGS)
+
+kinematics/pulse_timing.o: kinematics/pulse_timing.c
+	$(CC) -c kinematics/pulse_timing.c -o kinematics/pulse_timing.o $(CFLAGS)
+
+utils/min_max.o: utils/min_max.c
+	$(CC) -c utils/min_max.c -o utils/min_max.o $(CFLAGS)
+
+utils/quartile_calc.o: utils/quartile_calc.c
+	$(CC) -c utils/quartile_calc.c -o utils/quartile_calc.o $(CFLAGS)
+
+kinematics/limits.o: kinematics/limits.c
+	$(CC) -c kinematics/limits.c -o kinematics/limits.o $(CFLAGS)
+
+utils/trajectory_length.o: utils/trajectory_length.c
+	$(CC) -c utils/trajectory_length.c -o utils/trajectory_length.o $(CFLAGS)
+
+post_processing/gcode_parser.o: post_processing/gcode_parser.c
+	$(CC) -c post_processing/gcode_parser.c -o post_processing/gcode_parser.o $(CFLAGS)
+
+file_manager/path_maker.o: file_manager/path_maker.c
+	$(CC) -c file_manager/path_maker.c -o file_manager/path_maker.o $(CFLAGS)

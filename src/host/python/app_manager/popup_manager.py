@@ -1,26 +1,7 @@
-#*******************EXTERNAL IMPORTS************************
-import shutil
-import sys
-import serial.tools.list_ports
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5 import QtGui
-from PyQt5.QtGui import *
-import time
-import os
-import easygui
-import subprocess
-import struct
-import win32pipe, win32file
-import numpy as np
-from matplotlib import pyplot
-import matplotlib.pyplot as plt
-from scipy.interpolate import Rbf
-from numpy import loadtxt
-
 #********************LOCAL IMPORTS**************************
 from popup.pins_library import PinsWindow
 from popup.autopid_update import AutoTuneWindow
+
 class PopupManager:
 
     def __init__(self, main_window):
