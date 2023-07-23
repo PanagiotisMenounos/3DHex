@@ -1,4 +1,7 @@
 #include "../global_vars/globals.h"
+#include "../kinematics/pulse_timing.h"
+#include "../utils/bits_to_val.h"
+#include "../file_manager/hexval_writer.h"
 
 void wr2bin(int stepx, int stepy, int stepz, int stepe, double l)
     {

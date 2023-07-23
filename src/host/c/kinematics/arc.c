@@ -1,4 +1,10 @@
 #include "../global_vars/globals.h"
+#include "../kinematics/velocity_profile.h"
+#include "../kinematics/limits.h"
+#include "../utils/angle_calc.h"
+#include "../utils/min_max.h"
+#include "../utils/quartile_calc.h"
+#include "../file_manager/axes_bits_calc.h"
 
 void ARC(bool clockwise,double k,double l,double x1_f,double y1_f,double Ef,double x2_f,double y2_f,double El,double FEEDRATE)
    {

@@ -1,4 +1,6 @@
 #include "../global_vars/globals.h"
+#include "../utils/angle_calc.h"
+#include "../utils/quartile_calc.h"
 
 void curve_length(unsigned long total_lines)
 {

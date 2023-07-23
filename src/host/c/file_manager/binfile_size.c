@@ -1,4 +1,7 @@
 #include "../global_vars/globals.h"
+#include "../kinematics/line.h"
+#include "../file_manager/binfile_maker.h"
+#include "../file_manager/binfile_wraper.h"
 
 void check_SD_file_size(double Xf, double Yf, double Zf, double Xl, double Yl, double Zl){
     if(storage_counter>=MAX_FILE_SIZE){ //create a new output file when the file size reached

@@ -1,4 +1,9 @@
 #include "../global_vars/globals.h"
+#include "../utils/angle_calc.h"
+#include "../utils/quartile_calc.h"
+
+void curve_detection(unsigned long total_lines);
+double curve_lines_angles(double xf,double yf,double xl,double yl, double Gl);
 
 void curve_detection(unsigned long total_lines)
 {

@@ -16,50 +16,9 @@
 #include <fcntl.h>
 #include <shlobj.h> //to get %APPDATA% path
 
-#include "../kinematics/line.h"
-#include "../kinematics/arc.h"
-#include "../kinematics/arc.h"
-#include "../kinematics/velocity_profile.h"
-#include "../kinematics/pulse_timing.h"
-#include "../kinematics/limits.h"
-#include "../postprocessor/curve.h"
-#include "../postprocessor/gcode_parser.h"
-#include "../utils/angle_calc.h"
-#include "../utils/min_max.h"
-#include "../utils/bits_to_val.h"
-#include "../utils/units_converter.h"
-#include "../utils/quartile_calc.h"
-#include "../utils/print_case.h"
-#include "../file_manager/path_maker.h"
-#include "../file_manager/binfile_maker.h"
-#include "../file_manager/config_reader.h"
-#include "../file_manager/axes_bits_calc.h"
-#include "../file_manager/ablconfig_reader.h"
-#include "../file_manager/hexval_writer.h"
-#include "../file_manager/binfile_size.h"
-#include "../file_manager/mcu_config_usbsend.h"
-#include "../file_manager/binfile_wraper.h"
-
 #define pi 3.14159265358979323846
 #define max_bufferfile_size 3000
 #define pipename "\\\\.\\pipe\\Foo"
-
-typedef unsigned char byte; // Define the 'byte' data type
-
-extern union {
-    int progress;
-    byte temp_array[4];
-} u;
-
-extern union {
-    int M;
-    byte fly_array[4];
-} y;
-
-extern union {
-    float S;
-    byte fly_array[4];
-} t;
 
 /////////////////////////////// GLOBAL VARIABLES FOR SETTINGS ///////////////////////////////
 

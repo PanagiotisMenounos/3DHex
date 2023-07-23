@@ -25,16 +25,52 @@ along with 3DHex.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "global_vars/globals.h"
+#include "kinematics/line.h"
+#include "kinematics/arc.h"
+#include "postprocessor/curve.h"
+#include "postprocessor/gcode_parser.h"
+#include "utils/units_converter.h"
+#include "utils/print_case.h"
+#include "utils/trajectory_length.h"
+#include "utils/cmdcursor_hider.h"
+#include "file_manager/path_maker.h"
+#include "file_manager/binfile_maker.h"
+#include "file_manager/config_reader.h"
+#include "file_manager/ablconfig_reader.h"
+#include "file_manager/hexval_writer.h"
+#include "file_manager/binfile_size.h"
+#include "file_manager/mcu_config_usbsend.h"
+#include "file_manager/binfile_wraper.h"
+
 
 ///////////////////////****************//////////////////////////
 
 int main(){
+	
+	union {
+	    int progress;
+	    byte temp_array[4];
+	} u;
+	
+	union {
+	    int M;
+	    byte fly_array[4];
+	} y;
+	
+	union {
+	    float S;
+	    byte fly_array[4];
+	} t;
+	
 	ABL_XCOORD = (float*)malloc(sizeof(float));
 	ABL_YCOORD = (float*)malloc(sizeof(float));
 	ABL_ZCOORD = (float*)malloc(sizeof(float));
-    int *ABL_XCOORD;
+    
+	int *ABL_XCOORD;
     
     HANDLE pipe = CreateFile(pipename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+    
+    
     if (pipe == INVALID_HANDLE_VALUE)
     {
         printf("Error: %d", GetLastError());

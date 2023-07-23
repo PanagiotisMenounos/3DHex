@@ -1,4 +1,7 @@
 #include "../global_vars/globals.h"
+#include "../kinematics/velocity_profile.h"
+#include "../kinematics/limits.h"
+#include "../file_manager/axes_bits_calc.h"
 
 void LINE(double xf, double yf, double zf, double ef, double xl, double yl, double zl, double el, double FEEDRATE)
 	{

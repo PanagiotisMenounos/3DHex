@@ -1,27 +1,7 @@
 #include "../global_vars/globals.h"
 
-#include <stdint.h>
-#include <stdbool.h>
 #include <stdio.h>
-
-// Define the global variables and initialize them here
-typedef unsigned char byte;
-
-// Definitions of the union variables
-union {
-    int progress;
-    byte temp_array[4];
-} u;
-
-union {
-    int M;
-    byte fly_array[4];
-} y;
-
-union {
-    float S;
-    byte fly_array[4];
-} t;
+#include <stdint.h>
 
 
 double STPU_X = 0, STPU_Y = 0, STPU_Z = 0, STPU_E = 0, MAX_FX = 0, MAX_FY = 0, MAX_FZ = 0, MAX_FE = 0, MAX_ACCX = 0, MAX_ACCY = 0, MAX_ACCZ = 0, MAX_ACCE = 0, ACCELERATION = 0, T_ACCEL_ERATION = 0, \

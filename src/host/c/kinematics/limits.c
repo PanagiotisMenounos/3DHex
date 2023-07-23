@@ -1,5 +1,9 @@
 #include "../global_vars/globals.h"
 
+double line_accel_feed_limits(double dx,double dy,double dz,double E_DIST,double FEEDRATE);
+double arc_accel_feed_limits(double R,double ARC_DIST,double E_DIST,double FEEDRATE);
+double check_jfeed_limits(double dx,double dy,double dz,double E_DIST);
+
 double line_accel_feed_limits(double dx,double dy,double dz,double E_DIST,double FEEDRATE)
   {
 	double ux,uy,uz,ue,div,Dux,Duy,Duz,Due,ax,ay,az,ae,Dax,Day,Daz,Dae;

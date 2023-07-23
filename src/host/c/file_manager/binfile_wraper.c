@@ -1,4 +1,5 @@
 #include "../global_vars/globals.h"
+#include "../file_manager/hexval_writer.h"
 
 void close_SD_binary_file()
 {
