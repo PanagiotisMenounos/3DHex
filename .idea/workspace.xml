@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/3DHex.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/3DHex.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/3DHex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/3DHex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/temp_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/app_graphics/temp_plot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/popup_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/popup_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/printers_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/printers_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/app_manager/widget_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/app_manager/widget_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/host/python/serial_controller/usb_connect_printer.py" afterDir="false" />
-    </list>
+    <list default="true" id="4cf3ea9d-0e97-4787-8849-f0901946acbf" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

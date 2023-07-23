@@ -1,0 +1,95 @@
+#include "../global_vars/globals.h"
+
+void mcu_settings_send()
+{
+    file_buffer_size=file_buffer_size+sizeof(MG_data);
+    buffer1_file=_wfopen(buffer1_path,L"wb");
+    fwrite(&X_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&X_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Y_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+	fwrite(&Z1_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&Z1_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENABLE_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_STEP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_DIR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&E_ENDSTOP_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&N_FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_HEATER_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&B_SENSOR_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&FAN_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO1_PIN, sizeof(int16_t),1,buffer1_file);
+    fwrite(&SERVO2_PIN, sizeof(int16_t),1,buffer1_file);
+    
+    fwrite(&CORE_FREQ, sizeof(uint16_t),1,buffer1_file); 
+    fwrite(&X_ENABLE, sizeof(uint8_t),1,buffer1_file); 
+    fwrite(&Y_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Z_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&E_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&NOZZLE_TEMP, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&BED_TEMP, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&CYCLE_NOZZ, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&CYCLE_BED, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&P_NOZZ_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&I_NOZZ_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&D_NOZZ_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&P_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&I_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&D_BED_MIRROR, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&Wait_nozz, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&Wait_bed, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&THERMISTOR_TYPE_NOZZLE, sizeof(int8_t),1,buffer1_file);
+    fwrite(&THERMISTOR_TYPE_BED, sizeof(int8_t),1,buffer1_file);
+    fwrite(&HEATED_NOZZLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HEATED_BED, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&PID_nozz, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&PID_bed, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&DIFFERENTIAL_NOZZ, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&DIFFERENTIAL_BED, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_X_DURATION, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&HOME_Y_DURATION, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&HOME_Z_DURATION, sizeof(uint16_t),1,buffer1_file);
+    fwrite(&HOME_X_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Y_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Z_ENABLE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_X_DIR, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Y_DIR, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Z_DIR, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_X_STATE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Y_STATE, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file); 
+    fwrite(&HOME_Z_STATE, sizeof(uint8_t),1,buffer1_file);
+    /*
+    fwrite(&EXP1_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_5_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_7_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_9_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_2_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_4_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_6_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_8_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP1_10_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_1_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_3_PIN, sizeof(uint8_t),1,buffer1_file);
+    fwrite(&EXP2_5_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_7_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_2_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_4_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_6_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_8_PIN, sizeof(uint8_t),1,buffer1_file);
+	fwrite(&EXP2_10_PIN, sizeof(uint8_t),1,buffer1_file);*/
+	
+}

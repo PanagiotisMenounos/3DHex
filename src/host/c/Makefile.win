@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o post_processing/curve.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o post_processing/gcode_parser.o file_manager/path_maker.o
-LINKOBJ  = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o post_processing/curve.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o post_processing/gcode_parser.o file_manager/path_maker.o
+OBJ      = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o file_manager/path_maker.o file_manager/binfile_maker.o file_manager/config_reader.o utils/bits_to_val.o utils/units_converter.o file_manager/axes_bits_calc.o file_manager/ablconfig_reader.o file_manager/hexval_writer.o utils/cmdcursor_hider.o utils/print_case.o file_manager/binfile_size.o file_manager/mcu_config_usbsend.o file_manager/binfile_wraper.o postprocessor/curve.o postprocessor/gcode_parser.o
+LINKOBJ  = main.o kinematics/line.o global_vars/globals.o kinematics/arc.o utils/angle_calc.o kinematics/velocity_profile.o kinematics/pulse_timing.o utils/min_max.o utils/quartile_calc.o kinematics/limits.o utils/trajectory_length.o file_manager/path_maker.o file_manager/binfile_maker.o file_manager/config_reader.o utils/bits_to_val.o utils/units_converter.o file_manager/axes_bits_calc.o file_manager/ablconfig_reader.o file_manager/hexval_writer.o utils/cmdcursor_hider.o utils/print_case.o file_manager/binfile_size.o file_manager/mcu_config_usbsend.o file_manager/binfile_wraper.o postprocessor/curve.o postprocessor/gcode_parser.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -mwindows
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -36,9 +36,6 @@ global_vars/globals.o: global_vars/globals.c
 kinematics/arc.o: kinematics/arc.c
 	$(CC) -c kinematics/arc.c -o kinematics/arc.o $(CFLAGS)
 
-post_processing/curve.o: post_processing/curve.c
-	$(CC) -c post_processing/curve.c -o post_processing/curve.o $(CFLAGS)
-
 utils/angle_calc.o: utils/angle_calc.c
 	$(CC) -c utils/angle_calc.c -o utils/angle_calc.o $(CFLAGS)
 
@@ -60,8 +57,47 @@ kinematics/limits.o: kinematics/limits.c
 utils/trajectory_length.o: utils/trajectory_length.c
 	$(CC) -c utils/trajectory_length.c -o utils/trajectory_length.o $(CFLAGS)
 
-post_processing/gcode_parser.o: post_processing/gcode_parser.c
-	$(CC) -c post_processing/gcode_parser.c -o post_processing/gcode_parser.o $(CFLAGS)
-
 file_manager/path_maker.o: file_manager/path_maker.c
 	$(CC) -c file_manager/path_maker.c -o file_manager/path_maker.o $(CFLAGS)
+
+file_manager/binfile_maker.o: file_manager/binfile_maker.c
+	$(CC) -c file_manager/binfile_maker.c -o file_manager/binfile_maker.o $(CFLAGS)
+
+file_manager/config_reader.o: file_manager/config_reader.c
+	$(CC) -c file_manager/config_reader.c -o file_manager/config_reader.o $(CFLAGS)
+
+utils/bits_to_val.o: utils/bits_to_val.c
+	$(CC) -c utils/bits_to_val.c -o utils/bits_to_val.o $(CFLAGS)
+
+utils/units_converter.o: utils/units_converter.c
+	$(CC) -c utils/units_converter.c -o utils/units_converter.o $(CFLAGS)
+
+file_manager/axes_bits_calc.o: file_manager/axes_bits_calc.c
+	$(CC) -c file_manager/axes_bits_calc.c -o file_manager/axes_bits_calc.o $(CFLAGS)
+
+file_manager/ablconfig_reader.o: file_manager/ablconfig_reader.c
+	$(CC) -c file_manager/ablconfig_reader.c -o file_manager/ablconfig_reader.o $(CFLAGS)
+
+file_manager/hexval_writer.o: file_manager/hexval_writer.c
+	$(CC) -c file_manager/hexval_writer.c -o file_manager/hexval_writer.o $(CFLAGS)
+
+utils/cmdcursor_hider.o: utils/cmdcursor_hider.c
+	$(CC) -c utils/cmdcursor_hider.c -o utils/cmdcursor_hider.o $(CFLAGS)
+
+utils/print_case.o: utils/print_case.c
+	$(CC) -c utils/print_case.c -o utils/print_case.o $(CFLAGS)
+
+file_manager/binfile_size.o: file_manager/binfile_size.c
+	$(CC) -c file_manager/binfile_size.c -o file_manager/binfile_size.o $(CFLAGS)
+
+file_manager/mcu_config_usbsend.o: file_manager/mcu_config_usbsend.c
+	$(CC) -c file_manager/mcu_config_usbsend.c -o file_manager/mcu_config_usbsend.o $(CFLAGS)
+
+file_manager/binfile_wraper.o: file_manager/binfile_wraper.c
+	$(CC) -c file_manager/binfile_wraper.c -o file_manager/binfile_wraper.o $(CFLAGS)
+
+postprocessor/curve.o: postprocessor/curve.c
+	$(CC) -c postprocessor/curve.c -o postprocessor/curve.o $(CFLAGS)
+
+postprocessor/gcode_parser.o: postprocessor/gcode_parser.c
+	$(CC) -c postprocessor/gcode_parser.c -o postprocessor/gcode_parser.o $(CFLAGS)
