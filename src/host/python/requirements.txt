@@ -4,3 +4,5 @@ PyQt5
 scipy
 matplotlib
 pyqtgraph
+pywin32
+pyserial
